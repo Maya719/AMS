@@ -69,6 +69,8 @@ if($my_current_lang){
 
 <link href="<?=base_url('assets2/vendor/jquery-asColorPicker/css/asColorPicker.min.css')?>" rel="stylesheet" type="text/css"/>	
 
+<link href="<?=base_url('assets2/vendor/sweetalert2/sweetalert2.min.css')?>" rel="stylesheet" type="text/css"/>	
+
 <link href="<?=base_url('assets2/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')?>" rel="stylesheet" type="text/css"/>	
 
 <link href="<?=base_url('assets2/vendor/bootstrap-datepicker-master/css/bootstrap-datepicker.min.css')?>" rel="stylesheet" type="text/css"/>	

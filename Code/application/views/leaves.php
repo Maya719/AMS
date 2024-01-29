@@ -29,7 +29,7 @@
 
         <div class="row">
           <div class="col-xl-2 col-sm-3 mt-2">
-            <a href="#" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#basicModal" class="btn btn-block btn-primary">+ ADD</a>
+            <a href="#" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#leave-modal" class="btn btn-block btn-primary">+ ADD</a>
           </div>
           <div class="col-lg-12 mt-3">
             <div class="card">
@@ -100,20 +100,19 @@
     <!-- ************************************* *****
     Model forms
   ****************************************************-->
-    <div class="modal fade" id="basicModal">
+    <div class="modal fade" id="leave-modal">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Create</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal">
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <form action="<?= base_url('leaves/create') ?>" method="POST" class="modal-part" id="modal-add-leaves-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
+          <form action="<?= base_url('leaves/create') ?>" method="POST" class="modal-part" id="modal-add-leaves-part">
             <div class="modal-body">
               <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                 <div class="form-group mb-3">
                   <label class="required"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Users' ?></label>
-                  <select name="user_id_add" id="user_id_add" class="form-control select2">
+                  <select name="user_id_add" id="user_id_add" class="form-control">
                     <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id') && ($system_user->finger_config == '1')) { ?>
@@ -126,7 +125,7 @@
 
               <div class="form-group mb-3">
                 <label class="required"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
-                <select class="form-control select2" name="type_add" id="type_add">
+                <select class="form-control" name="type_add" id="type_add">
                   <option value=""><?= $this->lang->line('select_type') ? $this->lang->line('select_type') : 'Select Type' ?></option>
                   <?php foreach ($leaves_types as $leaves) { ?>
                     <option value="<?= $leaves['id'] ?>"><?= $leaves['name'] ?></option>
@@ -138,7 +137,7 @@
               <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                 <div class="form-group mb-3">
                   <label><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
-                  <select name="paid" id="paidUnpaid" class="form-control select2">
+                  <select name="paid" id="paidUnpaid" class="form-control">
                     <option value="0"><?= $this->lang->line('paid') ? $this->lang->line('paid') : 'Paid Leave' ?></option>
                     <option value="1"><?= $this->lang->line('unpaid') ? $this->lang->line('unpaid') : 'Unpaid Leave' ?></option>
                   </select>
@@ -159,21 +158,21 @@
                 <div id="full_day_dates" class="row">
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="starting_date_create" name="starting_date" class="form-control datepicker-default required" required="">
+                    <input type="text" id="starting_date_create" name="starting_date" class="form-control datepicker-default required">
                   </div>
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="ending_date_create" name="ending_date" class="form-control datepicker-default required" required="">
+                    <input type="text" id="ending_date_create" name="ending_date" class="form-control datepicker-default required">
                   </div>
                 </div>
                 <div id="half_day_date" class="row" style="display: none;">
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="date_half" name="date_half" class="form-control datepicker-default required" required="">
+                    <input type="text" id="date_half" name="date_half" class="form-control datepicker-default required">
                   </div>
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
-                    <select name="half_day_period" class=" form-group form-control select2">
+                    <select name="half_day_period" class=" form-group form-control">
                       <option value="0">First Time</option>
                       <option value="1">Second Time</option>
                     </select>
@@ -182,54 +181,55 @@
                 <div id="short_leave_dates" class="row" style="display: none;">
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="date" name="date" class="form-control datepicker-default required" required="">
+                    <input type="text" id="date" name="date" class="form-control datepicker-default required">
                   </div>
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
-                    <input type="text" name="starting_time" id="starting_time_create" class="form-control timepicker" required="">
+                    <input type="text" name="starting_time" id="starting_time_create" class="form-control timepicker">
                   </div>
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                    <input type="text" name="ending_time" id="ending_time_create" class="form-control timepicker" required="">
+                    <input type="text" name="ending_time" id="ending_time_create" class="form-control timepicker">
                   </div>
                 </div>
               </div>
 
               <div class="form-group mb-3">
                 <div class="mb-3">
-                  <label><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('if_any_leave_document') ? $this->lang->line('if_any_leave_document') : "If any Document according to leave/s." ?>"></i></label>
+                  <label><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?> <i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= $this->lang->line('if_any_leave_document') ? $this->lang->line('if_any_leave_document') : "If any Document according to leave/s." ?>"></i></label>
                   <input class="form-control" type="file" id="formFile">
                 </div>
               </div>
               <div class="form-group mb-3">
                 <label><?= $this->lang->line('leave_reason') ? $this->lang->line('leave_reason') : 'Leave Reason' ?><span class="text-danger">*</span></label>
-                <textarea type="text" name="leave_reason" class="form-control" required=""></textarea>
+                <textarea type="text" name="leave_reason" class="form-control"></textarea>
               </div>
 
               <div id="leaves_count" class="row text-center">
                 <div class="col-md-4 form-group mb-3">
-                  <label><?= $this->lang->line('total_leaves') ? $this->lang->line('total_leaves') : 'Total Leaves' ?><i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('the_total_leaves_are_in_year_and_are_from_1st_Jan_to_31st_Dec_of_this_year') ? $this->lang->line('the_total_leaves_are_in_year_and_are_from_1st_Jan_to_31st_Dec_of_this_year') : "The Total leaves are in year and are from 1st Jan to 31st Dec of this year." ?>"></i></label>
-                  <input type="number" style="border: none;" id="total_leaves" name="total_leaves" class="form-control text-center" required="" readonly>
+                  <label><?= $this->lang->line('total_leaves') ? $this->lang->line('total_leaves') : 'Total Leaves' ?><i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= $this->lang->line('the_total_leaves_are_in_year_and_are_from_1st_Jan_to_31st_Dec_of_this_year') ? $this->lang->line('the_total_leaves_are_in_year_and_are_from_1st_Jan_to_31st_Dec_of_this_year') : "The Total leaves are in year and are from 1st Jan to 31st Dec of this year." ?>"></i></label>
+                  <input type="number" style="border: none;" id="total_leaves" name="total_leaves" class="form-control text-center" readonly>
                 </div>
                 <div class="col-md-4 form-group mb-3">
                   <label><?= $this->lang->line('consumed_leaves') ? $this->lang->line('consumed_leaves') : 'Consumed Leaves' ?></label>
-                  <input type="number" style="border: none;" id="consumed_leaves" name="consumed_leaves" class="form-control text-center" required="" readonly>
+                  <input type="number" style="border: none;" id="consumed_leaves" name="consumed_leaves" class="form-control text-center" readonly>
                 </div>
                 <div class="col-md-4 form-group mb-3">
                   <label><?= $this->lang->line('remaining_leaves') ? $this->lang->line('remaining_leaves') : 'Remaining Leaves' ?></label>
-                  <input style="border: none;" type="number" id="remaining_leaves" name="remaining_leaves" class="form-control text-center" required="" readonly>
+                  <input style="border: none;" type="number" id="remaining_leaves" name="remaining_leaves" class="form-control text-center" readonly>
                 </div>
               </div>
             </div>
             <div class="modal-footer d-flex justify-content-center">
               <div class="col-lg-4">
-                <button type="submit" class="btn btn-create btn-block btn-primary">Create</button>
+                <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
+
     <!--**********************************
 	Content body end
 ***********************************-->
@@ -360,7 +360,7 @@
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           userRow += '<span class="badge light badge-primary"><a href="javascript:void()" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>';
-          userRow += '<span class="badge light badge-danger ms-2"><a href="javascript:void()" class="text-danger" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>';
+          userRow += '<span class="badge light badge-danger ms-2"><a data-id="' + user.id + '" href="javascript:void()" class="text-danger delete_leaves" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>';
           userRow += '</div>';
           userRow += '</td>';
           userRow += '</tr>';
@@ -428,7 +428,6 @@
 
   <script>
     $(document).ready(function() {
-
       $('select[name="user_id_add"]').on('change', function() {
         updateLeaveCounts();
       });
@@ -442,10 +441,8 @@
       });
 
       function updateLeaveCounts() {
-
         var type = $('select[name="type_add"]').val();
         var user_id = $('select[name="user_id_add"]').val();
-
         $.ajax({
           url: '<?= base_url('leaves/get_leaves_count') ?>',
           method: 'POST',
@@ -455,7 +452,6 @@
             type: type
           },
           success: function(response) {
-            console.log(response);
             var totalLeaves = response.total_leaves;
             var consumedLeaves = response.consumed_leaves;
             var remainingLeaves = response.remaining_leaves;
@@ -476,36 +472,65 @@
           },
         });
       }
-
-      updateLeaveCounts();
-
     });
     // leaves
-$("#basicModal").on('click', '.submitFormBtn', function(e) {
-    var modal = $('#basicModal');
-    var form = $('#modal-add-leaves-part');
-    var formData = new FormData(form);
-    $.ajax({
-        type: 'POST',
-        url: form.attr('action'),
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType: "json",
-        success: function(result) {
-            if (result['error'] == false) {
-                location.reload();
-            } else {
-                console.log(result['as']);
-                console.log(result['starting_time']);
-                modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>');
-            }
-            modal.find('.modal-body').find('.alert').delay(4000).fadeOut();
+$("#leave-modal").on('click', '.btn-create', function(e) {
+  var modal = $('#leave-modal');
+  var form = $('#modal-add-leaves-part');
+  var formData = form.serialize();
+  console.log(formData);
+
+  $.ajax({
+    type: 'POST',
+    url: form.attr('action'),
+    data: formData,
+    dataType: "json",
+    success: function(result) {
+      if (result['error'] == false) {
+			  location.reload();
+		  }else{
+        modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+      }
+    }
+  });
+
+  e.preventDefault();
+});
+
+$(document).on('click','.delete_leaves',function(e){
+	e.preventDefault();
+    var id = $(this).data("id");
+     // Display a confirmation dialog
+     Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+              type: "POST",
+              url: base_url+'leaves/delete/'+id, 
+              data: "id="+id,
+              dataType: "json",
+              success: function(result) 
+              {	
+                if(result['error'] == false){
+                  location.reload();
+                }else{
+                    iziToast.error({
+                      title: result['message'],
+                      message: "",
+                      position: 'topRight'
+                  });
+                }
+              }        
+          });
         }
     });
-
-    e.preventDefault();
 });
   </script>
 

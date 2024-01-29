@@ -99,6 +99,9 @@ convert_estimate_to_invoice = "<?=$this->lang->line('convert_estimate_to_invoice
       <script src="<?=base_url('assets2/vendor/datatables/js/jquery.dataTables.min.js')?>"></script>
       <script src="<?=base_url('assets2/vendor/datatables/responsive/responsive.js')?>"></script>
       <script src="<?=base_url('assets2/js/plugins-init/datatables.init.js')?>"></script>
+      <script src="<?=base_url('assets2/vendor/sweetalert2/sweetalert2.min.js')?>"></script>
+      <script src="<?=base_url('assets2/js/plugins-init/sweetalert.init.js')?>"></script>
+
       <script src="<?=base_url('assets2/js/stisla.js')?>"></script>
       <script src="<?=base_url('assets2/js/custom.js')?>"></script>
       <script src="<?=base_url('assets2/js/custom.min.js')?>"></script>
