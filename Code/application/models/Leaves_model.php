@@ -37,7 +37,11 @@ class Leaves_model extends CI_Model
         $query = $this->db->query("SELECT * FROM leaves ".$where);
     
         $results = $query->result_array();  
-
+        foreach ($results as &$value) {
+            $query = $this->db->query("SELECT id FROM users WHERE employee_id = ".$value["user_id"]);
+            $user = $query->row();
+            $value["user_id"] = $user->id;
+        }
         return $results;
     }
 
