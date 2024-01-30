@@ -55,7 +55,7 @@
                       </select>
                     </div>
                     <div class="col-lg-3 mb-3">
-                      <select class="form-select" id="status">
+                      <select class="form-select" id="status_name">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
                         <option value="3">Pending</option>
@@ -365,7 +365,7 @@
   <script>
     $(document).ready(function() {
       setFilter();
-      $(document).on('change', '#leave_type, #status, #employee_id,#dateFilter, #from,#too', function() {
+      $(document).on('change', '#leave_type, #status_name, #employee_id,#dateFilter, #from,#too', function() {
         setFilter();
       });
 
@@ -373,7 +373,7 @@
         var employee_id = $('#employee_id').val();
         var leave_type = $('#leave_type').val();
         var filterOption = $('#dateFilter').val();
-        var status = $('#status').val();
+        var status = $('#status_name').val();
 
         const today = new Date();
         const year = today.getFullYear();
@@ -486,8 +486,14 @@
           userRow += '<td style="font-size:13px;">' + user.status + '</td>';
           userRow += '<td>';
           userRow += '<div class="d-flex">';
-          userRow += '<span class="badge light badge-primary"><a href="javascript:void()" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-leave-modal" class="text-primary edit-leaves" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>';
-          userRow += '<span class="badge light badge-danger ms-2"><a data-id="' + user.id + '" href="javascript:void()" class="text-danger delete_leaves" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>';
+          if (user.btn) {
+            userRow += '<span class="badge light badge-primary"><a href="javascript:void()" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-leave-modal" class="text-primary edit-leaves" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>';
+            userRow += '<span class="badge light badge-danger ms-2"><a data-id="' + user.id + '" href="javascript:void()" class="text-danger delete_leaves" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>';
+          } else {
+            userRow += '<span class="badge light badge-light"><a href="javascript:void()" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Disabled" disabled><i class="fa fa-pencil color-muted"></i></a></span>';
+            userRow += '<span class="badge light badge-light ms-2"><a data-id="' + user.id + '" href="javascript:void()" class="text-danger" data-bs-toggle="tooltip" data-placement="top" title="Disabled"><i class="fas fa-trash"></i></a></span>';
+          }
+          
           userRow += '</div>';
           userRow += '</td>';
           userRow += '</tr>';

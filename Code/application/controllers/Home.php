@@ -28,7 +28,6 @@ class Home extends CI_Controller
 				$this->data["report"] = $this->attendance_model->get_count_abs();
 				$this->data["events"] = $this->home_model->Get_events();
 				$this->load->view('home',$this->data);
-				// echo json_encode($this->data["report"]);
 			}
 		}else{
 			redirect('auth', 'refresh');
@@ -38,7 +37,7 @@ class Home extends CI_Controller
 
 		$get = $this->input->get();
 		$dateRec = $get["date"];
-		$dateObject = DateTime::createFromFormat('j F, Y', $dateRec);
+		$dateObject = date_create($dateRec);
 		$date = $dateObject->format('Y-m-d');
 		if($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')){
 			$attendance = $this->home_model->get_home_attendance_for_admin($date);

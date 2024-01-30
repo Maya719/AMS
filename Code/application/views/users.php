@@ -1,210 +1,321 @@
-<?php $this->load->view('includes/head'); ?>
+<?php $this->load->view('includes/header'); ?>
 <style>
-  table th,
-  table td {
-    width: 50px;
-    padding: 5px;
-    border: 0.5px solid black;
-  }
 
-  .GFG {
-    color: green;
-  }
-
-  .OK {
-    font-size: 18px;
-  }
-
-  .draggable {
-    position: absolute;
-    cursor: move;
-  }
 </style>
-<link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" />
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="../node_modules/table-dragger/dist/table-dragger.min.js"></script>
-<link rel="stylesheet" type="text/css" href="dragtable.css" />
 </head>
-<body class="sidebar-mini">
-  <?php
-  $id = $_GET['id'];
-  ?>
-  <div id="app">
-    <div class="main-wrapper">
-      <?php $this->load->view('includes/navbar'); ?>
-      <!-- Main Content -->
-      <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <div class="section-header-back">
-              <a href="javascript:history.go(-1)" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
-            </div>
-            <h1>
-              <?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Employees' ?>
-              <?php if (my_plan_features('users')) {
-                if ($this->ion_auth->is_admin() || permissions('user_create')) { ?>
-                  <a href="<?=base_url('users/create_user')?>"  class="btn btn-sm btn-icon icon-left btn-primary"><i
-                      class="fas fa-plus"></i> <?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?></a>
-                <?php }
-              } ?>
 
-            </h1>
-            <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active"><a
-                  href="<?= base_url() ?>"><?= $this->lang->line('dashboard') ? $this->lang->line('dashboard') : 'Dashboard' ?></a>
+<body>
+
+  <!--*******************
+        Preloader start
+    ********************-->
+  <div id="preloader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <!--*******************
+        Preloader end
+    ********************-->
+  <?php $this->load->view('includes/sidebar'); ?>
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+  <div id="main-wrapper">
+    <div class="content-body default-height">
+      <!-- row -->
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-xl-2 col-sm-3 mt-2">
+            <a href="<?=base_url('users/create_user')?>" id="modal-add-leaves" class="btn btn-block btn-primary">+ ADD</a>
+          </div>
+          <div class="col-lg-12 mt-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="basic-form">
+                  <form class="row">
+                    <!-- <div class="col-lg-6 mb-3">
+                      <select class="form-select" id="employee_id">
+                        <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
+                        <?php foreach ($system_users as $system_user) {
+                          if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                            <option value="<?= $system_user->employee_id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                        <?php }
+                        } ?>
+                      </select>
+                    </div> -->
+                    
+                    <div class="col-lg-12 mb-3">
+                      <select class="form-select" id="active">
+                        <option value="1" selected>Active</option>
+                        <option value="0">Inactive</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
               </div>
-              <div class="breadcrumb-item">
-                <?= $this->lang->line('employees') ? $this->lang->line('employees') : 'Employees' ?></div>
             </div>
           </div>
-          <?php
-          $user_id = $_GET['user'];
-          ?>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <select class="form-control select2" id="active_users" onchange="refreshTable()">
-                <option value="1"><?= $this->lang->line('select_active') ? $this->lang->line('select_active') : 'Active' ?>
-                </option>
-                <option value="2"><?= $this->lang->line('select_active') ? $this->lang->line('select_active') : 'Inactive' ?>
-                </option>
-                <option value="3"><?= $this->lang->line('select_all') ? $this->lang->line('select_all') : 'Select All' ?>
-                </option>
-              </select>
-            </div>
-            <div class="form-group col-md-6">
-              <select class="form-control select2" id="department_users" onchange="refreshTable()">
-                <option value="">
-                  <?= $this->lang->line('select_department') ? $this->lang->line('select_department') : 'Select Department' ?>
-                </option>
-                <?php foreach ($departments as $department) { ?>
-                  <option value="<?= $department['id'] ?>">
-                    <?= $department['department_name'] ?>
-                  </option>
-                <?php
-                } ?>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card card-primary">
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table id="GFG" class="table table-striped table-bordered sortable" id="user-list"
-                      data-toggle="table" data-toolbar="#toolbar" data-url="<?= base_url('users/get_active_inactive') ?>"
-                      data-search="true" data-show-columns="true" data-pagination="true" data-filter-control="true"
-                      data-filter-show-clear="true" data-mobile-responsive="true" data-minimum-count-columns="2"
-                      data-page-size="10" data-page-list="[10, 25, 50, 100]" data-row-style="rowStyle"
-                      data-query-params="queryParams">
-                      <thead>
-                        <tr>
-                          <th class="handle" data-field="s_no" data-sortable="false">
-                            <?= $this->lang->line('s_no') ? $this->lang->line('s_no') : '#' ?>
-                          </th>
-                          <th class="handle" data-field="employee_id" data-sortable="true">
-                            <?= $this->lang->line('employee_id') ? $this->lang->line('employee_id') : 'Emp ID' ?>
-                          </th>
-                          <!--<th data-field="id" data-sortable="true" data-visible="false"><?= $this->lang->line('id') ? htmlspecialchars($this->lang->line('id')) : 'Employee ID' ?></th>-->
-                          <th class="handle" data-field="name" data-sortable="true">
-                            <?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?>
-                          </th>
-                          <th class="handle" data-field="email" data-sortable="false">
-                            <?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?>
-                          </th>
-                          <th class="handle" data-field="mobile" data-sortable="false">
-                            <?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?>
-                          </th>
-                          <th class="handle" data-field="role" data-sortable="false">
-                            <?= $this->lang->line('role') ? $this->lang->line('role') : 'Role' ?>
-                          </th>
-                          <th class="handle" data-field="status" data-sortable="false" data-visible="true">
-                            <?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></th>
-                          <th class="handle" data-field="projects_count" data-sortable="true">
-                            <?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?>
-                          </th>
-                          <th data-field="tasks_count" data-sortable="true">
-                            <?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?>
-                          </th>
-                          <th data-field="shift_type" data-sortable="false" data-visible="true">
-                            <?= $this->lang->line('shift_type') ? htmlspecialchars($this->lang->line('shift_type')) : 'Shift' ?>
-                          </th>
-                          <?php if ($this->ion_auth->is_admin() || permissions('user_view_all') || permissions('user_view_selected') || $this->ion_auth->in_group(3)) { ?>
-                            <th data-field="cnic" data-sortable="false" data-visible="false">
-                              <?= $this->lang->line('cnic') ? htmlspecialchars($this->lang->line('cnic')) : 'CNIC' ?></th>
-                            <th data-field="father_name" data-sortable="false" data-visible="false">
-                              <?= $this->lang->line('father_name') ? htmlspecialchars($this->lang->line('father_name')) : 'Father Name' ?>
-                            </th>
-                            <th data-field="department" data-sortable="false" data-visible="false">
-                              <?= $this->lang->line('department') ? htmlspecialchars($this->lang->line('department')) : 'Department' ?>
-                            </th>
-                            <th data-field="joining_date" data-sortable="false" data-visible="false">
-                              <?= $this->lang->line('joining_date') ? htmlspecialchars($this->lang->line('joining_date')) : 'Joining Date' ?>
-                            </th>
-                            <th data-field="gender" data-sortable="false" data-visible="false">
-                              <?= $this->lang->line('gender') ? htmlspecialchars($this->lang->line('gender')) : 'Gender' ?></th>
-                          <?php } ?>
-                          <?php if ($this->ion_auth->is_admin() || permissions('user_edit') || permissions('user_delete') || $this->ion_auth->in_group(3)) { ?>
-                            <th data-field="action" data-sortable="false" data-visible="true">
-                              <?= $this->lang->line('action') ? htmlspecialchars($this->lang->line('action')) : 'Action' ?></th>
-                          <?php } ?>
-                        </tr>
-                  </div>
-                  </thead>
+        </div>
+        <div class="row mt-3">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="employee_list" class="table table-sm mb-0">
+                    <thead>
+                      <tr>
+                        
+                      </tr>
+                    </thead>
+                    <tbody id="customers">
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">1</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Aman</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">01/15/2023</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">2</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Alyan</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">3</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Shoaib</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">4</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Sameer</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">5</a></td>
+                        <td>
+                          <a href=""><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Saqib</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">6</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Nabil</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">7</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Sheeza Bibi</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">8</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Zeshan</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                      <tr class="btn-reveal-trigger" height="20">
+                        <td class="py-2"> <a href="edit-user.html">9</a></td>
+                        <td>
+                          <a href="edit-user.html"><img class="rounded-circle" width="35" src="assets/images/profile/small/pic1.jpg" alt=""><span class="ms-3"><strong>Mehmood</strong></span></a>
+                        </td>
+                        <td class="py-2 "><a href="edit-user.html">example@abc.com</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">030101010100</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Employee</a></td>
+                        <td class="py-2 text-warning"> <a href="edit-user.html"></a></td>
+                        <td class="py-2 "> <a href="edit-user.html">Regular</a></td>
+                        <td class="py-2 "> <a href="edit-user.html">19</a></td>
+                        <td><span>
+                            <span class="badge light badge-primary"><a href="edit-user.html" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
               </div>
             </div>
-          </div><!--end of the table format  -->
+          </div>
+        </div>
       </div>
     </div>
-    </section>
-  </div>
+    <!-- *******************************************
+  Footer -->
+    <?php $this->load->view('includes/footer'); ?>
+    <!-- ************************************* *****
+    Model forms
+  ****************************************************-->
 
-  <?php $this->load->view('includes/footer'); ?>
+    <!--**********************************
+	Content body end
+***********************************-->
   </div>
-  </div>
-
-  <?php $this->load->view('includes/js'); ?>
+  <?php $this->load->view('includes/scripts'); ?>
   <script>
-    function queryParams(p) {
-      return {
-        "active_users": $('#active_users').val(),
-        "department_users": $('#department_users').val(),
-        limit: p.limit,
-        sort: p.sort,
-        order: p.order,
-        offset: p.offset,
-        search: p.search
-      };
-    }
-
-    $(document).ready(function () {
-      function getEmployeeId() {
-
+    $(document).ready(function() {
+      setFilter();
+      $(document).on('change', '#active', function() {
+        setFilter();
+      });
+      function setFilter() {
+        var status = $('#active').val();
+        ajaxCall(status);
+      }
+      function ajaxCall(status) {
         $.ajax({
-          url: '<?= base_url('users/get_employee_id') ?>',
-          method: 'POST', // or 'POST' depending on your server-side implementation
-          dataType: 'json',
-          success: function (response) {
-            // Retrieve the calculated values from the JSON response
-            var employee_id = response.max_employee_id;
-            employee_id++;
-            // Update the input fields in the form
-
-            $('#employee_id_create').val(employee_id);
+          url: '<?= base_url('users/get_active_inactive') ?>',
+          type: 'GET',
+          data: {
+            status: status,
           },
+          success: function(response) {
+            var tableData = JSON.parse(response);
+            console.log(tableData);
+            showTable(tableData);
+          },
+          complete: function() {},
+          error: function(error) {
+            console.error(error);
+          }
         });
       }
-      getEmployeeId();
+      function showTable(data) {
+        var table = $('#employee_list');
+        if ($.fn.DataTable.isDataTable(table)) {
+          table.DataTable().destroy();
+        }
+        emptyDataTable(table);
+        var thead = table.find('thead');
+        var theadRow = '<tr>';
+        theadRow += '<th style="font-size: 15px;">ID</th>';
+        theadRow += '<th style="font-size: 15px;">Employee Name</th>';
+        theadRow += '<th style="font-size: 15px;">Email</th>';
+        theadRow += '<th style="font-size: 15px;">Mobile</th>';
+        theadRow += '<th style="font-size: 15px;">Role</th>';
+        theadRow += '<th style="font-size: 15px;">Status</th>';
+        theadRow += '<th style="font-size: 15px;">Shift</th>';
+        theadRow += '<th style="font-size: 15px;">Join Date</th>';
+        theadRow += '<th style="font-size: 15px;">Action</th>';
+        theadRow += '</tr>';
+        thead.html(theadRow);
+        // Add table body
+        var tbody = table.find('tbody');
+
+        data.forEach(user => {
+          var userRow = '<tr>';
+          userRow += '<td style="font-size:13px;">' + user.employee_id + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.name + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.email + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.mobile + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.role + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.status + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.shift_type + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.joining_date + '</td>';
+          userRow += '<td>';
+          userRow += '<div class="d-flex">';
+          userRow += user.action;
+          userRow += '</div>';
+          userRow += '</td>';
+          userRow += '</tr>';
+          tbody.append(userRow);
+        });
+        table.DataTable({
+          "paging": true,
+          "searching": false,
+          "language": {
+            "paginate": {
+              "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+              "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+            }
+          },
+          "info": false,
+          "dom": '<"top"i>rt<"bottom"lp><"clear">',
+          "lengthMenu": [5, 10, 20],
+          "pageLength": 5
+        });
+        
+      }
+      function emptyDataTable(table) {
+        table.find('thead').empty();
+        table.find('tbody').empty();
+      }
     });
-  </script>
-  <script>
-    function refreshTable() {
-      $('#GFG').bootstrapTable('refresh');
-    }
   </script>
 </body>
 

@@ -102,7 +102,7 @@ if ($totalleave > 0) {
                           <div class="static-icon mx-5">
                             <div class="d-flex">
                               <h3 class="text-primary">Leaves</h3>
-                              <h3 class="count text-primary ms-auto mb-0">0</h3>
+                              <h3 class="count text-primary ms-auto mb-0"><?=$totalleave?></h3>
                             </div>
                             <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                             <div class="progress default-progress mt-2">

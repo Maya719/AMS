@@ -83,10 +83,13 @@ class Leaves_model extends CI_Model
                 $leave['paid'] = ($this->lang->line('unpaid') ? htmlspecialchars($this->lang->line('unpaid')) : 'Unpaid Leave');
             }
             if ($leave['status'] == 0) {
+                $leave['btn'] = true;
                 $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
             } elseif ($leave['status'] == 1) {
+                $leave['btn'] = false;
                 $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved') . '</span>';
             } else {
+                $leave['btn'] = false;
                 $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('rejected') ? htmlspecialchars($this->lang->line('rejected')) : 'Rejected') . '</span>';
             }
         }
