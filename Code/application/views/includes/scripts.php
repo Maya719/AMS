@@ -54,6 +54,8 @@
 
 <?= get_footer_code() ?>
 <script src="<?= base_url('assets2/vendor/global/global.min.js') ?>"></script>
+<script src="<?=base_url('assets2/vendor/select2/js/select2.full.min.js')?>"></script>
+<script src="<?=base_url('assets2/js/plugins-init/select2-init.js');?>"></script>
 <script src="<?= base_url('assets2/vendor/bootstrap-select/js/bootstrap-select.min.js') ?>"></script>
 
 <script src="<?= base_url('assets2/vendor/moment/moment.min.js') ?>"></script>
@@ -72,11 +74,12 @@
 <script src="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
 
+
 <script src="<?= base_url('assets2/js/stisla.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.min.js') ?>"></script>
 <script src="<?= base_url('assets2/js/dlabnav-init.js') ?>"></script>
-<!-- <script src="<?= base_url('assets2/js/demo.js') ?>"></script> -->
+<script src="<?= base_url('assets2/js/demo.js') ?>"></script>
 <?php if ($this->session->flashdata('message') && $this->session->flashdata('message_type') == 'success') { ?>
   <script>
     toastr.success("<?= $this->session->flashdata('message'); ?>", "Success", {

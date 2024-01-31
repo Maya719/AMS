@@ -19,8 +19,10 @@ class Holiday extends CI_Controller
 			$this->data['data'] = $this->holiday_model->get_holiday();
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['system_users'] = $this->ion_auth->members()->result();
+			$this->db->where('saas_id', $this->session->userdata('saas_id'));
+			$query3 = $this->db->get('departments');
+			$this->data['departments'] = $query3->result_array();
 			$this->load->view('holiday',$this->data);
-			// echo json_encode($this->data);
 		}else{
 			redirect('auth', 'refresh');
 		}
@@ -56,6 +58,7 @@ class Holiday extends CI_Controller
 					'users' => $users,
 					'remarks' => $this->input->post('remarks'),
 					'type' => $this->input->post('type_add'),
+					'saas_id' => $this->session->userdata("saas_id")
 				);
 				if ($data['type'] == '2') {
 					$currentDate = date('Y-m-d');

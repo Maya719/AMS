@@ -83,6 +83,8 @@ if($my_current_lang){
 
 <link href="<?=base_url('assets2/vendor/nouislider/nouislider.min.css')?>" rel="stylesheet" type="text/css"/>	
 
+<link href="<?=base_url('assets2/vendor/select2/css/select2.min.css')?>" rel="stylesheet" type="text/css"/>	
+
 <link href="<?=base_url('assets2/vendor/bootstrap-select/css/bootstrap-select.min.css')?>" rel="stylesheet" type="text/css"/>		
 
 <link href="<?=base_url('assets2/css/style.css')?>" rel="stylesheet" type="text/css"/>		
