@@ -73,14 +73,19 @@ class Leaves extends CI_Controller
 
 			if ($this->form_validation->run() == TRUE) {
 
-				$data['user_id'] = $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id');
+				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id')));
+				if ($employeeIdQuery->num_rows() > 0) {
+					$employeeIdRow = $employeeIdQuery->row();
+					$employeeId = $employeeIdRow->employee_id;
+					$data['user_id'] = $employeeId;
+				}
 				$data['leave_reason'] = $this->input->post('leave_reason');
 				$data['type'] = $this->input->post('type');
 				$data['paid'] = $this->input->post('paid');
 				if ($this->input->post('status') == 1) {
 					$this->db->where('id',  $this->input->post('update_id'));
 					$query = $this->db->get('leaves');
-					$leave = $query->row(); // Assuming you expect only one result
+					$leave = $query->row(); 
 					$step = $leave->step;
 					if ($step - 1 == 0) {
 						$data['status'] = '1';

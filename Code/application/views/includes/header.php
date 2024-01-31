@@ -77,6 +77,8 @@ if($my_current_lang){
 
 <link href="<?=base_url('assets2/vendor/pickadate/themes/default.css')?>" rel="stylesheet" type="text/css"/>	
 
+<link href="<?=base_url('assets2/vendor/toastr/css/toastr.min.css')?>" rel="stylesheet" type="text/css"/>	
+
 <link href="<?=base_url('assets2/vendor/pickadate/themes/default.date.css')?>" rel="stylesheet" type="text/css"/>	
 
 <link href="<?=base_url('assets2/vendor/nouislider/nouislider.min.css')?>" rel="stylesheet" type="text/css"/>	

@@ -30,7 +30,7 @@
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="<?= base_url('auth/edit-user') ?>" method="post">
+                                <form action="<?= base_url('auth/edit-user') ?>" method="post" id="form-part">
                                     <input type="hidden" name="update_id" id="update_id" value="<?= $data->id ?>">
                                     <div id="DZ_W_TimeLine" class="widget-timeline dlab-scroll p-5">
                                         <ul class="timeline">
@@ -59,7 +59,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput3" class="form-label">Blood Group</label>
-                                                        <input type="text" class="form-control" id="exampleFormControlInput3">
+                                                        <input type="text" class="form-control" name="blood_group" value="<?= $data->blood_group ?>" id="exampleFormControlInput3">
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput4" class="form-label">Date Of Birth</label>
@@ -72,19 +72,17 @@
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput6" class="form-label">Martial Status</label>
                                                         <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
-                                                            <option selected>Martial Status</option>
-                                                            <option value="1">Single</option>
-                                                            <option value="2">Married</option>
-                                                            <option value="3">Other</option>
+                                                            <option selected value="">Martial Status</option>
+                                                            <option value="single" <?= ($data->martial_status === 'single') ? 'selected' : '' ?>>Single</option>
+                                                            <option value="married" <?= $data->martial_status === 'married' ? 'selected' : '' ?>>Married</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput7" class="form-label">Gender</label>
                                                         <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
-                                                            <option selected>Gender</option>
-                                                            <option value="1">Male</option>
-                                                            <option value="2">Female</option>
-                                                            <option value="3">Other</option>
+                                                            <option value="male" <?= $data->gender === 'male' ? 'selected' : '' ?>>Male</option>
+                                                            <option value="female" <?= $data->gender === 'female' ? 'selected' : '' ?>>Female</option>
+                                                            <option value="other" <?= $data->gender === 'other' ? 'selected' : '' ?>>Other</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-6 mb-3">
@@ -122,7 +120,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput16" class="form-label">Designation</label>
-                                                        <input type="text" name="desgnation" class="form-control" value="<?= $data->desgnation?>" id="exampleFormControlInput16"> 
+                                                        <input type="text" name="desgnation" class="form-control" value="<?= $data->desgnation ?>" id="exampleFormControlInput16">
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput15" class="form-label">Department</label>
@@ -148,7 +146,7 @@
                                                 </div>
                                                 <div class="row ms-5">
                                                     <div class="ms-3 col-12 mb-2 form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" name="finger_config" id="flexCheckDefault" <?= $data->finger_config == 1 ? 'checked' : '' ?>>
+                                                        <input class="form-check-input" type="checkbox" name="finger_config" id="flexCheckDefault" <?= $data->finger_config == 1 ? 'checked' : '' ?>>
                                                         <label class="form-check-label" for="flexCheckDefault">
                                                             Biometric
                                                         </label>
@@ -156,7 +154,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="shifts_select" class="form-label">Shift</label>
-                                                        <select id="shifts_select" name="type" class="form-control">
+                                                        <select class="form-select enable-disable-select" name="type" aria-label="Default select example">
                                                             <?php foreach ($shift_types as $shift_type) { ?>
                                                                 <option value="<?= $shift_type['id'] ?>" <?= ($data->shift_id == $shift_type['id']) ? 'selected' : '' ?>>
                                                                     <?= $shift_type['name'] ?>
@@ -166,7 +164,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="devices_select" class="form-label">Device</label>
-                                                        <select id="devices_select" name="device" class="form-control">
+                                                        <select class="form-select enable-disable-select" name="device" aria-label="Default select example">
                                                             <?php foreach ($devices as $device) { ?>
                                                                 <option value="<?= $device['id'] ?>" <?= ($data->device_id == $device['id']) ? 'selected' : '' ?>>
                                                                     <?= $device['device_name'] ?>
@@ -182,7 +180,7 @@
                                                 <div class="title">
                                                     <h5 class="text-primary ms-5 mt-2">Important Documents</h5>
                                                 </div>
-                                                <div class="row ms-3" id="inputs">
+                                                <div class="row ms-5" id="inputs">
                                                     <div class="col-10 mb-3">
                                                         <input class="form-control" type="file" name="files[]" id="formFile">
                                                     </div>
@@ -190,7 +188,7 @@
                                                         <a class="btn text-primary fw-600 remove-btn">Remove</a>
                                                     </div>
                                                 </div>
-                                                <div class="row ms-3">
+                                                <div class="row ms-5">
                                                     <div class="col-12">
                                                         <button type="button" class="btn btn-primary add-btn">+ Add</button>
                                                     </div>
@@ -200,9 +198,9 @@
                                                 <div class="timeline-badge dark">
                                                 </div>
                                                 <div class="title">
-                                                    <h5 class="text-primary ms-5 mt-2">Portal Setting</h5>
+                                                    <h5 class="text-primary ms-5 mt-2">Account Setting</h5>
                                                 </div>
-                                                <div class="row ms-3">
+                                                <div class="row ms-5">
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput12" class="form-label">Email</label>
                                                         <input type="email" name="email" class="form-control" value="<?= $data->email ?>" id="exampleFormControlInput12">
@@ -218,11 +216,16 @@
 
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput15" class="form-label">Role</label>
-                                                        <select class="form-select" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
-                                                            <option selected>Role</option>
-                                                            <?php foreach ($user_groups as $user_group) : ?>
-                                                                <option value="<?= $user_group->id ?>"><?= $user_group->description ?></option>
-                                                            <?php endforeach ?>
+                                                        <select name="groups" class="form-control">
+                                                            <?php foreach ($user_groups as $user_group) {
+                                                                if ($user_group->id == 3 || $user_group->id == 4) {
+                                                                    continue;
+                                                                }
+                                                            ?>
+                                                                <option value="<?= htmlspecialchars($user_group->id) ?>" <?= ($role == $user_group->id) ? 'selected' : '' ?>>
+                                                                    <?= ucfirst(htmlspecialchars($user_group->description)) ?>
+                                                                </option>
+                                                            <?php } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -230,11 +233,20 @@
                                         </ul>
                                         <div class="row ms-3 mt-5 mb-3 justify-content-between">
                                             <div class="col-5">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-edit-user btn-primary">Submit</button>
                                             </div>
                                             <div class="col-6 text-end">
-                                                <button type="button" class="btn btn-danger">Delete Account</button>
-                                                <button type="button" class="btn btn-danger">Deativate Account</button>
+                                                <button type="button" id="user_delete_btn" class="btn btn-danger">Delete Account</button>
+                                                <?php
+                                                if ($data->active == '0') { ?>
+                                                    <button type="button" id="user_active_btn" class="btn btn-primary">Activite Account</button>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                    <button type="button" id="user_deactive_btn" class="btn btn-danger">Deativate Account</button>
+                                                <?php
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                     </div>
@@ -272,6 +284,128 @@
                 var isChecked = $(this).prop("checked");
                 $(".enable-disable-select").prop("disabled", !isChecked);
             });
+        });
+        $(document).on('click', '#user_deactive_btn', function(e) {
+            e.preventDefault();
+            var id = $("#update_id").val();
+            Swal.fire({
+                title: are_you_sure,
+                text: you_want_to_deactivate_this_user_this_user_will_be_not_able_to_login_after_deactivation,
+                icon: 'warning',
+                showCancelButton: true,
+                dangerMode: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'auth/deactivate',
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload();
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '#user_active_btn', function(e) {
+            e.preventDefault();
+            var id = $("#update_id").val();
+            Swal.fire({
+                title: are_you_sure,
+                text: you_want_to_activate_this_user,
+                icon: 'warning',
+                showCancelButton: true,
+                dangerMode: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'auth/activate',
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload();
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        $(document).on('click', '#user_delete_btn', function(e) {
+            e.preventDefault();
+            var id = $("#update_id").val();
+            Swal.fire({
+                title: are_you_sure,
+                text: you_want_to_delete_this_user_all_related_data_with_this_user_also_will_be_deleted,
+                icon: 'warning',
+                showCancelButton: true,
+                dangerMode: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'auth/delete_user',
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.href = base_url + 'users';
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        $(document).on('click', '.btn-edit-user', function(e) {
+            var form = $('#form-part');
+            var formData = form.serialize();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                dataType: "json",
+                success: function(result) {
+                    if (result['error'] == false) {
+                        location.reload();
+                    } else {
+                        $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+                    }
+                }
+            });
+
+            e.preventDefault();
         });
     </script>
 </body>

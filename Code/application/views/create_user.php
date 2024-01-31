@@ -58,7 +58,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput3" class="form-label">Blood Group</label>
-                                                        <input type="text" class="form-control" id="exampleFormControlInput3">
+                                                        <input type="text" class="form-control" name="blood_group" id="exampleFormControlInput3">
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput4" class="form-label">Date Of Birth</label>
@@ -71,19 +71,19 @@
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput6" class="form-label">Martial Status</label>
                                                         <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
-                                                            <option selected>Martial Status</option>
-                                                            <option value="1">Single</option>
-                                                            <option value="2">Married</option>
-                                                            <option value="3">Other</option>
+                                                            <option value="" selected>Martial Status</option>
+                                                            <option value="single">Single</option>
+                                                            <option value="married">Married</option>
+                                                            <option value="other">Other</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput7" class="form-label">Gender</label>
                                                         <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
                                                             <option selected>Gender</option>
-                                                            <option value="1">Male</option>
-                                                            <option value="2">Female</option>
-                                                            <option value="3">Other</option>
+                                                            <option value="male">Male</option>
+                                                            <option value="female">Female</option>
+                                                            <option value="other">Other</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-6 mb-3">
@@ -113,7 +113,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput16" class="form-label">Designation</label>
-                                                        <input type="Date" class="form-control" name="desgnation" id="exampleFormControlInput16">
+                                                        <input type="text" class="form-control" name="desgnation" id="exampleFormControlInput16">
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput15" class="form-label">Department</label>
@@ -138,7 +138,7 @@
                                                 </div>
                                                 <div class="row ms-5">
                                                     <div class="ms-3 col-12 mb-2 form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" name="finger_config" id="flexCheckDefault" checked>
+                                                        <input class="form-check-input" type="checkbox" name="finger_config" id="flexCheckDefault" checked>
                                                         <label class="form-check-label" for="flexCheckDefault">
                                                             Biometric
                                                         </label>
@@ -146,7 +146,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput2" class="form-label">Shift</label>
-                                                        <select class="form-select enable-disable-select" aria-label="Default select example">
+                                                        <select class="form-select enable-disable-select" name="type" aria-label="Default select example">
                                                             <option selected>Shift</option>
                                                             <?php foreach ($shift_types as $shift_type) : ?>
                                                                 <option value="<?= $shift_type["id"] ?>"><?= $shift_type["name"] ?></option>
@@ -155,7 +155,7 @@
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput3" class="form-label">Device</label>
-                                                        <select class="form-select enable-disable-select" aria-label="Default select example">
+                                                        <select class="form-select enable-disable-select" name="device" aria-label="Default select example">
                                                             <option selected>Device</option>
                                                             <?php foreach ($devices as $device) : ?>
                                                                 <option value="<?= $device["id"] ?>"><?= $device["device_name"] ?></option>

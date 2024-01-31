@@ -130,7 +130,6 @@ class Users extends CI_Controller
 	}
 	public function create_user()
 	{
-
 		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || permissions('user_view_selected') || $this->ion_auth->in_group(3))) {
 			$saas_id = $this->session->userdata('saas_id');
 			$this->data['user_groups'] = $this->ion_auth->get_all_groups();

@@ -337,7 +337,7 @@
               ?>
                 <div class="form-group mb-3">
                   <label><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
-                  <select name="status" id="status" class="form-control select2">
+                  <select name="status" id="status" class="form-control">
                     <option value=""><?= $this->lang->line('select_status') ? $this->lang->line('select_status') : 'Select Status' ?></option>
                     <option value="0"><?= $this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending' ?></option>
                     <option value="1"><?= $this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved' ?></option>
@@ -349,7 +349,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-center">
               <div class="col-lg-4">
-                <button type="button" class="btn btn-edit btn-block btn-primary">Save</button>
+                <button type="button" class="btn btn-edit-leave btn-block btn-primary">Save</button>
               </div>
             </div>
           </form>
@@ -493,7 +493,7 @@
             userRow += '<span class="badge light badge-light"><a href="javascript:void()" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Disabled" disabled><i class="fa fa-pencil color-muted"></i></a></span>';
             userRow += '<span class="badge light badge-light ms-2"><a data-id="' + user.id + '" href="javascript:void()" class="text-danger" data-bs-toggle="tooltip" data-placement="top" title="Disabled"><i class="fas fa-trash"></i></a></span>';
           }
-          
+
           userRow += '</div>';
           userRow += '</td>';
           userRow += '</tr>';
@@ -779,6 +779,28 @@
         }
       });
     })
+    $("#edit-leave-modal").on('click', '.btn-edit-leave', function(e) {
+      var modal = $('#edit-leave-modal');
+      var form = $('#modal-edit-leaves-part');
+      var formData = form.serialize();
+      console.log(formData);
+
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
   </script>
 
 </body>

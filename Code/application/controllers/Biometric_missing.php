@@ -46,17 +46,15 @@ class Biometric_missing extends CI_Controller
 			$this->form_validation->set_rules('update_id', 'Biometric ID', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('reason', 'Reason', 'trim|required|strip_tags|xss_clean');
 			
-			$type = '';
-			if ($this->input->post('check_in')) {
-				$type = 'check_in';
-			} elseif ($this->input->post('check_out')) {
-				$type = 'check_out';
-			}
+			$type = 'check_in';
 
 			if($this->form_validation->run() == TRUE){
-				
-				$data['user_id'] = $this->input->post('user_id')?$this->input->post('user_id'):$this->session->userdata('user_id');
-				$data['employee_id'] = $this->input->post('employee_id');
+				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id')));
+				if ($employeeIdQuery->num_rows() > 0) {
+					$employeeIdRow = $employeeIdQuery->row();
+					$employeeId = $employeeIdRow->employee_id;
+					$data['user_id'] = $employeeId;
+				} 
 				$data['date'] = format_date($this->input->post('date'),"Y-m-d");
 				$data['time'] = format_date($this->input->post('time'),"H:i:s");
 				$data['reason'] = $this->input->post('reason');
@@ -73,7 +71,7 @@ class Biometric_missing extends CI_Controller
 					$notification_id = $this->notifications_model->create($notification_data);
 
 					$attendance_data = array(
-						'user_id' => $data['employee_id'],
+						'user_id' => $data['user_id'],
 						'finger' => $data['date'] . ' ' . $data['time'],
 						'note' => "Biometric missing request"
 					);
@@ -160,68 +158,32 @@ class Biometric_missing extends CI_Controller
 			$this->form_validation->set_rules('time', 'Time', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('reason', 'Missing Reason', 'trim|required|strip_tags|xss_clean');
 
-			$type = '';
-				if ($this->input->post('check_in')) {
-					$type = 'check_in';
-				} elseif ($this->input->post('check_out')) {
-					$type = 'check_out';
-				}
+			$type = 'check_in';
 
 			if($this->form_validation->run() == TRUE){
 				$data = array(
 					'saas_id' => $this->session->userdata('saas_id'),
-					'user_id' => $this->input->post('user_id_add')?$this->input->post('user_id_add'):$this->session->userdata('user_id'),
 					'date' => format_date($this->input->post('date'),"Y-m-d"),
 					'time' => format_date($this->input->post('time'),"H:i:s"),
 					'reason' => $this->input->post('reason'),
 					'type' => $type, 	
 				);
 
-				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $data['user_id']));
+				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id')));
 
-				// Check if a row is found
 				if ($employeeIdQuery->num_rows() > 0) {
 					$employeeIdRow = $employeeIdQuery->row();
 					$employeeId = $employeeIdRow->employee_id;
-
-					// Add 'employee_id' to the data array
-					$data['employee_id'] = $employeeId;
+					$data['user_id'] = $employeeId;
 				} 
 				
 				$id = $this->biometric_missing_model->create($data);
 				
-				if($id){
-
-					if($this->ion_auth->in_group(2) || permissions('biometric_request_view')|| $this->ion_auth->in_group(1)){
-						$group = get_notifications_group_id();
-						if(!empty($group)){
-							$system_admins = $this->ion_auth->users($group)->result();
-						}
-						foreach ($system_admins as $system_user) {
-							if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
-								$notification_data = array(
-									'notification' => 'Biometric missing request received',
-									'type' => 'biometric_request',	
-									'type_id' => $id,	
-									'from_id' => $this->input->post('user_id')?$this->input->post('user_id'):$this->session->userdata('user_id'),
-									'to_id' => $system_user->user_id,		
-								);
-								$notification_id = $this->notifications_model->create($notification_data);
-							}
-						}
-					}
-
 					$this->session->set_flashdata('message', $this->lang->line('created_successfully')?$this->lang->line('created_successfully'):"Created successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;
 					$this->data['message'] = $this->lang->line('created_successfully')?$this->lang->line('created_successfully'):"Created successfully.";
 					echo json_encode($this->data); 
-				}else{
-					$this->data['error'] = true;
-					$this->data['sql'] = $id;
-					$this->data['message'] = $this->lang->line('something_wrong_try_again')?$this->lang->line('something_wrong_try_again'):"Something wrong! Try again.";
-					echo json_encode($this->data);
-				}
 			}else{
 				$this->data['error'] = true;
 				$this->data['message'] = validation_errors();
