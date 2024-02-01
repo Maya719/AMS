@@ -1,9 +1,5 @@
 <?php $this->load->view('includes/header'); ?>
 <style>
-  :root {
-    --theme-color: #193a66;
-  }
-
   .static-column-left {
     position: sticky;
     left: 0;
@@ -54,7 +50,8 @@
       <!-- row -->
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-12 mb-3">
+          <div class="col-lg-12 mb-3 d-flex">
+            <a class="fs-6" href="<?=base_url('attendance')?>"><i class="fas fa-angle-left mx-3 mt-2"></i></a>
             <div class="title">
               <div style="color: #6B6D71; font-size: 20px; font-family: Poppins; font-weight: 500; line-height: 30px; letter-spacing: 0.10px; word-wrap: break-word"><?=$name?></div>
             </div>
@@ -312,7 +309,5 @@ function getUniqueDates(data) {
         Main wrapper end
     ***********************************-->
 </body>
-
-<!-- Mirrored from fillow.Mobipixels.com/codeigniter/demo/index by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 07 Dec 2023 05:48:29 GMT -->
 
 </html>

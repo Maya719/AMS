@@ -29,11 +29,11 @@
   <!--*******************
         Preloader end
     ********************-->
-    <?php $this->load->view('includes/sidebar');?>
   <!--**********************************
         Main wrapper start
     ***********************************-->
   <div id="main-wrapper">
+  <?php $this->load->view('includes/sidebar');?>
   <div class="content-body default-height">
       <!-- row -->
       <div class="container-fluid">

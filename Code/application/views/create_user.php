@@ -18,11 +18,19 @@
     <!--*******************
         Preloader end
     ********************-->
-    <?php $this->load->view('includes/sidebar'); ?>
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
+            <!--**********************************
+    Sidebar start
+***********************************-->
+    <?php $this->load->view('includes/sidebar'); ?>
+    <!--**********************************
+    Sidebar end
+***********************************--> <!--**********************************
+	Content body start
+***********************************-->
         <div class="content-body default-height">
             <!-- row -->
             <div class="container-fluid">
