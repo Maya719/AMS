@@ -160,20 +160,25 @@ function ajaxCall(employee_id,shift_id,department_id,from,too){
 }
 
 function showTable(data) {
+    console.log(data);
     var table = $('#attendance_list');
     if ($.fn.DataTable.isDataTable(table)) {
         table.DataTable().destroy();
     }
     emptyDataTable(table);
+    var uniqueDates = getUniqueDates(data.data);
     var thead = table.find('thead');
-    var theadRow = '<tr><th style="font-size:10px;">ID</th><th style="font-size:10px;">Employee</th>';
-
-    var uniqueDates = getUniqueDates(data);
+    var theadRow = '<tr><td style="background=#FAFAFA;border:2px solid #FAFAFA;" colspan="2"></td> ';
+    const dataArray = Object.entries(data.range);
+    dataArray.forEach(([month, value]) => {
+        theadRow += '<td class="text-center" style="background=#FAFAFA; font-weight:600; border:2px solid #FAFAFA;" colspan="'+value+'">'+month+'</td>';
+    });
+    theadRow += '</tr><tr><th style="font-size:12px;">ID</th><th style="font-size:12px;">Employee</th>';
 
     uniqueDates.forEach(date => {
         const formattedDate = new Date(date);
-        const formattedDateString = formattedDate.toLocaleString('en-US', { month: 'short', day: 'numeric' });
-        theadRow += '<th style="font-size:10px;">' + formattedDateString + '</th>';
+        const formattedDateString = formattedDate.toLocaleString('en-US', {day: 'numeric' });
+        theadRow += '<th style="font-size:12px;">' + formattedDateString + '</th>';
     });
 
     theadRow += '</tr>';
@@ -182,14 +187,14 @@ function showTable(data) {
     // Add table body
     var tbody = table.find('tbody');
     
-    data.forEach(user => {
+    data.data.forEach(user => {
         var userRow = '<tr>';
-        userRow += '<td style="font-size:10px;">' + user.user + '</td>';
-        userRow += '<td style="font-size:10px;">' + user.name + '</td>';
+        userRow += '<td style="font-size:12px;">' + user.user + '</td>';
+        userRow += '<td style="font-size:12px;">' + user.name + '</td>';
 
         uniqueDates.forEach(date => {
             if (user.dates[date]) {
-                userRow += '<td style="font-size:10px;">' + user.dates[date].join('<br>') + '</td>';
+                userRow += '<td style="font-size:12px;">' + user.dates[date].join('<br>') + '</td>';
             } else {
                 userRow += '<td style="font-size:10px;">Absent</td>';
             }
@@ -272,6 +277,13 @@ function setFilter() {
       fromDate = new Date(year, month - 1, 1);
       toDate = new Date(year, month, 0);
       break;
+    case "custom":
+      var fromInput =$('#from').val();
+      var toInput =$('#too').val();
+      console.log(from);
+      fromDate = new Date(convertDateFormat(fromInput));
+      toDate = new Date(convertDateFormat(toInput));
+      break;
     default:
       console.error("Invalid filter option:", filterOption);
       return null; 
@@ -281,6 +293,16 @@ function setFilter() {
   var formattedFromDate = formatDate(fromDate, "Y-m-d");
   var formattedToDate = formatDate(toDate, "Y-m-d");
   ajaxCall(employee_id, shift_id, department_id, formattedFromDate, formattedToDate);
+}
+function convertDateFormat(inputDate) {
+    const months = {
+        Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+        Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+    };
+
+    const [day, month, year] = inputDate.split(' ');
+
+    return `${year}-${months[month]}-${day}`;
 }
 function formatDate(date, format) {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit' };

@@ -125,9 +125,27 @@ class Attendance_model extends CI_Model
                 }
             }
         }
+        
+        $groupedData = array();
 
-        $resultArray = array_values($formattedData);
-        return $resultArray;
+        foreach ($dateArray as $date) {
+            $monthYear = date('M Y', strtotime($date));
+
+            if (!isset($groupedData[$monthYear])) {
+                $groupedData[$monthYear] = array();
+            }
+
+            $groupedData[$monthYear][] = $date;
+        }
+
+
+        $monthCounts = array_map('count', $groupedData);
+
+        $output = [
+            'data'=>array_values($formattedData),
+            'range'=>$monthCounts
+        ];
+        return $output;
     }
 
     public function holidayCheck($user_id, $date){

@@ -28,7 +28,7 @@
     <!--**********************************
     Sidebar start
 ***********************************-->
-<?php $this->load->view('includes/sidebar'); ?>
+    <?php $this->load->view('includes/sidebar'); ?>
     <!--**********************************
     Sidebar end
 ***********************************--> <!--**********************************
@@ -46,7 +46,7 @@
           <div class="col-xl-2 col-sm-4">
             <div class="card">
               <div class="card-body text-sm-center py-3 text-primary">
-                <input style="border:none; height:20px;" name="datepicker" class="text-primary fs-6 fw-bold datepicker-default form-control p-0" value="<?= date('j F, Y') ?>" id="from">
+                <input style="border:none; height:20px;" name="datepicker" class="text-primary fs-6 fw-bold datepicker-default2 form-control p-0" value="<?= date('j F, Y') ?>" id="from">
               </div>
             </div>
           </div>
@@ -343,6 +343,13 @@
     $(document).ready(function() {
       $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
       $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
+    });
+    $('.datepicker-default2').daterangepicker({
+      locale: {
+        format: date_format_js
+      },
+      singleDatePicker: true,
+      maxDate: moment()
     });
   </script>
 </body>

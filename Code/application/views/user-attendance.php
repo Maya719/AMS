@@ -51,7 +51,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-12 mb-3 d-flex">
-            <a class="fs-6" href="<?=base_url('attendance')?>"><i class="fas fa-angle-left mx-3 mt-2"></i></a>
+            <a class="fs-6" href="javascript:history.go(-1)"><i class="fas fa-angle-left mx-3 mt-2"></i></a>
             <div class="title">
               <div style="color: #6B6D71; font-size: 20px; font-family: Poppins; font-weight: 500; line-height: 30px; letter-spacing: 0.10px; word-wrap: break-word"><?=$name?></div>
             </div>
