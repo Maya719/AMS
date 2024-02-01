@@ -31,9 +31,19 @@ class Holiday_model extends CI_Model
         $results4["starting_date"]=$results[0]["starting_date"];
         $results4["type"]=$results[0]["type"];
         $usersarray = json_decode($results[0]["users"]);
+        if (count($usersarray) > 0) {
+            foreach ($usersarray as $user) {
+                $employeeIdQuery = $this->db->select('id')->get_where('users', array('employee_id' => $user));
+                if ($employeeIdQuery->num_rows() > 0) {
+                    $employeeIdRow = $employeeIdQuery->row();
+                    $users[] = $employeeIdRow->id;
+                }
+            }
+        $results4["users"] = implode(',', $users); 
+        }
+        
         $departmentarray = json_decode($results[0]["department"]);
-        $results4["users"]= implode(',',$usersarray );
-        $results4["department"]= implode(',',$departmentarray );
+        $results4["department"]= implode(',', $departmentarray);
 
         return $results4;
     }

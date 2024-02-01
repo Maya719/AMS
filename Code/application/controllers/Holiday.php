@@ -147,7 +147,15 @@ class Holiday extends CI_Controller
 						$data["apply"]= '2';
 						$data["department"] = json_encode(array());
 						$users = $this->input->post('users');
-						$data["users"] = json_encode($users);
+						foreach ($users as $user) {
+							$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $user));
+								if ($employeeIdQuery->num_rows() > 0) {
+									$employeeIdRow = $employeeIdQuery->row();
+									$employeeId = $employeeIdRow->employee_id;
+									$userArray[] = $employeeId;
+								}
+						}
+						$data["users"] = json_encode($userArray);
 					}
 
 					if ($data['type'] == '2') {
