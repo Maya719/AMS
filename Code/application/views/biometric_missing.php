@@ -286,7 +286,7 @@
           },
           success: function(response) {
             var tableData = JSON.parse(response);
-            // console.log(response);
+            console.log(response);
             showTable(tableData);
           },
           complete: function() {},

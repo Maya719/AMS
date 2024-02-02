@@ -22,7 +22,7 @@
         Main wrapper start
     ***********************************-->
   <div id="main-wrapper">
-  <?php $this->load->view('includes/sidebar'); ?>
+    <?php $this->load->view('includes/sidebar'); ?>
     <div class="content-body default-height">
       <!-- row -->
       <div class="container-fluid">
@@ -36,6 +36,7 @@
               <div class="card-body">
                 <div class="basic-form">
                   <form class="row">
+                  <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                     <div class="col-lg-3 mb-3">
                       <select class="form-select" id="employee_id">
                         <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
@@ -46,6 +47,8 @@
                         } ?>
                       </select>
                     </div>
+                    <?php
+                  }?>
                     <div class="col-lg-3 mb-3">
                       <select class="form-select" id="leave_type">
                         <option value=""><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave type' ?></option>
@@ -109,7 +112,7 @@
           </div>
           <form action="<?= base_url('leaves/create') ?>" method="POST" class="modal-part" id="modal-add-leaves-part">
             <div class="modal-body">
-              <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                 <div class="form-group mb-3">
                   <label class="required"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Users' ?></label>
                   <select name="user_id_add" id="user_id_add" class="form-control">
@@ -222,13 +225,14 @@
             </div>
             <div class="modal-footer d-flex justify-content-center">
               <div class="col-lg-4">
-                <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
+                <button type="button" class="btn btn-create-leave btn-block btn-primary">Create</button>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
+
     <div class="modal fade" id="edit-leave-modal">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -297,7 +301,7 @@
                 <div id="half_day_date_edit" class="row" style="display: none;">
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="date_half" name="date_half" class="form-control" required="">
+                    <input type="text" id="date_half2" name="date_half" class="form-control datepicker-default" required="">
                   </div>
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
@@ -401,7 +405,7 @@
             break;
           case "tmonth":
             fromDate = new Date(year, month, 1);
-            toDate = today;
+            toDate = new Date(year, month + 1, 0);
             break;
           case "lmonth":
             fromDate = new Date(year, month - 1, 1);
@@ -409,7 +413,7 @@
             break;
           case "tyear":
             fromDate = new Date(year, 0, 1);
-            toDate = today;
+            toDate = new Date(year, 11, 31);
             break;
           case "lyear":
             fromDate = new Date(year - 1, 0, 1);
@@ -607,12 +611,12 @@
       }
     });
     // leaves
-    $("#leave-modal").on('click', '.btn-create', function(e) {
+    $("#leave-modal").on('click', '.btn-create-leave', function(e) {
       var modal = $('#leave-modal');
       var form = $('#modal-add-leaves-part');
       var formData = form.serialize();
       console.log(formData);
-
+      e.preventDefault();
       $.ajax({
         type: 'POST',
         url: form.attr('action'),
@@ -627,13 +631,11 @@
         }
       });
 
-      e.preventDefault();
     });
 
     $(document).on('click', '.delete_leaves', function(e) {
       e.preventDefault();
       var id = $(this).data("id");
-      // Display a confirmation dialog
       Swal.fire({
         title: 'Are you sure?',
         text: 'You won\'t be able to revert this!',
@@ -702,7 +704,6 @@
                 },
                 singleDatePicker: true,
                 startDate: endingDate,
-                minDate: moment(startingDate, date_format_js).startOf('day')
               });
 
               $('#full_day_dates_edit').show();
@@ -724,26 +725,27 @@
                 showMeridian: false,
                 time24Hour: time24
               });
-              $('#starting_time').timepicker('setTime', startingTime); // Set the default starting time
+              $('#starting_time').timepicker('setTime', startingTime);
 
               $('#ending_time').timepicker({
                 format: 'HH:mm',
                 showMeridian: false,
                 time24Hour: time24
               });
-              $('#ending_time').timepicker('setTime', endingTime); // Set the default ending time
+              $('#ending_time').timepicker('setTime', endingTime);
 
               $('#full_day_dates_edit').hide();
               $('#short_leave_dates_edit').show();
               $('#half_day_date_edit').hide();
               $("#leave").val('Short Leave');
             } else if (result['data'][0].leave_duration.includes('Half')) {
-              $('#date_half').daterangepicker({
+              console.log(endingDate);
+              $('#date_half2').daterangepicker({
                 locale: {
                   format: date_format_js
                 },
                 singleDatePicker: true,
-                startDate: startingDate,
+                startDate: endingDate,
               });
 
               if (result['data'][0].leave_duration.includes('First')) {

@@ -366,10 +366,15 @@ class Attendance extends CI_Controller
 		{
 			
 		    $employee_id = $this->uri->segment($this->uri->total_segments());
-			$user_data = $this->ion_auth->user($employee_id)->row();
-			$user_query = $this->db->get_where('users', array('employee_id' => $employee_id));
-			$user_data = $user_query->row();
-			if ($user_data) {
+			if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+				$user_data = $this->ion_auth->user($employee_id)->row();
+				$user_query = $this->db->get_where('users', array('employee_id' => $employee_id));
+				$user_data = $user_query->row();
+				if ($user_data) {
+					$this->data['name'] = $user_data->first_name . ' ' . $user_data->last_name;
+				}
+			}else{
+				$user_data = $this->ion_auth->user()->row();
 				$this->data['name'] = $user_data->first_name . ' ' . $user_data->last_name;
 			}
 			$this->data['page_title'] = 'Attendance - '.company_name();

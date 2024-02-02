@@ -44,8 +44,7 @@ class Leaves extends CI_Controller
 				$id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
 			}
 
-			if (!empty($id) && is_numeric($id) && $this->leaves_model->delete($this->session->userdata('user_id'), $id)) {
-
+			if (!empty($id) && is_numeric($id) && $this->leaves_model->delete($id)) {
 				$this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
 				$this->session->set_flashdata('message_type', 'success');
 
@@ -100,7 +99,7 @@ class Leaves extends CI_Controller
 				}
 
 				// Get shift details based on shift_id
-				$shiftIdQuery = $this->db->select('shift_id')->get_where('users', array('id' => $data['user_id']));
+				$shiftIdQuery = $this->db->select('shift_id')->get_where('users', array('id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id')));
 				$shiftIdRow = $shiftIdQuery->row();
 				$shiftId = $shiftIdRow->shift_id;
 

@@ -8,13 +8,12 @@ class Biometric_missing_model extends CI_Model
 		parent::__construct();
     }
     
-    function delete($user_id, $id){
+    function delete($id){
         if($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')){
         $this->db->where('id', $id);
         $this->db->where('saas_id', $this->session->userdata('saas_id'));
         }else{
             $this->db->where('id', $id);
-            $this->db->where('user_id', $user_id);
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
         }
         if($this->db->delete('biometric_missing'))
@@ -29,8 +28,9 @@ class Biometric_missing_model extends CI_Model
         if($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')){
             $where .= " WHERE bm.id = $id ";
         }else{
-            $where .= " WHERE bm.user_id = ".$this->session->userdata('user_id');
-            $where .= " AND bm.id = $id ";
+            // $where .= " WHERE bm.user_id = ".$this->session->userdata('user_id');
+
+            $where .= " WHERE bm.id = $id ";
         }
     
         $where .= " AND bm.saas_id = ".$this->session->userdata('saas_id');
@@ -64,7 +64,6 @@ class Biometric_missing_model extends CI_Model
                     $where .= " WHERE bm.user_id = ".$get['user_id'];
                 } else {
                     $selected = selected_users();
-                    $selected[] = $this->session->userdata('employee_id');
                 
                     if (!empty($selected)) {
                         $userIdsString = implode(',', $selected);
@@ -72,7 +71,8 @@ class Biometric_missing_model extends CI_Model
                     }
                 }
             }else{
-                $where .= " WHERE bm.user_id = ".$this->session->userdata('employee_id');
+                $id = get_employee_id_from_user_id($this->session->userdata('user_id'));
+                $where .= " WHERE bm.user_id = ". $id ;
             }
         }
         
@@ -92,7 +92,7 @@ class Biometric_missing_model extends CI_Model
         $query = $this->db->query("SELECT bm.*, CONCAT(u.first_name, ' ', u.last_name) as user FROM biometric_missing bm $LEFT_JOIN ".$where);
         $results = $query->result_array();
         foreach ($results as &$request) {
-            if ($request['status'] == 0 && ($this->ion_auth->is_admin() || permissions('biometric_request_status'))) {
+            if ($request['status'] == 0) {
                 $request['btn'] =true;
                 $request['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
             } elseif ($request['status'] == 1) {

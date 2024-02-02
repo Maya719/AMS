@@ -18,7 +18,7 @@ class Biometric_missing extends CI_Controller
 				$id = $this->uri->segment(3)?$this->uri->segment(3):'';
 			}
 			
-			if(!empty($id) && is_numeric($id) && $this->biometric_missing_model->delete($this->session->userdata('user_id'), $id)){
+			if(!empty($id) && is_numeric($id) && $this->biometric_missing_model->delete($id)){
 
 				$this->session->set_flashdata('message', $this->lang->line('deleted_successfully')?$this->lang->line('deleted_successfully'):"Deleted successfully.");
 				$this->session->set_flashdata('message_type', 'success');
@@ -169,7 +169,7 @@ class Biometric_missing extends CI_Controller
 					'type' => $type, 	
 				);
 
-				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id')));
+				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id')));
 
 				if ($employeeIdQuery->num_rows() > 0) {
 					$employeeIdRow = $employeeIdQuery->row();
@@ -178,7 +178,6 @@ class Biometric_missing extends CI_Controller
 				} 
 				
 				$id = $this->biometric_missing_model->create($data);
-				
 					$this->session->set_flashdata('message', $this->lang->line('created_successfully')?$this->lang->line('created_successfully'):"Created successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;
@@ -205,8 +204,6 @@ class Biometric_missing extends CI_Controller
 			$this->data['page_title'] = 'Biometric Request - '.company_name();
 			$this->data['main_page'] = 'Biometric Request';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			// $userRow = $this->attendance_model->get_user_by_active();
-			// $this->data['system_users'] = $userRow;
 			if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all')) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			}elseif (permissions('biometric_request_view_selected')) {

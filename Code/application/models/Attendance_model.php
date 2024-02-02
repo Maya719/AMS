@@ -350,8 +350,9 @@ class Attendance_model extends CI_Model
             $attendance = $this->get_single_attendance_for_admin($get["user_id"], $get["from"], $get["too"]);
             $formated_data = $this->format_single_user_attendance($attendance, $get);
         } else {
-            $leaves = [];
-            $formated_data = [];
+            $id = $this->ion_auth->user()->row()->employee_id;
+            $attendance = $this->get_single_attendance_for_admin($id, $get["from"], $get["too"]);
+            $formated_data = $this->format_single_user_attendance($attendance, $get);
         }
         return $formated_data;
     }

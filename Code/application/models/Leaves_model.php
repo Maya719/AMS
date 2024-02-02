@@ -8,13 +8,12 @@ class Leaves_model extends CI_Model
 		parent::__construct();
     }
     
-    function delete($user_id, $id){
+    function delete($id){
         if($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')){
         $this->db->where('id', $id);
         $this->db->where('saas_id', $this->session->userdata('saas_id'));
         }else{
          $this->db->where('id', $id);
-         $this->db->where('user_id', $user_id);
          $this->db->where('saas_id', $this->session->userdata('saas_id'));
         }
         if($this->db->delete('leaves'))
@@ -28,8 +27,7 @@ class Leaves_model extends CI_Model
         if($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')){
             $where .= " WHERE id = $id ";
         }else{
-            $where .= " WHERE user_id = ".$this->session->userdata('user_id');
-            $where .= " AND id = $id ";
+            $where .= " WHERE id = $id ";
         }
 
         $where .= " AND saas_id = ".$this->session->userdata('saas_id');
@@ -51,6 +49,7 @@ class Leaves_model extends CI_Model
         $toDate = $get["too"];
         $where = '';
         $where .= " WHERE l.saas_id = ".$this->session->userdata('saas_id');
+
         $where .= " AND ((DATE(l.starting_date) BETWEEN '{$fromDate}' AND '{$toDate}') OR (DATE(l.ending_date) BETWEEN '{$fromDate}' AND '{$toDate}')) ";
         if(isset($get['status']) &&  !empty($get['status'])){
             $status = $get["status"];
@@ -67,6 +66,19 @@ class Leaves_model extends CI_Model
             if(isset($get['user_id']) && !empty($get['user_id'])){
                 $where .= " AND l.user_id = ".$get['user_id'];
             }
+        }else{
+            if (permissions('leaves_view_selected')) {
+                $selected = selected_users();
+                $selected[] = $this->session->userdata('user_id');
+            
+                if (!empty($selected)) {
+                    $userIdsString = implode(',', $selected);
+                    $where = " AND l.user_id IN ($userIdsString)";
+                }
+            }else{
+                $id = get_employee_id_from_user_id($this->session->userdata('user_id'));
+                $where .= " AND l.user_id = ".$id;
+            }
         }
         $LEFT_JOIN = " LEFT JOIN users u ON u.employee_id = l.user_id ";
         $LEFT_JOIN .= " LEFT JOIN leaves_type lt ON lt.id = l.type "; 
@@ -77,6 +89,10 @@ class Leaves_model extends CI_Model
             return strtotime($b['starting_date']) - strtotime($a['starting_date']);
         });
         foreach ($results as &$leave) {
+            $leave['starting_date'] = date('d M, Y', strtotime($leave['starting_date']));
+            $leave['ending_date'] = date('d M, Y', strtotime($leave['ending_date']));
+            $leave['starting_time'] = date('h:i A', strtotime($leave['starting_time']));
+            $leave['ending_time'] = date('h:i A', strtotime($leave['ending_time']));
             if ($leave['paid'] == 0) {
                 $leave['paid'] = ($this->lang->line('paid') ? htmlspecialchars($this->lang->line('paid')) : 'Paid Leave');
             } else {
@@ -85,6 +101,7 @@ class Leaves_model extends CI_Model
             if ($leave['status'] == 0) {
                 $leave['btn'] = true;
                 $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
+            
             } elseif ($leave['status'] == 1) {
                 $leave['btn'] = false;
                 $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved') . '</span>';
@@ -92,6 +109,7 @@ class Leaves_model extends CI_Model
                 $leave['btn'] = false;
                 $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('rejected') ? htmlspecialchars($this->lang->line('rejected')) : 'Rejected') . '</span>';
             }
+
         }
        
         return $results;
