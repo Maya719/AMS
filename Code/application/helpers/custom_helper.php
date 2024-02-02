@@ -2654,5 +2654,13 @@ function formatOffset($offset) {
     return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT).':'. str_pad($minutes,2, '0');
 }
 // new pms
-
+function get_user_id_from_employee_id($employee_id){
+    $CI =& get_instance();
+    $employeeIdQuery =  $CI->db->select('id')->get_where('users', array('employee_id' => $employee_id));
+    // if ($employeeIdQuery->num_rows() > 0) {
+        $employeeIdRow = $employeeIdQuery->row();
+        $employeeId = $employeeIdRow->id;
+       return $employeeId;
+    // }
+}
 ?>

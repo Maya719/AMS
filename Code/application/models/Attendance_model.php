@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
 use AgileBM\ZKLib\ZKLib;
 
 require '../vendor/autoload.php';
@@ -18,7 +19,6 @@ class Attendance_model extends CI_Model
         } else {
             return false;
         }
-
     }
 
     public function my_att_running($user_id)
@@ -59,7 +59,7 @@ class Attendance_model extends CI_Model
             $leaves = [];
             $formated_data = [];
         }
-        
+
         echo json_encode($formated_data);
     }
 
@@ -89,7 +89,7 @@ class Attendance_model extends CI_Model
 
             if (!isset($formattedData[$userId])) {
                 $formattedData[$userId] = [
-                    'user_id'=>$userId,
+                    'user_id' => $userId,
                     'user' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>',
                     'name' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user . '</a>',
                     'dates' => [],
@@ -99,7 +99,7 @@ class Attendance_model extends CI_Model
             if (!isset($formattedData[$userId]['dates'][$createdDate])) {
                 $formattedData[$userId]['dates'][$createdDate] = [];
             }
-            $formattedData[$userId]['dates'][$createdDate][] = date('H:i A', strtotime($createdTime));
+            $formattedData[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
         }
 
         foreach ($dateArray as $date) {
@@ -115,17 +115,17 @@ class Attendance_model extends CI_Model
                 if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
                     $user_id = $userData['user_id'];
                     // check leave
-                    if($this->checkLeave($user_id, $date)){
+                    if ($this->checkLeave($user_id, $date)) {
                         $userData['dates'][$date][] = '<span class="text-success">Leave</span>';
-                    }elseif ($this->holidayCheck($user_id, $date)) {
+                    } elseif ($this->holidayCheck($user_id, $date)) {
                         $userData['dates'][$date][] = '<span class="text-primary">Holiday</span>';
-                    }else{
+                    } else {
                         $userData['dates'][$date][] = '<span class="text-danger">Absent</span>';
                     }
                 }
             }
         }
-        
+
         $groupedData = array();
 
         foreach ($dateArray as $date) {
@@ -142,50 +142,51 @@ class Attendance_model extends CI_Model
         $monthCounts = array_map('count', $groupedData);
 
         $output = [
-            'data'=>array_values($formattedData),
-            'range'=>$monthCounts
+            'data' => array_values($formattedData),
+            'range' => $monthCounts
         ];
         return $output;
     }
 
-    public function holidayCheck($user_id, $date){
+    public function holidayCheck($user_id, $date)
+    {
         $this->db->select('*');
         $this->db->from('holiday');
         $this->db->where('starting_date <=', $date);
         $this->db->where('ending_date >=', $date);
-        
+
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $holidays = $query->result_array();
             foreach ($holidays as $holiday) {
                 if ($holiday["apply"] == '0') {
                     return true;
-                }elseif ($holiday["apply"] == '1') {
+                } elseif ($holiday["apply"] == '1') {
                     $user = $this->ion_auth->user($user_id)->row();
                     $department = $user->department;
                     $appliedDepart =  json_decode($holiday["department"]);
                     if (in_array($department, $appliedDepart)) {
                         return true;
                     }
-                }elseif ($holiday["apply"] == '2') {
+                } elseif ($holiday["apply"] == '2') {
                     $appliedUser =  json_decode($holiday["users"]);
                     if (in_array($user_id, $appliedUser)) {
                         return true;
                     }
-                }else{
-                    
+                } else {
                 }
             }
         } else {
             $dayOfWeek = date('N', strtotime($date));
             if ($dayOfWeek == 6 || $dayOfWeek == 7) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
     }
-    public function checkLeave($user_id, $date){
+    public function checkLeave($user_id, $date)
+    {
         $this->db->select('*');
         $this->db->from('leaves');
         $this->db->where('user_id', $user_id);
@@ -249,7 +250,7 @@ class Attendance_model extends CI_Model
         }
         $leftjoin = " LEFT JOIN users ON attendance.user_id = users.employee_id";
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user 
-        FROM attendance " . $leftjoin . $where);        
+        FROM attendance " . $leftjoin . $where);
         $results = $query->result_array();
         $system_users = $this->ion_auth->members_all()->result();
         foreach ($system_users as $user) {
@@ -260,13 +261,13 @@ class Attendance_model extends CI_Model
                     if ($user->employee_id == $attendance["user_id"]) {
                         $present++;
                         $userPresent = true;
-                        break; 
+                        break;
                     }
                 }
                 if (!$userPresent) {
                     if ($this->checkLeave($user->id, $todayDate)) {
                         $leaves++;
-                    }else {
+                    } else {
                         $abs++;
                     }
                 }
@@ -276,16 +277,16 @@ class Attendance_model extends CI_Model
         $firstDayOfMonth = new DateTime('first day of ' . $currentDate->format('Y-m'));
         $fromDate = $firstDayOfMonth->format('Y-m-d');
         $leftjoin2 = " LEFT JOIN users ON leaves.user_id = users.employee_id";
-        $where2 = " WHERE users.active= '1' AND users.finger_config='1' AND users.saas_id=".$this->session->userdata('saas_id');
+        $where2 = " WHERE users.active= '1' AND users.finger_config='1' AND users.saas_id=" . $this->session->userdata('saas_id');
         $where2 .= " AND leaves.starting_date >= '" . $fromDate . "' AND leaves.ending_date <= '" . $todayDate . "'";
-        $leaveQuery = $this->db->query("SELECT leaves.*, CONCAT(users.first_name, ' ', users.last_name) AS user  FROM leaves ".$leftjoin2.$where2." AND leaves.leave_duration NOT LIKE '%Half%' AND leaves.leave_duration NOT LIKE '%Short%'");
+        $leaveQuery = $this->db->query("SELECT leaves.*, CONCAT(users.first_name, ' ', users.last_name) AS user  FROM leaves " . $leftjoin2 . $where2 . " AND leaves.leave_duration NOT LIKE '%Half%' AND leaves.leave_duration NOT LIKE '%Short%'");
         $leavesresult = $leaveQuery->result_array();
         foreach ($leavesresult as $leavesResult) {
             if ($leavesResult["status"] == '1') {
                 $leaves_approved++;
-            }elseif ($leavesResult["status"] == '0') {
+            } elseif ($leavesResult["status"] == '0') {
                 $leave_pending++;
-            }elseif($leavesResult["status"] == '2'){
+            } elseif ($leavesResult["status"] == '2') {
                 $leave_rejected++;
             }
         }
@@ -297,16 +298,16 @@ class Attendance_model extends CI_Model
         foreach ($BioResults as $BioResult) {
             if ($BioResult["status"] == '1') {
                 $bio_approved++;
-            }elseif ($BioResult["status"] == '0') {
+            } elseif ($BioResult["status"] == '0') {
                 $bio_pending++;
-            }elseif($BioResult["status"] == '2'){
+            } elseif ($BioResult["status"] == '2') {
                 $bio_rejected++;
             }
         }
 
         return $array = [
             // "system_users" => $system_users,
-            "total_staff"=>$total_staff,
+            "total_staff" => $total_staff,
             "abs" => $abs,
             "leave" => $leaves,
             "present" => $present,
@@ -323,7 +324,8 @@ class Attendance_model extends CI_Model
     {
         if ($department == '') {
             $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1'");
-        }if ($department != '') {
+        }
+        if ($department != '') {
             $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND department= '$department' AND finger_config = '1'");
         }
         $results = $query->result_array();
@@ -345,7 +347,7 @@ class Attendance_model extends CI_Model
     {
         $attendance_view_all = permissions('attendance_view_all') || permissions('attendance_view_selected');
         if ($this->ion_auth->is_admin() || $attendance_view_all) {
-            $attendance = $this->get_single_attendance_for_admin($get["user_id"],$get["from"],$get["too"]);
+            $attendance = $this->get_single_attendance_for_admin($get["user_id"], $get["from"], $get["too"]);
             $formated_data = $this->format_single_user_attendance($attendance, $get);
         } else {
             $leaves = [];
@@ -354,7 +356,8 @@ class Attendance_model extends CI_Model
         return $formated_data;
     }
 
-    public function get_single_attendance_for_admin($user_id,$from,$too){
+    public function get_single_attendance_for_admin($user_id, $from, $too)
+    {
         if (isset($user_id) && !empty($user_id)) {
             $where = " WHERE attendance.user_id = " . $user_id;
         } else {
@@ -372,130 +375,172 @@ class Attendance_model extends CI_Model
     }
 
     public function format_single_user_attendance($attendance, $get)
-{
-    $from = $get["from"];
-    $too = $get["too"];
-    $fromDate = new DateTime($from);
-    $toDate = new DateTime($too);
+    {
+        $from = $get["from"];
+        $too = $get["too"];
+        $fromDate = new DateTime($from);
+        $toDate = new DateTime($too);
 
-    $dateArray = array();
-    $interval = new DateInterval('P1D');
-    $datePeriod = new DatePeriod($fromDate, $interval, $toDate->modify('+1 day'));
+        $dateArray = array();
+        $interval = new DateInterval('P1D');
+        $datePeriod = new DatePeriod($fromDate, $interval, $toDate->modify('+1 day'));
 
-    foreach ($datePeriod as $date) {
-        $dateArray[] = $date->format('Y-m-d');
-    }
-
-    $formattedData = [];
-    foreach ($attendance as $entry) {
-        $userId = $entry['user_id'];
-        $user = $entry['user'];
-        $finger = $entry['finger'];
-        $createdDate = date("Y-m-d", strtotime($finger));
-        $createdTime = date("H:i:s", strtotime($finger));
-
-        if (!isset($formattedData[$userId])) {
-            $formattedData[$userId] = [
-                'user_id' => $userId,
-                'dates' => [],
-            ];
+        foreach ($datePeriod as $date) {
+            $dateArray[] = $date->format('Y-m-d');
         }
 
-        if (!isset($formattedData[$userId]['dates'][$createdDate])) {
-            $formattedData[$userId]['dates'][$createdDate] = [];
+        $formattedData = [];
+        foreach ($attendance as $entry) {
+            $userId = $entry['user_id'];
+            $user = $entry['user'];
+            $finger = $entry['finger'];
+            $createdDate = date("Y-m-d", strtotime($finger));
+            $createdTime = date("H:i:s", strtotime($finger));
+
+            if (!isset($formattedData[$userId])) {
+                $formattedData[$userId] = [
+                    'user_id' => $userId,
+                    'dates' => [],
+                ];
+            }
+
+            if (!isset($formattedData[$userId]['dates'][$createdDate])) {
+                $formattedData[$userId]['dates'][$createdDate] = [];
+            }
+
+            $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
         }
 
-        $formattedData[$userId]['dates'][$createdDate][] = date('H:iA', strtotime($createdTime));
-    }
-
-    $leave=0;
-    $absent=0;
-    foreach ($formattedData as &$userData) {
-        foreach ($dateArray as $date) {
-            if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
-                $user_id = $userData['user_id'];
-                if ($this->checkLeave($user_id, $date)) {
-                    $userData['dates'][$date][] = '--';
-                    $userData["status"][]='L';
-                    $leave++;
-                } elseif ($this->holidayCheck($user_id, $date)) {
-                    $userData['dates'][$date][] = '--';
-                    $userData["status"][]='H';
+        $leave = '0.0';
+        $absent = '0.0';  
+        $totalLateMinutes = 0;
+        
+        foreach ($formattedData as &$userData) {
+            $user_id = $userData['user_id'];
+            foreach ($dateArray as $date) {
+                if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
+                    if ($this->checkLeave($user_id, $date)) {
+                        $userData['dates'][$date][] = '--';
+                        $userData["status"][] = 'L';
+                        $leave++;
+                    } elseif ($this->holidayCheck($user_id, $date)) {
+                        $userData['dates'][$date][] = '--';
+                        $userData["status"][] = 'H';
+                    } else {
+                        $userData['dates'][$date][] = '--';
+                        $userData["status"][] = 'A';
+                        $absent++;
+                    }
                 } else {
-                    $userData['dates'][$date][] = '--';
-                    $userData["status"][]='A';
-                    $absent++;
+                    $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                    if ($min["lateMinutes"]) {
+                        $totalLateMinutes += $min["lateMinutes"];
+                    }
+                    if ($min["halfDay"]) {
+                        $absent = ''.floatval($absent) + floatval(1/2).'';  
+                    }
+                    if ($min["halfDayLeave"]) {
+                        $leave = ''.floatval($leave) + floatval(1/2).'';  
+                    }
+                    $userData["checkin"][] = $min;
+                    if ($this->checkHalfDayLeave($date,$user_id)) {
+                        $userData["status"][] = 'HD L';
+                    }else{
+                        $userData["status"][] = 'P';
+                    }
+                }
+            }
+            $userData["text"] = 'A/ ' . $absent . ' <br>L/ ' . $leave . ' <br>L min/ ' . $totalLateMinutes;
+        }
+
+        $resultArray = array_values($formattedData);
+        return $resultArray;
+    }
+
+
+    public function checkHalfDayLeavesAbsentsLateMin($data, $date, $employee_id)
+    {
+        $smallestTime = PHP_INT_MAX;
+        $greatestTime = PHP_INT_MIN;
+
+        foreach ($data as $time) {
+            $currentTimestamp = strtotime($time);
+
+            if ($currentTimestamp < $smallestTime) {
+                $smallestTime = $currentTimestamp;
+            }
+
+            if ($currentTimestamp > $greatestTime) {
+                $greatestTime = $currentTimestamp;
+            }
+        }
+
+        $checkInTime = date('H:i:s', $smallestTime);
+        $checkOutTime = date('H:i:s', $greatestTime);
+
+        $user_id = get_user_id_from_employee_id($employee_id);
+        $user = $this->ion_auth->user($user_id)->row();
+        $shift_id = $user->shift_id;
+        $shift = $this->shift_model->get_shift_by_id($shift_id);
+        $shiftStartTime = $shift["starting_time"];
+        $shiftStartTime = $shift["starting_time"];
+        $shiftEndTime = $shift["ending_time"];
+
+        $halfDayCheckIn = $shift["half_day_check_in"];
+        $halfDayCheckOut = $shift["half_day_check_out"];
+
+        $halfDayStartDateTime = new DateTime($date . ' ' . $halfDayCheckIn);
+        $halfDayEndDateTime = new DateTime($date . ' ' . $halfDayCheckOut);
+
+        $shiftEndDateTime = new DateTime($date . ' ' . $shiftEndTime);
+        $checkOutDateTime = new DateTime($date . ' ' . $checkOutTime);
+
+        $shiftStartDateTime = new DateTime($date . ' ' . $shiftStartTime);
+        $halfDay = false;
+        $halfDayLeave = false;
+        $checkInDateTime = new DateTime($date . ' ' . $checkInTime);
+        if ($checkInDateTime != $checkOutDateTime) {
+            if ($halfDayStartDateTime<$checkInDateTime && $halfDayEndDateTime<$checkOutDateTime) {
+                if ($this->checkHalfDayLeave($date,$employee_id)) {
+                    $halfDayLeave = true;
+                }else{
+                    $halfDay = true;
                 }
             }else{
-                $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date]);
-                $userData["ckeck_in"][]=$min;
-                $userData["status"][]='P';
+                $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
             }
-        } 
+            if ($date !== date('Y-m-d')) {
+                if ($shiftEndDateTime>$checkOutDateTime) {
+                    $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
+                    $lateMinutes += $lateMinutes2;
+                }
+            }
+        }
+
+        return ['checkInTime' => $checkInTime, 
+        'checkOutTime' => $checkOutTime,
+        'shiftStartTime' => $shiftStartTime,
+        'shiftEndTime' => $shiftEndTime,
+        'halfDayCheckIn' => $halfDayCheckIn,
+        'halfDayCheckOut' => $halfDayCheckOut,
+        'halfDay' => $halfDay,
+        'halfDayLeave' => $halfDayLeave,
+        'lateMinutes'=>$lateMinutes];
     }
-
-    $resultArray = array_values($formattedData);
-    return $resultArray;
-}
-
-
-public function checkHalfDayLeavesAbsentsLateMin($data)
-{
-    $timestamps = array_map(function ($time) {
-        return strtotime($time);
-    }, $data);
-    $smallestTimestamp = min($timestamps);
-    $smallestTime = date('h:iA', $smallestTimestamp);
-    return $timestamps;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public function checkHalfDayLeave($date, $user_id)
+    {
+        $this->db->select('*');
+        $this->db->from('leaves');
+        $this->db->where('user_id', $user_id);
+        $this->db->where('starting_date <=', $date);
+        $this->db->where('ending_date >=', $date);
+        $this->db->where('paid', 0);
+        $this->db->where('leave_duration LIKE', '%Half%');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
