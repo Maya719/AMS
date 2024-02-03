@@ -9,39 +9,6 @@ class Shift extends CI_Controller
 		parent::__construct();
 	}
 
-	public function index()
-	{
-		if ($this->ion_auth->logged_in() && is_module_allowed('shift')  && ($this->ion_auth->is_admin() || permissions('shift_view')))
-		{
-			$this->data['page_title'] = 'Shift Scheduling - '.company_name();
-			$this->data['current_user'] = $this->ion_auth->user()->row();
-			// $this->data['system_users'] = $this->ion_auth->users(array(1,2))->result();
-			$userRow = $this->attendance_model->get_user_by_active();
-			// Store the fetched row in the 'system_users' key of the data array.
-			$this->data['system_users'] = $userRow;
-			$query = $this->db->get('shift');
-        	$this->data['shift_types'] = $query->result_array();
-			$this->load->view('shift',$this->data);
-		}else{
-			redirect('auth', 'refresh');
-		}
-	}
-
-	// public function list()
-	// {
-	// 	if ($this->ion_auth->logged_in() && is_module_allowed('shift')  && $this->ion_auth->is_admin())
-	// 	{
-	// 		$this->data['page_title'] = 'Shift Scheduling - '.company_name();
-	// 		$this->data['current_user'] = $this->ion_auth->user()->row();
-	// 		$this->data['system_users'] = $this->ion_auth->users(array(1,2,4))->result();
-	// 		$query = $this->db->get('shift');
-    //     	$this->data['shift_types'] = $query->result_array();
-	// 		$this->load->view('shift_list',$this->data);
-	// 	}else{
-	// 		redirect('auth', 'refresh');
-	// 	}
-	// }
-
 	public function create()
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('shift_view')))

@@ -177,12 +177,14 @@ class Attendance_model extends CI_Model
                 }
             }
         } else {
-            $dayOfWeek = date('N', strtotime($date));
-            if ($dayOfWeek == 6 || $dayOfWeek == 7) {
-                return true;
-            } else {
-                return false;
-            }
+            return false;
+
+            // $dayOfWeek = date('N', strtotime($date));
+            // if ($dayOfWeek == 6 || $dayOfWeek == 7) {
+            //     return true;
+            // } else {
+            //     return false;
+            // }
         }
     }
     public function checkLeave($user_id, $date)
@@ -192,7 +194,7 @@ class Attendance_model extends CI_Model
         $this->db->where('user_id', $user_id);
         $this->db->where('starting_date <=', $date);
         $this->db->where('ending_date >=', $date);
-        $this->db->where('paid', 0);
+        $this->db->where('status', 1);
         $this->db->where('leave_duration NOT LIKE', '%Half%');
         $this->db->where('leave_duration NOT LIKE', '%Short%');
         $query = $this->db->get();
@@ -413,9 +415,9 @@ class Attendance_model extends CI_Model
         }
 
         $leave = '0.0';
-        $absent = '0.0';  
+        $absent = '0.0';
         $totalLateMinutes = 0;
-        
+
         foreach ($formattedData as &$userData) {
             $user_id = $userData['user_id'];
             foreach ($dateArray as $date) {
@@ -433,21 +435,24 @@ class Attendance_model extends CI_Model
                         $absent++;
                     }
                 } else {
-                    $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
-                    if ($min["lateMinutes"]) {
-                        $totalLateMinutes += $min["lateMinutes"];
-                    }
-                    if ($min["halfDay"]) {
-                        $absent = ''.floatval($absent) + floatval(1/2).'';  
-                    }
-                    if ($min["halfDayLeave"]) {
-                        $leave = ''.floatval($leave) + floatval(1/2).'';  
-                    }
-                    $userData["checkin"][] = $min;
-                    if ($this->checkHalfDayLeave($date,$user_id)) {
+                    if ($this->checkHalfDayLeave($date, $user_id)) {
+                        $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                        if ($min["halfDayLeave"]) {
+                            $leave = '' . floatval($leave) + floatval(1 / 2) . '';
+                        }
                         $userData["status"][] = 'HD L';
-                    }else{
-                        $userData["status"][] = 'P';
+                    } else {
+                        $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                        if ($min["halfDay"]) {
+                            $userData["status"][] = 'HD';
+                            $absent = '' . floatval($absent) + floatval(1 / 2) . '';
+                        }else{
+                            if ($min["lateMinutes"]) {
+                                $totalLateMinutes += $min["lateMinutes"];
+                            }
+                            $userData["status"][] = 'P';
+                        }
+                        $userData["checkin"][] = $min;
                     }
                 }
             }
@@ -497,36 +502,44 @@ class Attendance_model extends CI_Model
         $checkOutDateTime = new DateTime($date . ' ' . $checkOutTime);
 
         $shiftStartDateTime = new DateTime($date . ' ' . $shiftStartTime);
+
         $halfDay = false;
         $halfDayLeave = false;
         $checkInDateTime = new DateTime($date . ' ' . $checkInTime);
         if ($checkInDateTime != $checkOutDateTime) {
-            if ($halfDayStartDateTime<$checkInDateTime && $halfDayEndDateTime<$checkOutDateTime) {
-                if ($this->checkHalfDayLeave($date,$employee_id)) {
-                    $halfDayLeave = true;
+            if ($this->checkHalfDayLeave($date, $employee_id)) {
+                $halfDayLeave = true;
+            }
+            if (($halfDayStartDateTime >= $checkInDateTime && $halfDayEndDateTime >= $checkOutDateTime) ||
+                ($halfDayStartDateTime <= $checkInDateTime && $halfDayEndDateTime <= $checkOutDateTime)
+            ) {
+                $halfDay = true;
+            } else {
+                if ($checkInDateTime > $shiftStartDateTime) {
+                    $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
                 }else{
-                    $halfDay = true;
+                    $lateMinutes = 0;
                 }
-            }else{
-                $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
             }
             if ($date !== date('Y-m-d')) {
-                if ($shiftEndDateTime>$checkOutDateTime) {
+                if ($shiftEndDateTime > $checkOutDateTime) {
                     $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
                     $lateMinutes += $lateMinutes2;
                 }
             }
         }
 
-        return ['checkInTime' => $checkInTime, 
-        'checkOutTime' => $checkOutTime,
-        'shiftStartTime' => $shiftStartTime,
-        'shiftEndTime' => $shiftEndTime,
-        'halfDayCheckIn' => $halfDayCheckIn,
-        'halfDayCheckOut' => $halfDayCheckOut,
-        'halfDay' => $halfDay,
-        'halfDayLeave' => $halfDayLeave,
-        'lateMinutes'=>$lateMinutes];
+        return [
+            'checkInTime' => $checkInTime,
+            'checkOutTime' => $checkOutTime,
+            'shiftStartTime' => $shiftStartTime,
+            'shiftEndTime' => $shiftEndTime,
+            'halfDayCheckIn' => $halfDayCheckIn,
+            'halfDayCheckOut' => $halfDayCheckOut,
+            'halfDay' => $halfDay,
+            'halfDayLeave' => $halfDayLeave,
+            'lateMinutes' => $lateMinutes
+        ];
     }
     public function checkHalfDayLeave($date, $user_id)
     {
@@ -535,7 +548,7 @@ class Attendance_model extends CI_Model
         $this->db->where('user_id', $user_id);
         $this->db->where('starting_date <=', $date);
         $this->db->where('ending_date >=', $date);
-        $this->db->where('paid', 0);
+        $this->db->where('status', 1);
         $this->db->where('leave_duration LIKE', '%Half%');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {

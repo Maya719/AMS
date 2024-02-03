@@ -906,7 +906,7 @@
           <?php if ($this->ion_auth->is_admin() || permissions('departments_view')) { ?>
             <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
           <?php } ?>
-          <li><a href="<?= base_url('settings/department') ?>"><a class="nav-link" href="<?= base_url('settings/department') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
+          <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
 
           <?php if ($this->ion_auth->is_admin()  && is_module_allowed('user_permissions')) { ?>
             <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
