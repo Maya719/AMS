@@ -236,44 +236,57 @@
       setFilter();
       $(document).on('change', '#from', function() {
         var date = $('#from').val();
+        var all = 0;
         var present = 0;
         var absent = 0;
         var leave = 0;
-        setFilter(date,present,absent,leave);
+        setFilter(date,all,present,absent,leave);
       });
       $(document).on('click', '#total_present', function() {
         var date = $('#from').val();
+        var all = 0;
         var present = 1;
         var absent = 0;
         var leave = 0;
-          setFilter(date,present,absent,leave);
+          setFilter(date,all,present,absent,leave);
       });
       $(document).on('click', '#total_absent', function() {
         var date = $('#from').val();
+        var all = 0;
         var present = 0;
         var absent = 1;
         var leave = 0;
-          setFilter(date,present,absent,leave);
+          setFilter(date,all,present,absent,leave);
       });
       $(document).on('click', '#total_leave', function() {
         var date = $('#from').val();
+        var all = 0;
         var present = 0;
         var absent = 0;
         var leave = 1;
-          setFilter(date,present,absent,leave);
+          setFilter(date,all,present,absent,leave);
+      });
+      $(document).on('click', '#total_staff', function() {
+        var date = $('#from').val();
+        var all = 1;
+        var present = 0;
+        var absent = 0;
+        var leave = 0;
+          setFilter(date,all,present,absent,leave);
       });
 
-      function setFilter(date,present,absent,leave) {
-        callAjax(date,present,absent,leave);
+      function setFilter(date,all,present,absent,leave) {
+        callAjax(date,all,present,absent,leave);
       }
 
-      function callAjax(date,present,absent,leave) {
-        console.log(date,present,absent,leave);
+      function callAjax(date,all,present,absent,leave) {
+        console.log(date,all,present,absent,leave);
         $.ajax({
           url: '<?= base_url('home/get_home_attendance') ?>',
           type: 'GET',
           data: {
             date: date,
+            all: present,
             present: present,
             absent: absent,
             leave: leave,

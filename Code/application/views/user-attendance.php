@@ -330,6 +330,9 @@
           if (status == 'HD L') {
             userRow += '<td class="text-info">' + status + '</td>';
           }
+          if (status == 'HD') {
+            userRow += '<td class="text-info">' + status + '</td>';
+          }
         });
         userRow += '</tr>';
         userRow += '<tr>';

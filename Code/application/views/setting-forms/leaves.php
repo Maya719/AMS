@@ -1,114 +1,127 @@
-<?php $this->load->view('includes/head'); ?>
-
-            
-<div class="card-body row">
-    <div class="alert alert-danger col-md-12 center row">
-        <b><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></b> <?=$this->lang->line('the_numbers_in_the_total_leaves_represent_the_yearly_leave_allowance_for_each_leave_type')?$this->lang->line('the_numbers_in_the_total_leaves_represent_the_yearly_leave_allowance_for_each_leave_type'):": The numbers in the total leaves represent the yearly leave allowance for each leave type. "?>
+<div class="row">
+    <div class="col-xl-2 col-sm-3 mt-2">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#add-leave-type-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
-    <!-- <div class="row ml-3" >
-        <?php if($this->ion_auth->is_admin() || permissions('leave_type_create')){ ?>
-            <a href="#" id="modal-add-leaves-type" class="btn btn-sm btn-icon icon-left btn-primary"><i class="fas fa-plus"></i> <?=$this->lang->line('create_leave_type')?$this->lang->line('create_leave_type'):'Create Leave Type'?></a>
-        <?php } ?>
-    </div> -->
-
-    <div class="col-md-12" >
-        <table class='table-striped' id='leaves_type_list'
-            data-toggle="table"
-            data-url="<?=base_url('settings/get_leaves_type')?>"
-            data-click-to-select="true"
-            data-side-pagination="server"
-            data-pagination="true"
-            
-            data-page-list="[5, 10, 20, 50, 100, 200]"
-            data-search="false" data-show-columns="true"
-            data-show-refresh="false" data-trim-on-search="false"
-            data-sort-name="id" data-sort-order="DESC"
-            data-mobile-responsive="true"
-            data-toolbar="" data-show-export="false"
-            data-maintain-selected="true"
-            data-export-types='["txt","excel"]'
-            data-export-options='{
-            "fileName": "shift-list",
-            "ignoreColumn": ["state"] 
-            }'
-            data-query-params="queryParams">
-            <thead>
-            <tr>
-                <th data-field="sr_no" data-sortable="false"><?=$this->lang->line('sr_no')?$this->lang->line('sr_no'):'#'?></th>
-                <th data-field="name" data-sortable="false"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?></th>
-                <th data-field="duration" data-sortable="false"><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration'?></th>
-                <th data-field="action" data-sortable="false"><?=$this->lang->line('action')?$this->lang->line('action'):'Action'?></th>
-            </tr>
-            </thead>
-        </table>
+    <div class="col-lg-12 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="leave_list" class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Duration</th>
+                                <th>Leave Count</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers">
+                            <?php foreach ($leaves_type as $type) : ?>
+                                <tr>
+                                    <td><?= $type["name"] ?></td>
+                                    <?php
+                                    if ($type["duration"] == '3_months') {
+                                        $count = '3 Months';
+                                    }
+                                    if ($type["duration"] == 'year') {
+                                        $count = 'Annually';
+                                    }
+                                    if ($type["duration"] == '4_months') {
+                                        $count = '4 Months';
+                                    }
+                                    if ($type["duration"] == '6_months') {
+                                        $count = '6 Months';
+                                    }
+                                    ?>
+                                    <td><?= $count ?></td>
+                                    <td><?= $type["leave_counts"] ?></td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <span class="badge light badge-primary"><a href="#" class="text-primary edit-leave-type" data-id="<?=$type["id"]?>" data-bs-toggle="modal" data-bs-target="#edit-leave-type-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                                            <span class="badge light badge-danger ms-2"><a href="#" class="text-danger delete-leave-type" data-bs-toggle="tooltip" data-id="<?=$type["id"]?>" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<form action="<?=base_url('settings/leaves_type_create')?>" method="POST" class="modal-part"  id="modal-add-leaves-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
-    
-    <div class="form-group">
-        <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
-        <input type="text" name="name" class="form-control" required="">
+<div class="modal fade" id="add-leave-type-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="<?= base_url('settings/leaves_type_create') ?>" method="POST" class="modal-part" id="modal-add-leaves-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" required="">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?><span class="text-danger">*</span></label>
+                        <select name="duration" class="form-control select2">
+                            <option value="year">Annually</option>
+                            <option value="3_months">For 3 Months</option>
+                            <option value="4_months">For 4 Months</option>
+                            <option value="6_months">For 6 Months</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
+                        <input type="number" name="count" class="form-control" required="">
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration'?><span class="text-danger">*</span></label>
-        <select name="duration" class="form-control select2">
-            <option value="year">Annually</option>
-            <option value="3_months">For 3 Months</option>
-            <option value="4_months">For 4 Months</option>
-            <option value="6_months">For 6 Months</option>
-        </select>
+</div>
+
+<div class="modal fade" id="edit-leave-type-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="<?= base_url('settings/leaves_type_edit') ?>" method="POST" class="modal-part" id="modal-edit-leaves-type-part" data-title="<?= $this->lang->line('edit') ? $this->lang->line('edit') : 'Edit' ?>" data-btn="<?= $this->lang->line('update') ? $this->lang->line('update') : 'Update' ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="update_id" id="update_id">
+                    <div class="form-group mb-3">
+                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="name" class="form-control" required="">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?><span class="text-danger">*</span></label>
+                        <select name="duration" id="duration" class="form-control select2">
+                            <option value="year">Annually</option>
+                            <option value="3_months">For 3 Months</option>
+                            <option value="4_months">For 4 Months</option>
+                            <option value="6_months">For 6 Months</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
+                        <input type="number" id="count" name="count" class="form-control" required="">
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-create btn-block btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
-
-<form action="<?=base_url('settings/leaves_type_edit')?>" method="POST" class="modal-part" id="modal-edit-leaves-type-part" data-title="<?=$this->lang->line('edit')?$this->lang->line('edit'):'Edit'?>" data-btn="<?=$this->lang->line('update')?$this->lang->line('update'):'Update'?>">
-    <input type="hidden" name="update_id" id="update_id">
-    <div class="form-group">
-        <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
-        <input type="text" name="name" id="name" class="form-control" required="">
-    </div>
-    <div class="form-group">
-        <label><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration'?><span class="text-danger">*</span></label>
-        <select name="duration" id="duration" class="form-control select2">
-            <option value="year">Annually</option>
-            <option value="3_months">For 3 Months</option>
-            <option value="4_months">For 4 Months</option>
-            <option value="6_months">For 6 Months</option>
-        </select>
-    </div>
-</form>
-
-<div id="modal-edit-leaves-type"></div>
-
-<script>
-  function queryParams(p){
-    return {
-      limit:p.limit,
-      sort:p.sort,
-      order:p.order,
-      offset:p.offset,
-      search:p.search
-    };
-  }
-</script>
-
-<style>
-.left-pad{
-  padding-left:0.5em !important;
-  padding-right:0.5em !important;
-  padding-bottom:0.5em !important;
-  padding-top:0.5em !important;
-} 
-.create {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-top: 20px;
-    margin-left: 15px;
-    z-index: 100; /* Set a higher value for z-index */
-}
-</style>
-
-
-
-
+</div>

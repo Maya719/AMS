@@ -1,167 +1,463 @@
-<?php $this->load->view('includes/head'); ?>
+<?php $this->load->view('includes/header'); ?>
 <style>
-  .toggle-heading {
-    cursor: pointer;
-  }
-
-  .card-header {
-  position: relative;
-}
-
-.toggle-icon {
-  position: absolute;
-  right: 10px; /* Added 'px' unit here */
-  top: 10px; /* Added 'px' unit here */
-}
-  .toggle-icon::before {
-    content: "\f078"; /* Up arrow icon */
-    font-family: 'Font Awesome 5 Free';
-    display: inline-block;
-    width: 20px; /* Adjust the width as needed */
-    text-align: center;
-  }
-
-  .expanded .toggle-icon::before {
-    content: "\f077"; /* Down arrow icon when expanded */
-  }
-
-.hidden{
-    display: none;
-  }
 
 </style>
-<link rel="stylesheet" href="<?=base_url('assets/modules/multiselect/multselect.css')?>">
-
 </head>
-<body class="sidebar-mini">
-  <div id="app">
-    <div class="main-wrapper">
-      <?php $this->load->view('includes/navbar'); ?>
-        <div class="main-content">
-          <section class="section">
-            <div class="section-header">
-              <div class="section-header-back">
-                <a href="javascript:history.go(-1)" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
-              </div>
-              <h1><?=$this->lang->line('settings')?$this->lang->line('settings'):'Settings'?>
-              <?php
-              if($create){
-                ?>
-              <a href="#" id="modal-add-leaves" class="btn btn-sm btn-icon icon-left btn-primary"><i class="fas fa-plus"></i> <?=$this->lang->line('create')?$this->lang->line('create'):'Create'?></a>
-            <?php
-              }
-              ?>
-            </h1>
-              <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="<?=base_url()?>"><?=$this->lang->line('dashboard')?$this->lang->line('dashboard'):'Dashboard'?></a></div>
-                <div class="breadcrumb-item"><?=$this->lang->line('settings')?$this->lang->line('settings'):'Settings'?></div>
-              </div>
-            </div>
-            <div class="section-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="card card-primary" id="settings-card">
-                    <?php $this->load->view('setting-forms/'.htmlspecialchars($main_page)); ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      <?php $this->load->view('includes/footer'); ?>
+
+<body>
+
+  <!--*******************
+        Preloader start
+    ********************-->
+  <div id="preloader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
     </div>
   </div>
+  <!--*******************
+        Preloader end
+    ********************-->
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+  <div id="main-wrapper">
+    <?php $this->load->view('includes/sidebar'); ?>
+    <div class="content-body default-height">
+      <div class="container-fluid">
+        <?php $this->load->view('setting-forms/' . htmlspecialchars($main_page)); ?>
+      </div>
+    </div>
+    <!-- *******************************************
+  Footer -->
+    <?php $this->load->view('includes/footer'); ?>
+    <!--**********************************
+	Content body end
+***********************************-->
+  </div>
+  <?php $this->load->view('includes/scripts'); ?>
 
-<?php $this->load->view('includes/js'); ?>
-
-<?php if($this->uri->segment(2) == 'custom-code'){ ?>
   <script>
-    CodeMirror.fromTextArea(document.getElementById('header_code'), { 
-      lineNumbers: true,
-      theme: 'duotone-dark',
-    }).on('change', editor => {
-      $("#header_code").val(editor.getValue());
+    /*
+     * Leave Type Setting
+     */
+    $("#add-leave-type-modal").on('click', '.btn-create', function(e) {
+      var modal = $('#add-leave-type-modal');
+      var form = $('#modal-add-leaves-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
     });
 
-    CodeMirror.fromTextArea(document.getElementById('footer_code'), { 
-      lineNumbers: true,
-      theme: 'duotone-dark',
-    }).on('change', editor => {
-      $("#footer_code").val(editor.getValue());
+    $("#edit-leave-type-modal").on('click', '.btn-create', function(e) {
+      var modal = $('#edit-leave-type-modal');
+      var form = $('#modal-edit-leaves-type-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $(document).on('click', '.edit-leave-type', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      $.ajax({
+        type: "POST",
+        url: base_url + 'settings/get_leaves_type_by_id',
+        data: "id=" + id,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false && result['data'] != '') {
+            console.log(result);
+            $("#update_id").val(result['data'].id);
+            $("#name").val(result['data'].name);
+            $("#duration").val(result['data'].duration);
+            $("#count").val(result['data'].leave_counts);
+
+          } else {
+            iziToast.error({
+              title: something_wrong_try_again,
+              message: "",
+              position: 'topRight'
+            });
+          }
+        }
+      });
+    })
+
+    $(document).on('click', '.delete-leave-type', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      Swal.fire({
+        title: are_you_sure,
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'settings/leaves_type_delete/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            success: function(result) {
+              if (result['error'] == false) {
+                location.reload();
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            }
+          });
+        }
+      });
     });
   </script>
-<?php } ?>
+  <script>
+    /*
+     * Department Setting
+     */
+    $("#add-department-modal").on('click', '.btn-create', function(e) {
+      var modal = $('#add-department-modal');
+      var form = $('#modal-add-department-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $("#edit-department-modal").on('click', '.btn-edit', function(e) {
+      var modal = $('#edit-department-modal');
+      var form = $('#modal-edit-department-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $(document).on('click', '.edit-department', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      $.ajax({
+        type: "POST",
+        url: base_url + 'department/get_department_by_id',
+        data: "id=" + id,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false && result['data'] != '') {
+            console.log(result);
+            $("#update_id").val(result['data'][0].id);
+            $("#department_name").val(result['data'][0].department_name);
 
 
-<script>
-$(document).ready(function(){
-  
-  $('#name').on('change', function() {
-    var nameInput = $('#name').val();
-    if (nameInput == 'client' || nameInput == 'members') {
-      $('#users_roles_div').hide();
-    } else {
-      $('#users_roles_div').show();
-    }
-  });
+          } else {
+            iziToast.error({
+              title: something_wrong_try_again,
+              message: "",
+              position: 'topRight'
+            });
+          }
+        }
+      });
+    })
 
-  $(".toggle-heading").click(function(){
-    $(this).toggleClass("expanded");
-    var target = $(this).data("toggle");
-    $(".inner-content").not("[data-target=" + target + "]").hide();
-    $("[data-target=" + target + "]").toggle();
-  });
-});
+    $(document).on('click', '.delete-department', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      Swal.fire({
+        title: are_you_sure,
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'department/delete/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            success: function(result) {
+              if (result['error'] == false) {
+                location.reload();
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
 
-// $(document).ready(function() {
-//     function getDepartmentTime() {
-//         $.ajax({
-//             url: '<?= base_url('settings/get_grace_minutes') ?>',
-//             method: 'POST',
-//             dataType: 'json',
-//             success: function(response) {
-//                 if (response) {
-//                     var grace = JSON.parse(response);
-//                     if (grace.days_counter) {
-//                         $('#days_counter').val(grace.days_counter);
-//                     }if (grace.grace_minutes) {
-//                         $('#grace_minutes').val(grace.grace_minutes);
-//                     }
-//                     if (grace.apply == 1) {
-//                         $('#enableGraceMinutes').prop('checked', true);
-//                         $("#show_div").show();
-//                     }else{
-//                       $("#show_div").hide();
-//                     }
-//                     if (grace.sandwich == 1) {
-//                         $('#enebleSandwich').prop('checked', true);
-//                     }
-//                 }
-//             },
-//             error: function() {
-//             }
-//         });
-//     }
+  <script>
+    /*
+     * Shift Setting
+     */
+    $("#add-shift-modal").on('click', '.btn-create', function(e) {
+      var modal = $('#add-shift-modal');
+      var form = $('#modal-add-leaves-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
 
-//     getDepartmentTime();
-// });
+      e.preventDefault();
+    });
 
-function teamMembersFormatter(value, row) {
-    const teamMembers = value.split('<br>');
-    const maxVisibleTeamMembers = 10;
-    if (teamMembers.length > maxVisibleTeamMembers) {
-        const visibleMembers = teamMembers.slice(0, maxVisibleTeamMembers).join('<br>');
-        const hiddenMembers = teamMembers.slice(maxVisibleTeamMembers).join('<br>');
-        return `
-            <div class="visible-members">${visibleMembers}</div>
-            <div class="hidden-members" style="display: none">${hiddenMembers}</div>
-            <a href="#" class="see-more-link text-danger">See More...</a>
+    $("#edit-department-modal").on('click', '.btn-edit', function(e) {
+      var modal = $('#edit-department-modal');
+      var form = $('#modal-edit-department-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $(document).on('click', '.edit-shift', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      $.ajax({
+        type: "POST",
+        url: base_url + 'shift/get_shift_by_id',
+        data: "id=" + id,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false && result['data'] != '') {
+            console.log(result['data'].id);
+            $("#update_id").val(result['data'].id);
+            $("#type").val(result['data'].id);
+            $("#starting_time").val(result['data'].starting_time);
+            $("#ending_time").val(result['data'].ending_time);
+            $("#break_start").val(result['data'].break_start);
+            $("#break_end").val(result['data'].break_end);
+            $("#half_day_check_in").val(result['data'].half_day_check_in);
+            $("#half_day_check_out").val(result['data'].half_day_check_out);
+          } else {
+            iziToast.error({
+              title: something_wrong_try_again,
+              message: "",
+              position: 'topRight'
+            });
+          }
+        }
+      });
+    })
+
+    $(document).on('click', '.delete-shift', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      Swal.fire({
+        title: are_you_sure,
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'shift/delete/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            success: function(result) {
+              if (result['error'] == false) {
+                location.reload();
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      let stepCounter = 0;
+
+      function addStep() {
+        stepCounter++;
+        let newStep;
+        newStep = `
+            <div class="step-container">
+            <div class="row arrow"><div class="col-md-6 text-center mb-3"><i class="fa fa-arrow-down" aria-hidden="true"></i></div></div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <select name="step[]" id="step_${stepCounter}" class="form-control select6" multiple>
+                    <option>Select Role</option>
+                  <?php foreach ($groups as $value) { ?>
+                    <option value="<?= htmlspecialchars($value->id) ?>"><?= htmlspecialchars($value->description) ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+                <div class="form-group col-md-6">
+                    <button class="btn text-danger remove-step" type="button"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            </div>
         `;
-    } else {
-        return value;
-    }
-}
+        $(".more-steps").append(newStep);
+        $(".select6").select2();
+      }
 
+      $("#add-more-steps").on("click", function() {
+        addStep();
+      });
+
+      $(".more-steps").on("click", ".remove-step", function() {
+        $(this).closest('.step-container').remove();
+      });
+    });
+    $(document).on('click', '.savebtn', function(e) {
+      var form = $('#setting-form2');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          } else {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+    $(document).on('click', '.savebtn2', function(e) {
+      var form = $('#setting-form');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          } else {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+  </script>
+  <script>
+    $('.timepicker').bootstrapMaterialDatePicker({
+      format: 'HH:mm',
+      time: true,
+      date: false,
+    });
+    $(".select7").select2();
+  </script>
+  <script>
 $(document).ready(function () {
     if ($("#enableGraceMinutes").is(":checked")) {
         $("#show_div").show();
@@ -198,137 +494,7 @@ $(document).ready(function () {
             $("#show_div2").hide();
         }
     });
-});
-
-function permissionsFormatter(value, row) {
-    const teamMembers = value.split('<br>');
-    const maxVisibleTeamMembers = 10;
-
-    if (teamMembers.length > maxVisibleTeamMembers) {
-        const visibleMembers = teamMembers.slice(0, maxVisibleTeamMembers).join('<br>');
-        const hiddenMembers = teamMembers.slice(maxVisibleTeamMembers).join('<br>');
-        return `
-            <div class="visible-members">${visibleMembers}</div>
-            <div class="hidden-members" style="display: none">${hiddenMembers}</div>
-            <a href="#" class="see-more-link text-danger">See More...</a>
-        `;
-    } else {
-        return value;
-    }
-}
-
-$(document).ready(function() {
-  $('#permissions').multiSelect();
-  $("#selectAllPermissions").change(function () {
-            if ($(this).prop("checked")) {
-                // Select all options in the multi-select
-                $('#permissions').multiSelect('select_all');
-            } else {
-                // Deselect all options in the multi-select
-                $('#permissions').multiSelect('deselect_all');
-            }
-        });
-
-  $('#assigned_users').multiSelect();
-  $("#selectAllUsers4").change(function () {
-            if ($(this).prop("checked")) {
-                // Select all options in the multi-select
-                $('#assigned_users').multiSelect('select_all');
-            } else {
-                // Deselect all options in the multi-select
-                $('#assigned_users').multiSelect('deselect_all');
-            }
-        });
-
-  $('#users').multiSelect();
-   // Handle the checkbox change event
-   $("#selectAllUsers").change(function () {
-            if ($(this).prop("checked")) {
-                // Select all options in the multi-select
-                $('#users').multiSelect('select_all');
-            } else {
-                // Deselect all options in the multi-select
-                $('#users').multiSelect('deselect_all');
-            }
-        });
-  $('#users_create').multiSelect();
-  $("#selectAllUsers_create").change(function () {
-            if ($(this).prop("checked")) {
-                // Select all options in the multi-select
-                $('#users_create').multiSelect('select_all');
-            } else {
-                // Deselect all options in the multi-select
-                $('#users_create').multiSelect('deselect_all');
-            }
-        });
-});
-
-$(document).ready(function() {
-    $(document).on('click', '.see-more-link', function(e) {
-        e.preventDefault();
-        console.log('See More link clicked');
-        const $this = $(this);
-        const $cell = $this.closest('td');
-        $cell.find('.hidden-members').slideToggle();
-        $this.text($this.text() === 'See More...' ? 'See Less' : 'See More...');
-    });
-});
-
-    function setTableHeight() {
-        var options = $('#shift_list').bootstrapTable('getOptions');
-        options.height = 650;
-
-        $('#shift_list').bootstrapTable('refreshOptions',options);
-        var options = $('#leaves_list').bootstrapTable('getOptions');
-        options.height = 600;
-
-        $('#leaves_list').bootstrapTable('refreshOptions',options);
-    }
-
-    // Call the function initially and whenever the table data is refreshed
-    $(document).ready(function() {
-        setTableHeight();
-    });
-</script>
-<script>
-$(document).ready(function() {
-    let stepCounter = 0;
-    function addStep() {
-        stepCounter++;
-        let newStep;
-           newStep = `
-            <div class="step-container">
-            <div class="row arrow"><div class="col-md-6 text-center mb-3"><i class="fa fa-arrow-down" aria-hidden="true"></i></div></div>
-            <div class="row">
-              <div class="form-group col-md-6">
-                <select name="step[]" id="step_${stepCounter}" class="form-control select2" multiple>
-                    <option>Select Role</option>
-                  <?php foreach($groups as $value){ ?>
-                    <option value="<?=htmlspecialchars($value->id)?>"><?=htmlspecialchars($value->description)?></option>
-                  <?php } ?>
-                </select>
-              </div>
-                <div class="form-group col-md-6">
-                    <button class="btn text-danger remove-step" type="button"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-            </div>
-        `;
-        $(".more-steps").append(newStep);
-        $(".select2").select2();
-    }
-
-    $("#add-more-steps").on("click", function() {
-        addStep();
-    });
-
-    $(".more-steps").on("click", ".remove-step", function() {
-        $(this).closest('.step-container').remove();
-    });
-});
-</script>
-<script src="<?=base_url('assets/modules/multiselect/multiselect.js')?>"></script>
-
-
+});</script>
 </body>
+
 </html>
