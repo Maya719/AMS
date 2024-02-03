@@ -74,7 +74,7 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h3 class="text-primary">Staff</h3>
-                                <h3 class="count text-primary ms-auto mb-0" id="total_staff"><?= $report["total_staff"] ?></h3>
+                                <h3 class="count ms-auto mb-0" ><a class="text-primary" id="total_staff" href="javascript:void(0)"><?= $report["total_staff"] ?></a></h3>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(Attendance)</p>
                               <div class="progress default-progress mt-2">
@@ -83,9 +83,9 @@
                                 </div>
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Present<strong class="text-primary float-end me-2" id="total_present"><?= $report["present"] ?></strong></p>
-                                <p class="mb-0">On Leave<strong class="text-warning float-end me-2" id="total_leave"><?= $report["leave"] ?></strong></p>
-                                <p class="mb-0">Absent<strong class="text-danger float-end me-2" id="total_absent"><?= $report["abs"] ?></strong></p>
+                                <p class="mb-0">Present<strong class="float-end me-2"><a class="text-primary" id="total_present" href="javascript:void(0);"><?= $report["present"] ?></a></strong></p>
+                                <p class="mb-0">On Leave<strong class="float-end me-2" ><a id="total_leave" class="text-warning" href="javascript:void(0);"><?= $report["leave"] ?></a></strong></p>
+                                <p class="mb-0">Absent<strong class="float-end me-2" ><a class="text-danger " id="total_absent" href="javascript:void(0);"><?= $report["abs"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -114,9 +114,9 @@
 
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="text-primary float-end me-2"><?= $report["leave_approved"] ?></strong></p>
-                                <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $report["leave_pending"] ?></strong></p>
-                                <p class="mb-0">Rejected<strong class="text-danger float-end me-2"><?= $report["leave_rejected"] ?></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="javascript:void(0);"><?= $report["leave_approved"] ?></a></strong></p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning " href="javascript:void(0);"><?= $report["leave_pending"] ?></a></strong></p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger " href="javascript:void(0);"><?= $report["leave_rejected"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -235,25 +235,52 @@
     $(document).ready(function() {
       setFilter();
       $(document).on('change', '#from', function() {
-        setFilter();
+        var date = $('#from').val();
+        var present = 0;
+        var absent = 0;
+        var leave = 0;
+        setFilter(date,present,absent,leave);
+      });
+      $(document).on('click', '#total_present', function() {
+        var date = $('#from').val();
+        var present = 1;
+        var absent = 0;
+        var leave = 0;
+          setFilter(date,present,absent,leave);
+      });
+      $(document).on('click', '#total_absent', function() {
+        var date = $('#from').val();
+        var present = 0;
+        var absent = 1;
+        var leave = 0;
+          setFilter(date,present,absent,leave);
+      });
+      $(document).on('click', '#total_leave', function() {
+        var date = $('#from').val();
+        var present = 0;
+        var absent = 0;
+        var leave = 1;
+          setFilter(date,present,absent,leave);
       });
 
-      function setFilter() {
-        var date = $('#from').val();
-        callAjax(date);
+      function setFilter(date,present,absent,leave) {
+        callAjax(date,present,absent,leave);
       }
 
-      function callAjax(date) {
+      function callAjax(date,present,absent,leave) {
+        console.log(date,present,absent,leave);
         $.ajax({
           url: '<?= base_url('home/get_home_attendance') ?>',
           type: 'GET',
           data: {
             date: date,
+            present: present,
+            absent: absent,
+            leave: leave,
           },
           success: function(response) {
             var tableData = JSON.parse(response);
             showTable(tableData.attendance);
-            console.log(tableData.counts);
             $("#total_present").html(tableData.counts.present);
             $("#total_leave").html(tableData.counts.leave);
             $("#total_absent").html(tableData.counts.abs);

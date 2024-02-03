@@ -8,11 +8,14 @@ class Home_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_home_attendance_for_admin($date)
+    public function get_home_attendance_for_admin($date,$present,$absent,$leave)
     {
         $get = [
             "from" => $date,
             "too" => $date,
+            "present" => $present,
+            "absent" => $absent,
+            "leave" => $leave,
         ];
         
         $get_data = $this->get_attendance_for_admin($get);
@@ -52,6 +55,8 @@ class Home_model extends CI_Model
         $too = $get["too"];
         $dateArray = [$from];
         $formattedData = [];
+        $leaveArray = [];
+        $absentArray = [];
     
         foreach ($attendance as $entry) {
             $userId = $entry['user_id'];
@@ -67,18 +72,25 @@ class Home_model extends CI_Model
                     'name' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user . '</a>',
                     'dates' => [],
                 ];
+                $presentArray[$userId] = [
+                    'user_id' => $userId,
+                    'user' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>',
+                    'name' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user . '</a>',
+                    'dates' => [],
+                ];
             }
     
             if (!isset($formattedData[$userId]['dates'][$createdDate])) {
                 $formattedData[$userId]['dates'][$createdDate] = [];
             }
             $formattedData[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
+            $presentArray[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
         }
     
         $system_users = $this->ion_auth->members_all()->result();
         foreach ($system_users as $user) {
             if ($user->finger_config == '1' && $user->active == '1') {
-                // Check if the user is in formattedData
+
                 if (!isset($formattedData[$user->employee_id])) {
                     $formattedData[$user->employee_id] = [
                         'user_id' => $user->employee_id,
@@ -87,17 +99,40 @@ class Home_model extends CI_Model
                         'dates' => [],
                     ];
                 }
+
                 if (!isset($formattedData[$user->employee_id]['dates'][$from])) {
                     if ($this->checkLeave($user->employee_id,$from)) {
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
+                        $leaveArray[$user->employee_id] = [
+                            'user_id' => $user->employee_id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name.' ' .$user->last_name. '</a>',
+                            'dates' => [],
+                        ];
+                        $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
                     }else{
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
+                        $absentArray[$user->employee_id] = [
+                            'user_id' => $user->employee_id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name.' ' .$user->last_name. '</a>',
+                            'dates' => [],
+                        ];
+                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
                     }
                 }
             }
         }
+        if ($get["absent"] && $get["absent"] == 1) {
+            $resultArray = array_values($absentArray);
+        }elseif ($get["leave"] && $get["leave"] == 1) {
+            $resultArray = array_values($leaveArray);
+        }elseif ($get["present"] && $get["present"] == 1) {
+            $resultArray = array_values($presentArray);
+        }else{
+            $resultArray = array_values($formattedData);
+        }
     
-        $resultArray = array_values($formattedData);
         return $resultArray;
     }
     public function filter_count_abs($date)
