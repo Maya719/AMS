@@ -362,8 +362,9 @@ class Settings extends CI_Controller
 			$this->data['create'] = true;
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['system_users'] = $this->ion_auth->members()->result();
-			$query = $this->db->get('shift');
-			$this->data['shift_types'] = $query->result_array();
+			$this->db->where('saas_id', $this->session->userdata('saas_id'));
+			$query = $this->db->get('devices');
+			$this->data['devices'] = $query->result_array();
 			$this->load->view('settings', $this->data);
 		} else {
 			redirect('auth', 'refresh');

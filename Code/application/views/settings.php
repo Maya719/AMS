@@ -370,6 +370,116 @@
       });
     });
   </script>
+  <script>
+    /*
+     * Device Setting
+     */
+    $("#add-device-modal").on('click', '.btn-create', function(e) {
+      var modal = $('#add-device-modal');
+      var form = $('#modal-add-device-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $("#edit-device-modal").on('click', '.btn-edit', function(e) {
+      var modal = $('#edit-device-modal');
+      var form = $('#modal-edit-device-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $(document).on('click', '.edit-device', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      $.ajax({
+        type: "POST",
+        url: base_url + 'device_config/get_device_by_id',
+        data: "id=" + id,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false && result['data'] != '') {
+            console.log(result['data'][0]);
+            $("#update_id").val(result['data'][0].id);
+            $("#device_name").val(result['data'][0].device_name);
+            $("#device_ip").val(result['data'][0].device_ip);
+            $("#port").val(result['data'][0].port);
+            
+          } else {
+            iziToast.error({
+              title: something_wrong_try_again,
+              message: "",
+              position: 'topRight'
+            });
+          }
+        }
+      });
+    })
+
+    $(document).on('click', '.delete-device', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      Swal.fire({
+        title: are_you_sure,
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'device_config/delete/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            success: function(result) {
+              if (result['error'] == false) {
+                location.reload();
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
 
   <script>
     $(document).ready(function() {

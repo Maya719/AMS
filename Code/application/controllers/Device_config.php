@@ -30,9 +30,9 @@ class Device_config extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && !$this->ion_auth->in_group(3) && !$this->ion_auth->in_group(4))
 		{
-			$this->form_validation->set_rules('device_name', 'Device Name', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('device_ip', 'Device Ip Address', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('port', 'Device External Port', 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('device_name', 'Device Name', 'required');
+			$this->form_validation->set_rules('device_ip', 'Device Ip Address', 'required');
+			$this->form_validation->set_rules('port', 'Device External Port', 'required');
 
 			if($this->form_validation->run() == TRUE){
 				$data = array(
@@ -149,18 +149,10 @@ class Device_config extends CI_Controller
                     $data['port'] = $this->input->post('port');
 					
 				if($this->device_config_model->edit($this->input->post('update_id'), $data)){
-					$user_ids = $this->input->post('users')?$this->input->post('users'):'';
-
-					// Update users with shift_id
-					$this->device_config_model->updateUserDeviceId($this->input->post('update_id'), $user_ids);
 					$this->session->set_flashdata('message', $this->lang->line('updated_successfully')?$this->lang->line('updated_successfully'):"Updated successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;
 					$this->data['message'] = $this->lang->line('updated_successfully')?$this->lang->line('updated_successfully'):"Updated successfully.";
-					echo json_encode($this->data); 
-				}else{
-					$this->data['error'] = true;
-					$this->data['message'] = $this->lang->line('something_wrong_try_again')?$this->lang->line('something_wrong_try_again'):"Something wrong! Try again.";
 					echo json_encode($this->data);
 				}
 			}else{
