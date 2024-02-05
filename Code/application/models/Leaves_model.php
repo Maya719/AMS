@@ -99,9 +99,17 @@ class Leaves_model extends CI_Model
                 $leave['paid'] = ($this->lang->line('unpaid') ? htmlspecialchars($this->lang->line('unpaid')) : 'Unpaid Leave');
             }
             if ($leave['status'] == 0) {
-                $leave['btn'] = true;
-                $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
-            
+                $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
+                $current_group_id = $group[0]->id;
+                $step = $leave['step'];
+                $forword_result = $this->is_forworded($current_group_id,$step);
+                if ($forword_result["is_forworded"]) {
+                    $leave['btn'] = false;
+                    $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to '.$forword_result["forworded_to"]) . '</span>';
+                }else{
+                    $leave['btn'] = true;
+                    $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
+                }
             } elseif ($leave['status'] == 1) {
                 $leave['btn'] = false;
                 $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved') . '</span>';
@@ -113,6 +121,30 @@ class Leaves_model extends CI_Model
         }
        
         return $results;
+    }
+    
+    public function is_forworded($group_id, $step) {
+        $saas_id = $this->session->userdata('saas_id');
+        $this->db->where('saas_id', $saas_id);
+        $this->db->where('step_no', $step);
+        $array = [];
+        $query = $this->db->get('leave_hierarchy');
+        if ($row = $query->row()) {
+            $step_group = $row->group_id;  
+            if ($step_group != $group_id) {
+                $group = $this->ion_auth->group($step_group)->row();
+                $array=[
+                    'is_forworded'=>true,
+                    'forworded_to'=>$group->description,
+                ];
+                return $array;
+            }
+        }
+        $array=[
+            'is_forworded'=>false,
+            'forworded_to'=>null,
+        ];
+        return $array;
     }
     
 

@@ -41,12 +41,12 @@
                   <table id="holiday_list" class="table table-sm mb-0">
                     <thead>
                       <tr>
-                        <th>#</th>
-                        <th>Holiday Type</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Remarks</th>
-                        <th>Action</th>
+                        <th style="font-size: 15px;">#</th>
+                        <th style="font-size: 15px;">Holiday Type</th>
+                        <th style="font-size: 15px;">Start Date</th>
+                        <th style="font-size: 15px;">End Date</th>
+                        <th style="font-size: 15px;">Remarks</th>
+                        <th style="font-size: 15px;">Action</th>
                       </tr>
                     </thead>
                     <tbody id="customers">

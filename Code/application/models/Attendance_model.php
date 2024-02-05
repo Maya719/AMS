@@ -557,4 +557,68 @@ class Attendance_model extends CI_Model
             return false;
         }
     }
+    function connect(){
+        $datetime = new DateTime();
+        $timezone = new DateTimeZone('Asia/Karachi');
+        $datetime->setTimezone($timezone);
+        $cdate = $datetime->format('Y-m-d H:i:s');
+        $devices = $this->db->query("SELECT * FROM devices");
+        $devicesresults = $devices->result_array();
+        foreach ($devicesresults as $device) {
+            $ip = $device["device_ip"];
+            $zk = new ZKLib($ip, 27010);
+            try {
+                $zk->connect();
+                $zk->disableDevice();
+                $zk->setTime($cdate); 
+                $users = $zk->getUser();
+                $attendance = $zk->getAttendance();
+                 $zk->clearAttendance();
+                $zk->enableDevice();
+                $zk->disconnect();
+                    foreach ($attendance as $key => $attendances) {
+                        $userid = $attendances['id'];
+                        $timestamp = $attendances['timestamp'];
+                        $query = $this->db->query("SELECT * FROM attendance WHERE user_id = '$userid' AND finger ='$timestamp'");
+                        $results = $query->result_array();
+                        $query2 = $this->db->query("SELECT * FROM users WHERE employee_id = '$userid'");
+                        $result2 = $query2->row();
+                        if ($result2) {
+                            $id = $result2->id;
+                            $email = $result2->email;
+                            $name = $result2->first_name.' '.$result2->last_name;
+                            $dateTime = new DateTime($timestamp);
+                            $time = $dateTime->format("h:i A");
+                            $numRows = $query->num_rows();
+                            if ($numRows == 0) {
+                                $data = [
+                                    'user_id'=>$userid,
+                                    'finger'=>$timestamp
+                                ];
+                                $this->db->insert('attendance', $data);
+                                $notification_data = array(
+                                    'notification' => 'Your Punch recorded at '.$timestamp,
+                                    'type' => 'attendance',	
+                                    'type_id' => '11',	
+                                    'from_id' => $id,
+                                    'to_id' => $id
+                                );
+                                $notification_id = $this->notifications_model->create($notification_data);
+                                
+                                $template_data['NAME'] = $name;
+                                $template_data['TIME'] = $time;
+                                $template_data['DASHBOARD_URL'] = 'https://pms.mobipixels.com';
+                                $email_template = render_email_template('biometric', $template_data);
+                                send_mail($email, $email_template[0]['subject'], $email_template[0]['message']);
+                                
+                            }
+                        }
+                        
+                    }
+                echo json_encode($attendance);
+                } catch (\Exception $e) {
+                         echo "Error: " . $e->getMessage() . "\n";
+                }
+        }
+    }
 }
