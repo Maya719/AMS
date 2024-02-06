@@ -173,7 +173,6 @@ class Attendance_model extends CI_Model
                     if (in_array($user_id, $appliedUser)) {
                         return true;
                     }
-                } else {
                 }
             }
         } else {
@@ -249,6 +248,8 @@ class Attendance_model extends CI_Model
         $todayDate = $currentDate->format('Y-m-d');
         if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
             $where = " WHERE DATE(attendance.finger) = '" . $todayDate . "' ";
+        }else{
+            $where = '';
         }
         $leftjoin = " LEFT JOIN users ON attendance.user_id = users.employee_id";
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user 
@@ -279,8 +280,17 @@ class Attendance_model extends CI_Model
         $firstDayOfMonth = new DateTime('first day of ' . $currentDate->format('Y-m'));
         $fromDate = $firstDayOfMonth->format('Y-m-d');
         $leftjoin2 = " LEFT JOIN users ON leaves.user_id = users.employee_id";
+
         $where2 = " WHERE users.active= '1' AND users.finger_config='1' AND users.saas_id=" . $this->session->userdata('saas_id');
         $where2 .= " AND leaves.starting_date >= '" . $fromDate . "' AND leaves.ending_date <= '" . $todayDate . "'";
+        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            $where2 .= " " ;
+        }else{
+            $user = $this->ion_auth->user()->row();
+            $user_id = $user->id;
+            $employee_id = get_employee_id_from_user_id($user_id);
+            $where2 .= " AND leaves.user_id = '" . $employee_id ."'";
+        }
         $leaveQuery = $this->db->query("SELECT leaves.*, CONCAT(users.first_name, ' ', users.last_name) AS user  FROM leaves " . $leftjoin2 . $where2 . " AND leaves.leave_duration NOT LIKE '%Half%' AND leaves.leave_duration NOT LIKE '%Short%'");
         $leavesresult = $leaveQuery->result_array();
         foreach ($leavesresult as $leavesResult) {
@@ -294,7 +304,16 @@ class Attendance_model extends CI_Model
         }
 
         $leftjoin3 = " LEFT JOIN users ON biometric_missing.user_id = users.employee_id";
+
         $where3 = " WHERE biometric_missing.date BETWEEN '" . $fromDate . "' AND '" . $todayDate . "'";
+        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            $where3 .= " " ;
+        }else{
+            $user = $this->ion_auth->user()->row();
+            $user_id = $user->id;
+            $employee_id = get_employee_id_from_user_id($user_id);
+            $where3 .= " AND biometric_missing.user_id = '" . $employee_id ."'";
+        }
         $BioQuery = $this->db->query("SELECT biometric_missing.*, CONCAT(users.first_name, ' ', users.last_name) AS user FROM biometric_missing " . $leftjoin3 . $where3);
         $BioResults = $BioQuery->result_array();
         foreach ($BioResults as $BioResult) {

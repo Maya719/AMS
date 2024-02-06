@@ -73,10 +73,30 @@
                           <div class="col-xl-4 col-lg-4 col-sm-4 col-6">
                             <div class="static-icon mx-5">
                               <div class="d-flex">
-                                <h3 class="text-primary">Staff</h3>
-                                <h3 class="count ms-auto mb-0" ><a class="text-primary" id="total_staff" href="javascript:void(0)"><?= $report["total_staff"] ?></a></h3>
+
+                                <?php
+                                if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                                ?>
+                                  <h4 class="text-primary">Staff</h4>
+                                <?php
+                                } else {
+                                ?>
+                                  <h4 class="text-primary">Working Days</h4>
+                                <?php
+                                } ?>
+                                <h4 class="count ms-auto mb-0"><a class="text-primary" id="total_staff" href="javascript:void(0)"><?= $report["total_staff"] ?></a></h4>
                               </div>
-                              <p class="mb-0 text-muted" style="margin-top: -10px;">(Attendance)</p>
+                              <?php
+                              if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                              ?>
+                                <p class="mb-0 text-muted" style="margin-top: -10px;">(Attendance)</p>
+                              <?php
+                              } else {
+                              ?>
+                                <p class="mb-0 text-muted" style="margin-top: -10px;">(This Month)</p>
+                              <?php
+                              }
+                              ?>
                               <div class="progress default-progress mt-2">
                                 <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perStaff ?>; height:8px;" role="progressbar">
                                   <span class="sr-only"><?= $perStaff ?> Complete</span>
@@ -84,8 +104,8 @@
                               </div>
                               <div class="mt-2">
                                 <p class="mb-0">Present<strong class="float-end me-2"><a class="text-primary" id="total_present" href="javascript:void(0);"><?= $report["present"] ?></a></strong></p>
-                                <p class="mb-0">On Leave<strong class="float-end me-2" ><a id="total_leave" class="text-warning" href="javascript:void(0);"><?= $report["leave"] ?></a></strong></p>
-                                <p class="mb-0">Absent<strong class="float-end me-2" ><a class="text-danger " id="total_absent" href="javascript:void(0);"><?= $report["abs"] ?></a></strong></p>
+                                <p class="mb-0">On Leave<strong class="float-end me-2"><a id="total_leave" class="text-warning" href="javascript:void(0);"><?= $report["leave"] ?></a></strong></p>
+                                <p class="mb-0">Absent<strong class="float-end me-2"><a class="text-danger " id="total_absent" href="javascript:void(0);"><?= $report["abs"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -103,8 +123,8 @@
                           <div class="col-xl-4 col-lg-4 col-sm-4 col-6">
                             <div class="static-icon mx-5">
                               <div class="d-flex">
-                                <h3 class="text-primary">Leaves</h3>
-                                <h3 class="count text-primary ms-auto mb-0"><?= $totalleave ?></h3>
+                                <h4 class="text-primary">Leaves</h4>
+                                <h4 class="count text-primary ms-auto mb-0"><?= $totalleave ?></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
@@ -133,8 +153,8 @@
                           <div class="col-xl-4 col-lg-4 col-sm-4 col-6">
                             <div class="static-icon mx-5">
                               <div class="d-flex">
-                                <h3 class="text-primary">Biometrics</h3>
-                                <h3 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h3>
+                                <h4 class="text-primary">Biometrics</h4>
+                                <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
@@ -180,218 +200,227 @@
                       <h4 class="text-primary">Upcoming Events</h4>
                     </div>
                     <div class="card-body p-0">
-                      <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height630 mb-0">
-                        <ul class="timeline ">
-                          <?php foreach ($events as $event) : ?>
-                            <li>
-                              <div class="timeline-panel">
-                                <div class="avatar avatar-xl me-2">
-                                  <?php if ($event["profile"]) : ?>
-                                    <?php
-                                    if (file_exists('assets/uploads/profiles/' . $event["profile"])) {
-                                      $file_upload_path = 'assets/uploads/profiles/' . $event["profile"];
-                                    } else {
-                                      $file_upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $event["profile"];
-                                    }
-                                    ?>
-                                    <div class=""><img class="rounded-circle img-fluid" src="<?= base_url($file_upload_path) ?>" width="40" alt=""></div>
-                                  <?php else : ?>
-                                    <div class="d-flex align-items-center flex-wrap">
-                                      <ul class="kanbanimg me-3">
-                                        <li><span><?= $event["short"] ?></span></li>
-                                      </ul>
-                                    </div>
-                                  <?php endif ?>
+                      <?php
+                      if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                      ?>
+                        <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height630 mb-0">
+                        <?php
+                      } else {
+                        ?>
+                          <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height400 mb-0">
 
+                          <?php
+                        } ?>
+                          <ul class="timeline ">
+                            <?php foreach ($events as $event) : ?>
+                              <li>
+                                <div class="timeline-panel">
+                                  <div class="avatar avatar-xl me-2">
+                                    <?php if ($event["profile"]) : ?>
+                                      <?php
+                                      if (file_exists('assets/uploads/profiles/' . $event["profile"])) {
+                                        $file_upload_path = 'assets/uploads/profiles/' . $event["profile"];
+                                      } else {
+                                        $file_upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $event["profile"];
+                                      }
+                                      ?>
+                                      <div class=""><img class="rounded-circle img-fluid" src="<?= base_url($file_upload_path) ?>" width="40" alt=""></div>
+                                    <?php else : ?>
+                                      <div class="d-flex align-items-center flex-wrap">
+                                        <ul class="kanbanimg me-3">
+                                          <li><span><?= $event["short"] ?></span></li>
+                                        </ul>
+                                      </div>
+                                    <?php endif ?>
+
+                                  </div>
+                                  <div class="media-body ms-2">
+                                    <h5 class="mb-1"><?= $event["user"] ?></h5>
+                                    <small class="d-block"><?= $event["event"] . ' ' . $event["date"] ?></small>
+                                  </div>
                                 </div>
-                                <div class="media-body ms-2">
-                                  <h5 class="mb-1"><?= $event["user"] ?></h5>
-                                  <small class="d-block"><?= $event["event"] . ' ' . $event["date"] ?></small>
-                                </div>
-                              </div>
-                            </li>
-                          <?php endforeach ?>
-                        </ul>
-                      </div>
+                              </li>
+                            <?php endforeach ?>
+                          </ul>
+                          </div>
+                        </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div id="navpills2-2" class="tab-pane">
-              <h5>2nd</h5>
+              <div id="navpills2-2" class="tab-pane">
+                <h5>2nd</h5>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!--**********************************
+      <!--**********************************
 	Content body end
 ***********************************-->
-    <?php $this->load->view('includes/footer'); ?>
-  </div>
-  <?php $this->load->view('includes/scripts'); ?>
-  <script>
-    $(document).ready(function() {
-      setFilter();
-      $(document).on('change', '#from', function() {
-        var date = $('#from').val();
-        var all = 0;
-        var present = 0;
-        var absent = 0;
-        var leave = 0;
-        setFilter(date,all,present,absent,leave);
-      });
-      $(document).on('click', '#total_present', function() {
-        var date = $('#from').val();
-        var all = 0;
-        var present = 1;
-        var absent = 0;
-        var leave = 0;
-          setFilter(date,all,present,absent,leave);
-      });
-      $(document).on('click', '#total_absent', function() {
-        var date = $('#from').val();
-        var all = 0;
-        var present = 0;
-        var absent = 1;
-        var leave = 0;
-          setFilter(date,all,present,absent,leave);
-      });
-      $(document).on('click', '#total_leave', function() {
-        var date = $('#from').val();
-        var all = 0;
-        var present = 0;
-        var absent = 0;
-        var leave = 1;
-          setFilter(date,all,present,absent,leave);
-      });
-      $(document).on('click', '#total_staff', function() {
-        var date = $('#from').val();
-        var all = 1;
-        var present = 0;
-        var absent = 0;
-        var leave = 0;
-          setFilter(date,all,present,absent,leave);
-      });
-
-      function setFilter(date,all,present,absent,leave) {
-        callAjax(date,all,present,absent,leave);
-      }
-
-      function callAjax(date,all,present,absent,leave) {
-        console.log(date,all,present,absent,leave);
-        $.ajax({
-          url: '<?= base_url('home/get_home_attendance') ?>',
-          type: 'GET',
-          data: {
-            date: date,
-            all: present,
-            present: present,
-            absent: absent,
-            leave: leave,
-          },
-          success: function(response) {
-            var tableData = JSON.parse(response);
-            showTable(tableData.attendance);
-            $("#total_present").html(tableData.counts.present);
-            $("#total_leave").html(tableData.counts.leave);
-            $("#total_absent").html(tableData.counts.abs);
-          },
-          complete: function() {},
-          error: function(error) {
-            console.error(error);
-          }
+      <?php $this->load->view('includes/footer'); ?>
+    </div>
+    <?php $this->load->view('includes/scripts'); ?>
+    <script>
+      $(document).ready(function() {
+        setFilter();
+        $(document).on('change', '#from', function() {
+          var date = $('#from').val();
+          var all = 0;
+          var present = 0;
+          var absent = 0;
+          var leave = 0;
+          setFilter(date, all, present, absent, leave);
         });
-      }
+        $(document).on('click', '#total_present', function() {
+          var date = $('#from').val();
+          var all = 0;
+          var present = 1;
+          var absent = 0;
+          var leave = 0;
+          setFilter(date, all, present, absent, leave);
+        });
+        $(document).on('click', '#total_absent', function() {
+          var date = $('#from').val();
+          var all = 0;
+          var present = 0;
+          var absent = 1;
+          var leave = 0;
+          setFilter(date, all, present, absent, leave);
+        });
+        $(document).on('click', '#total_leave', function() {
+          var date = $('#from').val();
+          var all = 0;
+          var present = 0;
+          var absent = 0;
+          var leave = 1;
+          setFilter(date, all, present, absent, leave);
+        });
+        $(document).on('click', '#total_staff', function() {
+          var date = $('#from').val();
+          var all = 1;
+          var present = 0;
+          var absent = 0;
+          var leave = 0;
+          setFilter(date, all, present, absent, leave);
+        });
 
-      function showTable(data) {
-        var table = $('#attendance_list');
-        if ($.fn.DataTable.isDataTable(table)) {
-          table.DataTable().destroy();
+        function setFilter(date, all, present, absent, leave) {
+          callAjax(date, all, present, absent, leave);
         }
-        emptyDataTable(table);
 
-        var thead = table.find('thead');
-        var uniqueDates = getUniqueDates(data);
-        var theadRow = '<tr>';
-        theadRow += '<th>Employee ID</th>';
-        theadRow += '<th>Name</th>';
-        theadRow += '<th>Attendance</th>';
+        function callAjax(date, all, present, absent, leave) {
+          console.log(date, all, present, absent, leave);
+          $.ajax({
+            url: '<?= base_url('home/get_home_attendance') ?>',
+            type: 'GET',
+            data: {
+              date: date,
+              all: present,
+              present: present,
+              absent: absent,
+              leave: leave,
+            },
+            success: function(response) {
+              var tableData = JSON.parse(response);
+              showTable(tableData.attendance);
+              console.log(tableData.counts);
+              $("#total_present").html(tableData.counts.present);
+              $("#total_leave").html(tableData.counts.leave);
+              $("#total_absent").html(tableData.counts.abs);
+              var total = tableData.counts.present + tableData.counts.leave + tableData.counts.abs;
+              $("#total_staff").html(total);
 
-        theadRow += '</tr>';
-        thead.html(theadRow);
-
-        // Add table body
-        var tbody = table.find('tbody');
-        data.forEach(user => {
-          var userRow = '<tr>';
-          userRow += '<td>' + user.user + '</td>';
-          userRow += '<td>' + user.name + '</td>';
-
-          uniqueDates.forEach(date => {
-            if (user.dates[date]) {
-              userRow += '<td>' + user.dates[date].join('<br>') + '</td>';
-            } else {
-              userRow += '<td>Absent</td>';
+            },
+            complete: function() {},
+            error: function(error) {
+              console.error(error);
             }
           });
+        }
 
-          userRow += '</tr>';
-          tbody.append(userRow);
-        });
-
-        // Initialize DataTable
-        table.DataTable({
-          "paging": true,
-          "searching": false,
-          "language": {
-            "paginate": {
-              "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-              "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
-            }
-          },
-          "info": false,
-          "dom": '<"top"i>rt<"bottom"lp><"clear">',
-          "lengthMenu": [7, 14],
-          "pageLength": 7
-        });
-      }
-
-      function emptyDataTable(table) {
-        table.find('thead').empty();
-        table.find('tbody').empty();
-      }
-    });
-
-    function getUniqueDates(data) {
-      // Extract unique dates from the data
-      var uniqueDates = [];
-      data.forEach(user => {
-        Object.keys(user.dates).forEach(date => {
-          if (!uniqueDates.includes(date)) {
-            uniqueDates.push(date);
+        function showTable(data) {
+          var table = $('#attendance_list');
+          if ($.fn.DataTable.isDataTable(table)) {
+            table.DataTable().destroy();
           }
-        });
+          emptyDataTable(table);
+          var thead = table.find('thead');
+          var uniqueDates = getUniqueDates(data);
+          var theadRow = '<tr>';
+          theadRow += '<th>Employee ID</th>';
+          theadRow += '<th>Name</th>';
+          theadRow += '<th>Attendance</th>';
+          theadRow += '</tr>';
+          thead.html(theadRow);
+          var tbody = table.find('tbody');
+          data.forEach(user => {
+            var userRow = '<tr>';
+            userRow += '<td>' + user.user + '</td>';
+            userRow += '<td>' + user.name + '</td>';
+
+            uniqueDates.forEach(date => {
+              if (user.dates[date]) {
+                userRow += '<td>' + user.dates[date].join('<br>') + '</td>';
+              } else {
+                userRow += '<td>Absent</td>';
+              }
+            });
+
+            userRow += '</tr>';
+            tbody.append(userRow);
+          });
+
+          table.DataTable({
+            "paging": true,
+            "searching": false,
+            "language": {
+              "paginate": {
+                "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+              }
+            },
+            "info": false,
+            "dom": '<"top"i>rt<"bottom"lp><"clear">',
+            "lengthMenu": [7, 14],
+            "pageLength": 7
+          });
+        }
+
+        function emptyDataTable(table) {
+          table.find('thead').empty();
+          table.find('tbody').empty();
+        }
       });
 
-      // Sort the dates in ascending order
-      uniqueDates.sort();
+      function getUniqueDates(data) {
+        // Extract unique dates from the data
+        var uniqueDates = [];
+        data.forEach(user => {
+          Object.keys(user.dates).forEach(date => {
+            if (!uniqueDates.includes(date)) {
+              uniqueDates.push(date);
+            }
+          });
+        });
 
-      return uniqueDates;
-    }
-    $(document).ready(function() {
-      $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
-      $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
-    });
-    $('.datepicker-default2').daterangepicker({
-      locale: {
-        format: date_format_js
-      },
-      singleDatePicker: true,
-      maxDate: moment()
-    });
-  </script>
+        // Sort the dates in ascending order
+        uniqueDates.sort();
+
+        return uniqueDates;
+      }
+      $(document).ready(function() {
+        $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
+        $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
+      });
+      $('.datepicker-default2').daterangepicker({
+        locale: {
+          format: date_format_js
+        },
+        singleDatePicker: true,
+        maxDate: moment()
+      });
+    </script>
 </body>
 
 </html>
