@@ -163,13 +163,11 @@
                 } else {
                   $file_upload_path = 'assets/uploads/profiles/' + notification['profile'];
                 }
-                $profile = '<figure class="dropdown-item-icon avatar avatar-m bg-transparent"><img src="' + base_url + '' + $file_upload_path + '" alt="' + notification['first_name'] + ' ' + notification['last_name'] + '" data-toggle="tooltip" data-placement="top" title="' + notification['first_name'] + ' ' + notification['last_name'] + '" data-original-title=""></figure>';
+                $profile = '<div class="media me-2"><img alt="' + notification['first_name'] + ' ' + notification['last_name'] + '" width="50" src="' + base_url + '' + $file_upload_path + '"></div>';
               } else {
-
-                $profile = '<figure  class="dropdown-item-icon avatar avatar-sm bg-primary text-white" data-initial="' + notification['first_name'].substr(0, 1) + '' + notification['last_name'].substr(0, 1) + '" data-toggle="tooltip" data-placement="top" title="' + notification['first_name'] + ' ' + notification['last_name'] + '" data-original-title="' + notification['first_name'] + ' ' + notification['last_name'] + '"></figure>';
+                $profile = '<div class="media me-2 media-info">' + notification['first_name'].substr(0, 1) + '' + notification['last_name'].substr(0, 1) + '</div>';
               }
-
-              $whole_noti += '<a href="' + notification['notification_url'] + '" class="dropdown-item dropdown-item-unread">' + $profile + '<div class="dropdown-item-desc  ml-2">' + notification['notification'] + '<div class="time text-primary">' + notification['created'] + '</div></div></a>';
+              $whole_noti += '<li><div class="timeline-panel"> ' + $profile + ' <div class="media-body"> <h6 class="mb-1">' + notification['notification'] + '</h6><small class="d-block">' + notification['created'] + '</small> </div> </div>  </li>';
             });
 
           } else {

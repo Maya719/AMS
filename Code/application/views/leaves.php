@@ -36,19 +36,19 @@
               <div class="card-body">
                 <div class="basic-form">
                   <form class="row">
-                  <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
-                    <div class="col-lg-3 mb-3">
-                      <select class="form-select" id="employee_id">
-                        <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
-                        <?php foreach ($system_users as $system_user) {
-                          if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
-                            <option value="<?= $system_user->employee_id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
-                        <?php }
-                        } ?>
-                      </select>
-                    </div>
+                    <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
+                      <div class="col-lg-3 mb-3">
+                        <select class="form-select" id="employee_id">
+                          <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
+                          <?php foreach ($system_users as $system_user) {
+                            if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
+                              <option value="<?= $system_user->employee_id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                          <?php }
+                          } ?>
+                        </select>
+                      </div>
                     <?php
-                  }?>
+                    } ?>
                     <div class="col-lg-3 mb-3">
                       <select class="form-select" id="leave_type">
                         <option value=""><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave type' ?></option>
@@ -168,6 +168,7 @@
                     <input type="text" id="ending_date_create" name="ending_date" class="form-control datepicker-default required">
                   </div>
                 </div>
+
                 <div id="half_day_date" class="row" style="display: none;">
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
@@ -298,6 +299,7 @@
                     <input type="text" id="ending_date" name="ending_date" class="form-control" required="">
                   </div>
                 </div>
+
                 <div id="half_day_date_edit" class="row" style="display: none;">
                   <div class="col-md-6 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
@@ -704,6 +706,8 @@
                 },
                 singleDatePicker: true,
                 startDate: endingDate,
+                minDate: startingDate
+
               });
 
               $('#full_day_dates_edit').show();
@@ -731,6 +735,7 @@
                 format: 'HH:mm',
                 showMeridian: false,
                 time24Hour: time24
+
               });
               $('#ending_time').timepicker('setTime', endingTime);
 
@@ -804,7 +809,42 @@
       e.preventDefault();
     });
   </script>
+  <script>
+    $(document).on('change', '#starting_date_create', function(e) {
+      closeEnddate();
+    });
+    $(document).ready(function() {
+      closeEnddate();
 
+    });
+
+    function closeEnddate() {
+      var starting_date_create = $('#starting_date_create').val();
+      $('#ending_date_create').daterangepicker({
+        locale: {
+          format: date_format_js
+        },
+        singleDatePicker: true,
+        minDate: moment(starting_date_create, date_format_js).toDate()
+      });
+    }
+
+
+    $(document).on('change', '#starting_date', function(e) {
+      closeEnddate2();
+    });
+
+    function closeEnddate2() {
+      var starting_date_create = $('#starting_date').val();
+      $('#ending_date').daterangepicker({
+        locale: {
+          format: date_format_js
+        },
+        singleDatePicker: true,
+        minDate: moment(starting_date_create, date_format_js).toDate()
+      });
+    }
+  </script>
 </body>
 
 </html>

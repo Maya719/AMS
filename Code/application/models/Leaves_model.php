@@ -83,10 +83,10 @@ class Leaves_model extends CI_Model
         $LEFT_JOIN = " LEFT JOIN users u ON u.employee_id = l.user_id ";
         $LEFT_JOIN .= " LEFT JOIN leaves_type lt ON lt.id = l.type "; 
     
-        $query = $this->db->query("SELECT l.*, CONCAT(u.first_name, ' ', u.last_name) as user, lt.name FROM leaves l $LEFT_JOIN ".$where);
+        $query = $this->db->query("SELECT l.*, CONCAT(u.first_name, ' ', u.last_name) as user, lt.name FROM leaves l $LEFT_JOIN ".$where ." ORDER BY created DESC");
         $results = $query->result_array();
         usort($results, function($a, $b) {
-            return strtotime($b['starting_date']) - strtotime($a['starting_date']);
+            return strtotime($b['created']) - strtotime($a['created']);
         });
         foreach ($results as &$leave) {
             $leave['starting_date'] = date('d M, Y', strtotime($leave['starting_date']));

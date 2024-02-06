@@ -248,7 +248,7 @@ class Attendance_model extends CI_Model
         $todayDate = $currentDate->format('Y-m-d');
         if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
             $where = " WHERE DATE(attendance.finger) = '" . $todayDate . "' ";
-        }else{
+        } else {
             $where = '';
         }
         $leftjoin = " LEFT JOIN users ON attendance.user_id = users.employee_id";
@@ -284,12 +284,12 @@ class Attendance_model extends CI_Model
         $where2 = " WHERE users.active= '1' AND users.finger_config='1' AND users.saas_id=" . $this->session->userdata('saas_id');
         $where2 .= " AND leaves.starting_date >= '" . $fromDate . "' AND leaves.ending_date <= '" . $todayDate . "'";
         if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
-            $where2 .= " " ;
-        }else{
+            $where2 .= " ";
+        } else {
             $user = $this->ion_auth->user()->row();
             $user_id = $user->id;
             $employee_id = get_employee_id_from_user_id($user_id);
-            $where2 .= " AND leaves.user_id = '" . $employee_id ."'";
+            $where2 .= " AND leaves.user_id = '" . $employee_id . "'";
         }
         $leaveQuery = $this->db->query("SELECT leaves.*, CONCAT(users.first_name, ' ', users.last_name) AS user  FROM leaves " . $leftjoin2 . $where2 . " AND leaves.leave_duration NOT LIKE '%Half%' AND leaves.leave_duration NOT LIKE '%Short%'");
         $leavesresult = $leaveQuery->result_array();
@@ -307,12 +307,12 @@ class Attendance_model extends CI_Model
 
         $where3 = " WHERE biometric_missing.date BETWEEN '" . $fromDate . "' AND '" . $todayDate . "'";
         if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
-            $where3 .= " " ;
-        }else{
+            $where3 .= " ";
+        } else {
             $user = $this->ion_auth->user()->row();
             $user_id = $user->id;
             $employee_id = get_employee_id_from_user_id($user_id);
-            $where3 .= " AND biometric_missing.user_id = '" . $employee_id ."'";
+            $where3 .= " AND biometric_missing.user_id = '" . $employee_id . "'";
         }
         $BioQuery = $this->db->query("SELECT biometric_missing.*, CONCAT(users.first_name, ' ', users.last_name) AS user FROM biometric_missing " . $leftjoin3 . $where3);
         $BioResults = $BioQuery->result_array();
@@ -460,12 +460,15 @@ class Attendance_model extends CI_Model
                             $leave = '' . floatval($leave) + floatval(1 / 2) . '';
                         }
                         $userData["status"][] = 'HD L';
+                        $totalLateMinutes += $min["lateMinutes"];
+                        $userData["checkin"][] = $min;
                     } else {
                         $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
                         if ($min["halfDay"]) {
                             $userData["status"][] = 'HD';
+                            $totalLateMinutes += $min["lateMinutes"];
                             $absent = '' . floatval($absent) + floatval(1 / 2) . '';
-                        }else{
+                        } else {
                             if ($min["lateMinutes"]) {
                                 $totalLateMinutes += $min["lateMinutes"];
                             }
@@ -528,20 +531,21 @@ class Attendance_model extends CI_Model
         if ($checkInDateTime != $checkOutDateTime) {
             if ($this->checkHalfDayLeave($date, $employee_id)) {
                 $halfDayLeave = true;
+                $lateMinutes = 0;
+
             }
-            if (($halfDayStartDateTime >= $checkInDateTime && $halfDayEndDateTime >= $checkOutDateTime) ||
-                ($halfDayStartDateTime <= $checkInDateTime && $halfDayEndDateTime <= $checkOutDateTime)
-            ) {
+            if (($halfDayStartDateTime >= $checkInDateTime && $halfDayEndDateTime >= $checkOutDateTime) || ($halfDayStartDateTime <= $checkInDateTime && $halfDayEndDateTime <= $checkOutDateTime) ) {
                 $halfDay = true;
+                $lateMinutes = 0;
             } else {
                 if ($checkInDateTime > $shiftStartDateTime) {
                     $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
-                }else{
+                } else {
                     $lateMinutes = 0;
                 }
             }
             if ($date !== date('Y-m-d')) {
-                if ($shiftEndDateTime > $checkOutDateTime) {
+                if ($shiftEndDateTime > $checkOutDateTime && !$halfDayLeave) {
                     $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
                     $lateMinutes += $lateMinutes2;
                 }
@@ -576,7 +580,8 @@ class Attendance_model extends CI_Model
             return false;
         }
     }
-    function connect(){
+    function connect()
+    {
         $datetime = new DateTime();
         $timezone = new DateTimeZone('Asia/Karachi');
         $datetime->setTimezone($timezone);
@@ -589,55 +594,53 @@ class Attendance_model extends CI_Model
             try {
                 $zk->connect();
                 $zk->disableDevice();
-                $zk->setTime($cdate); 
+                $zk->setTime($cdate);
                 $users = $zk->getUser();
                 $attendance = $zk->getAttendance();
-                 $zk->clearAttendance();
+                $zk->clearAttendance();
                 $zk->enableDevice();
                 $zk->disconnect();
-                    foreach ($attendance as $key => $attendances) {
-                        $userid = $attendances['id'];
-                        $timestamp = $attendances['timestamp'];
-                        $query = $this->db->query("SELECT * FROM attendance WHERE user_id = '$userid' AND finger ='$timestamp'");
-                        $results = $query->result_array();
-                        $query2 = $this->db->query("SELECT * FROM users WHERE employee_id = '$userid'");
-                        $result2 = $query2->row();
-                        if ($result2) {
-                            $id = $result2->id;
-                            $email = $result2->email;
-                            $name = $result2->first_name.' '.$result2->last_name;
-                            $dateTime = new DateTime($timestamp);
-                            $time = $dateTime->format("h:i A");
-                            $numRows = $query->num_rows();
-                            if ($numRows == 0) {
-                                $data = [
-                                    'user_id'=>$userid,
-                                    'finger'=>$timestamp
-                                ];
-                                $this->db->insert('attendance', $data);
-                                $notification_data = array(
-                                    'notification' => 'Your Punch recorded at '.$timestamp,
-                                    'type' => 'attendance',	
-                                    'type_id' => '11',	
-                                    'from_id' => $id,
-                                    'to_id' => $id
-                                );
-                                $notification_id = $this->notifications_model->create($notification_data);
-                                
-                                $template_data['NAME'] = $name;
-                                $template_data['TIME'] = $time;
-                                $template_data['DASHBOARD_URL'] = 'https://pms.mobipixels.com';
-                                $email_template = render_email_template('biometric', $template_data);
-                                send_mail($email, $email_template[0]['subject'], $email_template[0]['message']);
-                                
-                            }
+                foreach ($attendance as $key => $attendances) {
+                    $userid = $attendances['id'];
+                    $timestamp = $attendances['timestamp'];
+                    $query = $this->db->query("SELECT * FROM attendance WHERE user_id = '$userid' AND finger ='$timestamp'");
+                    $results = $query->result_array();
+                    $query2 = $this->db->query("SELECT * FROM users WHERE employee_id = '$userid'");
+                    $result2 = $query2->row();
+                    if ($result2) {
+                        $id = $result2->id;
+                        $email = $result2->email;
+                        $name = $result2->first_name . ' ' . $result2->last_name;
+                        $dateTime = new DateTime($timestamp);
+                        $time = $dateTime->format("h:i A");
+                        $numRows = $query->num_rows();
+                        if ($numRows == 0) {
+                            $data = [
+                                'user_id' => $userid,
+                                'finger' => $timestamp
+                            ];
+                            $this->db->insert('attendance', $data);
+                            $notification_data = array(
+                                'notification' => 'Your Punch recorded at ' . $timestamp,
+                                'type' => 'attendance',
+                                'type_id' => '11',
+                                'from_id' => $id,
+                                'to_id' => $id
+                            );
+                            $notification_id = $this->notifications_model->create($notification_data);
+
+                            $template_data['NAME'] = $name;
+                            $template_data['TIME'] = $time;
+                            $template_data['DASHBOARD_URL'] = 'https://pms.mobipixels.com';
+                            $email_template = render_email_template('biometric', $template_data);
+                            send_mail($email, $email_template[0]['subject'], $email_template[0]['message']);
                         }
-                        
                     }
-                echo json_encode($attendance);
-                } catch (\Exception $e) {
-                         echo "Error: " . $e->getMessage() . "\n";
                 }
+                echo json_encode($attendance);
+            } catch (\Exception $e) {
+                echo "Error: " . $e->getMessage() . "\n";
+            }
         }
     }
 }

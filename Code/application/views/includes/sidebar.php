@@ -579,9 +579,10 @@
           </div>
         </div>
         <ul class="navbar-nav header-right">
+        <?php if(!is_saas_admin() && !is_client() && is_module_allowed('timesheet')){ ?>
           <li class="nav-item dropdown notification_dropdown">
             <a class="nav-link " href="javascript:void(0);" data-bs-toggle="dropdown">
-              <i class="fa-regular fa-clock" style="color:  #193a66;"></i>
+              <i class="fa-regular fa-clock text-primary"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <div id="DZ_W_TimeLine02" class="widget-timeline dlab-scroll style-1 ps ps--active-y p-3 height370">
@@ -638,14 +639,20 @@
               </div>
             </div>
           </li>
+          <?php
+        }?>
           <li class="nav-item dropdown notification_dropdown">
-            <a class="nav-link bell-link " href="javascript:void(0);">
-              <i class="fa-regular fa-envelope" style="color:  #193a66;"></i>
+            <a class="nav-link bell-link" href="javascript:void(0);">
+              <i class="fa-regular fa-envelope text-primary"></i>
             </a>
           </li>
-          <li class="nav-item dropdown notification_dropdown">
+          <?php 
+  if(is_module_allowed('notifications')){ 
+      echo get_notifications_live2(); 
+  } ?>
+          <!-- <li class="nav-item dropdown notification_dropdown">
             <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-              <i class="fa-regular fa-bell" style="color:  #193a66;"></i>
+              <i class="fa-regular fa-bell beep text-primary" ></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
               <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">
@@ -720,7 +727,7 @@
               </div>
               <a class="all-notification" href="javascript:void(0);">See all notifications <i class="ti-arrow-end"></i></a>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item dropdown  header-profile">
             <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
               <?php if (isset($current_user->profile) && !empty($current_user->profile)) {
@@ -807,23 +814,23 @@
           </a>
           <ul aria-expanded="false">
             <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('project_view'))) { ?>
-              <li><a href="<?= base_url('projects/list') ?>"><?=$this->lang->line('projects')?$this->lang->line('projects'):'Projects'?></a></li>
+              <li><a href="<?= base_url('projects/list') ?>"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></a></li>
             <?php } ?>
-            
+
             <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
-              <li><a href="<?= base_url('projects/tasks') ?>"><?=$this->lang->line('tasks')?$this->lang->line('tasks'):'Tasks'?></a></li>
+              <li><a href="<?= base_url('projects/tasks') ?>"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></a></li>
             <?php } ?>
 
             <?php if (is_module_allowed('timesheet') && ($this->ion_auth->is_admin() || permissions('task_view')) && !is_client()) { ?>
               <li><a href="<?= base_url('projects/timesheet') ?>"><?= $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet' ?></a></li>
             <?php } ?>
 
-            <?php if(($this->ion_auth->is_admin() || permissions('gantt_view')) && is_module_allowed('gantt')){ ?>
-              <li><a href="<?=base_url('projects/gantt')?>"><?=$this->lang->line('gantt')?$this->lang->line('gantt'):'Gantt'?></a></li>
+            <?php if (($this->ion_auth->is_admin() || permissions('gantt_view')) && is_module_allowed('gantt')) { ?>
+              <li><a href="<?= base_url('projects/gantt') ?>"><?= $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt' ?></a></li>
             <?php } ?>
 
-            <?php if($this->ion_auth->is_admin() || permissions('calendar_view')){ ?>
-              <li><a href="<?=base_url('projects/calendar')?>"><?=$this->lang->line('calendar')?$this->lang->line('calendar'):'Calendar'?></a></li>
+            <?php if ($this->ion_auth->is_admin() || permissions('calendar_view')) { ?>
+              <li><a href="<?= base_url('projects/calendar') ?>"><?= $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar' ?></a></li>
             <?php } ?>
           </ul>
         </li>
@@ -872,51 +879,59 @@
           </ul>
         </li>
       <?php } ?>
-      <li><a href="suport.html" aria-expanded="false">
+      <?php if (is_module_allowed('support') && ($this->ion_auth->is_admin() || is_saas_admin() || permissions('support_view'))){ ?> 
+      <li><a href="<?=base_url('support')?>" aria-expanded="false">
           <i class="fa-solid fa-circle-info"></i>
           <span class="nav-text">Support</span>
         </a>
       </li>
+      <?php } ?>
+      <?php
+       if($this->ion_auth->is_admin() || is_saas_admin() || permissions('general_view') || permissions('company_view') || permissions('leave_type_view') || permissions('device_view') || permissions('departments_view') || permissions('shift_view') || permissions('time_schedule_view')){ ?>   
+        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+            <i class="fa-solid fa-gear"></i>
+            <span class="nav-text">Settings</span>
+          </a>
+          <ul aria-expanded="false">
+            <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
+              <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
+            <?php } ?>
 
-      <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
-          <i class="fa-solid fa-gear"></i>
-          <span class="nav-text">Settings</span>
-        </a>
-        <ul aria-expanded="false">
-          <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
-            <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
-          <?php } ?>
+            <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
+              <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>
+            <?php } ?>
 
-          <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
-            <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>
-          <?php } ?>
+            <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
+              <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave hierarchy' ?></a></li>
+            <?php } ?>
 
-          <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
-            <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave hierarchy' ?></a></li>
-          <?php } ?>
+            <?php if ($this->ion_auth->is_admin() || permissions('shift_view')) { ?>
+              <li><a href="<?= base_url('settings/shift') ?>">Shifts</a></li>
+            <?php } ?>
 
-          <?php if ($this->ion_auth->is_admin() || permissions('shift_view')) { ?>
-            <li><a href="<?= base_url('settings/shift') ?>">Shifts</a></li>
-          <?php } ?>
+            <?php if ($this->ion_auth->is_admin() || permissions('device_view')) { ?>
+              <li><a href="<?= base_url('settings/device_config') ?>"><?= $this->lang->line('device_config') ? $this->lang->line('device_config') : 'Device Configuration' ?></a></li>
+            <?php } ?>
 
-          <?php if ($this->ion_auth->is_admin() || permissions('device_view')) { ?>
-            <li><a href="<?= base_url('settings/device_config') ?>"><?= $this->lang->line('device_config') ? $this->lang->line('device_config') : 'Device Configuration' ?></a></li>
-          <?php } ?>
+            <?php if ($this->ion_auth->is_admin() || permissions('departments_view')) { ?>
+              <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
+            <?php } ?>
+            <?php if ($this->ion_auth->is_admin()) { ?>
+              <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
+            <?php } ?>
 
-          <?php if ($this->ion_auth->is_admin() || permissions('departments_view')) { ?>
-            <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
-          <?php } ?>
-          <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
+            <?php if ($this->ion_auth->is_admin() && is_module_allowed('user_permissions')) { ?>
+              <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
+            <?php } ?>
 
-          <?php if ($this->ion_auth->is_admin()  && is_module_allowed('user_permissions')) { ?>
-            <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
-          <?php } ?>
-
-          <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
-            <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
-          <?php } ?>
-        </ul>
-      </li>
+            <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
+              <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
+            <?php } ?>
+          </ul>
+        </li>
+      <?php
+      }
+      ?>
     </ul>
     <div class="copyright">
       <p class="fs-12">Made with <span class="heart"></span> by Mobipixels</p>

@@ -117,6 +117,113 @@ function get_notifications_live()
     </div>
     </li>';
 }
+function get_notifications_live2()
+{
+
+    $CI = &get_instance();
+    $new_noti = true;
+    $show_beep_for_msg = false;
+    $show_beep_for_support_msg = false;
+    $notifications = get_notifications();
+    $unread_msg_count = get_unread_msg_count();
+    $unread_support_msg_count = get_unread_support_msg_count();
+    $chat_message_count = get_unread_msg_count_numeric();
+
+    if (($CI->ion_auth->is_admin() || permissions('chat_view') || permissions('notification_view_all') || permissions('notification_view_pms') || $CI->ion_auth->in_group(3)) && ($unread_msg_count || $unread_support_msg_count) && is_module_allowed('chat')) {
+        if ($unread_msg_count) {
+            $show_beep_for_msg = true;
+        }
+        if ($unread_support_msg_count) {
+            $show_beep_for_support_msg = true;
+        }
+    }
+
+    $new_support_message_received = '';
+    if ($show_beep_for_support_msg) {
+        $new_noti = false;
+        $new_support_message_received = '<a href="' . (base_url('support')) . '" class="dropdown-item dropdown-item-unread">
+        <figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-question-circle"></figure>
+        <h6 class="dropdown-item-desc m-2">
+        ' . ($CI->lang->line('new_support_message_received') ? htmlspecialchars($CI->lang->line('new_support_message_received')) : 'New support message received') . '
+        </h6>
+        </a>';
+    }
+
+    $new_message = '';
+    if ($show_beep_for_msg) {
+        $new_noti = false;
+
+        $new_message = '<a href="' . (base_url('chat')) . '" class="dropdown-item dropdown-item-unread">
+        <figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-comment-alt"></figure>
+        <h6 class="dropdown-item-desc m-2">
+        ' . ($CI->lang->line('new_message') ? $CI->lang->line('new_message') : 'New Message') . '
+        </h6>
+        </a>';
+    }
+
+    $count = 0;
+
+    if ($notifications) {
+        $new_noti = false;
+        $whole_noti = '';
+
+        foreach ($notifications as $notification) {
+            $profile = '';
+
+            if (isset($notification['profile']) && !empty($notification['profile'])) {
+                if (file_exists('assets/uploads/profiles/' . $notification['profile'])) {
+                    $file_upload_path = 'assets/uploads/profiles/' . $notification['profile'];
+                } else {
+                    $file_upload_path = 'assets/uploads/f' . $CI->session->userdata('saas_id') . '/profiles/' . $notification['profile'];
+                }
+                $profile = '<div class="media me-2"><img alt="' . (htmlspecialchars($notification['first_name']) . ' ' . htmlspecialchars($notification['last_name'])) . '" width="50" src="' . (base_url($file_upload_path)) . '"></div>';
+            } else {
+                $profile = '<div class="media me-2 media-info">
+                ' . (mb_substr(htmlspecialchars($notification['first_name']), 0, 1, "utf-8") . '' . mb_substr(htmlspecialchars($notification['last_name']), 0, 1, "utf-8")) . '
+              </div>';
+
+                $whole_noti .= '<li>
+            <div class="timeline-panel">
+              ' . $profile . '
+              <div class="media-body">
+                <h6 class="mb-1">' . ($notification['notification']) . '</h6>
+                <small class="d-block">' . (time_elapsed_string($notification['created'])) . '</small>
+              </div>
+            </div>
+          </li>';
+                $count++;
+            }
+        }
+    } else {
+        if ($new_noti) {
+            $whole_noti = '<a class="dropdown-item dropdown-item-unread">
+        <div class="dropdown-item-desc  ml-2">
+            ' . ($CI->lang->line('no_new_notifications') ? $CI->lang->line('no_new_notifications') : 'No new notifications.') . '
+        </div>
+        </a>';
+        }
+    }
+
+    if ($chat_message_count != 0) {
+        $count++;
+    }
+
+    return '<li class="nav-item dropdown notification_dropdown">
+    <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+      <i class="fa-regular fa-bell '.($notifications || $show_beep_for_msg || $show_beep_for_support_msg?'beep':'').' text-primary" ></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end">
+      <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">
+        <ul class="timeline" id="new_live_notifications">
+         '.($new_support_message_received).'
+         '.($new_message).'
+         '.($whole_noti).'
+        </ul>
+      </div>
+      <a class="all-notification" href="' . (base_url('notifications')) . '">See all notifications <i class="ti-arrow-end"></i></a>
+    </div>
+  </li>';
+}
 
 function get_google_client_id()
 {

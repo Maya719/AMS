@@ -257,12 +257,8 @@ let dataSet = [
 
 	});
 	
-	// Move elements using CSS
 	$(document).ready(function() {
-		// Move the information about entries to the bottom
 		$(".dataTables_info").appendTo("#example3_wrapper .bottom");
-	
-		// Move the length selector to the bottom
 		$(".dataTables_length").appendTo("#example3_wrapper .bottom");
 	});
 	
