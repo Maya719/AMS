@@ -183,7 +183,7 @@ class Plans extends CI_Controller
 								$saas_admins = $this->ion_auth->users(array(3))->result();
 								foreach($saas_admins as $saas_admin){
 									$data = array(
-										'notification' => '<span class="text-info">'.$plan[0]['title'].'</span>',
+										'notification' => '<span class="text-primary">'.$plan[0]['title'].'</span>',
 										'type' => 'new_plan',	
 										'type_id' => $payment_details->metadata->plan_id,	
 										'from_id' => $this->session->userdata('saas_id'),
@@ -532,7 +532,7 @@ class Plans extends CI_Controller
 							$plan_name = $plan[0]['title'];
 						}
 						$notification_data = array(
-							'notification' => '<span class="text-info">'.$plan_name.'</span>',
+							'notification' => '<span class="text-primary">'.$plan_name.'</span>',
 							'type' => 'offline_request',	
 							'type_id' => $this->input->post('plan_id'),	
 							'from_id' => $this->session->userdata('user_id'),
@@ -617,7 +617,7 @@ class Plans extends CI_Controller
 					}
 					foreach($saas_admins as $saas_admin){
 						$notification_data = array(
-							'notification' => '<span class="text-info">'.$plan_name.'</span>',
+							'notification' => '<span class="text-primary">'.$plan_name.'</span>',
 							'type' => 'offline_request',	
 							'type_id' => $this->input->post('plan_id'),	
 							'from_id' => $this->session->userdata('saas_id'),
@@ -752,7 +752,7 @@ class Plans extends CI_Controller
 					$saas_admins = $this->ion_auth->users(array(3))->result();
 					foreach($saas_admins as $saas_admin){
 						$data = array(
-							'notification' => '<span class="text-info">'.$plan[0]['title'].'</span>',
+							'notification' => '<span class="text-primary">'.$plan[0]['title'].'</span>',
 							'type' => 'new_plan',	
 							'type_id' => $this->input->post('plan_id'),	
 							'from_id' => $this->session->userdata('saas_id'),

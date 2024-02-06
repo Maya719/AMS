@@ -165,7 +165,7 @@
                 }
                 $profile = '<div class="media me-2"><img alt="' + notification['first_name'] + ' ' + notification['last_name'] + '" width="50" src="' + base_url + '' + $file_upload_path + '"></div>';
               } else {
-                $profile = '<div class="media me-2 media-info">' + notification['first_name'].substr(0, 1) + '' + notification['last_name'].substr(0, 1) + '</div>';
+                $profile = '<div class="media me-2 media-primary">' + notification['first_name'].substr(0, 1) + '' + notification['last_name'].substr(0, 1) + '</div>';
               }
               $whole_noti += '<li><div class="timeline-panel"> ' + $profile + ' <div class="media-body"> <h6 class="mb-1">' + notification['notification'] + '</h6><small class="d-block">' + notification['created'] + '</small> </div> </div>  </li>';
             });

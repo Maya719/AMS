@@ -672,7 +672,7 @@ class Projects extends CI_Controller
 							foreach($project_old[0]['project_users_ids_array'] as $user){
 								if($user != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '"<span class="text-info">'.$this->input->post('message').'</span>"',
+										'notification' => '"<span class="text-primary">'.$this->input->post('message').'</span>"',
 										'type' => 'project_comment',	
 										'type_id' => $this->input->post('comment_project_id'),	
 										'from_id' => $this->session->userdata('user_id'),
@@ -685,7 +685,7 @@ class Projects extends CI_Controller
 						if($project_old[0]['client_id']){
 							if($project_old[0]['client_id'] != $this->session->userdata('user_id')){
 								$data = array(
-									'notification' => '"<span class="text-info">'.$this->input->post('message').'</span>"',
+									'notification' => '"<span class="text-primary">'.$this->input->post('message').'</span>"',
 									'type' => 'project_comment',	
 									'type_id' => $this->input->post('comment_project_id'),	
 									'from_id' => $this->session->userdata('user_id'),
@@ -703,7 +703,7 @@ class Projects extends CI_Controller
 							foreach ($system_admins as $system_user) {
 								if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '"<span class="text-info">'.$this->input->post('message').'</span>"',
+										'notification' => '"<span class="text-primary">'.$this->input->post('message').'</span>"',
 										'type' => 'project_comment',	
 										'type_id' => $this->input->post('comment_project_id'),	
 										'from_id' => $this->session->userdata('user_id'),
@@ -801,7 +801,7 @@ class Projects extends CI_Controller
 								foreach($users as $key => $user){
 									if($user['id'] != $this->session->userdata('user_id')){
 										$data = array(
-											'notification' => '<span class="text-info">'.$this->upload->data('file_name').'</span>',
+											'notification' => '<span class="text-primary">'.$this->upload->data('file_name').'</span>',
 											'type' => 'task_file',	
 											'type_id' => $task_id,	
 											'from_id' => $this->session->userdata('user_id'),
@@ -814,7 +814,7 @@ class Projects extends CI_Controller
 							if($project_old[0]['client_id']){
 								if($project_old[0]['client_id'] != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '<span class="text-info">'.$this->upload->data('file_name').'</span>',
+										'notification' => '<span class="text-primary">'.$this->upload->data('file_name').'</span>',
 										'type' => 'task_file',	
 										'type_id' => $task_id,	
 										'from_id' => $this->session->userdata('user_id'),
@@ -832,7 +832,7 @@ class Projects extends CI_Controller
 								foreach ($system_admins as $system_user) {
 									if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
 										$data = array(
-											'notification' => '<span class="text-info">'.$this->upload->data('file_name').'</span>',
+											'notification' => '<span class="text-primary">'.$this->upload->data('file_name').'</span>',
 											'type' => 'task_file',	
 											'type_id' => $task_id,	
 											'from_id' => $this->session->userdata('user_id'),
@@ -880,7 +880,7 @@ class Projects extends CI_Controller
 							foreach($users as $key => $user){
 								if($user['id'] != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '"<span class="text-info">'.$this->input->post('message').'</span>"',
+										'notification' => '"<span class="text-primary">'.$this->input->post('message').'</span>"',
 										'type' => 'task_comment',	
 										'type_id' => $task_id,	
 										'from_id' => $this->session->userdata('user_id'),
@@ -893,7 +893,7 @@ class Projects extends CI_Controller
 						if($project_old[0]['client_id']){
 							if($project_old[0]['client_id'] != $this->session->userdata('user_id')){
 								$data = array(
-									'notification' => '"<span class="text-info">'.$this->input->post('message').'</span>"',
+									'notification' => '"<span class="text-primary">'.$this->input->post('message').'</span>"',
 									'type' => 'task_comment',	
 									'type_id' => $task_id,	
 									'from_id' => $this->session->userdata('user_id'),
@@ -911,7 +911,7 @@ class Projects extends CI_Controller
 							foreach ($system_admins as $system_user) {
 								if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '"<span class="text-info">'.$this->input->post('message').'</span>"',
+										'notification' => '"<span class="text-primary">'.$this->input->post('message').'</span>"',
 										'type' => 'task_comment',	
 										'type_id' => $task_id,	
 										'from_id' => $this->session->userdata('user_id'),
@@ -1265,7 +1265,7 @@ class Projects extends CI_Controller
 							foreach($users as $key => $user){
 								if($user['id'] != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '<span class="text-info">'.$file_data['file_name'].'</span>',
+										'notification' => '<span class="text-primary">'.$file_data['file_name'].'</span>',
 										'type' => 'project_file',	
 										'type_id' => $project_id,	
 										'from_id' => $this->session->userdata('user_id'),
@@ -1278,7 +1278,7 @@ class Projects extends CI_Controller
 						if($project_old[0]['client_id']){
 							if($project_old[0]['client_id'] != $this->session->userdata('user_id')){
 								$data = array(
-									'notification' => '<span class="text-info">'.$file_data['file_name'].'</span>',
+									'notification' => '<span class="text-primary">'.$file_data['file_name'].'</span>',
 									'type' => 'project_file',	
 									'type_id' => $project_id,	
 									'from_id' => $this->session->userdata('user_id'),
@@ -1296,7 +1296,7 @@ class Projects extends CI_Controller
 							foreach ($system_admins as $system_user) {
 								if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
 									$data = array(
-										'notification' => '<span class="text-info">'.$file_data['file_name'].'</span>',
+										'notification' => '<span class="text-primary">'.$file_data['file_name'].'</span>',
 										'type' => 'project_file',	
 										'type_id' => $project_id,	
 										'from_id' => $this->session->userdata('user_id'),
@@ -1950,7 +1950,7 @@ class Projects extends CI_Controller
 
 					if($this->input->post('client')){
 						$data = array(
-							'notification' => '<span class="text-info">'.$this->input->post('title').'</span>',
+							'notification' => '<span class="text-primary">'.$this->input->post('title').'</span>',
 							'type' => 'new_project',	
 							'type_id' => $project_id,	
 							'from_id' => $this->session->userdata('user_id'),
@@ -1971,7 +1971,7 @@ class Projects extends CI_Controller
 						foreach ($system_admins as $system_user) {
 							if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
 								$data = array(
-									'notification' => '<span class="text-info">'.$this->input->post('title').'</span>',
+									'notification' => '<span class="text-primary">'.$this->input->post('title').'</span>',
 									'type' => 'new_project',
 									'type_id' => $project_id,	
 									'from_id' => $this->session->userdata('user_id'),
@@ -1991,7 +1991,7 @@ class Projects extends CI_Controller
 							);
 							$this->projects_model->create_project_users($user_data);
 							$data = array(
-								'notification' => '<span class="text-info">'.$this->input->post('title').'</span>',
+								'notification' => '<span class="text-primary">'.$this->input->post('title').'</span>',
 								'type' => 'new_project',	
 								'type_id' => $project_id,	
 								'from_id' => $this->session->userdata('user_id'),
@@ -2229,7 +2229,7 @@ public function create_task()
 							$this->projects_model->create_task_users($user_data);
 							if($user_id != $this->session->userdata('user_id')){
 								$data = array(
-									'notification' => '<span class="text-info">'.$this->input->post('title').'</span>',
+									'notification' => '<span class="text-primary">'.$this->input->post('title').'</span>',
 									'type' => 'new_task',	
 									'type_id' => $task_id,	
 									'from_id' => $this->session->userdata('user_id'),
@@ -2269,7 +2269,7 @@ public function create_task()
 						foreach ($system_admins as $system_user) {
 							if($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')){
 								$data = array(
-									'notification' => '<span class="text-info">'.$this->input->post('title').'</span>',
+									'notification' => '<span class="text-primary">'.$this->input->post('title').'</span>',
 									'type' => 'new_task',	
 									'type_id' => $task_id,	
 									'from_id' => $this->session->userdata('user_id'),
@@ -2283,7 +2283,7 @@ public function create_task()
 					if($project_old[0]['client_id']){
 						if($project_old[0]['client_id'] != $this->session->userdata('user_id')){
 							$data = array(
-								'notification' => '<span class="text-info">'.$this->input->post('title').'</span>',
+								'notification' => '<span class="text-primary">'.$this->input->post('title').'</span>',
 								'type' => 'new_task',	
 								'type_id' => $task_id,	
 								'from_id' => $this->session->userdata('user_id'),
@@ -2395,7 +2395,7 @@ public function create_task()
 								$query = $this->db->get('task_status');
 								$task_data = $query->row_array(); 
 								$data = array(
-									'notification' => 'Project <span class="text-info">'.$this->input->post('title').'</span> now <span class="text-info">'.$task_data['title'].'</span>.',
+									'notification' => 'Project <span class="text-primary">'.$this->input->post('title').'</span> now <span class="text-primary">'.$task_data['title'].'</span>.',
 									'type' => 'task_status',	
 									'type_id' => $task_id,	
 									'from_id' => $this->session->userdata('user_id'),
@@ -2419,7 +2419,7 @@ public function create_task()
 							$query = $this->db->get('task_status');
 							$task_data = $query->row_array(); 
 							$data = array(
-								'notification' => 'Project <span class="text-info">'.$this->input->post('title').'</span> now <span class="text-info">'.$task_data['title'].'</span>.',
+								'notification' => 'Project <span class="text-primary">'.$this->input->post('title').'</span> now <span class="text-primary">'.$task_data['title'].'</span>.',
 								'type' => 'task_status',	
 								'type_id' => $task_id,	
 								'from_id' => $this->session->userdata('user_id'),
@@ -2440,7 +2440,7 @@ public function create_task()
 								$query = $this->db->get('task_status');
 								$task_data = $query->row_array(); 
 								$data = array(
-									'notification' => 'Project <span class="text-info">'.$this->input->post('title').'</span> now <span class="text-info">'.$task_data['title'].'</span>.',
+									'notification' => 'Project <span class="text-primary">'.$this->input->post('title').'</span> now <span class="text-primary">'.$task_data['title'].'</span>.',
 									'type_id' => $task_id,	
 									'from_id' => $this->session->userdata('user_id'),
 									'to_id' => $system_user->user_id,	

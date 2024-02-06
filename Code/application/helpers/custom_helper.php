@@ -979,7 +979,7 @@ function get_notifications($user_id = ''){
                 $plan = $CI->plans_model->get_plans($notification['type_id']);
                 if($plan){
                     $extra = '<div class="text-small">
-                        '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-info">'.$plan[0]['title'].'</span> 
+                        '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-primary">'.$plan[0]['title'].'</span> 
                     </div>'; 
                 }
             }elseif($notification['type'] == 'new_plan' && $CI->ion_auth->in_group(3)){
@@ -989,13 +989,13 @@ function get_notifications($user_id = ''){
                 if($plan){
                     $user = $CI->ion_auth->user($notification['from_id'])->row();
                     if($user){
-                        $ADD = 'User: <span class="text-info">'.$user->first_name.' '.$user->last_name.'</span>';
+                        $ADD = 'User: <span class="text-primary">'.$user->first_name.' '.$user->last_name.'</span>';
                     }else{
                         $ADD = '';
                     }
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-info">'.$plan[0]['title'].'</span> 
-                        '.($CI->lang->line('transaction')?$CI->lang->line('transaction'):'Transaction').': <span class="text-info">'.$plan[0]['price'].'</span> 
+                    '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-primary">'.$plan[0]['title'].'</span> 
+                        '.($CI->lang->line('transaction')?$CI->lang->line('transaction'):'Transaction').': <span class="text-primary">'.$plan[0]['price'].'</span> 
                         '.$ADD.'
                     </div>';
                 }
@@ -1005,7 +1005,7 @@ function get_notifications($user_id = ''){
                 $user = $CI->ion_auth->user($notification['type_id'])->row();
                 if($user){
                     $extra = '<div class="text-small">
-                        '.($CI->lang->line('user')?$CI->lang->line('user'):'User').': <span class="text-info">'.$user->first_name.' '.$user->last_name.'</span> 
+                        '.($CI->lang->line('user')?$CI->lang->line('user'):'User').': <span class="text-primary">'.$user->first_name.' '.$user->last_name.'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'offline_request' && $CI->ion_auth->is_admin()){
@@ -1015,7 +1015,7 @@ function get_notifications($user_id = ''){
                 $plan = $CI->plans_model->get_plans($notification['type_id']);
                 if($plan){
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-info">'.$plan[0]['title'].'</span> 
+                    '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-primary">'.$plan[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'new_project'){
@@ -1024,7 +1024,7 @@ function get_notifications($user_id = ''){
                 $project = $CI->projects_model->get_projects('',$notification['type_id']);
                 if($project){
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$project[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'project_status'){
@@ -1032,14 +1032,14 @@ function get_notifications($user_id = ''){
                 $project = $CI->projects_model->get_projects('',$notification['type_id']);
 
                 if($old_status && $project){
-                    $notification_txt = $CI->lang->line('project_status_changed')?$CI->lang->line('project_status_changed').' <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-info">'.$project[0]['project_status'].'</span>':'Project status changed. <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-info">'.$project[0]['project_status'].'</span>';
+                    $notification_txt = $CI->lang->line('project_status_changed')?$CI->lang->line('project_status_changed').' <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-primary">'.$project[0]['project_status'].'</span>':'Project status changed. <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-primary">'.$project[0]['project_status'].'</span>';
                 }
 
                 $notification_url = base_url('projects/detail/'.$notification['type_id']);
                 
                 if($project){
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$project[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'project_file'){
@@ -1048,7 +1048,7 @@ function get_notifications($user_id = ''){
                 $project = $CI->projects_model->get_projects('',$notification['type_id']);
                 if($project){
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$project[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'new_task'){
@@ -1057,8 +1057,8 @@ function get_notifications($user_id = ''){
                 if($task){
                     $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-info">'.$task[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
+                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'task_status'){
@@ -1066,14 +1066,14 @@ function get_notifications($user_id = ''){
                 $task = $CI->projects_model->get_tasks('',$notification['type_id']);
 
                 if($task_status_old && $task){
-                    $notification_txt = $CI->lang->line('task_status_changed')?($CI->lang->line('task_status_changed').' <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-info">'.$task[0]['task_status'].'</span>'):('Task status changed. <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-info">'.$task[0]['task_status'].'</span>');
+                    $notification_txt = $CI->lang->line('task_status_changed')?($CI->lang->line('task_status_changed').' <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-primary">'.$task[0]['task_status'].'</span>'):('Task status changed. <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-primary">'.$task[0]['task_status'].'</span>');
                 }
                 
                 if($task){
                     $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-info">'.$task[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
+                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'task_file'){
@@ -1082,8 +1082,8 @@ function get_notifications($user_id = ''){
                 if($task){
                     $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-info">'.$task[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
+                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'task_comment'){
@@ -1092,8 +1092,8 @@ function get_notifications($user_id = ''){
                 if($task){
                     $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-info">'.$task[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
+                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'project_comment'){
@@ -1102,69 +1102,69 @@ function get_notifications($user_id = ''){
                 $project = $CI->projects_model->get_projects('',$notification['type_id']);
                 if($project){
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-info">'.$project[0]['title'].'</span> 
+                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
                     </div>';
                 }
             }elseif($notification['type'] == 'new_invoice'){
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
                 if($invoice){
-                    $invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
                     $notification_txt = $CI->lang->line('new_invoice_received')?$invoice_id." ".$CI->lang->line('new_invoice_received'):$invoice_id." new invoice received.";
                     $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
                 }
             }elseif($notification['type'] == 'bank_transfer'){
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
                 if($invoice){
-                    $invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
                     $notification_txt = $CI->lang->line('bank_transfer_request_received_for_the_invoice')?$CI->lang->line('bank_transfer_request_received_for_the_invoice')." ".$invoice_id:"Bank transfer request received for the invoice ".$invoice_id;
                     $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
                 }
             }elseif($notification['type'] == 'bank_transfer_accept'){
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
                 if($invoice){
-                    $invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
                     $notification_txt = $CI->lang->line('bank_transfer_request_accepted_for_the_invoice')?$CI->lang->line('bank_transfer_request_accepted_for_the_invoice')." ".$invoice_id:"Bank transfer request accepted for the invoice ".$invoice_id;
                     $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
                 }
             }elseif($notification['type'] == 'bank_transfer_reject'){
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
                 if($invoice){
-                    $invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
                     $notification_txt = $CI->lang->line('bank_transfer_request_rejected_for_the_invoice')?$CI->lang->line('bank_transfer_request_rejected_for_the_invoice')." ".$invoice_id:"Bank transfer request rejected for the invoice ".$invoice_id;
                     $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
                 }
             }elseif($notification['type'] == 'payment_received'){
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
                 if($invoice){
-                    $invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
                     $notification_txt = $CI->lang->line('payment_received_for_the_invoice')?$CI->lang->line('payment_received_for_the_invoice')." ".$invoice_id:"Payment received for the invoice ".$invoice_id;
                     $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
                 }
             }elseif($notification['type'] == 'new_estimate'){
                 $estimates = $CI->estimates_model->get_estimates($notification['type_id']); 
                 if($estimates){
-                    $title = '<span class="text-info">'.$notification['notification'].'</span>';
+                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
                     $notification_txt = $CI->lang->line('new_estimate_received')?$title." ".$CI->lang->line('new_estimate_received'):$title." new estimate received.";
                     $notification_url = base_url('estimates/view/'.$notification['type_id']);
                 }
             }elseif($notification['type'] == 'estimate_reject'){
                 $estimates = $CI->estimates_model->get_estimates($notification['type_id']); 
                 if($estimates){
-                    $title = '<span class="text-info">'.$notification['notification'].'</span>';
+                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
                     $notification_txt = $CI->lang->line('estimate_rejected')?$title." ".$CI->lang->line('estimate_rejected'):$title." estimate rejected.";
                     $notification_url = base_url('estimates/view/'.$notification['type_id']);
                 }
             }elseif($notification['type'] == 'estimate_accept'){
                 $estimates = $CI->estimates_model->get_estimates($notification['type_id']); 
                 if($estimates){
-                    $title = '<span class="text-info">'.$notification['notification'].'</span>';
+                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
                     $notification_txt = $CI->lang->line('estimate_accepted')?$title." ".$CI->lang->line('estimate_accepted'):$title." estimate accepted.";
                     $notification_url = base_url('estimates/view/'.$notification['type_id']);
                 }
             }elseif($notification['type'] == 'new_meeting'){
                 $meetings = $CI->meetings_model->get_meetings($notification['type_id']); 
                 if($meetings){
-                    $title = '<span class="text-info">'.$notification['notification'].'</span>';
+                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
                     $notification_txt = $CI->lang->line('new_meeting_created')?$title." ".$CI->lang->line('new_meeting_created'):$title." new meeting scheduled.";
                     $notification_url = base_url('meetings/view/'.$notification['type_id']);
                 }
@@ -1189,7 +1189,7 @@ function get_notifications($user_id = ''){
             }elseif($notification['type'] == 'new_lead'){
                 $leads = $CI->leads_model->get_leads_by_id($notification['type_id']);
                 if($leads){
-                $title = '<span class="text-info">'.$notification['notification'].'</span>';
+                $title = '<span class="text-primary">'.$notification['notification'].'</span>';
                 $notification_txt = $CI->lang->line('new_lead_assigned_to_you')?$title." ".$CI->lang->line('new_lead_assigned_to_you'):$title." New lead assigned to you.";
                 $notification_url = base_url('leads');
                 }

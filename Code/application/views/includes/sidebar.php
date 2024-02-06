@@ -580,69 +580,15 @@
         </div>
         <ul class="navbar-nav header-right">
         <?php if(!is_saas_admin() && !is_client() && is_module_allowed('timesheet')){ ?>
-          <li class="nav-item dropdown notification_dropdown">
-            <a class="nav-link " href="javascript:void(0);" data-bs-toggle="dropdown">
+          <li class="nav-item">
+            <a class="nav-link " href="<?=base_url('projects/timesheet')?>">
               <i class="fa-regular fa-clock text-primary"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-end">
-              <div id="DZ_W_TimeLine02" class="widget-timeline dlab-scroll style-1 ps ps--active-y p-3 height370">
-                <ul class="timeline">
-                  <li>
-                    <div class="timeline-badge primary"></div>
-                    <a class="timeline-panel text-muted" href="javascript:void(0);">
-                      <span>10 minutes ago</span>
-                      <h6 class="mb-0">Youtube, a video-sharing website, goes live <strong class="text-primary">$500</strong>.</h6>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="timeline-badge info">
-                    </div>
-                    <a class="timeline-panel text-muted" href="javascript:void(0);">
-                      <span>20 minutes ago</span>
-                      <h6 class="mb-0">New order placed <strong class="text-info">#XF-2356.</strong></h6>
-                      <p class="mb-0">Quisque a consequat ante Sit amet magna at volutapt...</p>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="timeline-badge danger">
-                    </div>
-                    <a class="timeline-panel text-muted" href="javascript:void(0);">
-                      <span>30 minutes ago</span>
-                      <h6 class="mb-0">john just buy your product <strong class="text-warning">Sell $250</strong></h6>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="timeline-badge success">
-                    </div>
-                    <a class="timeline-panel text-muted" href="javascript:void(0);">
-                      <span>15 minutes ago</span>
-                      <h6 class="mb-0">StumbleUpon is acquired by eBay. </h6>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="timeline-badge warning">
-                    </div>
-                    <a class="timeline-panel text-muted" href="javascript:void(0);">
-                      <span>20 minutes ago</span>
-                      <h6 class="mb-0">Mashable, a news website and blog, goes live.</h6>
-                    </a>
-                  </li>
-                  <li>
-                    <div class="timeline-badge dark">
-                    </div>
-                    <a class="timeline-panel text-muted" href="javascript:void(0);">
-                      <span>20 minutes ago</span>
-                      <h6 class="mb-0">Mashable, a news website and blog, goes live.</h6>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </li>
           <?php
         }?>
           <li class="nav-item dropdown notification_dropdown">
-            <a class="nav-link bell-link" href="javascript:void(0);">
+            <a class="nav-link bell-link" href="<?=base_url('chat')?>">
               <i class="fa-regular fa-envelope text-primary"></i>
             </a>
           </li>
@@ -650,84 +596,6 @@
   if(is_module_allowed('notifications')){ 
       echo get_notifications_live2(); 
   } ?>
-          <!-- <li class="nav-item dropdown notification_dropdown">
-            <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-              <i class="fa-regular fa-bell beep text-primary" ></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end">
-              <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">
-                <ul class="timeline">
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2">
-                        <img alt="image" width="50" src="assets2/images/avatar/1.jpg">
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2 media-info">
-                        KG
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Resport created successfully</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2 media-success">
-                        <i class="fa fa-home"></i>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2">
-                        <img alt="image" width="50" src="assets2/images/avatar/1.jpg">
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2 media-danger">
-                        KG
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Resport created successfully</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2 media-primary">
-                        <i class="fa fa-home"></i>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <a class="all-notification" href="javascript:void(0);">See all notifications <i class="ti-arrow-end"></i></a>
-            </div>
-          </li> -->
           <li class="nav-item dropdown  header-profile">
             <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
               <?php if (isset($current_user->profile) && !empty($current_user->profile)) {

@@ -136,7 +136,7 @@ class Notifications extends CI_Controller
 						$old_status = project_status('',$notification['notification']);
 						$project = $this->projects_model->get_projects('',$notification['type_id']);
 						if($old_status && $project){
-							$notification_txt = $this->lang->line('project_status_changed')?$this->lang->line('project_status_changed').' <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-info">'.$project[0]['project_status'].'</span>':'Project status changed. <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-info">'.$project[0]['project_status'].'</span>';
+							$notification_txt = $this->lang->line('project_status_changed')?$this->lang->line('project_status_changed').' <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-primary">'.$project[0]['project_status'].'</span>':'Project status changed. <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-primary">'.$project[0]['project_status'].'</span>';
 						}
 		
 						$notification_url = base_url('projects/detail/'.$notification['type_id']);
@@ -164,7 +164,7 @@ class Notifications extends CI_Controller
 						$task = $this->projects_model->get_tasks('',$notification['type_id']);
 
 						if($task_status_old && $task){
-							$notification_txt = $this->lang->line('task_status_changed')?($this->lang->line('task_status_changed').' <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-info">'.$task[0]['task_status'].'</span>'):('Task status changed. <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-info">'.$task[0]['task_status'].'</span>');
+							$notification_txt = $this->lang->line('task_status_changed')?($this->lang->line('task_status_changed').' <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-primary">'.$task[0]['task_status'].'</span>'):('Task status changed. <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-primary">'.$task[0]['task_status'].'</span>');
 						}
 
 						if($task){
@@ -198,63 +198,63 @@ class Notifications extends CI_Controller
 					}elseif($notification['type'] == 'new_invoice'){
 						$invoice = $this->invoices_model->get_invoices($notification['type_id']);
 						if($invoice){
-							$invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+							$invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
 							$notification_txt = $this->lang->line('new_invoice_received')?$invoice_id." ".$this->lang->line('new_invoice_received'):$invoice_id." new invoice received.";
 							$notification_url = base_url('invoices/view/'.$invoice[0]['id']);
 						}
 					}elseif($notification['type'] == 'bank_transfer'){
 						$invoice = $this->invoices_model->get_invoices($notification['type_id']);
 						if($invoice){
-							$invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+							$invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
 							$notification_txt = $this->lang->line('bank_transfer_request_received_for_the_invoice')?$this->lang->line('bank_transfer_request_received_for_the_invoice')." ".$invoice_id:"Bank transfer request received for the invoice ".$invoice_id;
 							$notification_url = base_url('invoices/view/'.$invoice[0]['id']);
 						}
 					}elseif($notification['type'] == 'bank_transfer_accept'){
 						$invoice = $this->invoices_model->get_invoices($notification['type_id']);
 						if($invoice){
-							$invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+							$invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
 							$notification_txt = $this->lang->line('bank_transfer_request_accepted_for_the_invoice')?$this->lang->line('bank_transfer_request_accepted_for_the_invoice')." ".$invoice_id:"Bank transfer request accepted for the invoice ".$invoice_id;
 							$notification_url = base_url('invoices/view/'.$invoice[0]['id']);
 						}
 					}elseif($notification['type'] == 'bank_transfer_reject'){
 						$invoice = $this->invoices_model->get_invoices($notification['type_id']);
 						if($invoice){
-							$invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+							$invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
 							$notification_txt = $this->lang->line('bank_transfer_request_rejected_for_the_invoice')?$this->lang->line('bank_transfer_request_rejected_for_the_invoice')." ".$invoice_id:"Bank transfer request rejected for the invoice ".$invoice_id;
 							$notification_url = base_url('invoices/view/'.$invoice[0]['id']);
 						}
 					}elseif($notification['type'] == 'payment_received'){
 						$invoice = $this->invoices_model->get_invoices($notification['type_id']);
 						if($invoice){
-							$invoice_id = '<span class="text-info">'.$invoice[0]['invoice_id'].'</span>';
+							$invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
 							$notification_txt = $this->lang->line('payment_received_for_the_invoice')?$this->lang->line('payment_received_for_the_invoice')." ".$invoice_id:"Payment received for the invoice ".$invoice_id;
 							$notification_url = base_url('invoices/view/'.$invoice[0]['id']);
 						}
 					}elseif($notification['type'] == 'new_estimate'){
 						$estimates = $this->estimates_model->get_estimates($notification['type_id']); 
 						if($estimates){
-							$title = '<span class="text-info">'.$notification['notification'].'</span>';
+							$title = '<span class="text-primary">'.$notification['notification'].'</span>';
 							$notification_txt = $this->lang->line('new_estimate_received')?$title." ".$this->lang->line('new_estimate_received'):$title." new estimate received.";
 							$notification_url = base_url('estimates/view/'.$notification['type_id']);
 						}
 					}elseif($notification['type'] == 'estimate_reject'){
 						$estimates = $this->estimates_model->get_estimates($notification['type_id']); 
 						if($estimates){
-							$title = '<span class="text-info">'.$notification['notification'].'</span>';
+							$title = '<span class="text-primary">'.$notification['notification'].'</span>';
 							$notification_txt = $this->lang->line('estimate_rejected')?$title." ".$this->lang->line('estimate_rejected'):$title." estimate rejected.";
 							$notification_url = base_url('estimates/view/'.$notification['type_id']);
 						}
 					}elseif($notification['type'] == 'estimate_accept'){
 						$estimates = $this->estimates_model->get_estimates($notification['type_id']); 
 						if($estimates){
-							$title = '<span class="text-info">'.$notification['notification'].'</span>';
+							$title = '<span class="text-primary">'.$notification['notification'].'</span>';
 							$notification_txt = $this->lang->line('estimate_accepted')?$title." ".$this->lang->line('estimate_accepted'):$title." estimate accepted.";
 							$notification_url = base_url('estimates/view/'.$notification['type_id']);
 						}
 					}elseif($notification['type'] == 'new_meeting'){
 						$meetings = $this->meetings_model->get_meetings($notification['type_id']); 
 						if($meetings){
-							$title = '<span class="text-info">'.$notification['notification'].'</span>';
+							$title = '<span class="text-primary">'.$notification['notification'].'</span>';
 							$notification_txt = $this->lang->line('new_meeting_created')?$title." ".$this->lang->line('new_meeting_created'):$title." new meeting scheduled.";
 							$notification_url = base_url('meetings/view/'.$notification['type_id']);
 						}
@@ -279,7 +279,7 @@ class Notifications extends CI_Controller
 					}elseif($notification['type'] == 'new_lead'){
 						$leads = $this->leads_model->get_leads_by_id($notification['type_id']);
 						if($leads){
-						$title = '<span class="text-info">'.$notification['notification'].'</span>';
+						$title = '<span class="text-primary">'.$notification['notification'].'</span>';
 						$notification_txt = $this->lang->line('new_lead_assigned_to_you')?$title." ".$this->lang->line('new_lead_assigned_to_you'):$title." New lead assigned to you.";
 						$notification_url = base_url('leads');
 						}
