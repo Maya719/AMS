@@ -37,13 +37,13 @@
     <div class="content-body default-height">
       <div class="container-fluid">
         <div class="row justify-content-between">
-          <div class="col-xl-4 col-sm-5">
+          <div class="col-xl-4 col-sm-12">
             <nav class="nav nav-pills flex-column flex-sm-row">
               <a class="flex-sm-fill fs-4 text-sm-center nav-link active" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false"><strong>AMS</strong></a>
               <a class="flex-sm-fill fs-4 text-sm-center nav-link ms-4" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
             </nav>
           </div>
-          <div class="col-xl-2 col-sm-4">
+          <div class="col-xl-2 col-sm-12">
             <div class="card">
               <div class="card-body text-sm-center py-3 text-primary">
                 <input style="border:none; height:20px;" name="datepicker" class="text-primary fs-6 fw-bold datepicker-default2 form-control p-0" value="<?= date('j F, Y') ?>" id="from">

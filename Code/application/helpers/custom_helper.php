@@ -213,7 +213,7 @@ function get_notifications_live2()
       <i class="fa-regular fa-bell '.($notifications || $show_beep_for_msg || $show_beep_for_support_msg?'beep':'').' text-primary" ></i>
     </a>
     <div class="dropdown-menu dropdown-menu-end">
-      <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px; width:400px">
+      <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">
         <ul class="timeline" id="new_live_notifications">
          '.($new_support_message_received).'
          '.($new_message).'

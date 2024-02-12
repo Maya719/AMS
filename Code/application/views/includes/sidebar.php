@@ -566,6 +566,7 @@
 <!--**********************************
     Nav header end
 ***********************************-->
+
 <!--**********************************
 	Header start
 ***********************************-->
@@ -579,23 +580,23 @@
           </div>
         </div>
         <ul class="navbar-nav header-right">
-        <?php if(!is_saas_admin() && !is_client() && is_module_allowed('timesheet')){ ?>
-          <li class="nav-item">
-            <a class="nav-link " href="<?=base_url('projects/timesheet')?>">
-              <i class="fa-regular fa-clock text-primary"></i>
-            </a>
-          </li>
+          <?php if (!is_saas_admin() && !is_client() && is_module_allowed('timesheet')) { ?>
+            <li class="nav-item">
+              <a class="nav-link " href="<?= base_url('projects/timesheet') ?>">
+                <i class="fa-regular fa-clock text-primary"></i>
+              </a>
+            </li>
           <?php
-        }?>
+          } ?>
           <li class="nav-item dropdown notification_dropdown">
-            <a class="nav-link bell-link" href="<?=base_url('chat')?>">
+            <a class="nav-link bell-link" href="<?= base_url('chat') ?>">
               <i class="fa-regular fa-envelope text-primary"></i>
             </a>
           </li>
-          <?php 
-  if(is_module_allowed('notifications')){ 
-      echo get_notifications_live2(); 
-  } ?>
+          <?php
+          if (is_module_allowed('notifications')) {
+            echo get_notifications_live2();
+          } ?>
           <li class="nav-item dropdown  header-profile">
             <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
               <?php if (isset($current_user->profile) && !empty($current_user->profile)) {
@@ -639,7 +640,9 @@
 </div>
 <!--**********************************
 	Header end 
-***********************************--> <!--**********************************
+***********************************--> 
+
+<!--**********************************
     Sidebar start
 ***********************************-->
 <div class="dlabnav">
@@ -747,15 +750,15 @@
           </ul>
         </li>
       <?php } ?>
-      <?php if (is_module_allowed('support') && ($this->ion_auth->is_admin() || is_saas_admin() || permissions('support_view'))){ ?> 
-      <li><a href="<?=base_url('support')?>" aria-expanded="false">
-          <i class="fa-solid fa-circle-info"></i>
-          <span class="nav-text">Support</span>
-        </a>
-      </li>
+      <?php if (is_module_allowed('support') && ($this->ion_auth->is_admin() || is_saas_admin() || permissions('support_view'))) { ?>
+        <li><a href="<?= base_url('support') ?>" aria-expanded="false">
+            <i class="fa-solid fa-circle-info"></i>
+            <span class="nav-text">Support</span>
+          </a>
+        </li>
       <?php } ?>
       <?php
-       if($this->ion_auth->is_admin() || is_saas_admin() || permissions('general_view') || permissions('company_view') || permissions('leave_type_view') || permissions('device_view') || permissions('departments_view') || permissions('shift_view') || permissions('time_schedule_view')){ ?>   
+      if ($this->ion_auth->is_admin() || is_saas_admin() || permissions('general_view') || permissions('company_view') || permissions('leave_type_view') || permissions('device_view') || permissions('departments_view') || permissions('shift_view') || permissions('time_schedule_view')) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fa-solid fa-gear"></i>
             <span class="nav-text">Settings</span>
