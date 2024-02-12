@@ -1,576 +1,394 @@
-<?php $this->load->view('includes/head'); ?>
+<?php $this->load->view('includes/header');?>
 <style>
-  .hidden{
-    display: none;
-  }
 
 
-
-#attendance_list thead {
-  position: sticky;
-  top: 0;
-  background-color: #fff; /* Add background color if needed */
-  z-index: 2; /* Add a z-index to ensure it's above the table body */
+#attendance_list tbody td a{
+    font-weight:bold;
+    font-size:10px;
+}
+.dataTables_wrapper .dataTables_scrollFoot {
+    position: sticky;
+    bottom: 0;
+    background-color: white; /* Adjust as needed */
+    z-index: 1000; /* Adjust as needed */
 }
 
-.green-background{
-  background-color: #efffc7 !important; /* Remove background color */
-}
-
-.left-pad{
-  padding-left:0.5em !important;
-  padding-right:0.5em !important;
-  padding-bottom:0.5em !important;
-  padding-top:0.5em !important;
-} 
-
-#attendance_list th{
-  font-weight: bold;
-  font-size: 12px;
-  max-height: 20px;
-  height: 30px;
-  background-color: #f1f1f1; 
-  }
-#attendance_list td {
-  font-weight: bold;
-  font-size: 9px;
-}
-
-.loader-container {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.2); 
-    z-index: 9999; 
-}
-
-.loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
 </style>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
 </head>
-<body class="sidebar-mini">
-  <div id="app">
-    <div class="main-wrapper">
-      <?php $this->load->view('includes/navbar'); ?>
-      <!-- Main Content -->
-      <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <div class="section-header-back">
-              <a href="javascript:history.go(-1)" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
-            </div>
-            <h1>
-            <?=$this->lang->line('attendance')?htmlspecialchars($this->lang->line('attendance')):'Attendance Report'?> 
-            </h1>
-            <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active"><a href="<?=base_url()?>"><?=$this->lang->line('dashboard')?$this->lang->line('dashboard'):'Dashboard'?></a></div>
-              <div class="breadcrumb-item"><?=$this->lang->line('attendance')?htmlspecialchars($this->lang->line('attendance')):'Attendance Report'?></div>
-            </div>
-          </div>
-          <div class="section-body">
-            <div class="row">
-            <div class="form-group col-md-6">
-                  <select onchange="filter()" class="form-control select2" id="active_users">
-                    <option value="3"><?=$this->lang->line('select_department')?$this->lang->line('select_department'):'All'?></option>
-                    <option value="1"><?=$this->lang->line('select_department')?$this->lang->line('select_department'):'Active'?></option>
-                    <option value="2"><?=$this->lang->line('select_department')?$this->lang->line('select_department'):'Inactive'?></option>
-                  </select>
-              </div>
-              <div class="form-group col-md-6">
-                <select onchange="filter()" class="form-control select2" id="attendance_filter_user">
-                  <option value=""><?=$this->lang->line('select_users')?$this->lang->line('select_users'):'Select Users'?></option>
-                  <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
-                  <option value="<?=$system_user->employee_id?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
-                  <?php } } ?>
-                </select>
-            </div>
-              <div class="form-group col-md-6">
-                <select onchange="filter()" class="form-control select2" id="department">
-                  <option value=""><?=$this->lang->line('select_department')?$this->lang->line('select_department'):'Select Department'?></option>
-                  <?php foreach($departments as $department){ ?>
-                    <option value="<?= $department['id'] ?>"><?= $department['department_name'] ?></option>
-                  <?php 
-                }?>
-                </select>
-              </div>
-                <div class="form-group col-md-6">
-                  <select class="form-control select2" id="attendance_filter" onchange="filter()">
-                    <option value="today"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'Today'?></option>
-                    <option value="ystdy"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'Yesterday'?></option>
-                    <option value="tweek"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'This Week'?></option>
-                    <option value="tmonth" selected><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'This Month'?></option>
-                    <option value="lmonth"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'Last Month'?></option>
-                    <option value="tyear"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'This Year'?></option>
-                    <option value="lyear"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'Last Year'?></option>
-                    <option value="custom"><?=$this->lang->line('select_filter')?$this->lang->line('select_users'):'Custom'?></option>
-                  </select>
-                </div>
-                <div id="myDiv" class="form-group col-md-6 hidden">
-                  <input onchange="filter()" type="text" name="from" id="from" class="form-control">
-                </div>
-                <div id="myDiv2" class="form-group col-md-6 hidden">
-                  <input onchange="filter()" type="text" name="too" id="too" class="form-control">
-                </div>
-                <!-- <div class="form-group col-md-2">
-                  <button type="button" class="btn btn-primary btn-lg btn-block" id="filter" onclick="filter()">
-                    <?=$this->lang->line('filter')?$this->lang->line('filter'):'Filter'?>
-                  </button>
-                </div> -->
-            </div>
-             <!-- Toolbar buttons -->
-             <div class="toolbar" id="toolbar">
-              <button class="btn btn-secondary" onclick="printAttendanceData()">Download Pdf</button>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                  <div class="card card-primary">
-                    <div class="card-body"> 
-                    <table
-                      id="attendance_list"
-                      data-toggle="table"
-                      data-pagination="true"
-                      data-height="800"
-                      data-pagination-h-align="left"
-                      data-pagination-detail-h-align="right"
-                      data-sticky-header=true
-                      data-click-to-select="true"
-                      data-page-list="[5, 10, 20, 50, 100, 200]"
-                      data-show-refresh="false" 
-                      data-trim-on-search="false"
-                      data-sort-name="id" 
-                      data-sort-order="desc"
-                      data-mobile-responsive="true"
-                      data-toolbar="#toolbar"
-                      data-show-export="true" 
-                      data-export-types="['json', 'csv', 'txt', 'sql', 'doc', 'excel']"
-                      data-maintain-selected="true"
-                      data-url="attendance/get_attendance_report">
-                        <!-- start preloader -->
-                        <div class="preloader">
-                            <div class="sk-spinner sk-spinner-rotating-plane"></div>
-                        </div>
-                        <div class="loader-container">
-                            <div class="loader"></div>
-                        </div>
-                        <!-- end preloader -->
-                    </table>
-                    </div>
-                  </div>
-                </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    <?php $this->load->view('includes/footer'); ?>
+<body>
+
+  <!--*******************
+        Preloader start
+    ********************-->
+  <div id="preloader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
     </div>
   </div>
-
-
-<?php $this->load->view('includes/js'); ?>
-
+  <!--*******************
+        Preloader end
+    ********************-->
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+  <div id="main-wrapper">
+  <?php $this->load->view('includes/sidebar');?>
+  <div class="content-body default-height">
+      <!-- row -->
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="basic-form">
+                            <form class="row">
+                                <div class="col-lg-3 mb-3">
+                                    <select class="form-select" id="employee_id">
+                                    <option value=""><?=$this->lang->line('employee') ? $this->lang->line('employee') : 'Employee'?></option>
+                                    <?php foreach ($system_users as $system_user) {if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') {?>
+                                    <option value="<?=$system_user->id?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
+                                    <?php }}?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 mb-3">
+                                    <select class="form-select" id="shift_id">
+                                        <option value=""><?=$this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts'?></option>
+                                        <?php foreach ($shifts as $shift): ?>
+                                            <option value="<?=$shift["id"]?>"><?=$shift["name"]?></option>
+                                        <?php endforeach?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 mb-3">
+                                    <select class="form-select" id="department_id">
+                                        <option value=""><?=$this->lang->line('departments') ? $this->lang->line('departments') : 'Departments'?></option>
+                                        <?php foreach ($departments as $department): ?>
+                                            <option value="<?=$department["id"]?>"><?=$department["department_name"]?></option>
+                                        <?php endforeach?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 mb-3">
+                                    <select class="form-select" id="dateFilter">
+                                        <option value="today"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today'?></option>
+                                        <option value="ystdy"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday'?></option>
+                                        <option value="tweek"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Week'?></option>
+                                        <option value="tmonth" selected><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Month'?></option>
+                                        <option value="lmonth"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Last Month'?></option>
+                                        <option value="custom"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Custom'?></option>
+                                    </select>
+                                </div>
+                                <div id="custom-date-range"  style="display: none;">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <input name="datepicker" class="datepicker-default form-control" placeholder="From Date" id="from">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input name="datepicker" class="datepicker-default form-control" placeholder="To Date" id="too">
+                                    </div>
+                                </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="attendance_list" class="table table-sm mb-0">
+                                <thead>
+                                </thead>
+                                <tbody id="customers">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+    </div>
+<!--**********************************
+	Content body end
+***********************************-->
+<?php $this->load->view('includes/footer');?>
+  </div>
+<?php $this->load->view('includes/scripts');?>
 <script>
-    function showLoader() {
-    $('.loader-container').css('display', 'block');
-}
-
-function hideLoader() {
-    $('.loader-container').css('display', 'none');
-}
-</script>
-<script>
-
-  function filter(){
-  var select = document.getElementById("attendance_filter");
-  var div = document.getElementById("myDiv");
-  var div2 = document.getElementById("myDiv2");
-  if (select.value === "custom") {
-    div.classList.remove("hidden");
-    div2.classList.remove("hidden");
-  } else {
-    div.classList.add("hidden");
-    div2.classList.add("hidden");
-  }
-    const table = $('#attendance_list');
-    // Get the current limit (number of rows per page)
-    const limit = table.bootstrapTable('getOptions').pageSize;
-    // Get the current offset (page number)
-    const offset = table.bootstrapTable('getOptions').pageNumber;
-    console.log($('#department').val());
-    var data = {
-  "active_users": $('#active_users').val(),
-  "user_id": $('#attendance_filter_user').val(),
-  "filter": $('#attendance_filter').val(),
-  "departments": $('#department').val(),
-  "from": $('#from').val(),
-  "limit": offset,
-  "offset": offset,
-  "too": $('#too').val()
-};
-showLoader();
-$.ajax({
-  url: '<?= base_url('attendance/get_attendance_report') ?>',
-  type: 'POST',
-  data: data,
-  success: function (response) {
-    hideLoader();
-    var tableData = JSON.parse(response);
-    console.log(tableData);
-
-    // Construct the entire table, including the header and body
-    var tableHTML = '<thead>';
-
-    if (!tableData.rows || tableData.rows.length === 0) {
-      // If no data, display a message
-      tableHTML += '<tr><th colspan="2">No Matching Records Found</th></tr>';
-    } else {
-       // Construct header rows
-      tableHTML += '<tr>' +
-        '<th class="nopad" colspan="3"></th>';
-
-      $.each(tableData.month, function (index, month) {
-        var monthKey = new Date(month).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        daysCount = 0;
-        $.each(tableData.headings, function (index, date) {
-          if (new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) === monthKey) {
-            daysCount++;
-          }
-        });
-        tableHTML += '<th class="left-pad" colspan="' + daysCount + '"><center>' + month + '</center></th>';
-      });
-
-      tableHTML += '</tr>'; // Close the first header row
-
-      // Construct header rows
-      tableHTML += '<tr>' +
-      '<th class="nopad" colspan="3"></th>';
-
-      $.each(tableData.headings, function (index, date) {
-        tableHTML += '<th>' + formatDate(date) + '</th>';
-      });
-
-      tableHTML += '</tr>';
-      // Construct header rows
-      tableHTML += '<tr>' +
-        '<th>S.no</th>' +
-        '<th><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members' ?></th>' +
-        '<th>Absent/ HD/Late</th>';
-
-      $.each(tableData.headings, function (index, date) {
-        tableHTML += '<th>' + getDayFromDate(date) + '</th>';
-      });
-
-      tableHTML += '</tr>';
-    }
-
-    tableHTML += '</thead><tbody>';
-    function getDayFromDate(date) {
-      var parsedDate = new Date(date);
-      var options = { weekday: 'short' };
-      var formattedDay = parsedDate.toLocaleString('en-US', options);
-      return formattedDay;
-    }
-    function formatDate(date) {
-      var parsedDate = new Date(date);
-      var formattedDate = parsedDate.toLocaleDateString('en-US', {
-        day: 'numeric'
-      });
-      return formattedDate;
-    }
-    // Construct body rows
-    $.each(tableData.rows, function (index, row) {
-      tableHTML += '<tr>' +
-        '<td>' + (index + 1) + '</td>' +
-        '<td class="sticky">' + row.user + '</td>' +
-        '<td>' + row.sq + '</td>';
-
-      $.each(tableData.headings, function (index, date) {
-        tableHTML += '<td>' + (row[date] ? row[date] : '') + '</td>';
-      });
-
-      tableHTML += '</tr>';
+    var dateFilterSelect = document.getElementById('dateFilter');
+    var customDateDiv = document.getElementById('custom-date-range');
+    dateFilterSelect.addEventListener('change', function() {
+        if (dateFilterSelect.value === 'custom') {
+            customDateDiv.style.display = 'block';
+        } else {
+            customDateDiv.style.display = 'none';
+        }
     });
-
-    tableHTML += '</tbody>';
-
-    // Append the entire table to the existing table
-    $('#attendance_list').html(tableHTML);
-  },
-  error: function (xhr, status, error) {
-    // Handle any errors that occur during the AJAX request
-    console.log('Error:', error);
-
-    // If you want to see the full XMLHttpRequest object and its properties
-    console.log("Response:", xhr.responseText);
-  }
-});
-}
-
-</script>
-<script>
-      function showLoader2() {
-    $('.loader-container').css('display', 'block');
-}
-
-function hideLoader2() {
-    $('.loader-container').css('display', 'none');
-}
-  $( '#department').on('change', function(e) {
-  var department = $('#department').val();
-  var active = $('#active_users').val();
-  var data = {
-  "department": department,
-  "active": active
-};
-console.log(data);
-showLoader2();
-$.ajax({
-    url: '<?= base_url('attendance/get_users_by_department') ?>', // Replace with your actual API URL
-    type: 'POST', // Adjust the request method if needed
-    data: data,
-    success: function(response) {
-      hideLoader2();
-      var data = JSON.parse(response);
-      console.log(data);
-      const select = $("#attendance_filter_user");
-      // Clear previous options
-      select.empty().append('<option value="">Select Users</option>');
-
-      // Add new options based on the user data
-      $.each(data, function(index, user) {
-        const option = $('<option>')
-          .val(user.employee_id) // Assuming each user has a unique "id" property
-          .text(user.first_name+' '+user.last_name); // Assuming each user has a "name" property
-          select.append(option);
-      });
-    },
-    error: function(xhr, status, error) {
-      // Handle any errors that occur during the AJAX request
-      console.log('Error:', error);
-    }
-  });
-  });
 </script>
 
 <script>
-  // Assuming you have an HTML element with the ID "attendance_filter"
-    $('#active_users').change(function() {
-      // Get the selected value
-      var selectedValue = $(this).val();
-      
-      // Perform an AJAX request based on the selected value
-      $.ajax({
-        url: '<?= base_url('attendance/get_active_inactive_users') ?>', // Replace with your actual API URL
-        method: 'GET',             // Replace with the appropriate HTTP method
-        data: { value: selectedValue },
+    $(document).ready(function() {
+        setFilter();
+        $(document).on('change', '#shift_id, #department_id, #employee_id,#dateFilter, #from,#too', function() {
+            setFilter();
+        });
+    });
+function ajaxCall(employee_id,shift_id,department_id,from,too){
+    $.ajax({
+        url: '<?=base_url('attendance/get_attendance')?>',
+        type: 'GET',
+        data: {
+            user_id: employee_id,
+            department: department_id,
+            shifts: shift_id,
+            from: from,
+            too: too
+        },
         success: function(response) {
-          var tableData = JSON.parse(response);
-          // Handle the successful response from the server
-          console.log(tableData);
-          const select = $("#attendance_filter_user");
-            // Clear previous options
-            select.empty().append('<option value="">Select Users</option>');
-
-            // Add new options based on the user data
-            $.each(tableData, function(index, user) {
-              const option = $('<option>')
-                .val(user.employee_id) // Assuming each user has a unique "id" property
-                .text(user.first_name+' '+user.last_name); // Assuming each user has a "name" property
-                select.append(option);
-            });
+            var tableData = JSON.parse(response);
+            showTable(tableData);
+        },
+        complete: function () {
         },
         error: function(error) {
-          // Handle errors if the request fails
-          console.error(error);
+            console.error(error);
         }
-      });
     });
-</script>
+}
 
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
-<!-- <script>
-$(document).ready( function () {
-  var table = $('#attendance_list').DataTable( {
-    paging: false
-  });
-} );
-</script> -->
-
-<script>
-$('#filter').on('click',function(e){
-  $('#attendance_list').bootstrapTable('refresh');
-});
-
-$(document).ready(function(){
-  $('#from').daterangepicker({
-    locale: {format: date_format_js},
-    singleDatePicker: true,
-  });
-
-  $('#too').daterangepicker({
-    locale: {format: date_format_js},
-    singleDatePicker: true,
-  });
-});
-</script>
-<script>
-function printAttendanceData() {
-  var table = $('#attendance_list');
-  var tbody = table.find('tbody');
-  var attendanceData = [];
-
-  var headerRow = table.find('thead tr');
-  var headerValues = [];
-  headerRow.find('th').each(function () {
-    headerValues.push($(this).text().trim());
-  });
-
-  tbody.find('tr').each(function () {
-    var rowData = [];
-    $(this).find('td').each(function () {
-      // Use .html() to preserve HTML markup
-      rowData.push($(this).html());
-    });
-    attendanceData.push(rowData);
-  });
-
-  function splitArrayByType(arr) {
-    const numericValues = [];
-    const dateValues = [];
-    const dayValues = [];
-
-    for (const element of arr) {
-      if (!isNaN(element)) {
-        // Check if the element is a numeric value (not NaN) and not an empty string
-        if (element !== '') {
-          numericValues.push(element);
-        }
-      } else if (/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}$/.test(element)) {
-        // Check if the element matches the pattern for a date (e.g., "Sep 2023")
-        dateValues.push(element);
-      } else if (['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].includes(element)) {
-        // Check if the element is a day name
-        dayValues.push(element);
-      }
+function showTable(data) {
+    console.log(data);
+    var table = $('#attendance_list');
+    if ($.fn.DataTable.isDataTable(table)) {
+        table.DataTable().destroy();
     }
-    numericValues.splice(0, 0, '', '', '');
-    dayValues.splice(0, 0, 'S.no', 'Employee', 'A/HD/LM');
-    return { numericValues, dateValues, dayValues };
+    emptyDataTable(table);
+    var uniqueDates = getUniqueDates(data.data);
+    var thead = table.find('thead');
+    var theadRow = '<tr><td style="background=#FAFAFA;border:2px solid #FAFAFA;" colspan="2"></td> ';
+    const dataArray = Object.entries(data.range);
+    dataArray.forEach(([month, value]) => {
+        theadRow += '<td class="text-center" style="background=#FAFAFA; font-weight:600; border:2px solid #FAFAFA;" colspan="'+value+'">'+month+'</td>';
+    });
+    theadRow += '</tr><tr><th style="font-size:12px;">ID</th><th style="font-size:12px;">Employee</th>';
+
+    uniqueDates.forEach(date => {
+        const formattedDate = new Date(date);
+        const formattedDateString = formattedDate.toLocaleString('en-US', {day: 'numeric' });
+        theadRow += '<th style="font-size:12px;">' + formattedDateString + '</th>';
+    });
+
+    theadRow += '</tr>';
+    thead.html(theadRow);
+
+    // Add table body
+    var tbody = table.find('tbody');
+    
+    data.data.forEach(user => {
+        var userRow = '<tr>';
+        userRow += '<td style="font-size:12px;">' + user.user + '</td>';
+        userRow += '<td style="font-size:12px;">' + user.name + '</td>';
+
+        uniqueDates.forEach(date => {
+            if (user.dates[date]) {
+                userRow += '<td style="font-size:12px;">' + user.dates[date].join('<br>') + '</td>';
+            } else {
+                userRow += '<td style="font-size:10px;">Absent</td>';
+            }
+        });
+        userRow += '</tr>';
+        tbody.append(userRow);
+    });
+    table.DataTable({
+        "paging": true,
+        "searching":false,
+        "language": {
+			"paginate": {
+			  "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+			  "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>' 
+			}
+		  },
+        "info": false,         
+        "dom": '<"top"i>rt<"bottom"lp><"clear">',
+        "lengthMenu": [5, 10, 20], 
+        "pageLength": 5 
+    });
+}
+$(document).ready(function() {
+    $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
+    $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
+});
+function emptyDataTable(table) {
+    table.find('thead').empty();
+    table.find('tbody').empty();
+}
+function getUniqueDates(data) {
+    // Extract unique dates from the data
+    var uniqueDates = [];
+    data.forEach(user => {
+        Object.keys(user.dates).forEach(date => {
+            if (!uniqueDates.includes(date)) {
+                uniqueDates.push(date);
+            }
+        });
+    });
+
+    uniqueDates.sort();
+
+    return uniqueDates;
+}
+function setFilter() {
+  var employee_id = $('#employee_id').val();
+  var shift_id = $('#shift_id').val();
+  var filterOption = $('#dateFilter').val();
+  var department_id = $('#department_id').val();
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const day = today.getDate();
+
+  let fromDate, toDate;
+
+  switch (filterOption) {
+    case "today":
+      fromDate = new Date(year, month, day);
+      toDate = new Date(year, month, day);
+      break;
+    case "ystdy":
+      fromDate = new Date(year, month, day - 1);
+      toDate = new Date(year, month, day - 1);
+      break;
+    case "tweek":
+      fromDate = new Date(year, month, day - today.getDay());
+      toDate = new Date(year, month, day);
+      break;
+    case "lweek":
+      fromDate = new Date(year, month, day - today.getDay() - 7);
+      toDate = new Date(year, month, day - today.getDay() - 1);
+      break;
+    case "tmonth":
+      fromDate = new Date(year, month, 1);
+      toDate = today; // Set toDate as today
+      break;
+    case "lmonth":
+      fromDate = new Date(year, month - 1, 1);
+      toDate = new Date(year, month, 0);
+      break;
+    case "custom":
+      var fromInput =$('#from').val();
+      var toInput =$('#too').val();
+      console.log(from);
+      fromDate = new Date(convertDateFormat(fromInput));
+      toDate = new Date(convertDateFormat(toInput));
+      break;
+    default:
+      console.error("Invalid filter option:", filterOption);
+      return null; 
   }
 
-  const { numericValues, dateValues, dayValues } = splitArrayByType(headerValues);
-
-  
-  console.log(numericValues);
-  console.log(dayValues);
-  console.log(attendanceData);
-  
- // Open a new window
-var printWindow = window.open('', '', 'width=800,height=600');
-printWindow.document.open();
-
-// Create the HTML structure
-printWindow.document.write('<html><head><title>Attendance List</title>');
-printWindow.document.write('<style>');
-printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
-printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 20px; }');
-printWindow.document.write('th, td { border: 1px solid #ccc; padding: 8px; text-align: left; font-size: 9px; }');
-printWindow.document.write('th { background-color: #f2f2f2; }');
-printWindow.document.write('</style>');
-printWindow.document.write('</head><body>');
-printWindow.document.write('<h2>Attendance List</h2>');
-
-// Check if there are more than 10 headings
-if (dayValues.length > 15) {
-    // Calculate how many tables are needed
-    var numberOfTables = Math.ceil(dayValues.length / 15);
-    for (var tableIndex = 0; tableIndex < numberOfTables; tableIndex++) {
-        // Calculate the start and end indices for this table
-        var startIndex = tableIndex * 15;
-        var endIndex = Math.min(startIndex + 15, dayValues.length);
-
-        // Create a table for this set of headings
-        printWindow.document.write('<table border="1">');
-        printWindow.document.write('<tr>');
-        for (var i = startIndex; i < endIndex; i++) {
-            printWindow.document.write('<th>' + numericValues[i] + '</th>');
-        }
-        printWindow.document.write('</tr>');
-        printWindow.document.write('<tr>');
-        for (var i = startIndex; i < endIndex; i++) {
-            printWindow.document.write('<th>' + dayValues[i] + '</th>');
-        }
-        printWindow.document.write('</tr>');
-
-        // Create the table body with attendance data for this set of headings
-        for (var i = 0; i < attendanceData.length; i++) {
-            printWindow.document.write('<tr>');
-            for (var j = startIndex; j < endIndex; j++) {
-                printWindow.document.write('<td>' + attendanceData[i][j] + '</td>');
-            }
-            printWindow.document.write('</tr>');
-        }
-
-        printWindow.document.write('</table>');
-
-        // Add some space between tables
-        if (tableIndex < numberOfTables - 1) {
-            printWindow.document.write('<br><br><h4>Continue...</h4>');
-        }
-    }
-} else {
-    // If there are 10 or fewer headings, create a single table
-    printWindow.document.write('<table border="1">');
-    printWindow.document.write('<tr>');
-    for (var i = 0; i < numericValues.length; i++) {
-        printWindow.document.write('<th>' + numericValues[i] + '</th>');
-    }
-    printWindow.document.write('</tr>');
-    printWindow.document.write('<tr>');
-    for (var i = 0; i < dayValues.length; i++) {
-        printWindow.document.write('<th>' + dayValues[i] + '</th>');
-    }
-    printWindow.document.write('</tr>');
-
-    // Create the table body with attendance data
-    for (var i = 0; i < attendanceData.length; i++) {
-        printWindow.document.write('<tr>');
-        for (var j = 0; j < dayValues.length; j++) {
-            printWindow.document.write('<td>' + attendanceData[i][j] + '</td>');
-        }
-        printWindow.document.write('</tr>');
-    }
-
-    printWindow.document.write('</table>');
+  // Format dates as strings
+  var formattedFromDate = formatDate(fromDate, "Y-m-d");
+  var formattedToDate = formatDate(toDate, "Y-m-d");
+  ajaxCall(employee_id, shift_id, department_id, formattedFromDate, formattedToDate);
 }
+function convertDateFormat(inputDate) {
+    const months = {
+        Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+        Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+    };
 
-// Close the HTML document
-printWindow.document.write('</body></html>');
-printWindow.document.close();
-printWindow.print();
-printWindow.close();
+    const [day, month, year] = inputDate.split(' ');
+
+    return `${year}-${months[month]}-${day}`;
 }
+function formatDate(date, format) {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const formattedDate = date.toLocaleDateString('en-US', options);
+  return format
+    .replace("Y", date.getFullYear())
+    .replace("m", formattedDate.slice(0, 2))
+    .replace("d", formattedDate.slice(3, 5));
+}
+$(document).on('change', '#employee_id', function() {
+    var employee_id = $('#employee_id').val();
+    $.ajax({
+        url: '<?=base_url('attendance/get_filters_for_user')?>',
+        type: 'GET',
+        data: {
+            employee_id: employee_id,
+        },
+        success: function(response) {
+            var tableData = JSON.parse(response);
+            $('#shift_id').empty();
+            $('#department_id').empty();
+            tableData.shift.forEach(function(shift) {
+                $('#shift_id').append('<option value="' + shift.id + '">' + shift.name + '</option>');
+            });
+            tableData.department.forEach(function(department) {
+                $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
+            });
+        },
+        complete: function () {
+        },
+        error: function(error) {
+            console.error(error);
+        }
+
+    });
+});
+$(document).on('change', '#department_id', function() {
+    var department_id = $('#department_id').val();
+    $.ajax({
+        url: '<?=base_url('attendance/get_users_by_department')?>',
+        type: 'POST',
+        data: {
+            department: department_id,
+        },
+        success: function(response) {
+            var tableData = JSON.parse(response);
+            console.log(tableData);
+            $('#employee_id').empty();
+            $('#employee_id').append('<option value="">Employee</option>');
+            tableData.forEach(function(department) {
+                $('#employee_id').append('<option value="' + department.id + '">' + department.first_name+' '+department.last_name+ '</option>');
+            });
+        },
+        complete: function () {
+        },
+        error: function(error) {
+            console.error(error);
+        }
+
+    });
+});
+$(document).on('change', '#shift_id', function() {
+    var shift_id = $('#shift_id').val();
+    $.ajax({
+        url: '<?=base_url('attendance/get_users_by_shifts')?>',
+        type: 'POST',
+        data: {
+            shift_id: shift_id,
+        },
+        success: function(response) {
+            var tableData = JSON.parse(response);
+            console.log(tableData);
+            $('#employee_id').empty();
+            $('#employee_id').append('<option value="">Employee</option>');
+            tableData.forEach(function(department) {
+                $('#employee_id').append('<option value="' + department.id + '">' + department.first_name+' '+department.last_name+ '</option>');
+            });
+        },
+        complete: function () {
+        },
+        error: function(error) {
+            console.error(error);
+        }
+
+    });
+});
 </script>
-
-
-
 </body>
 </html>

@@ -319,14 +319,9 @@
 
         </ul>
       </li>
-
       <li <?= (current_url() == base_url('users'))?'class="active"':''; ?>><a class="nav-link" href="<?=base_url('users')?>"><i class="fas fa-user-tie text-success"></i> <span><?=$this->lang->line('saas_admins')?$this->lang->line('saas_admins'):'SaaS Admins'?></span></a></li>
-      
       <?php } ?> 
-
-
       <?php if($this->ion_auth->is_admin() || is_saas_admin() || permissions('general_view') || permissions('company_view') || permissions('leave_type_view') || permissions('device_view') || permissions('departments_view') || permissions('shift_view') || permissions('time_schedule_view')){ ?>   
-
         <?php if (is_module_allowed('support') && ($this->ion_auth->is_admin() || is_saas_admin() || permissions('support_view'))){ ?> 
         <li <?=($this->uri->segment(1) == 'support')?'class="active"':''; ?>><a class="nav-link" href="<?=base_url('support')?>"><i class="fas fa-question-circle text-success"></i> <span><?=$this->lang->line('support')?htmlspecialchars($this->lang->line('support')):'Support'?></a></li>
         <?php } ?>

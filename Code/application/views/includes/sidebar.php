@@ -640,7 +640,7 @@
 </div>
 <!--**********************************
 	Header end 
-***********************************--> 
+***********************************-->
 
 <!--**********************************
     Sidebar start
@@ -708,6 +708,40 @@
       <?php
       }
       ?>
+      <?php if (is_saas_admin()) { ?>
+        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+            <i class="fas fa fa-dollar-sign"></i>
+            <span class="nav-text"><?= $this->lang->line('subscription') ? htmlspecialchars($this->lang->line('subscription')) : 'Subscription' ?></span>
+          </a>
+          <ul aria-expanded="false">
+            <li><a href="<?= base_url('plans') ?>"><?= $this->lang->line('subscription_plans') ? $this->lang->line('subscription_plans') : 'Plans' ?></a></li>
+            <li><a href="<?= base_url('plans/orders') ?>"><?= $this->lang->line('orders') ? $this->lang->line('orders') : 'Orders' ?></a></li>
+            <li><a href="<?= base_url('plans/offline-requests') ?>"><?= $this->lang->line('offline_requests') ? $this->lang->line('offline_requests') : 'Offline Requests' ?></a></li>
+            <li><a href="<?= base_url('users/saas') ?>"><?= $this->lang->line('subscribers') ? htmlspecialchars($this->lang->line('subscribers')) : 'Subscribers' ?></a></li>
+          </ul>
+        </li>
+
+        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+            <i class="fas fa-puzzle-piece"></i>
+            <span class="nav-text"><?= $this->lang->line('frontend') ? $this->lang->line('frontend') : 'Frontend' ?></span>
+          </a>
+          <ul aria-expanded="false">
+            <li><a href="<?= base_url('front/landing') ?>"><?= $this->lang->line('general') ? $this->lang->line('general') : 'General' ?></a></li>
+            <li><a href="<?= base_url('front/features') ?>"><?= $this->lang->line('features') ? $this->lang->line('features') : 'Features' ?></a></li>
+            <li><a href="<?= base_url('front/about') ?>"><?= $this->lang->line('about') ? $this->lang->line('about') : 'About Us' ?></a></li>
+            <li><a href="<?= base_url('front/saas-privacy-policy') ?>"><?= $this->lang->line('privacy_policy') ? $this->lang->line('privacy_policy') : 'Privacy Policy' ?></a></li>
+            <li><a href="<?= base_url('front/saas-terms-and-conditions') ?>"><?= $this->lang->line('terms_and_conditions') ? $this->lang->line('terms_and_conditions') : 'Terms and Conditions' ?></a></li>
+          </ul>
+        </li>
+
+        <li><a href="<?= base_url('users') ?>" aria-expanded="false">
+            <i class="fas fa-user-tie"></i>
+            <span class="nav-text"><?= $this->lang->line('saas_admins') ? $this->lang->line('saas_admins') : 'SaaS Admins' ?></span>
+          </a>
+        </li>
+      <?php
+      } ?>
+
       <?php if (($this->ion_auth->is_admin() || permissions('user_view')) && !is_saas_admin() && is_module_allowed('team_members')) { ?>
         <li><a href="<?= base_url('users') ?>" aria-expanded="false">
             <i class="fas fa-user"></i>
@@ -764,39 +798,53 @@
             <span class="nav-text">Settings</span>
           </a>
           <ul aria-expanded="false">
-            <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
-              <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
-            <?php } ?>
+            <?php if (is_saas_admin()) { ?>
+                <li><a href="<?=base_url('settings')?>"><?=$this->lang->line('general')?$this->lang->line('general'):'General'?></a></li>
+                <li><a href="<?=base_url('settings/seo')?>"><?=$this->lang->line('seo')?$this->lang->line('seo'):'SEO'?></a></li>
+                <li><a href="<?=base_url('settings/logins')?>"><?=$this->lang->line('social_login')?htmlspecialchars($this->lang->line('social_login')):'Social Login'?></a></li>
+                <li><a href="<?=base_url('settings/email')?>"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?></a></li>
+                <li><a href="<?=base_url('settings/email-templates')?>"><?=$this->lang->line('email_templates')?$this->lang->line('email_templates'):'Email Templates'?></a></li>
+                <li><a href="<?=base_url('languages')?>"><?=$this->lang->line('languages')?$this->lang->line('languages'):'Languages'?></a></li>
+                <li><a href="<?=base_url('settings/update')?>"><?=$this->lang->line('update')?$this->lang->line('update'):'Update'?></a></li>
+                <li><a href="<?=base_url('settings/recaptcha')?>"><?=$this->lang->line('google_recaptcha')?$this->lang->line('google_recaptcha'):'Google reCAPTCHA'?></a></li>
+                <li><a href="<?=base_url('settings/custom-code')?>"><?=$this->lang->line('custom_code')?$this->lang->line('custom_code'):'Custom Code'?></a></li>
+            <?php
+            } else {
+            ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
+                <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
+              <?php } ?>
 
-            <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
-              <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>
-            <?php } ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
+                <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>
+              <?php } ?>
 
-            <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
-              <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave hierarchy' ?></a></li>
-            <?php } ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
+                <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave hierarchy' ?></a></li>
+              <?php } ?>
 
-            <?php if ($this->ion_auth->is_admin() || permissions('shift_view')) { ?>
-              <li><a href="<?= base_url('settings/shift') ?>">Shifts</a></li>
-            <?php } ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('shift_view')) { ?>
+                <li><a href="<?= base_url('settings/shift') ?>">Shifts</a></li>
+              <?php } ?>
 
-            <?php if ($this->ion_auth->is_admin() || permissions('device_view')) { ?>
-              <li><a href="<?= base_url('settings/device_config') ?>"><?= $this->lang->line('device_config') ? $this->lang->line('device_config') : 'Device Configuration' ?></a></li>
-            <?php } ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('device_view')) { ?>
+                <li><a href="<?= base_url('settings/device_config') ?>"><?= $this->lang->line('device_config') ? $this->lang->line('device_config') : 'Device Configuration' ?></a></li>
+              <?php } ?>
 
-            <?php if ($this->ion_auth->is_admin() || permissions('departments_view')) { ?>
-              <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
-            <?php } ?>
-            <?php if ($this->ion_auth->is_admin()) { ?>
-              <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
-            <?php } ?>
+              <?php if ($this->ion_auth->is_admin() || permissions('departments_view')) { ?>
+                <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
+              <?php } ?>
+              <?php if ($this->ion_auth->is_admin()) { ?>
+                <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
+              <?php } ?>
 
-            <?php if ($this->ion_auth->is_admin() && is_module_allowed('user_permissions')) { ?>
-              <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
-            <?php } ?>
+              <?php if ($this->ion_auth->is_admin() && is_module_allowed('user_permissions')) { ?>
+                <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
+              <?php } ?>
 
-            <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
-              <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
+              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
+                <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
+              <?php } ?>
             <?php } ?>
           </ul>
         </li>

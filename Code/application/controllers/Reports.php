@@ -14,19 +14,36 @@ class Reports extends CI_Controller
 		if($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('reports_view')) && is_module_allowed('reports')){
 			
 			$this->data['page_title'] = 'Attendance Report - '.company_name();
+			$saas_id = $this->session->userdata('saas_id');
+			$this->db->where('saas_id', $saas_id);
+			$query4 = $this->db->get('shift');
+			$this->data['shifts'] = $query4->result_array();
+			$this->db->where('saas_id', $saas_id);
+			$query3 = $this->db->get('departments');
+			$this->data['departments'] = $query3->result_array();
+			$this->data['main_page'] = 'Attendance Report';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$query2 = $this->db->query("SELECT * FROM users WHERE active = '1'");
+			$results2 = $query2->result_array();
+			foreach ($results2 as $current_user) {
+				if ($current_user["id"] == $this->session->userdata('user_id')) {
+					$employee_id = $current_user["employee_id"];
+					$where = " WHERE attendance.user_id = " . $employee_id;
+					$where2 = " WHERE leaves.employee_id = " . $employee_id;
+					$user_id = $employee_id;
+				}
+			}
+			$this->data['user_id'] = $user_id;
 			if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			}elseif (permissions('attendance_view_selected')) {
+			} elseif (permissions('attendance_view_selected')) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
-					$users[]= $this->ion_auth->user($user_id)->row();				
+					$users[] = $this->ion_auth->user($user_id)->row();
 				}
-				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();	
+				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
 				$this->data['system_users'] = $users;
 			}
-			$query3 = $this->db->get('departments');
-        	$this->data['departments'] = $query3->result_array();
 			$this->load->view('report-attendance',$this->data);
 
 		}else{
