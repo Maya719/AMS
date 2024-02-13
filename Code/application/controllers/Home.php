@@ -11,10 +11,6 @@ class Home extends CI_Controller
 
 	public function index()
 	{
-		// error_reporting(E_ALL);
-
-		// Display errors on the screen
-		// ini_set('display_errors', 1);
 		if ($this->ion_auth->logged_in()) {
 			$this->data['page_title'] = 'Dashboard - ' . company_name();
 			$this->data['main_page'] = 'Dashboard ';

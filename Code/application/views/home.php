@@ -324,7 +324,7 @@
             success: function(response) {
               var tableData = JSON.parse(response);
               showTable(tableData.attendance);
-              console.log(tableData.counts);
+              console.log(tableData);
               $("#total_present").html(tableData.counts.present);
               $("#total_leave").html(tableData.counts.leave);
               $("#total_absent").html(tableData.counts.abs);

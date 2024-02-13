@@ -96,11 +96,11 @@
                 <div class="col-lg-4 text-end">
                   <button class="btn btn-primary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown">Export</button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">CSV</a>
-                    <a class="dropdown-item" href="#">PDF</a>
-                    <a class="dropdown-item" href="#">EXCEL</a>
+                    <a class="dropdown-item" id="csv" href="javascript:void(0);">CSV</a>
+                    <a class="dropdown-item" id="pdf" href="javascript:void(0);">PDF</a>
+                    <a class="dropdown-item" id="excel" href="javascript:void(0);">EXCEL</a>
                   </div>
-                  <button type="button" class="btn btn-sm btn-primary"><i class="fas fa-print"></i></button>
+                  <button type="button" id="print" class="btn btn-sm btn-primary"><i class="fas fa-print"></i></button>
                 </div>
               </div>
               <div class="card-body">
@@ -126,6 +126,10 @@
 ***********************************-->
     <?php $this->load->view('includes/footer'); ?>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
   <?php $this->load->view('includes/scripts'); ?>
   <script>
     $(document).ready(function() {
@@ -336,7 +340,7 @@
         });
         userRow += '</tr>';
         userRow += '<tr>';
-        userRow += '<th class="border-bottom-0 static-column-left" style="background: #FAFAFA;">'+data[0].text+'</th>';
+        userRow += '<th class="border-bottom-0 static-column-left" style="background: #FAFAFA;">' + data[0].text + '</th>';
 
         uniqueDates.forEach(date => {
           if (user.dates[date]) {
@@ -381,6 +385,268 @@
       });
       uniqueDates.sort();
       return uniqueDates;
+    }
+  </script>
+
+  <script>
+    $(document).on('click', '#csv', function() {
+      var filters = setFilter2();
+      ajaxCall2(filters.employee_id, filters.from, filters.too)
+        .then(function(response) {
+          downloadCSV(response[0].dates, "data.csv");
+        })
+        .catch(function(error) {
+          console.error("Error fetching data:", error);
+        });
+    });
+    $(document).on('click', '#excel', function() {
+      var filters = setFilter2();
+      ajaxCall2(filters.employee_id, filters.from, filters.too)
+        .then(function(response) {
+          console.log(response[0].dates);
+          downloadExcel(response[0].dates, "<?= $name ?>.xlsx");
+        })
+        .catch(function(error) {
+          console.error("Error fetching data:", error);
+        });
+    });
+    $(document).on('click', '#pdf', function() {
+      var filters = setFilter2();
+      ajaxCall2(filters.employee_id, filters.from, filters.too)
+        .then(function(response) {
+          downloadPDF(response[0].dates, response[0].text, "<?= $name ?>.pdf");
+        })
+        .catch(function(error) {
+          console.error("Error fetching data:", error);
+        });
+    });
+
+    $(document).on('click', '#print', function() {
+      var filters = setFilter2();
+      ajaxCall2(filters.employee_id, filters.from, filters.too)
+        .then(function(response) {
+          printContent(response[0].dates, response[0].text);
+        })
+        .catch(function(error) {
+          console.error("Error fetching data:", error);
+        });
+    });
+
+    function printContent(data, summaryText) {
+      var printWindow = window.open('', '_blank');
+      var htmlContent = '<html><head><title>Attendance Report</title></head><body>';
+
+      var currentTime = new Date().toLocaleString();
+      htmlContent += '<h3><?= $name ?> Attendance Report</h3>';
+      htmlContent += '<table style="border:1px solid #000000"><tr><th>Date</th><th>Check-in</th></tr>';
+
+      var sortedDates = Object.keys(data).sort();
+
+      sortedDates.forEach(function(date) {
+        var checkins = data[date];
+        var checkinsString = checkins.join(', ');
+        htmlContent += '<tr><td style="border:1px solid #000000">' + date + '</td><td style="border:1px solid #000000;">' + checkinsString + '</td></tr>';
+      });
+
+      htmlContent += '</table>';
+      htmlContent += '<h3>Summery</h3>';
+      htmlContent += '<p>' + summaryText + '</p>';
+
+      htmlContent += '</body></html>';
+      printWindow.document.open();
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+
+      printWindow.print();
+
+      if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function(mql) {
+          if (!mql.matches) {
+            printWindow.close();
+          }
+        });
+      } else {
+        printWindow.onafterprint = function() {
+          printWindow.close();
+        };
+      }
+    }
+
+
+    function downloadPDF(data, summaryText, filename) {
+      var doc = new jsPDF();
+
+      var currentTime = new Date().toLocaleString();
+      doc.text('<?= $name ?> Attendance Report (' + currentTime + ')', 10, 10);
+
+      var y = 20;
+
+      var columns = ['Date', 'Check-in'];
+      columns.forEach(function(column, index) {
+        doc.text(column, 10 + (index * 60), y);
+      });
+
+      y += 10;
+
+      // Sort the dates
+      var sortedDates = Object.keys(data).sort();
+
+      sortedDates.forEach(function(date) {
+        var checkins = data[date];
+        var checkinsString = checkins.join(', ');
+        doc.text(date, 10, y);
+        doc.text(checkinsString, 70, y);
+        y += 10;
+      });
+
+      var summaryWithoutLineBreaks = summaryText.replace(/<br>/g, '\n');
+
+      doc.text(summaryWithoutLineBreaks, 10, y + 10);
+      doc.save(filename);
+    }
+
+    function downloadCSV(data, filename) {
+      var csvContent = "Date,Check-in\n";
+
+      // Extract and sort the dates
+      var sortedDates = Object.keys(data).sort();
+
+      // Iterate over the sorted dates
+      sortedDates.forEach(function(date) {
+        var checkins = data[date];
+        var checkinString = checkins.join(",");
+        csvContent += date + "," + checkinString + "\n";
+      });
+
+      var blob = new Blob([csvContent], {
+        type: 'text/csv;charset=utf-8;'
+      });
+
+      var csvUrl = URL.createObjectURL(blob);
+
+      var link = document.createElement("a");
+      link.href = csvUrl;
+      link.setAttribute("download", filename);
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+
+    function downloadExcel(data, filename) {
+      var workbook = XLSX.utils.book_new();
+      var worksheet = XLSX.utils.aoa_to_sheet([
+        ["Date", "Check-in"]
+      ]);
+
+      // Extract and sort the dates
+      var sortedDates = Object.keys(data).sort();
+
+      // Iterate over the sorted dates
+      sortedDates.forEach(function(date, index) {
+        var checkins = data[date];
+        var row = [date, checkins.join(", ")];
+        XLSX.utils.sheet_add_aoa(worksheet, [row], {
+          origin: -1
+        });
+      });
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, filename);
+    }
+
+
+
+    function setFilter2() {
+      var filterOption = $('#dateFilter').val();
+      var currentUrl = window.location.href;
+      var id;
+      if (currentUrl.match(/\/attendance\/user_attendance\/\d+(?:#|$)/)) {
+        id = currentUrl.match(/\/(\d+)(?:#|$)/)[1];
+      } else if (currentUrl.match(/\/attendance\/user_attendance(?:#|$)/)) {
+        id = <?= json_encode($user_id) ?>;
+      }
+      var employee_id = id;
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const day = today.getDate();
+
+      let fromDate, toDate;
+
+      switch (filterOption) {
+        case "today":
+          fromDate = new Date(year, month, day);
+          toDate = new Date(year, month, day);
+          break;
+        case "ystdy":
+          fromDate = new Date(year, month, day - 1);
+          toDate = new Date(year, month, day - 1);
+          break;
+        case "tweek":
+          fromDate = new Date(year, month, day - today.getDay());
+          toDate = new Date(year, month, day);
+          break;
+        case "lweek":
+          fromDate = new Date(year, month, day - today.getDay() - 7);
+          toDate = new Date(year, month, day - today.getDay() - 1);
+          break;
+        case "tmonth":
+          fromDate = new Date(year, month, 1);
+          toDate = today;
+          break;
+        case "lmonth":
+          fromDate = new Date(year, month - 1, 1);
+          toDate = new Date(year, month, 0);
+          break;
+        case "custom":
+          $("#custom-date-range").show();
+          var fromInput = $('#from').val();
+          var toInput = $('#too').val();
+          fromDate = new Date(convertDateFormat(fromInput));
+          toDate = new Date(convertDateFormat(toInput));
+          break;
+        default:
+          console.error("Invalid filter option:", filterOption);
+          return null;
+      }
+
+
+      var formattedFromDate = formatDate(fromDate, "Y-m-d");
+      var formattedToDate = formatDate(toDate, "Y-m-d");
+      var rangetext = getRangeText(formattedFromDate, formattedToDate);
+      $("#date-range").html(rangetext);
+
+      return {
+        employee_id: employee_id,
+        from: formattedFromDate,
+        too: formattedToDate
+      }
+    }
+
+    function ajaxCall2(employee_id, from, too) {
+      return new Promise(function(resolve, reject) {
+        $.ajax({
+          url: base_url + 'attendance/get_single_user_attendance',
+          type: 'POST',
+          data: {
+            user_id: employee_id,
+            from: from,
+            too: too
+          },
+          success: function(response) {
+            var tableData = JSON.parse(response);
+            resolve(tableData);
+          },
+          error: function(xhr, status, error) {
+            reject(error);
+            console.error("An error occurred:", error);
+            alert("An error occurred while fetching data.");
+          }
+        });
+      });
     }
   </script>
   <!--**********************************

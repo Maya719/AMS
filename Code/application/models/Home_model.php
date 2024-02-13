@@ -111,6 +111,15 @@ class Home_model extends CI_Model
                             'dates' => [],
                         ];
                         $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
+                    } elseif($this->attendance_model->holidayCheck($user->employee_id, $from)) {
+                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
+                        $absentArray[$user->employee_id] = [
+                            'user_id' => $user->employee_id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'dates' => [],
+                        ];
+                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
                     } else {
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
                         $absentArray[$user->employee_id] = [
@@ -153,7 +162,7 @@ class Home_model extends CI_Model
         $system_users = $this->ion_auth->members_all()->result();
 
         foreach ($system_users as $user) {
-            $userPresent = false; // Reset for each user
+            $userPresent = false; 
             if ($user->finger_config == '1' && $user->active == '1') {
                 foreach ($results as $attendance) {
                     if ($user->employee_id == $attendance["user_id"]) {
@@ -266,10 +275,9 @@ class Home_model extends CI_Model
             $presentArray[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
         }
 
-        $system_users = $this->ion_auth->user()->row();
+        $system_users = [$this->ion_auth->user()->row()];
         foreach ($system_users as $user) {
             if ($user->finger_config == '1' && $user->active == '1') {
-
                 if (!isset($formattedData[$user->employee_id])) {
                     $formattedData[$user->employee_id] = [
                         'user_id' => $user->employee_id,
@@ -289,6 +297,15 @@ class Home_model extends CI_Model
                             'dates' => [],
                         ];
                         $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
+                    } elseif($this->attendance_model->holidayCheck($user->employee_id, $from)) {
+                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
+                        $absentArray[$user->employee_id] = [
+                            'user_id' => $user->employee_id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'dates' => [],
+                        ];
+                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
                     } else {
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
                         $absentArray[$user->employee_id] = [
@@ -299,7 +316,7 @@ class Home_model extends CI_Model
                         ];
                         $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
                     }
-                }
+                    }
             }
         }
         if ($get["absent"] && $get["absent"] == 1) {
