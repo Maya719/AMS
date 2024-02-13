@@ -291,7 +291,7 @@ class Attendance_model extends CI_Model
             $employee_id = get_employee_id_from_user_id($user_id);
             $where2 .= " AND leaves.user_id = '" . $employee_id . "'";
         }
-        $leaveQuery = $this->db->query("SELECT leaves.*, CONCAT(users.first_name, ' ', users.last_name) AS user  FROM leaves " . $leftjoin2 . $where2 . " AND leaves.leave_duration NOT LIKE '%Half%' AND leaves.leave_duration NOT LIKE '%Short%'");
+        $leaveQuery = $this->db->query("SELECT leaves.*, CONCAT(users.first_name, ' ', users.last_name) AS user  FROM leaves " . $leftjoin2 . $where2 . "");
         $leavesresult = $leaveQuery->result_array();
         foreach ($leavesresult as $leavesResult) {
             if ($leavesResult["status"] == '1') {
