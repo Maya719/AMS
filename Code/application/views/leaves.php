@@ -582,6 +582,7 @@
       function updateLeaveCounts() {
         var type = $('select[name="type_add"]').val();
         var user_id = $('select[name="user_id_add"]').val();
+        console.log(type);
         $.ajax({
           url: '<?= base_url('leaves/get_leaves_count') ?>',
           method: 'POST',
@@ -591,6 +592,7 @@
             type: type
           },
           success: function(response) {
+            console.log(response);
             var totalLeaves = response.total_leaves;
             var consumedLeaves = response.consumed_leaves;
             var remainingLeaves = response.remaining_leaves;

@@ -134,21 +134,21 @@ class Leaves_model extends CI_Model
         $query = $this->db->get('leave_hierarchy');
         $array = [];
         if ($row = $query->row()) {
-            $array=[
-                'is_forworded'=>false,
-                'forworded_to'=>null,
+            $array = [
+                'is_forworded' => false,
+                'forworded_to' => null,
             ];
-        }else{
+        } else {
             $this->db->where('saas_id', $saas_id);
             $this->db->where('step_no', $step);
             $query = $this->db->get('leave_hierarchy');
             if ($row = $query->row()) {
-                $step_group = $row->group_id;  
+                $step_group = $row->group_id;
                 if ($step_group != $group_id) {
                     $group = $this->ion_auth->group($step_group)->row();
-                    $array=[
-                        'is_forworded'=>true,
-                        'forworded_to'=>$group->description,
+                    $array = [
+                        'is_forworded' => true,
+                        'forworded_to' => $group->description,
                     ];
                 }
             }
@@ -217,8 +217,8 @@ class Leaves_model extends CI_Model
         $consumed_leaves = 0;
         $remaining_leaves = 0;
         $type = $result['type'];
-        $user_id = isset($result['user_id']) ? $result['user_id'] : $this->session->userdata('user_id');
-
+        $user_id2 = isset($result['user_id']) ? $result['user_id'] : $this->session->userdata('user_id');
+        $user_id = get_employee_id_from_user_id($user_id2);
         // get consume leaves
         $currentDate = date('Y-m-d');
         $currentYear = date('Y');
@@ -234,196 +234,83 @@ class Leaves_model extends CI_Model
         $this->db->where('starting_date >=', $from);
         $this->db->where('starting_date <=', $too);
         $query = $this->db->get();
-
-        $this->db->where('user_id', $user_id);
-        $query2 = $this->db->get('applied_policies');
-        if ($query2->num_rows() > 0) {
-            $query2_result = $query2->row_array();
-            $appliedRulesJSON = $query2_result['applied_rules'];
-            $appliedRules = json_decode($appliedRulesJSON, true);
-            $data = $appliedRules;
-            foreach ($data['leave_data'] as $applied_leave) {
-                $leave_type_id =  $applied_leave["leave_type_id"];
-                if ($type == $leave_type_id) {
-                    $total_leaves =  $applied_leave["leave_count"];
+        if ($query) {
+            $result = $query->result();
+            foreach ($result as $leave) {
+                $startDate = new DateTime($leave->starting_date);
+                $endDate = new DateTime($leave->ending_date);
+                $leaveDuration = $endDate->diff($startDate)->days + 1;
+                if (strpos($leave->leave_duration, 'Full') !== false) {
+                    $consumed_leaves += $leaveDuration;
+                } elseif (strpos($leave->leave_duration, 'Half') !== false) {
+                    $consumed_leaves += $leaveDuration * 0.5;
                 }
             }
         }
-
-        $this->db->where('type', 'grace_minutes_' . $this->session->userdata('saas_id'));
-        $query3 = $this->db->get('settings');
-        if ($query3->num_rows() > 0) {
-            $query3_result = $query3->row_array();
-            $sandwich_data = $query3_result['value'];
-            $data = json_decode($sandwich_data, true);
-            $sindwitch = $data['sandwich'];
-        }
-        if ($sindwitch == 0) {
-            if ($query) {
-                $result = $query->result();
-                foreach ($result as $leave) {
-                    $startDate = new DateTime($leave->starting_date);
-                    $endDate = new DateTime($leave->ending_date);
-                    $leaveDuration = $endDate->diff($startDate)->days + 1;
-                    if (strpos($leave->leave_duration, 'Full') !== false) {
-                        $consumed_leaves += $leaveDuration;
-                    } elseif (strpos($leave->leave_duration, 'Half') !== false) {
-                        $consumed_leaves += $leaveDuration * 0.5;
-                    }
-                }
-            }
-        } else {
-            if ($query) {
-                $result = $query->result();
-                foreach ($result as $leave) {
-                    $startDate = new DateTime($leave->starting_date);
-                    $endDate = new DateTime($leave->ending_date);
-                    $leaveDuration = $endDate->diff($startDate)->days + 1;
-                    if (strpos($leave->leave_duration, 'Full') !== false) {
-                        if ($days = $this->sandwich_rule($startDate, $endDate)) {
-                            $consumed_leaves += $leaveDuration + $days;
-                        } else {
-                            $consumed_leaves += $leaveDuration;
-                        }
-                    } elseif (strpos($leave->leave_duration, 'Half') !== false) {
-                        $consumed_leaves += $leaveDuration * 0.5;
-                    }
-                }
-            }
-        }
+        $this->db->where('id', $type);
+        $query3 = $this->db->get('leaves_type');
+        $leave_type = $query3->row();
+        $total_leaves = $leave_type->leave_counts;
+        $duration = $leave_type->duration;
         // get user probation
-        $probation_query = $this->db->select('probation')->from('users')->where('id', $user_id)->get();
+        $probation_query = $this->db->select('probation')->from('users')->where('id', $user_id2)->get();
         $probation_data = $probation_query->row();
         $probation = $probation_data->probation;
         $probationYear = date('Y', strtotime($probation));
         $probationMonth = date('n', strtotime($probation));
-        $this->db->where('id', $type);
-        $leaves_type_query = $this->db->get('leaves_type');
-        $leaves_type_result = $leaves_type_query->row();
-        $duration = $leaves_type_result->duration;
-
         if ($probation > date('Y-m-d')) {
             $total_leaves = 0;
             $remaining_leaves = 0;
-        } elseif ($probationYear < $currentYear - 1) {
-            if ($duration == '3_months') {
+        } elseif ($probationYear < $currentYear) {
+            if($duration == '3_months'){
                 if ($currentMonth >= 1 && $currentMonth <= 3) {
-                    $slice = 1;
-                } elseif ($currentMonth >= 4 && $currentMonth <= 6) {
-                    $slice = 2;
-                } elseif ($currentMonth >= 7 && $currentMonth <= 9) {
-                    $slice = 3;
-                } elseif ($currentMonth >= 10 && $currentMonth <= 12) {
                     $slice = 4;
+                } elseif ($currentMonth >= 4 && $currentMonth <= 6) {
+                    $slice =3;
+
+                } elseif ($currentMonth >= 7 && $currentMonth <= 9) {
+                    $slice =2;
+
+                } elseif ($currentMonth >= 10 && $currentMonth <= 12) {
+                    $slice =1;
                 }
-            } elseif ($duration == '4_months') {
+            }elseif($duration == '4_months'){
 
                 if ($currentMonth >= 1 && $currentMonth <= 4) {
-                    $slice = 1;
+                    $slice =3;
                 } elseif ($currentMonth >= 5 && $currentMonth <= 8) {
-                    $slice = 2;
+                    $slice =2;
+
                 } elseif ($currentMonth >= 9 && $currentMonth <= 12) {
-                    $slice = 3;
+                    $slice =1;
                 }
-            } elseif ($duration == '6_months') {
+
+            }elseif($duration == '6_months'){
 
                 if ($currentMonth >= 1 && $currentMonth <= 6) {
-                    $slice = 1;
+                    $slice =2;
                 } elseif ($currentMonth >= 7 && $currentMonth <= 12) {
-                    $slice = 2;
+                    $slice =1;
                 }
-            } elseif ($duration == 'year') {
+
+            }elseif($duration == 'year'){
                 if ($currentMonth >= 1 && $currentMonth <= 12) {
-                    $slice = 1;
+                    $slice =1;
                 }
             }
+            $total_leaves = $total_leaves/$slice;
+            $remaining_leaves =  $total_leaves-$consumed_leaves;
 
-
-            $total_leaves = $slice * $total_leaves;
-            $remaining_leaves =  $total_leaves - $consumed_leaves;
         } elseif ($probationYear === $currentYear) {
-            if ($duration == '3_months') {
-                if ($probationMonth >= 1 && $probationMonth <= 3) {
-                    if ($probationMonth == 3) {
-                        $slice = 3;
-                    } else {
-                        $slice = 4;
-                    }
-                } elseif ($probationMonth >= 4 && $probationMonth <= 6) {
-                    if ($probationMonth == 6) {
-                        $slice = 2;
-                    } else {
-                        $slice = 3;
-                    }
-                } elseif ($probationMonth >= 7 && $probationMonth <= 9) {
-                    if ($probationMonth == 9) {
-                        $slice = 1;
-                    } else {
-                        $slice = 2;
-                    }
-                } elseif ($probationMonth >= 10 && $probationMonth <= 12) {
-                    if ($probationMonth == 12) {
-                        $slice = 0;
-                    } else {
-                        $slice = 1;
-                    }
-                }
-            } elseif ($duration == '4_months') {
-                if ($probationMonth >= 1 && $probationMonth <= 4) {
-                    if ($probationMonth == 4) {
-                        $slice = 2;
-                    } else {
-                        $slice = 3;
-                    }
-                } elseif ($probationMonth >= 5 && $probationMonth <= 8) {
-                    if ($probationMonth == 8) {
-                        $slice = 1;
-                    } else {
-                        $slice = 2;
-                    }
-                } elseif ($probationMonth >= 9 && $probationMonth <= 12) {
-                    if ($probationMonth == 12) {
-                        $slice = 0;
-                    } else {
-                        $slice = 1;
-                    }
-                }
-            } elseif ($duration == '6_months') {
-                if ($probationMonth >= 1 && $probationMonth <= 6) {
-                    if ($probationMonth == 6) {
-                        $slice = 1;
-                    } else {
-                        $slice = 2;
-                    }
-                } elseif ($probationMonth >= 7 && $probationMonth <= 12) {
-                    if ($probationMonth == 12) {
-                        $slice = 0;
-                    } else {
-                        $slice = 1;
-                    }
-                }
-            } elseif ($duration == 'year') {
-                if ($probationMonth >= 1 && $probationMonth <= 12) {
-                    if ($probationMonth == 12) {
-                        $slice = 0;
-                    } else {
-                        $slice = 1;
-                    }
-                }
-            }
-            $total_leaves = $slice * $total_leaves;
-            $remaining_leaves =  $total_leaves - $consumed_leaves;
-        }
-
-
-        if ($consumed_leaves > $total_leaves) {
+            
+            $total_leaves =0;
             $remaining_leaves =  0;
         }
-
         return array(
             'total_leaves' =>  $total_leaves,
             'consumed_leaves' => $consumed_leaves,
-            'remaining_leaves' => $remaining_leaves
+            'remaining_leaves' => $remaining_leaves,
+            'slice' => $slice,
         );
     }
 
