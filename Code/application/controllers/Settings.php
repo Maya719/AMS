@@ -1647,6 +1647,7 @@ class Settings extends CI_Controller
 			foreach ($roles as $role) {
 				$this->data[$role['name'] . '_permissions'] = get_permissions($role['name']);
 			}
+			// echo json_encode($this->data);
 			$this->load->view('settings', $this->data);
 		} else {
 			redirect('auth', 'refresh');

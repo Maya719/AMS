@@ -562,6 +562,27 @@
 
       e.preventDefault();
     });
+
+    $(document).on('click', '.savebtn', function(e) {
+      var form = $('#setting-form');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          } else {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
     $(document).on('click', '.savebtn2', function(e) {
       var form = $('#setting-form');
       var formData = form.serialize();
