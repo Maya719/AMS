@@ -1,6 +1,30 @@
 <?php $this->load->view('includes/header'); ?>
+<link rel="stylesheet" href="<?= base_url('assets/modules/multiselect/multselect.css') ?>">
 <style>
+  .toggle-heading {
+    cursor: pointer;
+  }
 
+  .toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .toggle-icon::before {
+    content: "\f078";
+    /* Up arrow icon */
+    font-family: 'Font Awesome 5 Free';
+    display: inline-block;
+    width: 20px;
+    /* Adjust the width as needed */
+    text-align: center;
+  }
+
+  .expanded .toggle-icon::before {
+    content: "\f077";
+    /* Down arrow icon when expanded */
+  }
 </style>
 </head>
 
@@ -434,7 +458,7 @@
             $("#device_name").val(result['data'][0].device_name);
             $("#device_ip").val(result['data'][0].device_ip);
             $("#port").val(result['data'][0].port);
-            
+
           } else {
             iziToast.error({
               title: something_wrong_try_again,
@@ -568,43 +592,242 @@
     $(".select7").select2();
   </script>
   <script>
-$(document).ready(function () {
-    if ($("#enableGraceMinutes").is(":checked")) {
+    $(document).ready(function() {
+      if ($("#enableGraceMinutes").is(":checked")) {
         $("#show_div").show();
         $("#enebleSandwich").prop("checked", false);
         $("#show_div2").hide();
-    } else {
+      } else {
         $("#show_div").hide();
-    }
+      }
 
-    $("#enableGraceMinutes").change(function () {
+      $("#enableGraceMinutes").change(function() {
         if ($(this).is(":checked")) {
-            $("#show_div").show();
-            $("#enebleSandwich").prop("checked", false);
-            $("#show_div2").hide();
+          $("#show_div").show();
+          $("#enebleSandwich").prop("checked", false);
+          $("#show_div2").hide();
         } else {
-            $("#show_div").hide();
+          $("#show_div").hide();
         }
-    });
+      });
 
-    if ($("#enebleSandwich").is(":checked")) {
+      if ($("#enebleSandwich").is(":checked")) {
         $("#show_div2").show();
         $("#enableGraceMinutes").prop("checked", false);
         $("#show_div").hide();
-    } else {
+      } else {
         $("#show_div2").hide();
-    }
+      }
 
-    $("#enebleSandwich").change(function () {
+      $("#enebleSandwich").change(function() {
         if ($(this).is(":checked")) {
-            $("#show_div2").show();
-            $("#enableGraceMinutes").prop("checked", false);
-            $("#show_div").hide();
+          $("#show_div2").show();
+          $("#enableGraceMinutes").prop("checked", false);
+          $("#show_div").hide();
         } else {
-            $("#show_div2").hide();
+          $("#show_div2").hide();
         }
+      });
     });
-});</script>
+  </script>
+  <script>
+    $('#users').multiSelect();
+    $("#selectAllUsers").change(function() {
+      if ($(this).prop("checked")) {
+        // Select all options in the multi-select
+        $('#users').multiSelect('select_all');
+      } else {
+        // Deselect all options in the multi-select
+        $('#users').multiSelect('deselect_all');
+      }
+    });
+    $('#users_create').multiSelect();
+    $("#selectAllUsers_create").change(function() {
+      if ($(this).prop("checked")) {
+        // Select all options in the multi-select
+        $('#users_create').multiSelect('select_all');
+      } else {
+        // Deselect all options in the multi-select
+        $('#users_create').multiSelect('deselect_all');
+      }
+    });
+    $('#assigned_users').multiSelect();
+    $("#selectAllUsers4").change(function() {
+      if ($(this).prop("checked")) {
+        // Select all options in the multi-select
+        $('#assigned_users').multiSelect('select_all');
+      } else {
+        // Deselect all options in the multi-select
+        $('#assigned_users').multiSelect('deselect_all');
+      }
+    });
+    $('#permissions').multiSelect();
+    $("#selectAllPermissions").change(function() {
+      if ($(this).prop("checked")) {
+        // Select all options in the multi-select
+        $('#permissions').multiSelect('select_all');
+      } else {
+        // Deselect all options in the multi-select
+        $('#permissions').multiSelect('deselect_all');
+      }
+    });
+    $(".select2").select2();
+  </script>
+  <script>
+    /*
+     *
+     *roles
+     * 
+     */
+    $("#add-role-modal").on('click', '.btn-create', function(e) {
+      var modal = $('#add-role-modal');
+      var form = $('#modal-add-role-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+
+    $("#edit-role-modal").on('click', '.btn-edit', function(e) {
+      var modal = $('#edit-role-modal');
+      var form = $('#modal-edit-roles-part');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        }
+      });
+
+      e.preventDefault();
+    });
+    $(document).on('click', '.edit-role', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      $.ajax({
+        type: "POST",
+        url: base_url + 'settings/get_roles_by_id',
+        data: "id=" + id,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+
+            $("#update_id").val(result['data'].id);
+
+            $("#name").val(result['data'].name);
+            $("#name").trigger("change");
+
+            $("#description").val(result['data'].description);
+            $("#description").trigger("change");
+
+            $("#descriptive_name").val(result['data'].descriptive_name);
+            $("#descriptive_name").trigger("change");
+
+            if (result['data'].permissions != null) {
+              var permissionsArray = JSON.parse(result['data'].permissions);
+
+              if (permissionsArray !== null) {
+                $('#permissions').multiSelect('deselect_all');
+
+                permissionsArray.forEach(function(value) {
+                  $('#permissions').multiSelect('select', value);
+                });
+
+                $('#permissions').multiSelect('refresh');
+              }
+            }
+
+            if (result['data'].assigned_users != null) {
+              var permissionsArray2 = JSON.parse(result['data'].assigned_users);
+
+              if (permissionsArray2 !== null) {
+                $('#users').multiSelect('deselect_all');
+
+                permissionsArray2.forEach(function(value) {
+                  $('#users').multiSelect('select', value);
+                });
+
+                $('#users').multiSelect('refresh');
+              }
+            }
+            var newArray = [];
+            if (result['data'].change_permissions_of != '' && result['data'].change_permissions_of != null) {
+              var inputString = result['data'].change_permissions_of.replace(/[\[\]"]+/g, ''); // Remove brackets and double quotes
+              newArray = inputString.split(',');
+            }
+
+            $("#change_permissions_of").val(newArray);
+            $("#change_permissions_of").trigger("change");
+
+            $("#modal-edit-roles").trigger("click");
+          } else {
+            iziToast.error({
+              title: something_wrong_try_again,
+              message: "",
+              position: 'topRight'
+            });
+          }
+        }
+      });
+    });
+
+
+    $(document).on('click', '.delete-role', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      Swal.fire({
+        title: are_you_sure,
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'settings/roles_delete/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            success: function(result) {
+              if (result['error'] == false) {
+                location.reload()
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

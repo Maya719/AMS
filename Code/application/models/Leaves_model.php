@@ -300,9 +300,7 @@ class Leaves_model extends CI_Model
             }
             $total_leaves = $total_leaves/$slice;
             $remaining_leaves =  $total_leaves-$consumed_leaves;
-
         } elseif ($probationYear === $currentYear) {
-            
             $total_leaves =0;
             $remaining_leaves =  0;
         }

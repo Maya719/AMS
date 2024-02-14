@@ -72,8 +72,8 @@
 <script src="<?= base_url('assets2/vendor/datatables/js/jquery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/datatables/responsive/responsive.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.js') ?>"></script>
+<script src="<?= base_url('assets2/vendor/multiselect/multiselect.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
-
 
 <script src="<?= base_url('assets2/js/stisla.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.js') ?>"></script>
