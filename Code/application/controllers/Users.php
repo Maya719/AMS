@@ -265,6 +265,7 @@ class Users extends CI_Controller
 
 		if ($this->ion_auth->logged_in()) {
 			$this->data['page_title'] = 'Profile - ' . company_name();
+			$this->data['main_page'] = 'Profile';
 			$this->data['current_user'] = $profile_user = $this->ion_auth->user()->row();
 			$query = $this->db->get('shift');
 			$this->data['shift_types'] = $query->result_array();
@@ -279,7 +280,6 @@ class Users extends CI_Controller
 				$user_data = $query->row();
 
 				if ($user_data && !is_client()) {
-					// Update the $tempRow array with the fetched user data
 					$tempRow['id'] = $user_data->id;
 					$tempRow['email'] = $user_data->email;
 					$tempRow['active'] = $user_data->active;
@@ -307,6 +307,9 @@ class Users extends CI_Controller
 					$tempRow['employee_id'] = $user_data->employee_id;
 					$tempRow['finger_config'] = $user_data->finger_config;
 					$tempRow['department'] = $user_data->department;
+					$tempRow['martial_status'] = $user_data->martial_status;
+					$tempRow['blood_group'] = $user_data->blood_group;
+					
 
 					$department_id = $tempRow['department'];
 

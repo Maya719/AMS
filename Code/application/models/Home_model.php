@@ -84,8 +84,8 @@ class Home_model extends CI_Model
             if (!isset($formattedData[$userId]['dates'][$createdDate])) {
                 $formattedData[$userId]['dates'][$createdDate] = [];
             }
-            $formattedData[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
-            $presentArray[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
+            $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
+            $presentArray[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
         }
 
         $system_users = $this->ion_auth->members_all()->result();

@@ -1162,7 +1162,6 @@ class Auth extends CI_Controller
 		$groups = $this->ion_auth->groups()->result_array();
 		$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 		
-		// ANCHOR  validate form input
 		$this->form_validation->set_rules('update_id', 'User ID', 'trim|required|strip_tags|xss_clean|is_numeric');
 		$this->form_validation->set_rules('plan_id', 'Plan ID', 'trim|strip_tags|xss_clean|is_numeric');
 		$this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'trim|required|strip_tags|xss_clean');
@@ -1172,7 +1171,6 @@ class Auth extends CI_Controller
 
 		if (isset($_POST) && !empty($_POST))
 		{
-			// ANCHOR  update the password if it was posted
 			if ($this->input->post('password'))
 			{
 				$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
@@ -1181,7 +1179,6 @@ class Auth extends CI_Controller
 
 			if ($this->form_validation->run() === TRUE)
 			{
-
 				$profile_pic = '';
 				if (!empty($_FILES['profile']['name'])){
 
