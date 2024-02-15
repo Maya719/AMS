@@ -2,7 +2,7 @@
 <style>
   #attendance_list tbody td a {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
   }
 </style>
 </head>
@@ -39,14 +39,14 @@
         <div class="row justify-content-between">
           <div class="col-xl-4 col-sm-12">
             <nav class="nav nav-pills flex-column flex-sm-row">
-              <a class="flex-sm-fill fs-4 text-sm-center nav-link active" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false"><strong>AMS</strong></a>
-              <a class="flex-sm-fill fs-4 text-sm-center nav-link ms-4" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
+              <a class="flex-sm-fill fs-6 text-sm-center nav-link active" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false"><strong>AMS</strong></a>
+              <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
             </nav>
           </div>
           <div class="col-xl-2 col-sm-12">
             <div class="card">
               <div class="card-body text-sm-center py-3 text-primary">
-                <input style="border:none; height:20px;" name="datepicker" class="text-primary fs-6 fw-bold datepicker-default2 form-control p-0" value="<?= date('j F, Y') ?>" id="from">
+                <input style="border:none; height:20px;" name="datepicker" class="text-primary text-center fs-6 fw-bold datepicker-default2 form-control p-0" value="<?= date('j F, Y') ?>" id="from">
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h4 class="text-primary">Leaves</h4>
-                                <h4 class="count text-primary ms-auto mb-0"><?= $totalleave ?></h4>
+                                <h4 class="count  ms-auto mb-0"><a class="text-primary" href="<?=base_url('leaves')?>"><?= $totalleave ?></a></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
@@ -134,9 +134,9 @@
 
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="javascript:void(0);"><?= $report["leave_approved"] ?></a></strong></p>
-                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning " href="javascript:void(0);"><?= $report["leave_pending"] ?></a></strong></p>
-                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger " href="javascript:void(0);"><?= $report["leave_rejected"] ?></a></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?=base_url('leaves')?>"><?= $report["leave_approved"] ?></a></strong></p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning " href="<?=base_url('leaves')?>"><?= $report["leave_pending"] ?></a></strong></p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger " href="<?=base_url('leaves')?>"><?= $report["leave_rejected"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -154,7 +154,7 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h4 class="text-primary">Biometrics</h4>
-                                <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
+                                <h4 class="count ms-auto mb-0"><a class="text-primary" href="<?=base_url('biometric_missing')?>"><?= $totalBio ?></a></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
@@ -163,9 +163,9 @@
                                 </div>
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="text-primary float-end me-2"><?= $report["bio_approved"] ?></strong></p>
-                                <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $report["bio_pending"] ?></strong></p>
-                                <p class="mb-0">Rejected<strong class="text-danger float-end me-2"><?= $report["bio_rejected"] ?></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?=base_url('biometric_missing')?>"><?= $report["bio_approved"] ?></a></strong></p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning" href="<?=base_url('biometric_missing')?>"><?= $report["bio_pending"] ?></a></strong></p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger" href="<?=base_url('biometric_missing')?>"><?= $report["bio_rejected"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -333,13 +333,12 @@
     <script src="<?= base_url('assets2/vendor/chart-js/chart.bundle.min.js') ?>"></script>
     <script>
       $(document).ready(function() {
-        var areaChart1 = function() {
-          // basic area chart
+        areaChart1();
+        pieChart();
+      });
+      var areaChart1 = function() {
           if (jQuery('#areaChart_1').length > 0) {
             const areaChart_1 = document.getElementById("areaChart_1").getContext('2d');
-
-            // areaChart_1.height = 100;
-
             new Chart(areaChart_1, {
               type: 'line',
               data: {
@@ -420,10 +419,6 @@
             });
           }
         }
-
-        areaChart1();
-        pieChart();
-      });
     </script>
     <script>
       $(document).ready(function() {
@@ -473,6 +468,7 @@
           callAjax(date, all, present, absent, leave);
         }
 
+        
         function callAjax(date, all, present, absent, leave) {
           console.log(date, all, present, absent, leave);
           $.ajax({
@@ -496,7 +492,9 @@
               $("#total_staff").html(total);
 
             },
-            complete: function() {},
+            complete: function() {
+
+            },
             error: function(error) {
               console.error(error);
             }
@@ -520,14 +518,14 @@
           var tbody = table.find('tbody');
           data.forEach(user => {
             var userRow = '<tr>';
-            userRow += '<td>' + user.user + '</td>';
-            userRow += '<td>' + user.name + '</td>';
+            userRow += '<td style="font-size:12px;">' + user.user + '</td>';
+            userRow += '<td style="font-size:12px;">' + user.name + '</td>';
 
             uniqueDates.forEach(date => {
               if (user.dates[date]) {
-                userRow += '<td>' + user.dates[date].join('<br>') + '</td>';
+                userRow += '<td style="font-size:12px;">' + user.dates[date].join('<br>') + '</td>';
               } else {
-                userRow += '<td>Absent</td>';
+                userRow += '<td style="font-size:12px;">Absent</td>';
               }
             });
 
@@ -584,6 +582,8 @@
         singleDatePicker: true,
         maxDate: moment()
       });
+
+      
     </script>
 </body>
 

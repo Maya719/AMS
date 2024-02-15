@@ -99,7 +99,7 @@ class Attendance_model extends CI_Model
             if (!isset($formattedData[$userId]['dates'][$createdDate])) {
                 $formattedData[$userId]['dates'][$createdDate] = [];
             }
-            $formattedData[$userId]['dates'][$createdDate][] = date('h:i A', strtotime($createdTime));
+            $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
         }
 
         foreach ($dateArray as $date) {
@@ -116,11 +116,11 @@ class Attendance_model extends CI_Model
                     $user_id = $userData['user_id'];
                     // check leave
                     if ($this->checkLeave($user_id, $date)) {
-                        $userData['dates'][$date][] = '<span class="text-success">Leave</span>';
+                        $userData['dates'][$date][] = '<span class="text-success">L</span>';
                     } elseif ($this->holidayCheck($user_id, $date)) {
-                        $userData['dates'][$date][] = '<span class="text-primary">Holiday</span>';
+                        $userData['dates'][$date][] = '<span class="text-primary">H</span>';
                     } else {
-                        $userData['dates'][$date][] = '<span class="text-danger">Absent</span>';
+                        $userData['dates'][$date][] = '<span class="text-danger">A</span>';
                     }
                 }
             }

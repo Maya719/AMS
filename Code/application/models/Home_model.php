@@ -111,7 +111,7 @@ class Home_model extends CI_Model
                             'dates' => [],
                         ];
                         $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
-                    } elseif($this->attendance_model->holidayCheck($user->employee_id, $from)) {
+                    } elseif ($this->attendance_model->holidayCheck($user->employee_id, $from)) {
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
                         $absentArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
@@ -162,7 +162,7 @@ class Home_model extends CI_Model
         $system_users = $this->ion_auth->members_all()->result();
 
         foreach ($system_users as $user) {
-            $userPresent = false; 
+            $userPresent = false;
             if ($user->finger_config == '1' && $user->active == '1') {
                 foreach ($results as $attendance) {
                     if ($user->employee_id == $attendance["user_id"]) {
@@ -297,7 +297,7 @@ class Home_model extends CI_Model
                             'dates' => [],
                         ];
                         $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
-                    } elseif($this->attendance_model->holidayCheck($user->employee_id, $from)) {
+                    } elseif ($this->attendance_model->holidayCheck($user->employee_id, $from)) {
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
                         $absentArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
@@ -316,7 +316,7 @@ class Home_model extends CI_Model
                         ];
                         $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
                     }
-                    }
+                }
             }
         }
         if ($get["absent"] && $get["absent"] == 1) {
@@ -375,9 +375,9 @@ class Home_model extends CI_Model
                 }
             }
             if ($absentForDate) {
-                if($this->attendance_model->holidayCheck($employee_id, $date)){
+                if ($this->attendance_model->holidayCheck($employee_id, $date)) {
                     $unique_dates[] = $date;
-                }else{
+                } else {
                     $abs++;
                 }
             }
@@ -454,8 +454,10 @@ class Home_model extends CI_Model
         foreach ($system_users as $user) {
             if ($user->finger_config == '1' && $user->active == '1') {
                 $join_date = $user->join_date;
+                $probation_date = $user->probation;
                 $date_of_birth = $user->DOB;
                 $formattedDateOfBirth = date('j F', strtotime($date_of_birth));
+                $formattedProbationDate = date('j F', strtotime($probation_date));
                 $formattedJoinDate = date('j F', strtotime($join_date));
 
                 if (
@@ -476,13 +478,24 @@ class Home_model extends CI_Model
                     date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate))
                     && date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))
                 ) {
-                    $formattedJoinDate = date('j F', strtotime($join_date));
                     $array[] = [
                         'user' => $user->first_name . ' ' . $user->last_name,
                         'profile' => $user->profile,
                         'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
                         'event' => 'Anniversary',
                         'date' => $formattedDateOfBirth
+                    ];
+                }
+                if (
+                    date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate))
+                    && date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))
+                ) {
+                    $array[] = [
+                        'user' => $user->first_name . ' ' . $user->last_name,
+                        'profile' => $user->profile,
+                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                        'event' => 'Probation Ending',
+                        'date' => $formattedProbationDate
                     ];
                 }
             }

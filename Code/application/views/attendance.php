@@ -13,6 +13,9 @@
     z-index: 1000; /* Adjust as needed */
 }
 
+#attendance_list tbody td{
+    padding: 1px 0px;
+}
 </style>
 </head>
 <body>
@@ -53,7 +56,7 @@
                                 </div>
                                 <div class="col-lg-3 mb-3">
                                     <select class="form-select" id="shift_id">
-                                        <option value=""><?=$this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts'?></option>
+                                        <option value=""><?=$this->lang->line('shift') ? $this->lang->line('shift') : 'Shift'?></option>
                                         <?php foreach ($shifts as $shift): ?>
                                             <option value="<?=$shift["id"]?>"><?=$shift["name"]?></option>
                                         <?php endforeach?>
@@ -61,7 +64,7 @@
                                 </div>
                                 <div class="col-lg-3 mb-3">
                                     <select class="form-select" id="department_id">
-                                        <option value=""><?=$this->lang->line('departments') ? $this->lang->line('departments') : 'Departments'?></option>
+                                        <option value=""><?=$this->lang->line('department') ? $this->lang->line('department') : 'Department'?></option>
                                         <?php foreach ($departments as $department): ?>
                                             <option value="<?=$department["id"]?>"><?=$department["department_name"]?></option>
                                         <?php endforeach?>
@@ -173,7 +176,7 @@ function showTable(data) {
     dataArray.forEach(([month, value]) => {
         theadRow += '<td class="text-center" style="background=#FAFAFA; font-weight:600; border:2px solid #FAFAFA;" colspan="'+value+'">'+month+'</td>';
     });
-    theadRow += '</tr><tr><th style="font-size:12px;">ID</th><th style="font-size:12px;">Employee</th>';
+    theadRow += '</tr><tr><th style="font-size:12px;">ID</th><th style="font-size:12px;  width:20px;">Employee</th>';
 
     uniqueDates.forEach(date => {
         const formattedDate = new Date(date);

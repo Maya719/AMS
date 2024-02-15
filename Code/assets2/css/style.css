@@ -35642,8 +35642,8 @@ table.dataTable tfoot th {
 }
 
 .dataTables_wrapper .dataTables_paginate span .paginate_button {
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   padding: 0;
   margin-left: 0px;
   margin: 0 2px;
@@ -35665,14 +35665,14 @@ table.dataTable tfoot th {
 
 .dataTables_wrapper .dataTables_paginate span .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate span .paginate_button:hover {
-  color: var(--primary) !important;
-  background: #FFFFFF;
+  background: var(--primary) !important;
+  color: #FFFFFF;
 }
 
 .dataTables_wrapper .dataTables_paginate span .paginate_button.current:hover,
 .dataTables_wrapper .dataTables_paginate span .paginate_button:hover:hover {
-  color: var(--primary) !important;
-  background: #FFFFFF !important;
+  background: var(--primary) !important;
+  color: #FFFFFF;
 }
 
 .dataTables_wrapper input[type="search"],
