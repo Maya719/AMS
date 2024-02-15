@@ -4,6 +4,9 @@
     font-weight: bold;
     font-size: 12px;
   }
+  #attendance_list tbody td{
+    padding: 5px 0px;
+}
 </style>
 </head>
 
@@ -98,7 +101,7 @@
                               }
                               ?>
                               <div class="progress default-progress mt-2">
-                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perStaff ?>; height:8px;" role="progressbar">
+                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perStaff ?>; height:5px;" role="progressbar">
                                   <span class="sr-only"><?= $perStaff ?> Complete</span>
                                 </div>
                               </div>
@@ -128,7 +131,7 @@
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
-                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perLeave ?>; height:8px;" role="progressbar">
+                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perLeave ?>; height:5px;" role="progressbar">
                                   <span class="sr-only"><?= $perLeave ?> Complete</span>
                                 </div>
 
@@ -158,7 +161,7 @@
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
-                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:8px;" role="progressbar">
+                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:5px;" role="progressbar">
                                   <span class="sr-only"><?= $perBio ?> Complete</span>
                                 </div>
                               </div>
@@ -203,12 +206,11 @@
                       <?php
                       if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
                       ?>
-                        <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height630 mb-0">
+                        <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height500 mb-0">
                         <?php
                       } else {
                         ?>
                           <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height400 mb-0">
-
                           <?php
                         } ?>
                           <ul class="timeline ">
@@ -232,10 +234,9 @@
                                         </ul>
                                       </div>
                                     <?php endif ?>
-
                                   </div>
                                   <div class="media-body ms-2">
-                                    <h5 class="mb-1"><?= $event["user"] ?></h5>
+                                    <h6 class="mb-1"><?= $event["user"] ?></h6>
                                     <small class="d-block"><?= $event["event"] . ' ' . $event["date"] ?></small>
                                   </div>
                                 </div>
@@ -259,7 +260,7 @@
                             <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
-                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:8px;" role="progressbar">
+                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:5px;" role="progressbar">
                               <span class="sr-only"><?= $perBio ?> Complete</span>
                             </div>
                           </div>
@@ -281,7 +282,7 @@
                             <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
-                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:8px;" role="progressbar">
+                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:5px;" role="progressbar">
                               <span class="sr-only"><?= $perBio ?> Complete</span>
                             </div>
                           </div>
@@ -544,8 +545,8 @@
             },
             "info": false,
             "dom": '<"top"i>rt<"bottom"lp><"clear">',
-            "lengthMenu": [7, 14],
-            "pageLength": 7
+            "lengthMenu": [10, 20],
+            "pageLength": 10
           });
         }
 

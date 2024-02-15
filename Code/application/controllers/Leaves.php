@@ -84,7 +84,7 @@ class Leaves extends CI_Controller
 				if ($this->input->post('status') == 1) {
 					$this->db->where('id',  $this->input->post('update_id'));
 					$query = $this->db->get('leaves');
-					$leave = $query->row(); 
+					$leave = $query->row();
 					$step = $leave->step;
 					if ($step - 1 == 0) {
 						$data['status'] = '1';
@@ -96,6 +96,18 @@ class Leaves extends CI_Controller
 				} elseif ($this->input->post('status') == 2) {
 					$data['step'] = 0;
 					$data['status'] = '2';
+				} elseif ($this->input->post('status') == 0) {
+					$this->db->where('id',  $this->input->post('update_id'));
+					$query = $this->db->get('leaves');
+					$leave = $query->row();
+					$step = $leave->step;
+					$status = $leave->status;
+					if ($status != $this->input->post('status')) {
+						$data['status'] = '0';
+						$data['step'] = $step + 1;
+					}else{
+						$data['status'] = '0';
+					}
 				}
 
 				// Get shift details based on shift_id
@@ -612,8 +624,7 @@ class Leaves extends CI_Controller
 				$heiQuery = $this->db->get('leave_hierarchy');
 				$heiResult = $heiQuery->row();
 				$data['step'] = $heiResult->step_no;
-				if($this->db->insert('leaves', $data))
-				{
+				if ($this->db->insert('leaves', $data)) {
 					$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;

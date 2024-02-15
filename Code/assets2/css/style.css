@@ -33505,7 +33505,7 @@ code {
 }
 
 .progress {
-  height: 8px;
+  height: 5px;
   background-color: #f6f6f6;
   overflow: hidden;
 }

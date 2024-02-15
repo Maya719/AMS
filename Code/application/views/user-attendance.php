@@ -438,7 +438,7 @@
 
       var currentTime = new Date().toLocaleString();
       htmlContent += '<h3><?= $name ?> Attendance Report</h3>';
-      htmlContent += '<table style="border:1px solid #000000"><tr><th>Date</th><th>Check-in</th></tr>';
+      htmlContent += '<table style="border:1px solid #000000"><tr><th>Date</th><th>Fingers</th></tr>';
 
       var sortedDates = Object.keys(data).sort();
 

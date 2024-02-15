@@ -114,7 +114,7 @@ class Leaves_model extends CI_Model
                     $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
                 }
             } elseif ($leave['status'] == 1) {
-                $leave['btn'] = false;
+                $leave['btn'] = true;
                 $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved') . '</span>';
             } else {
                 $leave['btn'] = false;
