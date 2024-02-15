@@ -162,32 +162,34 @@
   </div>
   <?php $this->load->view('includes/scripts'); ?>
   <script>
-  $(document).on('click', '.btn-edit-user', function(e) {
-    var form = $('#form-part')[0]; 
-    var formData = new FormData(form); 
+    $(document).on('click', '.btn-edit-user', function(e) {
+      var form = $('#form-part')[0];
+      var formData = new FormData(form);
 
-    // Append additional data if needed
-    formData.append('custom_data', 'value');
+      // Append additional data if needed
+      formData.append('custom_data', 'value');
 
-    console.log(formData);
+      console.log(formData);
+      $('.btn-edit-user').html(`<div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div> Submit`)
+      $.ajax({
+        type: 'POST',
+        url: form.action,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function(result) {
+          if (result['error'] == false) {
+            location.reload();
+          } else {}
+        }
+      });
 
-    $.ajax({
-      type: 'POST',
-      url: form.action,
-      data: formData,
-      processData: false, 
-      contentType: false, 
-      dataType: "json",
-      success: function(result) {
-        if (result['error'] == false) {
-          location.reload();
-        } else {}
-      }
+      e.preventDefault();
     });
-
-    e.preventDefault();
-  });
-</script>
+  </script>
 
 </body>
 
