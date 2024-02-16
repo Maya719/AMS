@@ -80,51 +80,82 @@ class Attendance_model extends CI_Model
 
         $formattedData = [];
 
-        foreach ($attendance as $entry) {
-            $userId = $entry['user_id'];
-            $user = $entry['user'];
-            $finger = $entry['finger'];
-            $createdDate = date("Y-m-d", strtotime($finger));
-            $createdTime = date("H:i:s", strtotime($finger));
+        if (!empty($attendance)) {
+            foreach ($attendance as $entry) {
+                $userId = $entry['user_id'];
+                $user = $entry['user'];
+                $finger = $entry['finger'];
+                $createdDate = date("Y-m-d", strtotime($finger));
+                $createdTime = date("H:i:s", strtotime($finger));
 
-            if (!isset($formattedData[$userId])) {
-                $formattedData[$userId] = [
-                    'user_id' => $userId,
-                    'user' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>',
-                    'name' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user . '</a>',
-                    'dates' => [],
-                ];
+                if (!isset($formattedData[$userId])) {
+                    $formattedData[$userId] = [
+                        'user_id' => $userId,
+                        'user' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>',
+                        'name' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user . '</a>',
+                        'dates' => [],
+                    ];
+                }
+
+                if (!isset($formattedData[$userId]['dates'][$createdDate])) {
+                    $formattedData[$userId]['dates'][$createdDate] = [];
+                }
+                $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
             }
 
-            if (!isset($formattedData[$userId]['dates'][$createdDate])) {
-                $formattedData[$userId]['dates'][$createdDate] = [];
-            }
-            $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
-        }
-
-        foreach ($dateArray as $date) {
-            foreach ($formattedData as &$userData) {
-                if (!isset($userData['dates'][$date])) {
-                    $userData['dates'][$date] = [];
+            foreach ($dateArray as $date) {
+                foreach ($formattedData as &$userData) {
+                    if (!isset($userData['dates'][$date])) {
+                        $userData['dates'][$date] = [];
+                    }
                 }
             }
-        }
 
-        foreach ($formattedData as &$userData) {
-            foreach ($dateArray as $date) {
-                if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
-                    $user_id = $userData['user_id'];
-                    // check leave
-                    if ($this->checkLeave($user_id, $date)) {
-                        $userData['dates'][$date][] = '<span class="text-success">L</span>';
-                    } elseif ($this->holidayCheck($user_id, $date)) {
-                        $userData['dates'][$date][] = '<span class="text-primary">H</span>';
+            foreach ($formattedData as &$userData) {
+                foreach ($dateArray as $date) {
+                    if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
+                        $user_id = $userData['user_id'];
+                        // check leave
+                        if ($this->checkLeave($user_id, $date)) {
+                            $userData['dates'][$date][] = '<span class="text-success">L</span>';
+                        } elseif ($this->holidayCheck($user_id, $date)) {
+                            $userData['dates'][$date][] = '<span class="text-primary">H</span>';
+                        } else {
+                            $userData['dates'][$date][] = '<span class="text-danger">A</span>';
+                        }
+                    }
+                }
+            }
+        } else {
+            $system_users = $this->ion_auth->members()->result();
+            foreach ($system_users as $user) {
+                if ($user->active == 1 && $user->finger_config == 1) {
+                    if ($this->checkLeave($user->id, $from)) {
+                        $formattedData[$user->id] = [
+                            'user_id' => $user->id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'dates' => ["$from" => ['<span class="text-success">L</span>']],
+                        ];
+                    } elseif ($this->holidayCheck($user->id, $from)) {
+                        $formattedData[$user->id] = [
+                            'user_id' => $user->id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'dates' => ["$from" => ['<span class="text-primary">H</span>']],
+                        ];
                     } else {
-                        $userData['dates'][$date][] = '<span class="text-danger">A</span>';
+                        $formattedData[$user->id] = [
+                            'user_id' => $user->id,
+                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->id . '</a>',
+                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'dates' => ["$from" => ['<span class="text-danger">A</span>']],
+                        ];
                     }
                 }
             }
         }
+
 
         $groupedData = array();
 
@@ -532,9 +563,8 @@ class Attendance_model extends CI_Model
             if ($this->checkHalfDayLeave($date, $employee_id)) {
                 $halfDayLeave = true;
                 $lateMinutes = 0;
-
             }
-            if (($halfDayStartDateTime >= $checkInDateTime && $halfDayEndDateTime >= $checkOutDateTime) || ($halfDayStartDateTime <= $checkInDateTime && $halfDayEndDateTime <= $checkOutDateTime) ) {
+            if (($halfDayStartDateTime >= $checkInDateTime && $halfDayEndDateTime >= $checkOutDateTime) || ($halfDayStartDateTime <= $checkInDateTime && $halfDayEndDateTime <= $checkOutDateTime)) {
                 $halfDay = true;
                 $lateMinutes = 0;
             } else {
