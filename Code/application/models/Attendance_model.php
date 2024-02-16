@@ -69,7 +69,7 @@ class Attendance_model extends CI_Model
         $too = $get["too"];
         $fromDate = new DateTime($from);
         $toDate = new DateTime($too);
-
+        $system_users = $this->ion_auth->members()->result();
         $dateArray = array();
         $interval = new DateInterval('P1D');
         $datePeriod = new DatePeriod($fromDate, $interval, $toDate->modify('+1 day'));
@@ -80,95 +80,51 @@ class Attendance_model extends CI_Model
 
         $formattedData = [];
 
-        if (!empty($attendance)) {
-            foreach ($attendance as $entry) {
-                $userId = $entry['user_id'];
-                $user = $entry['user'];
-                $finger = $entry['finger'];
-                $createdDate = date("Y-m-d", strtotime($finger));
-                $createdTime = date("H:i:s", strtotime($finger));
-
-                if (!isset($formattedData[$userId])) {
-                    $formattedData[$userId] = [
-                        'user_id' => $userId,
-                        'user' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>',
-                        'name' => '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user . '</a>',
-                        'dates' => [],
-                    ];
-                }
-
-                if (!isset($formattedData[$userId]['dates'][$createdDate])) {
-                    $formattedData[$userId]['dates'][$createdDate] = [];
-                }
-                $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
+        foreach ($system_users as $user) {
+            if ($user->active == 1 && $user->finger_config == 1) {
+                $userId = $user->employee_id;
+                $userLink = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>';
+                $userName = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user->first_name . ' ' . $user->last_name . '</a>';
+                $formattedData[$userId] = [
+                    'user_id' => $userId,
+                    'user' => $userLink,
+                    'name' => $userName,
+                    'dates' => [],
+                ];
             }
+        }
 
+        foreach ($attendance as $entry) {
+            $userId = $entry['user_id'];
+            $createdDate = date("Y-m-d", strtotime($entry['finger']));
+            $createdTime = date("H:i", strtotime($entry['finger']));
+            $formattedData[$userId]['dates'][$createdDate][] = $createdTime;
+        }
+
+        foreach ($formattedData as &$userData) {
             foreach ($dateArray as $date) {
-                foreach ($formattedData as &$userData) {
-                    if (!isset($userData['dates'][$date])) {
-                        $userData['dates'][$date] = [];
-                    }
-                }
-            }
-
-            foreach ($formattedData as &$userData) {
-                foreach ($dateArray as $date) {
-                    if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
-                        $user_id = $userData['user_id'];
-                        // check leave
-                        if ($this->checkLeave($user_id, $date)) {
-                            $userData['dates'][$date][] = '<span class="text-success">L</span>';
-                        } elseif ($this->holidayCheck($user_id, $date)) {
-                            $userData['dates'][$date][] = '<span class="text-primary">H</span>';
-                        } else {
-                            $userData['dates'][$date][] = '<span class="text-danger">A</span>';
-                        }
-                    }
-                }
-            }
-        } else {
-            $system_users = $this->ion_auth->members()->result();
-            foreach ($system_users as $user) {
-                if ($user->active == 1 && $user->finger_config == 1) {
-                    if ($this->checkLeave($user->id, $from)) {
-                        $formattedData[$user->id] = [
-                            'user_id' => $user->id,
-                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->id . '</a>',
-                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
-                            'dates' => ["$from" => ['<span class="text-success">L</span>']],
-                        ];
-                    } elseif ($this->holidayCheck($user->id, $from)) {
-                        $formattedData[$user->id] = [
-                            'user_id' => $user->id,
-                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->id . '</a>',
-                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
-                            'dates' => ["$from" => ['<span class="text-primary">H</span>']],
-                        ];
+                if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
+                    $user_id = $userData['user_id'];
+                    if ($this->checkLeave($user_id, $date)) {
+                        $userData['dates'][$date][] = '<span class="text-success">L</span>';
+                    } elseif ($this->holidayCheck($user_id, $date)) {
+                        $userData['dates'][$date][] = '<span class="text-primary">H</span>';
                     } else {
-                        $formattedData[$user->id] = [
-                            'user_id' => $user->id,
-                            'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->id . '</a>',
-                            'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
-                            'dates' => ["$from" => ['<span class="text-danger">A</span>']],
-                        ];
+                        $userData['dates'][$date][] = '<span class="text-danger">A</span>';
                     }
                 }
             }
         }
 
-
-        $groupedData = array();
+        $groupedData = [];
 
         foreach ($dateArray as $date) {
             $monthYear = date('M Y', strtotime($date));
-
             if (!isset($groupedData[$monthYear])) {
-                $groupedData[$monthYear] = array();
+                $groupedData[$monthYear] = [];
             }
-
             $groupedData[$monthYear][] = $date;
         }
-
 
         $monthCounts = array_map('count', $groupedData);
 
@@ -178,6 +134,7 @@ class Attendance_model extends CI_Model
         ];
         return $output;
     }
+
 
     public function holidayCheck($user_id, $date)
     {
