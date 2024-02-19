@@ -155,11 +155,16 @@
                     from: from,
                     too: too
                 },
+                eforeSend: function() {
+                    showLoader();
+                },
                 success: function(response) {
                     var tableData = JSON.parse(response);
                     showTable(tableData);
                 },
-                complete: function() {},
+                complete: function() {
+                    hideLoader();
+                },
                 error: function(error) {
                     console.error(error);
                 }
@@ -372,9 +377,11 @@
                     var tableData = JSON.parse(response);
                     $('#shift_id').empty();
                     $('#department_id').empty();
+                    $('#shift_id').append('<option value="" selected>Shift</option>');
                     tableData.shift.forEach(function(shift) {
                         $('#shift_id').append('<option value="' + shift.id + '">' + shift.name + '</option>');
                     });
+                    $('#department_id').append('<option value="" selected>Department</option>');
                     tableData.department.forEach(function(department) {
                         $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
                     });
