@@ -31,6 +31,12 @@
             <div></div>
         </div>
     </div>
+    <div id="loader">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
     <!--*******************
         Preloader end
     ********************-->
@@ -155,7 +161,7 @@
                     from: from,
                     too: too
                 },
-                eforeSend: function() {
+                beforeSend: function() {
                     showLoader();
                 },
                 success: function(response) {
