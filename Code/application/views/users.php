@@ -15,6 +15,12 @@
       <div></div>
     </div>
   </div>
+  <div id="loader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <!--*******************
         Preloader end
     ********************-->

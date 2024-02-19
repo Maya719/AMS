@@ -29,6 +29,12 @@
       <div></div>
     </div>
   </div>
+  <div id="loader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <!--*******************
         Preloader end
     ********************-->
@@ -131,6 +137,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
   <?php $this->load->view('includes/scripts'); ?>
+  <script src="<?= base_url('assets2/js/loader.js') ?>"></script>
   <script>
     $(document).ready(function() {
       checkCustomSelect();
@@ -258,6 +265,7 @@
       return date.toLocaleDateString('en-US', options);
     }
 
+
     function ajaxCall(employee_id, from, too) {
       $.ajax({
         url: '<?= base_url() ?>attendance/get_single_user_attendance',
@@ -267,12 +275,17 @@
           from: from,
           too: too
         },
+        beforeSend: function() {
+          showLoader();
+        },
         success: function(response) {
           var tableData = JSON.parse(response);
           console.log(tableData);
           showTable(tableData);
         },
-        complete: function() {},
+        complete: function() {
+          hideLoader();
+        },
         error: function(error) {
           console.error(error);
         }

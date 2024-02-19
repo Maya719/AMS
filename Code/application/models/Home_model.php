@@ -436,6 +436,7 @@ class Home_model extends CI_Model
         $this->db->where('starting_date <=', $date);
         $this->db->where('ending_date >=', $date);
         $this->db->where('paid', 0);
+        $this->db->where('status', 1);
         $this->db->where('leave_duration NOT LIKE', '%Half%');
         $this->db->where('leave_duration NOT LIKE', '%Short%');
         $query = $this->db->get();

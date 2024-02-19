@@ -26,6 +26,12 @@
       <div></div>
     </div>
   </div>
+  <div id="loader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <!--*******************
         Preloader end
     ********************-->
@@ -147,11 +153,15 @@ function ajaxCall(employee_id,shift_id,department_id,from,too){
             from: from,
             too: too
         },
+        beforeSend: function() {
+          showLoader();
+        },
         success: function(response) {
             var tableData = JSON.parse(response);
             showTable(tableData);
         },
         complete: function () {
+            hideLoader();
         },
         error: function(error) {
             console.error(error);

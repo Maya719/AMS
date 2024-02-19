@@ -4,9 +4,10 @@
     font-weight: bold;
     font-size: 12px;
   }
-  #attendance_list tbody td{
+
+  #attendance_list tbody td {
     padding: 5px 0px;
-}
+  }
 </style>
 </head>
 
@@ -16,6 +17,12 @@
         Preloader start
     ********************-->
   <div id="preloader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <div id="loader">
     <div class="lds-ripple">
       <div></div>
       <div></div>
@@ -127,7 +134,7 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h4 class="text-primary">Leaves</h4>
-                                <h4 class="count  ms-auto mb-0"><a class="text-primary" href="<?=base_url('leaves')?>"><?= $totalleave ?></a></h4>
+                                <h4 class="count  ms-auto mb-0"><a class="text-primary" href="<?= base_url('leaves') ?>"><?= $totalleave ?></a></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
@@ -137,9 +144,9 @@
 
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?=base_url('leaves')?>"><?= $report["leave_approved"] ?></a></strong></p>
-                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning " href="<?=base_url('leaves')?>"><?= $report["leave_pending"] ?></a></strong></p>
-                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger " href="<?=base_url('leaves')?>"><?= $report["leave_rejected"] ?></a></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?= base_url('leaves') ?>"><?= $report["leave_approved"] ?></a></strong></p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning " href="<?= base_url('leaves') ?>"><?= $report["leave_pending"] ?></a></strong></p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger " href="<?= base_url('leaves') ?>"><?= $report["leave_rejected"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -157,7 +164,7 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h4 class="text-primary">Biometrics</h4>
-                                <h4 class="count ms-auto mb-0"><a class="text-primary" href="<?=base_url('biometric_missing')?>"><?= $totalBio ?></a></h4>
+                                <h4 class="count ms-auto mb-0"><a class="text-primary" href="<?= base_url('biometric_missing') ?>"><?= $totalBio ?></a></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
@@ -166,9 +173,9 @@
                                 </div>
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?=base_url('biometric_missing')?>"><?= $report["bio_approved"] ?></a></strong></p>
-                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning" href="<?=base_url('biometric_missing')?>"><?= $report["bio_pending"] ?></a></strong></p>
-                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger" href="<?=base_url('biometric_missing')?>"><?= $report["bio_rejected"] ?></a></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?= base_url('biometric_missing') ?>"><?= $report["bio_approved"] ?></a></strong></p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning" href="<?= base_url('biometric_missing') ?>"><?= $report["bio_pending"] ?></a></strong></p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger" href="<?= base_url('biometric_missing') ?>"><?= $report["bio_rejected"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -185,7 +192,7 @@
                     <div class="card-header">
                       <h4 class="text-primary">Attendance</h4>
                     </div>
-                    <div class="card-body mb-5 px-4">
+                    <div class="card-body mb-5">
                       <div class="table-responsive">
                         <table id="attendance_list" class="table table-sm mb-0">
                           <thead>
@@ -338,88 +345,88 @@
         pieChart();
       });
       var areaChart1 = function() {
-          if (jQuery('#areaChart_1').length > 0) {
-            const areaChart_1 = document.getElementById("areaChart_1").getContext('2d');
-            new Chart(areaChart_1, {
-              type: 'line',
-              data: {
-                defaultFontFamily: 'Poppins',
-                labels: ["Todo", "In Progress", "In Review", "Completed"],
-                datasets: [{
-                  label: "Task Statistic",
-                  data: [11, 7, 0, 861],
-                  borderColor: 'rgb(100,201,188)',
-                  borderWidth: "1",
-                  backgroundColor: 'rgb(164,227,220)',
-                  fill: true,
-                  pointBackgroundColor: 'rgb(100,201,188)',
-                  tension: 0.5,
-                }]
+        if (jQuery('#areaChart_1').length > 0) {
+          const areaChart_1 = document.getElementById("areaChart_1").getContext('2d');
+          new Chart(areaChart_1, {
+            type: 'line',
+            data: {
+              defaultFontFamily: 'Poppins',
+              labels: ["Todo", "In Progress", "In Review", "Completed"],
+              datasets: [{
+                label: "Task Statistic",
+                data: [11, 7, 0, 861],
+                borderColor: 'rgb(100,201,188)',
+                borderWidth: "1",
+                backgroundColor: 'rgb(164,227,220)',
+                fill: true,
+                pointBackgroundColor: 'rgb(100,201,188)',
+                tension: 0.5,
+              }]
+            },
+            options: {
+              plugins: {
+                legend: false,
               },
-              options: {
-                plugins: {
-                  legend: false,
+              scales: {
+                y: {
+                  min: 0,
+                  ticks: {
+                    beginAtZero: true,
+                    stepSize: 20,
+                    padding: 10
+                  }
                 },
-                scales: {
-                  y: {
-                    min: 0,
-                    ticks: {
-                      beginAtZero: true,
-                      stepSize: 20,
-                      padding: 10
-                    }
-                  },
-                  x: {
-                    ticks: {
-                      padding: 5
-                    }
+                x: {
+                  ticks: {
+                    padding: 5
                   }
                 }
               }
-            });
-          }
-        };
-        var pieChart = function() {
-          if (jQuery('#pie_chart').length > 0) {
-            const pie_chart = document.getElementById("pie_chart").getContext('2d');
-            pie_chart.height = 100;
-            new Chart(pie_chart, {
-              type: 'pie',
-              data: {
-                defaultFontFamily: 'Poppins',
-                datasets: [{
-                  data: [31, 4, 1],
-                  borderWidth: 0,
-                  backgroundColor: [
-                    "rgb(164,227,220)",
-                    "rgb(228,52,52)",
-                    "rgba(46,46,46, 0.8)"
-                  ],
-                  hoverBackgroundColor: [
-                    "rgb(164,227,220)",
-                    "rgb(228,52,52)",
-                    "rgba(46,46,46, 0.8)"
-                  ]
-
-                }],
-                labels: [
-                  "On Going",
-                  "Not Started",
-                  "Completed"
-                ]
-              },
-              options: {
-                plugins: {
-                  legend: false,
-                },
-                responsive: true,
-                aspectRatio: 5,
-
-                maintainAspectRatio: false
-              }
-            });
-          }
+            }
+          });
         }
+      };
+      var pieChart = function() {
+        if (jQuery('#pie_chart').length > 0) {
+          const pie_chart = document.getElementById("pie_chart").getContext('2d');
+          pie_chart.height = 100;
+          new Chart(pie_chart, {
+            type: 'pie',
+            data: {
+              defaultFontFamily: 'Poppins',
+              datasets: [{
+                data: [31, 4, 1],
+                borderWidth: 0,
+                backgroundColor: [
+                  "rgb(164,227,220)",
+                  "rgb(228,52,52)",
+                  "rgba(46,46,46, 0.8)"
+                ],
+                hoverBackgroundColor: [
+                  "rgb(164,227,220)",
+                  "rgb(228,52,52)",
+                  "rgba(46,46,46, 0.8)"
+                ]
+
+              }],
+              labels: [
+                "On Going",
+                "Not Started",
+                "Completed"
+              ]
+            },
+            options: {
+              plugins: {
+                legend: false,
+              },
+              responsive: true,
+              aspectRatio: 5,
+
+              maintainAspectRatio: false
+            }
+          });
+        }
+      }
     </script>
     <script>
       $(document).ready(function() {
@@ -469,7 +476,7 @@
           callAjax(date, all, present, absent, leave);
         }
 
-        
+
         function callAjax(date, all, present, absent, leave) {
           console.log(date, all, present, absent, leave);
           $.ajax({
@@ -481,6 +488,9 @@
               present: present,
               absent: absent,
               leave: leave,
+            },
+            beforeSend: function() {
+              showLoader();
             },
             success: function(response) {
               var tableData = JSON.parse(response);
@@ -494,7 +504,7 @@
 
             },
             complete: function() {
-
+              hideLoader();
             },
             error: function(error) {
               console.error(error);
@@ -511,14 +521,17 @@
           var thead = table.find('thead');
           var uniqueDates = getUniqueDates(data);
           var theadRow = '<tr>';
+          theadRow += '<th>#</th>';
           theadRow += '<th>Employee ID</th>';
           theadRow += '<th>Name</th>';
-          theadRow += '<th>Attendance</th>';
+          theadRow += '<th>In/Out</th>';
           theadRow += '</tr>';
           thead.html(theadRow);
           var tbody = table.find('tbody');
+          var count = 1;
           data.forEach(user => {
             var userRow = '<tr>';
+            userRow += '<td style="font-size:12px;">' + count + '</td>';
             userRow += '<td style="font-size:12px;">' + user.user + '</td>';
             userRow += '<td style="font-size:12px;">' + user.name + '</td>';
 
@@ -532,6 +545,7 @@
 
             userRow += '</tr>';
             tbody.append(userRow);
+            count++;
           });
 
           table.DataTable({
@@ -583,8 +597,6 @@
         singleDatePicker: true,
         maxDate: moment()
       });
-
-      
     </script>
 </body>
 

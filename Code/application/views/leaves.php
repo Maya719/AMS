@@ -15,6 +15,12 @@
       <div></div>
     </div>
   </div>
+  <div id="loader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <!--*******************
         Preloader end
     ********************-->
@@ -443,12 +449,17 @@
             from: from,
             too: too
           },
+          beforeSend: function() {
+            showLoader();
+          },
           success: function(response) {
             var tableData = JSON.parse(response);
             console.log(tableData);
             showTable(tableData);
           },
-          complete: function() {},
+          complete: function() {
+            hideLoader();
+          },
           error: function(error) {
             console.error(error);
           }
@@ -475,7 +486,6 @@
         theadRow += '<th style="font-size: 15px;">Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
-
         // Add table body
         var tbody = table.find('tbody');
 

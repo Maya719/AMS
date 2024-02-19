@@ -199,3 +199,17 @@
 
   get_live_notifications();
 </script>
+<script>
+  function showLoader() {
+        $("#main-wrapper").removeClass("show");
+        $("#loader").css("display", "flex");
+    }
+
+    // Function to hide the loader
+    function hideLoader() {
+        setTimeout(function () {
+            $("#main-wrapper").addClass("show");
+            $("#loader").css("display", "none");
+        }, 800);
+    }
+</script>
