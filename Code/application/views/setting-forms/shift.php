@@ -2,11 +2,11 @@
     <div class="col-xl-2 col-sm-3 mt-2">
         <a href="#" data-bs-toggle="modal" data-bs-target="#add-shift-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
-    <div class="card mt-3">
-        <div class="card-body">
+    <div class="card mt-3 p-0">
+        <div class="card-body p-1">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table id="leave_list" class="table table-sm mb-0">
+                    <table id="table" class="table table-sm mb-0">
                         <thead>
                             <tr>
                                 <th data-field="sr_no" data-sortable="false" class="left-pad"><?= $this->lang->line('sr_no') ? $this->lang->line('sr_no') : '#' ?></th>

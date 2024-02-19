@@ -2,22 +2,26 @@
     <div class="col-xl-2 col-sm-3 mt-2">
         <a href="#" data-bs-toggle="modal" data-bs-target="#add-role-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
-    <div class="card mt-3">
-        <div class="card-body">
+    <div class="card mt-3 p-0">
+        <div class="card-body p-1">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table id="leave_list" class="table table-sm mb-0">
+                    <table id="table" class="table table-sm mb-0">
                         <thead>
                             <tr>
+                                <th data-field="sr" data-sortable="false" class="left-pad"><?= $this->lang->line('sr') ? $this->lang->line('sr') : '#' ?></th>
                                 <th data-field="description" data-sortable="false" class="left-pad"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></th>
                                 <th data-field="descriptive_name" data-sortable="false" class="left-pad"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?></th>
                                 <th data-field="action" data-sortable="false" class="left-pad"><?= $this->lang->line('action') ? $this->lang->line('action') : 'Action' ?></th>
                             </tr>
                         </thead>
                         <tbody>
-
+                            <?php
+                            $count = 1;
+                            ?>
                             <?php foreach ($groups as $group) : ?>
                                 <tr>
+                                    <td><?= $count ?></td>
                                     <td><?= $group->name ?></td>
                                     <td><?= $group->description ?></td>
                                     <td>
@@ -27,6 +31,9 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <?php
+                                $count++
+                                ?>
                             <?php endforeach ?>
                         </tbody>
                     </table>

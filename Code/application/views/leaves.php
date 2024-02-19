@@ -88,7 +88,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="card">
-              <div class="card-body">
+              <div class="card-body p-1">
                 <div class="table-responsive">
                   <table id="leave_list" class="table table-sm mb-0">
                     <thead>
@@ -474,16 +474,16 @@
         emptyDataTable(table);
         var thead = table.find('thead');
         var theadRow = '<tr>';
-        theadRow += '<th style="font-size: 15px;">ID</th>';
-        theadRow += '<th style="font-size: 15px;">Employee Name</th>';
-        theadRow += '<th style="font-size: 15px;">Type</th>';
-        theadRow += '<th style="font-size: 15px;">Reason</th>';
-        theadRow += '<th style="font-size: 15px;">Duration</th>';
-        theadRow += '<th style="font-size: 15px;">Starting Time</th>';
-        theadRow += '<th style="font-size: 15px;">Ending Time</th>';
-        theadRow += '<th style="font-size: 15px;">Paid</th>';
-        theadRow += '<th style="font-size: 15px;">Status</th>';
-        theadRow += '<th style="font-size: 15px;">Action</th>';
+        theadRow += '<th>ID</th>';
+        theadRow += '<th>Employee Name</th>';
+        theadRow += '<th>Type</th>';
+        theadRow += '<th>Reason</th>';
+        theadRow += '<th>Duration</th>';
+        theadRow += '<th>Starting Time</th>';
+        theadRow += '<th>Ending Time</th>';
+        theadRow += '<th>Paid</th>';
+        theadRow += '<th>Status</th>';
+        theadRow += '<th>Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
         // Add table body

@@ -3,9 +3,6 @@
     <div class="card">
       <form action="<?= base_url('settings/save-permissions-setting') ?>" method="POST" id="setting-form">
         <div class="card-body">
-          <div class="alert alert-danger col-md-12 center">
-            <b><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?></b> <?= $this->lang->line('admin_always_have_all_the_permission_here_you_can_set_permissions_for_other_roles') ? $this->lang->line('admin_always_have_all_the_permission_here_you_can_set_permissions_for_other_roles') : "Admin always have all the permission. Here you can set permissions for other roles." ?>
-          </div>
           <div class="accordion accordion-solid-bg" id="accordion-eight">
             <?php if ($this->ion_auth->is_admin()) { ?>
               <div class="accordion-item">

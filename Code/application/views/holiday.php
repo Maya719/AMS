@@ -36,17 +36,17 @@
         <div class="row mt-3">
           <div class="col-lg-12">
             <div class="card">
-              <div class="card-body">
+              <div class="card-body p-1">
                 <div class="table-responsive">
                   <table id="holiday_list" class="table table-sm mb-0">
                     <thead>
                       <tr>
-                        <th style="font-size: 15px;">#</th>
-                        <th style="font-size: 15px;">Holiday Type</th>
-                        <th style="font-size: 15px;">Start Date</th>
-                        <th style="font-size: 15px;">End Date</th>
-                        <th style="font-size: 15px;">Remarks</th>
-                        <th style="font-size: 15px;">Action</th>
+                        <th>#</th>
+                        <th>Holiday Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody id="customers">

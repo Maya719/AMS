@@ -13,7 +13,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Social Login - ' . company_name();
-			$this->data['main_page'] = 'logins';
+			$this->data['main_page2'] = 'logins';
+			$this->data['main_page'] = 'Logins';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['google_client_id'] = get_google_client_id();
 			$this->data['google_client_secret'] = get_google_client_secret();
@@ -68,7 +69,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'SEO - ' . company_name();
-			$this->data['main_page'] = 'seo';
+			$this->data['main_page2'] = 'seo';
+			$this->data['main_page'] = 'SEO';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['meta_title'] = get_mata_data('meta_title');
 			$this->data['meta_description'] = get_mata_data('meta_description');
@@ -134,7 +136,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(1) && is_module_allowed('taxes')) {
 			$this->data['page_title'] = 'Taxes - ' . company_name();
-			$this->data['main_page'] = 'taxes';
+			$this->data['main_page2'] = 'taxes';
+			$this->data['main_page'] = 'Taxes';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('settings', $this->data);
 		} else {
@@ -246,7 +249,8 @@ class Settings extends CI_Controller
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('company_view'))) {
 			$this->data['page_title'] = 'Company Settings - ' . company_name();
 			$this->data['create'] = false;
-			$this->data['main_page'] = 'company';
+			$this->data['main_page2'] = 'company';
+			$this->data['main_page'] = 'Company';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['company_details'] = company_details();
 			$this->load->view('settings', $this->data);
@@ -308,7 +312,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() &&  ($this->ion_auth->in_group(1) || permissions('shift_view'))) {
 			$this->data['page_title'] = 'Shift Settings - ' . company_name();
-			$this->data['main_page'] = 'shift';
+			$this->data['main_page2'] = 'shift';
+			$this->data['main_page'] = 'Shift';
 			$this->data['create'] = true;
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['system_users'] = $this->ion_auth->members()->result();
@@ -335,7 +340,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('departments_view'))) {
 			$this->data['page_title'] = 'Department Settings - ' . company_name();
-			$this->data['main_page'] = 'departments';
+			$this->data['main_page2'] = 'departments';
+			$this->data['main_page'] = 'Departments';
 			$this->data['create'] = true;
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['system_users'] = $this->ion_auth->members()->result();
@@ -358,7 +364,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('device_view'))) {
 			$this->data['page_title'] = 'Device Settings - ' . company_name();
-			$this->data['main_page'] = 'device_config';
+			$this->data['main_page2'] = 'device_config';
+			$this->data['main_page'] = 'Device Configuration';
 			$this->data['create'] = true;
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['system_users'] = $this->ion_auth->members()->result();
@@ -375,7 +382,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('time_schedule_view'))) {
 			$this->data['page_title'] = 'Company Policies - ' . company_name();
-			$this->data['main_page'] = 'policies';
+			$this->data['main_page2'] = 'policies';
+			$this->data['main_page'] = 'Policies';
 			$query = $this->db->get('shift');
 			$this->data['shift_types'] = $query->result_array();
 			$type = 'grace_minutes_' . $this->session->userdata('saas_id');
@@ -540,7 +548,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || $this->ion_auth->in_group(3) || permissions('general_view'))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'general';
+			$this->data['main_page2'] = 'general';
+			$this->data['main_page'] = 'General';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['timezones'] = timezones();
 			$this->data['time_formats'] = time_formats();
@@ -595,7 +604,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'update';
+			$this->data['main_page2'] = 'update';
+			$this->data['main_page'] = 'Update';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('settings', $this->data);
 		} else {
@@ -607,7 +617,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'recaptcha';
+			$this->data['main_page2'] = 'recaptcha';
+			$this->data['main_page'] = 'reCaptcha';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 
 			$this->data['site_key'] = get_google_recaptcha_site_key();
@@ -663,7 +674,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && is_module_allowed('payment_gateway') && ($this->ion_auth->in_group(1) || $this->ion_auth->in_group(3))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'payment';
+			$this->data['main_page2'] = 'payment';
+			$this->data['main_page'] = 'Payment';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 
 			if ($this->ion_auth->in_group(3)) {
@@ -879,7 +891,8 @@ class Settings extends CI_Controller
 
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_module_allowed('user_permissions'))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'hierarchy';
+			$this->data['main_page2'] = 'hierarchy';
+			$this->data['main_page'] = 'Leave Hierarchy';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['permissions'] = permissions();
 			$this->data['clients_permissions'] = clients_permissions();
@@ -895,7 +908,7 @@ class Settings extends CI_Controller
 						$group_desc = $group_data->name . '_permissions_' . $this->session->userdata('saas_id');
 						$this->db->where('type', $group_desc);
 						$query3 = $this->db->get('settings');
-						$setting_data = $query3->row(); // Assuming you expect only one result
+						$setting_data = $query3->row(); 
 						$permissions = json_decode($setting_data->value);
 						$leave_status = $permissions->leaves_status;
 						if ($leave_status == 1) {
@@ -917,7 +930,7 @@ class Settings extends CI_Controller
 				if (isset($grouped_data[$step_no])) {
 					$grouped_data[$step_no][] = $group_id;
 				} else {
-					$grouped_data[$step_no] = [$group_id];
+					$grouped_data[$step_no] = $group_id;
 				}
 			}
 			$result = [];
@@ -936,7 +949,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin() && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'permissions';
+			$this->data['main_page2'] = 'permissions';
+			$this->data['main_page'] = 'Permissions';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['permissions'] = permissions();
 			$this->data['clients_permissions'] = clients_permissions();
@@ -950,7 +964,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Custom Code - ' . company_name();
-			$this->data['main_page'] = 'custom-code';
+			$this->data['main_page2'] = 'custom-code';
+			$this->data['main_page'] = 'Custom Code';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['header_code'] = get_header_code();
 			$this->data['footer_code'] = get_footer_code();
@@ -995,7 +1010,9 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'email-templates';
+			$this->data['main_page2'] = 'email-templates';
+			$this->data['main_page'] = 'Email Templates';
+
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 
 			$this->data['email_templates'] = $this->settings_model->get_email_templates();
@@ -1122,7 +1139,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'email';
+			$this->data['main_page2'] = 'email';
+			$this->data['main_page'] = 'Email Configuration';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 
 			$this->data['smtp_host'] = smtp_host();
@@ -1616,7 +1634,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin() && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'roles';
+			$this->data['main_page2'] = 'roles';
+			$this->data['main_page'] = 'Roles';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['create'] = true;
 			$this->data['system_users'] = $this->ion_auth->members()->result();
@@ -1639,7 +1658,8 @@ class Settings extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
-			$this->data['main_page'] = 'roles_permissions';
+			$this->data['main_page2'] = 'roles_permissions';
+			$this->data['main_page'] = 'Roles Permissions';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['permissions'] = permissions();
 			$this->data['roles'] = $this->settings_model->get_roles_permissions();
@@ -1864,7 +1884,8 @@ class Settings extends CI_Controller
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leave_type_view'))) {
 			$this->data['page_title'] = 'Leaves Settings - ' . company_name();
 			$this->data['create'] = true;
-			$this->data['main_page'] = 'leaves';
+			$this->data['main_page2'] = 'leaves';
+			$this->data['main_page'] = 'Leaves Types';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->db->where('saas_id', 8);
 			$query = $this->db->get('leaves_type');

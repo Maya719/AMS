@@ -6,7 +6,7 @@
   }
 
   #attendance_list tbody td {
-    padding: 5px 0px;
+    padding: 5px 10px;
   }
 </style>
 </head>
@@ -192,7 +192,7 @@
                     <div class="card-header">
                       <h4 class="text-primary">Attendance</h4>
                     </div>
-                    <div class="card-body mb-5">
+                    <div class="card-body px-1">
                       <div class="table-responsive">
                         <table id="attendance_list" class="table table-sm mb-0">
                           <thead>

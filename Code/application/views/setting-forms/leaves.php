@@ -4,9 +4,9 @@
     </div>
     <div class="col-lg-12 mt-3">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-1">
                 <div class="table-responsive">
-                    <table id="leave_list" class="table table-sm mb-0">
+                    <table id="table" class="table table-sm mb-0">
                         <thead>
                             <tr>
                                 <th>Name</th>

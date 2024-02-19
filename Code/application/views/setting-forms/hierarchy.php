@@ -1,71 +1,71 @@
+<!-- Nestable -->
+<?php
+$current_group_ids = [];
+foreach ($data as $key => $hie) {
+    $stepCounter = $key + 1;
+    $current_step_no = $hie["step_no"];
+    $current_group_ids[] = $hie["group_id"];
+}
+?>
 <div class="row">
-    <div class="card">
-        <div class="card-body">
-            <form action="<?= base_url('settings/save-hierarchy-setting') ?>" method="POST" id="setting-form2">
-                <div class="card-body">
-                    <div class="alert alert-danger col-md-12 center">
-                        <b><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?></b> <?= $this->lang->line('the_top_value_will_be_the_highest_role_to_approve_leaves') ? $this->lang->line('the_top_value_will_be_the_highest_role_to_approve_leaves') : "The top value will be the highest role to approve leaves. Keep the roles in ascending order." ?>
-                    </div>
-                    <div class="more-steps">
-                        <?php
-                        $count = count($data);
-                        foreach ($data as $key => $hie) {
-                            $stepCounter = $key + 1;
-                            $selected_group_ids = [];
-                            $current_step_no = $hie["step_no"];
-                            $current_group_ids = $hie["group_id"];
-                        ?>
-                            <div class="step-container">
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <select name="step[<?= $stepCounter ?>][]" id="step_<?= $stepCounter ?>" class="form-control select7" multiple>
-                                            <?php
-                                            foreach ($groups as $value) {
-                                                if (!in_array($value->id, $selected_group_ids)) {
-                                            ?>
-                                                    <option value="<?= htmlspecialchars($value->id) ?>" <?= in_array($value->id, $current_group_ids) ? 'selected' : '' ?>>
-                                                        <?= htmlspecialchars($value->description) ?>
-                                                    </option>
-                                            <?php
-                                                }
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="alert alert-danger col-md-12 center">
+                    <b><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?></b> <?= $this->lang->line('Ensure_that_the_hierarchy_is_utilized_when_applying_for_leave._Nested_roles_should_first_approve_leave_requests_before_escalating_to_higher-level_roles') ? $this->lang->line('Ensure_that_the_hierarchy_is_utilized_when_applying_for_leave._Nested_roles_should_first_approve_leave_requests_before_escalating_to_higher-level_roles') : "Ensure that the hierarchy is utilized when applying for leave. Nested roles should first approve leave requests before escalating to higher-level roles." ?>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card-content">
+                            <div class="nestable">
+                                <div class="dd" id="nestable">
+                                    <ol class="dd-list">
+                                        <?php
+                                        foreach ($groups as $value) {
+                                            if (!in_array($value->id, $current_group_ids)) {
+
+                                        ?>
+                                                <li class="dd-item" data-id="<?= htmlspecialchars($value->id) ?>">
+                                                    <div class="dd-handle"><?= htmlspecialchars($value->description) ?></div>
+                                                </li>
+                                        <?php
                                             }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <button class="btn text-danger remove-step" type="button"><i class="fas fa-times"></i></button>
-                                    </div>
+                                        }
+                                        ?>
+                                    </ol>
                                 </div>
-                                <?php if ($key < $count - 1) { ?>
-                                    <div class="row arrow">
-                                        <div class="col-md-6 text-center mb-3">
-                                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                                        </div>
-                                    </div>
-                                <?php } ?>
                             </div>
-                        <?php
-                        }
-                        ?>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12 mt-3">
-                        <button class="btn btn-primary" id="add-more-steps" type="button">
-                            <?= $this->lang->line('new_step') ? $this->lang->line('new_step') : 'New Step' ?>
-                        </button>
+                    <div class="col-md-6">
+                        <div class="card-content">
+                            <div class="nestable">
+                                <div class="dd" id="nestable2">
+                                    <?php
+                                    foreach ($groups as $value) {
+                                        if (in_array($value->id, $current_group_ids)) {
+
+                                    ?>
+                                            <li class="dd-item" data-id="<?= htmlspecialchars($value->id) ?>">
+                                                <div class="dd-handle"><?= htmlspecialchars($value->description) ?></div>
+                                            </li>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="message"></div>
-                <?php if ($this->ion_auth->is_admin() || permissions('general_edit')) { ?>
-                    <div class="card-footer bg-whitesmoke text-md-right">
-                        <button class="btn btn-primary savebtn">
-                            <?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?>
-                        </button>
-                    </div>
-                <?php } ?>
-                <div class="result"></div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+<p>
+    <?php
+    var_dump($current_group_ids)
+    ?>
+</p>

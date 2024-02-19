@@ -2448,6 +2448,7 @@ progress {
 }
 
 .table>tbody {
+  padding: 10px;
   vertical-align: inherit;
 }
 
@@ -35235,7 +35236,7 @@ code {
 .table td {
   border-color: var(--border);
   font-size: 12px;
-  padding: 0.9375rem 0.625rem;
+  padding: 0;
   vertical-align: middle;
 }
 
@@ -35658,14 +35659,14 @@ table.dataTable tbody td {
 table.dataTable thead th {
   color: var(--text-white);
   white-space: nowrap;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 300;
   text-transform: capitalize;
-  padding: 20px 15px;
+  padding: 0;
 }
 
 table.dataTable tbody td {
-  padding: 20px 15px;
+  padding: 14px 5px;
   border-bottom: 1;
 }
 
@@ -35677,7 +35678,7 @@ table.dataTable tbody td {
 
 @media only screen and (max-width: 87.5rem) {
   table.dataTable tbody td {
-    padding: 8px 15px;
+    padding: 8px 5px;
   }
 }
 

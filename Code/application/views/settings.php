@@ -26,6 +26,8 @@
     /* Down arrow icon when expanded */
   }
 </style>
+<link href="<?=base_url('assets2/vendor/nestable2/css/jquery.nestable.min.css')?>" rel="stylesheet" type="text/css"/>	
+
 </head>
 
 <body>
@@ -55,7 +57,7 @@
     <?php $this->load->view('includes/sidebar'); ?>
     <div class="content-body default-height">
       <div class="container-fluid">
-        <?php $this->load->view('setting-forms/' . htmlspecialchars($main_page)); ?>
+        <?php $this->load->view('setting-forms/' . htmlspecialchars($main_page2)); ?>
       </div>
     </div>
     <!-- *******************************************
@@ -66,6 +68,8 @@
 ***********************************-->
   </div>
   <?php $this->load->view('includes/scripts'); ?>
+  <script src="<?=base_url('assets2/vendor/nestable2/js/jquery.nestable.min.js')?>"></script>
+  <script src="<?=base_url('assets2/js/plugins-init/nestable-init.js')?>"></script>
 
   <script>
     /*
@@ -559,7 +563,7 @@
         dataType: "json",
         success: function(result) {
           if (result['error'] == false) {
-            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+            $('.message').append('<div class="alert alert-success">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           } else {
             $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
@@ -580,7 +584,7 @@
         dataType: "json",
         success: function(result) {
           if (result['error'] == false) {
-            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+            $('.message').append('<div class="alert alert-success">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           } else {
             $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
@@ -600,7 +604,7 @@
         dataType: "json",
         success: function(result) {
           if (result['error'] == false) {
-            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+            $('.message').append('<div class="alert alert-success">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           } else {
             $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
@@ -853,6 +857,21 @@
           });
         }
       });
+    });
+
+    $('#table').DataTable({
+      "paging": true,
+      "searching": false,
+      "language": {
+        "paginate": {
+          "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+          "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+        }
+      },
+      "info": false,
+      "dom": '<"top"i>rt<"bottom"lp><"clear">',
+      "lengthMenu": [10, 20],
+      "pageLength": 10
     });
   </script>
 </body>
