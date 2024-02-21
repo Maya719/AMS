@@ -531,7 +531,7 @@
           var count = 1;
           data.forEach(user => {
             var userRow = '<tr>';
-            userRow += '<td style="font-size:12px;">' + count + '</td>';
+            userRow += '<td style="font-size:12px;"><a href="'+base_url+'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
             userRow += '<td style="font-size:12px;">' + user.user + '</td>';
             userRow += '<td style="font-size:12px;">' + user.name + '</td>';
 

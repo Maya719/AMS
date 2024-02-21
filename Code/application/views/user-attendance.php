@@ -15,6 +15,9 @@
     z-index: 1;
     width: 150px;
   }
+.table th, .table td {
+padding: 5px;
+}
 </style>
 </head>
 
