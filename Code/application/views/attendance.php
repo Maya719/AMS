@@ -166,7 +166,11 @@
                 },
                 success: function(response) {
                     var tableData = JSON.parse(response);
-                    showTable(tableData);
+                    if (tableData.data.length > 0) {
+                        showTable(tableData);
+                    } else {
+                        emptyTable();
+                    }
                 },
                 complete: function() {
                     hideLoader();
@@ -176,6 +180,46 @@
                 }
             });
         }
+
+        function emptyTable() {
+            var table = $('#attendance_list');
+
+            if ($.fn.DataTable.isDataTable(table)) {
+                table.DataTable().destroy();
+            }
+            emptyDataTable(table);
+
+            var thead = table.find('thead');
+            var theadRow = '<tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px; width:20px;">Employee</th></tr>';
+            thead.html(theadRow);
+
+            table.DataTable({
+                "language": {
+                    "paginate": {
+                        "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                        "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                    }
+                },
+                "info": false,
+                "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "lengthMenu": [5, 10, 20],
+                "pageLength": 5
+            });
+        }
+
+        // Call this function when you want to add an empty row to the table
+        function addEmptyRowToTable() {
+            var table = $('#attendance_list').DataTable();
+            table.row.add(['', '', '']).draw(); // Add an empty row with three empty cells
+        }
+
+        // Call this function when you want to remove all rows from the table
+        function removeAllRowsFromTable() {
+            var table = $('#attendance_list').DataTable();
+            table.clear().draw(); // Clear all rows from the table
+        }
+
+
 
         function showTable(data) {
             console.log(data);
@@ -230,7 +274,7 @@
             var count = 1;
             data.data.forEach(user => {
                 var userRow = '<tr>';
-                userRow += '<td style="font-size:12px;"><a href="'+base_url+'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
+                userRow += '<td style="font-size:12px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
                 userRow += '<td style="font-size:12px;">' + user.user + '</td>';
                 userRow += '<td style="font-size:12px;">' + user.name + '</td>';
 

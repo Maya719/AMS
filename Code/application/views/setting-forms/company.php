@@ -37,3 +37,34 @@
     </form>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var inputFields = document.querySelectorAll('input[name="company_name"], input[name="address"], input[name="city"], input[name="state"], input[name="country"], input[name="zip_code"]');
+    var saveBtn = document.querySelector('.savebtn');
+    var initialValues = Array.from(inputFields, input => input.value);
+
+    function checkChanges() {
+      var changed = false;
+      inputFields.forEach(function(input, index) {
+        if (input.value !== initialValues[index]) {
+          changed = true;
+        }
+      });
+      if (changed) {
+        saveBtn.classList.remove('btn-primary');
+        saveBtn.classList.add('btn-success');
+      } else {
+        saveBtn.classList.remove('btn-success');
+        saveBtn.classList.add('btn-primary');
+      }
+    }
+
+    inputFields.forEach(function(input) {
+      input.addEventListener('input', checkChanges);
+    });
+
+    // Initial check
+    checkChanges();
+  });
+</script>

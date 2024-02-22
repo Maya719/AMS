@@ -28,7 +28,7 @@
     <div class="content-body default-height">
       <div class="container-fluid">
 
-        <div class="row">
+        <div class="row d-flex justify-content-end">
           <div class="col-xl-2 col-sm-3 mt-2">
             <a href="#" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#holiday-add-modal" class="btn btn-block btn-primary">+ ADD</a>
           </div>

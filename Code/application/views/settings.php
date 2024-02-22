@@ -25,8 +25,18 @@
     content: "\f077";
     /* Down arrow icon when expanded */
   }
+
+  .box {
+    border: 2px dashed #ccc;
+    padding: 13px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dd-handle {
+    cursor: move;
+  }
 </style>
-<link href="<?=base_url('assets2/vendor/nestable2/css/jquery.nestable.min.css')?>" rel="stylesheet" type="text/css"/>	
 
 </head>
 
@@ -68,8 +78,8 @@
 ***********************************-->
   </div>
   <?php $this->load->view('includes/scripts'); ?>
-  <script src="<?=base_url('assets2/vendor/nestable2/js/jquery.nestable.min.js')?>"></script>
-  <script src="<?=base_url('assets2/js/plugins-init/nestable-init.js')?>"></script>
+  <script src="<?= base_url('assets2/vendor/nestable2/js/jquery.nestable.min.js') ?>"></script>
+  <script src="<?= base_url('assets2/js/plugins-init/nestable-init.js') ?>"></script>
 
   <script>
     /*
@@ -872,6 +882,76 @@
       "dom": '<"top"i>rt<"bottom"lp><"clear">',
       "lengthMenu": [10, 20],
       "pageLength": 10
+    });
+  </script>
+  <script>
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.dataset.id);
+      ev.target.classList.add("dragging");
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      var draggedItem = document.querySelector('.dd-item[data-id="' + data + '"]');
+      var targetBox = ev.target.closest(".box");
+
+      if (targetBox) {
+        var match = targetBox.id.match(/\d+/); // Extract numeric part from id
+        var newStep = match ? parseInt(match[0]) : 0; // Parse as integer or set to 0 if not found
+        draggedItem.setAttribute("data-step", newStep);
+        targetBox.appendChild(draggedItem.cloneNode(true));
+        draggedItem.parentNode.removeChild(draggedItem);
+        return;
+      }
+
+      var hierarchyCard = document.getElementById("hierarchyCard");
+      var newLevel = hierarchyCard.querySelectorAll(".box").length + 1;
+      var newBox = document.createElement("div");
+      newBox.className = "box";
+      newBox.id = "level" + newLevel;
+      newBox.innerHTML = "<h6 class='text-center'>level " + newLevel + "</h6>";
+      newBox.appendChild(draggedItem.cloneNode(true));
+      hierarchyCard.appendChild(newBox);
+
+      draggedItem.setAttribute("data-step", newLevel);
+      draggedItem.parentNode.removeChild(draggedItem);
+    }
+  </script>
+  <script>
+    $(document).ready(function() {
+      $('#saveBtn').on('click', function() {
+        var data = [];
+        $('.dd-item').each(function() {
+          var groupId = $(this).data('id');
+          var stepNo = $(this).data('step');
+          if (stepNo != 0 && !isNaN(stepNo)) {
+            data.push({
+              group_id: groupId,
+              step_no: stepNo
+            });
+          }
+        });
+        $.ajax({
+          type: "POST",
+          url: base_url + 'settings/save_hierarchy_setting',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+          dataType: "json",
+          success: function(result) {
+            if (result['error'] == false) {
+              $('.message').append('<div class="alert alert-success">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+            } else {
+              $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+            }
+          }
+        });
+        console.log(data);
+      });
     });
   </script>
 </body>

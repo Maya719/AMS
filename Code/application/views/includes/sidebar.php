@@ -820,7 +820,7 @@
               <?php } ?>
 
               <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
-                <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave hierarchy' ?></a></li>
+                <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave Approval Hierarchy' ?></a></li>
               <?php } ?>
 
               <?php if ($this->ion_auth->is_admin() || permissions('shift_view')) { ?>

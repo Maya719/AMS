@@ -210,6 +210,6 @@
         setTimeout(function () {
             $("#main-wrapper").addClass("show");
             $("#loader").css("display", "none");
-        }, 800);
+        }, 400);
     }
 </script>

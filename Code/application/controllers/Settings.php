@@ -345,7 +345,7 @@ class Settings extends CI_Controller
 			$this->data['create'] = true;
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['system_users'] = $this->ion_auth->members()->result();
-			
+
 			$this->db->where('saas_id', $this->session->userdata('saas_id'));
 			$query = $this->db->get('departments');
 			$this->data['departments'] = $query->result_array();
@@ -888,56 +888,25 @@ class Settings extends CI_Controller
 
 	public function hierarchy()
 	{
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// error_reporting(E_ALL);
 
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_module_allowed('user_permissions'))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
 			$this->data['main_page2'] = 'hierarchy';
-			$this->data['main_page'] = 'Leave Hierarchy';
+			$this->data['main_page'] = 'Leave Approval Hierarchy';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['permissions'] = permissions();
 			$this->data['clients_permissions'] = clients_permissions();
 			$groups_array = $this->ion_auth->get_all_groups();
-			$groups_data = [];
-			foreach ($groups_array as $group_data) {
-				if (!$group_data->permissions) {
-					$groups_data[] = $group_data;
-				} else {
-					$group_permissions = json_decode($group_data->permissions, true);
-					$leave_permission = 7;
-					if (in_array($leave_permission, $group_permissions)) {
-						$group_desc = $group_data->name . '_permissions_' . $this->session->userdata('saas_id');
-						$this->db->where('type', $group_desc);
-						$query3 = $this->db->get('settings');
-						$setting_data = $query3->row(); 
-						$permissions = json_decode($setting_data->value);
-						$leave_status = $permissions->leaves_status;
-						if ($leave_status == 1) {
-							$groups_data[] = $group_data;
-						}
-					}
-				}
-			}
-			$this->data['groups'] = $groups_data;
+
+
+			$this->data['groups'] = $groups_array;
 			$query = $this->db->get('leave_hierarchy');
 			$stepResult = $query->result();
-			$grouped_data = [];
 
-			// Loop through the data and group it by step_no
-			foreach ($stepResult as $item) {
-				$step_no = $item->step_no;
-				$group_id = $item->group_id;
-
-				if (isset($grouped_data[$step_no])) {
-					$grouped_data[$step_no][] = $group_id;
-				} else {
-					$grouped_data[$step_no] = $group_id;
-				}
-			}
-			$result = [];
-			foreach ($grouped_data as $step_no => $group_ids) {
-				$result[] = ["step_no" => $step_no, "group_id" => $group_ids];
-			}
-			$this->data['data'] = $result;
+			$this->data['data'] = $stepResult;
 
 			// echo json_encode($this->data);
 			$this->load->view('settings', $this->data);
@@ -1067,70 +1036,30 @@ class Settings extends CI_Controller
 	}
 	public function save_hierarchy_setting()
 	{
-		$response = array(); // Initialize the response array
-
 		if ($this->ion_auth->logged_in()) {
-			$steps = $this->input->post('step');
-
-			if ($steps) {
-				$saas_id = $this->session->userdata('saas_id');
-				$result = [];
-				$usedValues = []; // Keep track of used group_ids
-
-				foreach ($steps as $key => $values) {
-					if (is_array($values)) {
-						foreach ($values as $value) {
-							// Check if the group_id has already been used for a different step_no
-							if (in_array($value, $usedValues)) {
-								$response['error'] = true;
-								$response['message'] = "A role cannot be in 2 step numbers.";
-								echo json_encode($response);
-								return;
-							}
-
-							$result[] = [
-								'step_no' => $key,
-								'group_id' => $value,
-								'saas_id' => $saas_id,
-							];
-
-							$usedValues[] = $value;
-						}
-					} else {
-						if (in_array($values, $usedValues)) {
-							$response['error'] = true;
-							$response['message'] = "A role cannot be in 2 step numbers.";
-							echo json_encode($response);
-							return;
-						}
-
-						$result[] = [
-							'step_no' => $key,
-							'group_id' => $values,
-							'saas_id' => $saas_id,
-						];
-
-						$usedValues[] = $values;
-					}
-				}
-
-				if ($this->settings_model->save_hierarchy_setting($result)) {
-					$response['error'] = false;
-					$response['message'] = $this->lang->line('setting_saved') ?: "Setting Saved.";
-				} else {
-					$response['error'] = true;
-					$response['message'] = $this->lang->line('something_wrong_try_again') ?: "Something wrong! Try again.";
-				}
+			$json_data = file_get_contents('php://input');
+			$data = json_decode($json_data, true);
+			foreach ($data as $value) {
+				$step_no = $value["step_no"];
+				$group_id = $value["group_id"];
+				$array[] = [
+					'step_no' => $step_no,
+					'group_id' => $group_id,
+					'saas_id' => $this->session->userdata('saas_id')
+				];
+			}
+			if ($this->settings_model->save_hierarchy_setting($array)) {
+				$response['error'] = false;
+				$response['message'] = $this->lang->line('setting_saved') ?: "Setting Saved.";
 			} else {
 				$response['error'] = true;
-				$response['message'] = "No data to save."; // Add an appropriate message
+				$response['message'] = $this->lang->line('something_wrong_try_again') ?: "Something wrong! Try again.";
 			}
+			echo json_encode($response);
 		} else {
 			$response['error'] = true;
 			$response['message'] = $this->lang->line('access_denied') ?: "Access Denied";
 		}
-
-		echo json_encode($response);
 	}
 
 

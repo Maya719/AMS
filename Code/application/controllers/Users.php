@@ -197,6 +197,7 @@ class Users extends CI_Controller
 			$this->data['page_title'] = 'Employee - ' . company_name();
 			$this->data['main_page'] = 'Employee';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
+			
 			$query = $this->db->get('shift');
 			$this->data['shift_types'] = $query->result_array();
 
@@ -309,7 +310,7 @@ class Users extends CI_Controller
 					$tempRow['department'] = $user_data->department;
 					$tempRow['martial_status'] = $user_data->martial_status;
 					$tempRow['blood_group'] = $user_data->blood_group;
-					
+
 
 					$department_id = $tempRow['department'];
 
@@ -530,7 +531,8 @@ class Users extends CI_Controller
 		}
 
 		$status = $this->input->get('status');
-		// $department = $this->input->get('department_users');
+		$department = $this->input->get('department');
+		$shift = $this->input->get('shift');
 
 		if (!empty($system_user_ids)) {
 			if ($status == '1') {
@@ -538,6 +540,12 @@ class Users extends CI_Controller
 			}
 			if ($status == '0') {
 				$this->db->where('active', 0);
+			}
+			if (isset($department) && !empty($department)) {
+				$this->db->where('department', $department);
+			}
+			if (isset($shift) && !empty($shift)) {
+				$this->db->where('shift_id', $shift);
 			}
 			$this->db->where_in('id', $system_user_ids);
 			$query = $this->db->get('users');
@@ -568,6 +576,14 @@ class Users extends CI_Controller
 				$tempRow['action'] = '<span class="badge light badge-primary"><a href="' . base_url('users/edit_user/' . $tempRow['id'] . '') . '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>';
 				$tempRow['company'] = company_details('company_name', $system_user->user_id);
 				$tempRow['mobile'] = $system_user->phone != 0 ? $system_user->phone : '';
+				$department = $system_user->department != 0 ? $system_user->department : '';
+				if ($department === '0' || empty($department)) {
+					$tempRow['department'] = '<span class="text-danger">No Shift Assigned</span>';
+				} else {
+					$department_query = $this->db->query("SELECT * FROM departments WHERE id = $department");
+					$department_result = $department_query->row_array();
+					$tempRow['department'] = $department_result['department_name'];
+				}
 
 				$shift_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
 				$shift_result = $shift_query->row_array();
@@ -580,6 +596,8 @@ class Users extends CI_Controller
 					$shift_result = $shift_query->row_array();
 					$tempRow['shift_type'] = $shift_result['name'];
 				}
+
+
 				$tempRow['profile'] = '';
 				if ($system_user->profile) {
 					if (file_exists('assets/uploads/profiles/' . $system_user->profile)) {

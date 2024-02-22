@@ -2842,10 +2842,7 @@ class Ion_auth_model extends CI_Model
 	public function get_all_groups()
 	{
 		$saas_id = $this->session->userdata('saas_id');
-
-		// Get all groups that match the saas_id
 		$groups = $this->db->where('saas_id', $saas_id)->get('groups')->result();
-
 		return $groups;
 	}
 	
