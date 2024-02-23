@@ -481,6 +481,7 @@
         theadRow += '<th>Ending Time</th>';
         theadRow += '<th>Paid</th>';
         theadRow += '<th>Status</th>';
+        theadRow += '<th style="display:none;"></th>';
         theadRow += '<th>Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
@@ -498,6 +499,7 @@
           userRow += '<td style="font-size:13px;">' + user.ending_date + ' ' + user.ending_time + '</td>';
           userRow += '<td style="font-size:13px;">' + user.paid + '</td>';
           userRow += '<td style="font-size:13px;">' + user.status + '</td>';
+          userRow += '<td style="font-size:13px; display:none;">' + user.created + '</td>';
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           if (user.btn) {
@@ -525,6 +527,9 @@
           "info": false,
           "dom": '<"top"i>rt<"bottom"lp><"clear">',
           "lengthMenu": [10, 20, 50, 500],
+          "order": [
+            [9, 'desc']
+          ],
           "pageLength": 10
         });
       }
