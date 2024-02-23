@@ -117,6 +117,13 @@ class Department_model extends CI_Model
     return $array;
 }
 
+function saas_department(){
+    $user = $this->ion_auth->user()->row();
+    $saas_id = $user->saas_id;
+    $query = $this->db->query("SELECT * FROM departments WHERE saas_id=".$saas_id);
+    $results = $query->result_array(); 
+    return $results;
+}
 function edit($id, $data){
     $this->db->where('id', $id);
     if($this->db->update('departments', $data))

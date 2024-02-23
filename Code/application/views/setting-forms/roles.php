@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row d-flex justify-content-end">
     <div class="col-xl-2 col-sm-3 mt-2">
         <a href="#" data-bs-toggle="modal" data-bs-target="#add-role-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
@@ -69,8 +69,27 @@
                             <?php } ?>
                         </select>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6 form-group mt-3">
+                            <label><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></label>
+                            <select name="departments" class="form-control select2" multiple="" id="departments">
+                                <?php foreach ($departments as $department) { ?>
+                                    <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+    
+                        <div class="col-lg-6 form-group mt-3">
+                            <label><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></label>
+                            <select name="shifts" class="form-control select2" multiple="" id="shifts">
+                                <?php foreach ($shifts as $shift) { ?>
+                                    <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('assigned_users') ? $this->lang->line('assigned_users') : 'Assigned Users' ?><span class="text-danger">*</span></label>
+                        <label><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?></label>
                         <input type="checkbox" id="selectAllUsers_create"> Select All
                         <select name="users[]" id='users_create' multiple='multiple'>
                             <?php foreach ($system_users as $system_user) {
@@ -81,7 +100,7 @@
                         </select>
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?><span class="text-danger">*</span></label>
+                        <label><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?></label>
                         <select name="change_permissions_of[]" class="form-control select2" multiple="">
                             <?php foreach ($groups as $group) { ?>
                                 <option value="<?= $group->id ?>"><?= $group->description ?></option>
@@ -127,8 +146,27 @@
                             <?php } ?>
                         </select>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6 form-group mt-3">
+                            <label><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></label>
+                            <select name="departments" class="form-control select2" multiple="" id="departmentsEdit">
+                                <?php foreach ($departments as $department) { ?>
+                                    <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+    
+                        <div class="col-lg-6 form-group mt-3">
+                            <label><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></label>
+                            <select name="shifts" class="form-control select2" multiple="" id="shiftsEdit">
+                                <?php foreach ($shifts as $shift) { ?>
+                                    <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group mt-3" id="users_roles_div">
-                        <label><?= $this->lang->line('assigned_users') ? $this->lang->line('assigned_users') : 'Assigned Users' ?><span class="text-danger">*</span></label>
+                        <label><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?><span class="text-danger">*</span></label>
                         <input type="checkbox" id="selectAllUsers4"> Select All
                         <select name="users[]" id="assigned_users" class="form-control" multiple="">
                             <?php foreach ($system_users as $system_user) {

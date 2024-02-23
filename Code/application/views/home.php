@@ -8,6 +8,14 @@
   #attendance_list tbody td {
     padding: 5px 10px;
   }
+  #upcoming-events-column{
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure the column takes up full height */
+  }
+  .widget-media {
+    flex-grow: 1; /* Allow the content to grow to fill the available space */
+}
 </style>
 </head>
 
@@ -204,7 +212,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" id="upcoming-events-column">
                   <div class="card">
                     <div class="card-header mb-0">
                       <h4 class="text-primary">Upcoming Events</h4>
@@ -213,11 +221,11 @@
                       <?php
                       if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
                       ?>
-                        <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height500 mb-0">
+                        <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height500 mb-1">
                         <?php
                       } else {
                         ?>
-                          <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height400 mb-0">
+                          <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height400 mb-1">
                           <?php
                         } ?>
                           <ul class="timeline ">

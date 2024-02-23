@@ -41,7 +41,7 @@
                 <div class="basic-form">
                   <form class="row">
                     <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
-                      <div class="col-lg-3 mb-3">
+                      <div class="col-lg-3">
                         <select class="form-select" id="employee_id">
                           <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                           <?php foreach ($system_users as $system_user) {
@@ -53,7 +53,7 @@
                       </div>
                     <?php
                     } ?>
-                    <div class="col-lg-3 mb-3">
+                    <div class="col-lg-3">
                       <select class="form-select" id="leave_type">
                         <option value=""><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave type' ?></option>
                         <?php foreach ($leaves_types as $leaves_type) : ?>
@@ -61,7 +61,7 @@
                         <?php endforeach ?>
                       </select>
                     </div>
-                    <div class="col-lg-3 mb-3">
+                    <div class="col-lg-3">
                       <select class="form-select" id="status_name">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
@@ -69,7 +69,7 @@
                         <option value="2">Rejected</option>
                       </select>
                     </div>
-                    <div class="col-lg-3 mb-3">
+                    <div class="col-lg-3">
                       <select class="form-select" id="dateFilter">
                         <option value="tmonth" selected>This Month</option>
                         <option value="lmonth">Last Month</option>

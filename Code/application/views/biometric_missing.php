@@ -43,7 +43,7 @@
               <div class="card-body">
                 <div class="basic-form">
                   <form class="row">
-                    <div class="col-lg-4 mb-3">
+                    <div class="col-lg-4">
                       <select class="form-select" id="employee_id">
                         <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                         <?php foreach ($system_users as $system_user) {
@@ -53,7 +53,7 @@
                         } ?>
                       </select>
                     </div>
-                    <div class="col-lg-4 mb-3">
+                    <div class="col-lg-4">
                       <select class="form-select" id="status">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
@@ -61,7 +61,7 @@
                         <option value="2">Rejected</option>
                       </select>
                     </div>
-                    <div class="col-lg-4 mb-3">
+                    <div class="col-lg-4">
                       <select class="form-select" id="dateFilter">
                         <option value="tmonth" selected>This Month</option>
                         <option value="lmonth">Last Month</option>

@@ -962,6 +962,67 @@
       });
     });
   </script>
+
+  <script>
+    $(document).ready(function(){
+    $('#departments, #shifts').change(function(){
+        var departmentIds = $('#departments').val();
+        var shiftIds = $('#shifts').val();
+        
+        $.ajax({
+            url: base_url + 'settings/get_user_by_shift_and_department',
+            type: 'POST',
+            dataType: 'json',
+            data: {departments: departmentIds, shifts: shiftIds},
+            success: function(response){
+                $('#users_create').empty();
+                $.each(response, function(index, user){
+                    $('#users_create').append($('<option>', {
+                        value: user.id,
+                        text: user.first_name + ' ' + user.last_name
+                    }));
+                });
+                
+                $('#users_create').multiSelect('refresh');
+            },
+            error: function(xhr, status, error){
+                console.error(error);
+            }
+        });
+    });
+});
+
+  </script>
+  <script>
+    $(document).ready(function(){
+    $('#departmentsEdit, #shiftsEdit').change(function(){
+        var departmentIds = $('#departmentsEdit').val();
+        var shiftIds = $('#shiftsEdit').val();
+        
+        $.ajax({
+            url: base_url + 'settings/get_user_by_shift_and_department',
+            type: 'POST',
+            dataType: 'json',
+            data: {departments: departmentIds, shifts: shiftIds},
+            success: function(response){
+                $('#assigned_users').empty();
+                $.each(response, function(index, user){
+                    $('#assigned_users').append($('<option>', {
+                        value: user.id,
+                        text: user.first_name + ' ' + user.last_name
+                    }));
+                });
+                
+                $('#assigned_users').multiSelect('refresh');
+            },
+            error: function(xhr, status, error){
+                console.error(error);
+            }
+        });
+    });
+});
+
+  </script>
 </body>
 
 </html>

@@ -169,6 +169,11 @@ class Shift_model extends CI_Model
         else
             return false;
     }
+    public function saas_shifts(){
+        $query = $this->db->query("SELECT * FROM shift WHERE saas_id = ".$this->session->userdata('saas_id'));
+        $result = $query->result_array();
+        return $result;
+    }
 
     public function updateUserShiftId($type, $user_ids)
 	{

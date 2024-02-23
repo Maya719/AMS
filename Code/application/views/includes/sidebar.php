@@ -838,7 +838,7 @@
                 <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
               <?php } ?>
 
-              <?php if ($this->ion_auth->is_admin() && is_module_allowed('user_permissions')) { ?>
+              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
                 <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
               <?php } ?>
 

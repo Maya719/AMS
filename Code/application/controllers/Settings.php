@@ -1570,6 +1570,8 @@ class Settings extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['create'] = true;
 			$this->data['system_users'] = $this->ion_auth->members()->result();
+			$this->data['departments'] = $this->department_model->saas_department();
+			$this->data['shifts'] = $this->shift_model->saas_shifts();
 			$this->data['permissions'] = permissions();
 			$query = $this->db->get('permissions_list');
 			$groups = $this->ion_auth->get_all_groups();
@@ -1583,6 +1585,23 @@ class Settings extends CI_Controller
 		} else {
 			redirect('auth', 'refresh');
 		}
+	}
+	public function get_user_by_shift_and_department(){
+		$shifts = $this->input->post('shifts');
+		$departments = $this->input->post('departments');
+		
+		// Start building the query
+		$this->db->select('*');
+		$this->db->from('users'); // Replace 'your_users_table' with your actual table name
+		if (!empty($shifts)) {
+			$this->db->where_in('shift_id', $shifts);
+		}
+		if (!empty($departments)) {
+			$this->db->where_in('department', $departments);
+		}
+		$this->db->where('active', 1);
+		$query = $this->db->get();
+		echo json_encode($query->result_array());
 	}
 
 	public function roles_permissions()

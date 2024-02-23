@@ -54,7 +54,7 @@
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form class="row">
-                                        <div class="col-lg-3 mb-3">
+                                        <div class="col-lg-3">
                                             <select class="form-select" id="employee_id">
                                                 <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                                                 <?php foreach ($system_users as $system_user) {
@@ -64,7 +64,7 @@
                                                 } ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3 mb-3">
+                                        <div class="col-lg-3">
                                             <select class="form-select" id="shift_id">
                                                 <option value=""><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></option>
                                                 <?php foreach ($shifts as $shift) : ?>
@@ -72,7 +72,7 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3 mb-3">
+                                        <div class="col-lg-3">
                                             <select class="form-select" id="department_id">
                                                 <option value=""><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></option>
                                                 <?php foreach ($departments as $department) : ?>
@@ -80,7 +80,7 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3 mb-3">
+                                        <div class="col-lg-3">
                                             <select class="form-select" id="dateFilter">
                                                 <option value="today"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today' ?></option>
                                                 <option value="ystdy"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday' ?></option>
