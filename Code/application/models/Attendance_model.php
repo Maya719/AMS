@@ -78,21 +78,20 @@ class Attendance_model extends CI_Model
                     if ($get['shifts'] == $user->shift_id && $get['department'] == $user->department) {
                         $system_users[] = $user;
                     }
-                    
                 }
-            }elseif (isset($get['department']) && !empty($get['department'])) {
+            } elseif (isset($get['department']) && !empty($get['department'])) {
                 foreach ($system_users2 as $user) {
                     if ($get['department'] == $user->department) {
                         $system_users[] = $user;
                     }
                 }
-            }elseif (isset($get['shifts']) && !empty($get['shifts'])) {
+            } elseif (isset($get['shifts']) && !empty($get['shifts'])) {
                 foreach ($system_users2 as $user) {
                     if ($get['shifts'] == $user->shift_id) {
                         $system_users[] = $user;
                     }
                 }
-            }else{
+            } else {
                 $system_users = $system_users2;
             }
         }
@@ -547,7 +546,7 @@ class Attendance_model extends CI_Model
                 $halfDayLeave = true;
                 $lateMinutes = 0;
             }
-            if (($halfDayStartDateTime >= $checkInDateTime && $halfDayEndDateTime >= $checkOutDateTime) || ($halfDayStartDateTime <= $checkInDateTime && $halfDayEndDateTime <= $checkOutDateTime)) {
+            if ($checkInDateTime > $halfDayStartDateTime && $checkOutDateTime < $halfDayEndDateTime) {
                 $halfDay = true;
                 $lateMinutes = 0;
             } else {

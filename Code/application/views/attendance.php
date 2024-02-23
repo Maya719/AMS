@@ -300,8 +300,8 @@
                 },
                 "info": false,
                 "dom": '<"top"i>rt<"bottom"lp><"clear">',
-                "lengthMenu": [5, 10, 20],
-                "pageLength": 5
+                "lengthMenu": [10, 20, 50, 500],
+                "pageLength": 10
             });
         }
         $(document).ready(function() {

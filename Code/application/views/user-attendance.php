@@ -279,7 +279,7 @@ padding: 5px;
           too: too
         },
         beforeSend: function() {
-          showLoader();
+          // showLoader();
         },
         success: function(response) {
           var tableData = JSON.parse(response);
@@ -287,7 +287,7 @@ padding: 5px;
           showTable(tableData);
         },
         complete: function() {
-          hideLoader();
+          // hideLoader();
         },
         error: function(error) {
           console.error(error);
