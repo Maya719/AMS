@@ -15,9 +15,11 @@
     z-index: 1;
     width: 150px;
   }
-.table th, .table td {
-padding: 5px;
-}
+
+  .table th,
+  .table td {
+    padding: 5px;
+  }
 </style>
 </head>
 
@@ -337,21 +339,14 @@ padding: 5px;
           var status = user.status ? user.status[statusIndex] : '';
           if (status == 'P') {
             userRow += '<td class="text-success">' + status + '</td>';
-          }
-          if (status == 'A') {
+          } else if (status == 'A') {
             userRow += '<td class="text-danger">' + status + '</td>';
-          }
-          if (status == 'H') {
+          } else if (status == 'H') {
             userRow += '<td class="text-warning">' + status + '</td>';
-          }
-          if (status == 'L') {
+          } else if (status == 'L' || status == 'HD L' || status == 'HD') {
             userRow += '<td class="text-info">' + status + '</td>';
-          }
-          if (status == 'HD L') {
-            userRow += '<td class="text-info">' + status + '</td>';
-          }
-          if (status == 'HD') {
-            userRow += '<td class="text-info">' + status + '</td>';
+          } else {
+            userRow += '<td class="text-muted">' + status + ' m</td>';
           }
         });
         userRow += '</tr>';

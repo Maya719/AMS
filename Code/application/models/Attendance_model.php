@@ -473,19 +473,19 @@ class Attendance_model extends CI_Model
                             $leave = '' . floatval($leave) + floatval(1 / 2) . '';
                         }
                         $userData["status"][] = 'HD L';
-                        $totalLateMinutes += $min["lateMinutes"];
                         $userData["checkin"][] = $min;
                     } else {
                         $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
                         if ($min["halfDay"]) {
                             $userData["status"][] = 'HD';
-                            $totalLateMinutes += $min["lateMinutes"];
                             $absent = '' . floatval($absent) + floatval(1 / 2) . '';
                         } else {
                             if ($min["lateMinutes"]) {
                                 $totalLateMinutes += $min["lateMinutes"];
+                                $userData["status"][] = ''.$min["lateMinutes"].'';
+                            }else{
+                                $userData["status"][] = 'P';
                             }
-                            $userData["status"][] = 'P';
                         }
                         $userData["checkin"][] = $min;
                     }
@@ -545,15 +545,20 @@ class Attendance_model extends CI_Model
             if ($this->checkHalfDayLeave($date, $employee_id)) {
                 $halfDayLeave = true;
                 $lateMinutes = 0;
-            }
-            if ($checkInDateTime > $halfDayStartDateTime && $checkOutDateTime < $halfDayEndDateTime) {
-                $halfDay = true;
-                $lateMinutes = 0;
             } else {
-                if ($checkInDateTime > $shiftStartDateTime) {
-                    $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                if ($checkInDateTime > $halfDayStartDateTime || $checkOutDateTime < $halfDayEndDateTime) {
+                    $halfDay = true;
+                    if ($checkInDateTime > $shiftStartDateTime) {
+                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                    } else {
+                        $lateMinutes = 0;
+                    }
                 } else {
-                    $lateMinutes = 0;
+                    if ($checkInDateTime > $shiftStartDateTime) {
+                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                    } else {
+                        $lateMinutes = 0;
+                    }
                 }
             }
             if ($date !== date('Y-m-d')) {
@@ -573,7 +578,8 @@ class Attendance_model extends CI_Model
             'halfDayCheckOut' => $halfDayCheckOut,
             'halfDay' => $halfDay,
             'halfDayLeave' => $halfDayLeave,
-            'lateMinutes' => $lateMinutes
+            'lateMinutes' => $lateMinutes,
+            'shift_id' => $shift_id,
         ];
     }
     public function checkHalfDayLeave($date, $user_id)
@@ -609,7 +615,7 @@ class Attendance_model extends CI_Model
                 $zk->setTime($cdate);
                 $users = $zk->getUser();
                 $attendance = $zk->getAttendance();
-                $zk->clearAttendance();
+                // $zk->clearAttendance();
                 $zk->enableDevice();
                 $zk->disconnect();
                 foreach ($attendance as $key => $attendances) {

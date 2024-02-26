@@ -88,6 +88,7 @@ if($my_current_lang){
 <link href="<?=base_url('assets2/vendor/bootstrap-select/css/bootstrap-select.min.css')?>" rel="stylesheet" type="text/css"/>		
 
 <link href="<?=base_url('assets2/css/style.css')?>" rel="stylesheet" type="text/css"/>		
+<link href="<?=base_url('assets2/css/custom.css')?>" rel="stylesheet" type="text/css"/>		
 
   <!-- Template CSS -->
   <?php if($rtl){ ?>

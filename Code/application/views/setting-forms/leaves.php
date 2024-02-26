@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row d-flex justify-content-end">
     <div class="col-xl-2 col-sm-3 mt-2">
         <a href="#" data-bs-toggle="modal" data-bs-target="#add-leave-type-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
@@ -9,7 +9,7 @@
                     <table id="table" class="table table-sm mb-0">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Leave Type</th>
                                 <th>Duration</th>
                                 <th>Leave Count</th>
                                 <th>Action</th>
@@ -24,7 +24,7 @@
                                         $count = '3 Months';
                                     }
                                     if ($type["duration"] == 'year') {
-                                        $count = 'Annually';
+                                        $count = 'Annual';
                                     }
                                     if ($type["duration"] == '4_months') {
                                         $count = '4 Months';

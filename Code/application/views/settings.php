@@ -333,9 +333,9 @@
       e.preventDefault();
     });
 
-    $("#edit-department-modal").on('click', '.btn-edit', function(e) {
-      var modal = $('#edit-department-modal');
-      var form = $('#modal-edit-department-part');
+    $("#edit-shift-modal").on('click', '.btn-edit', function(e) {
+      var modal = $('#edit-shift-modal');
+      var form = $('#modal-edit-shift-part');
       var formData = form.serialize();
       console.log(formData);
       $.ajax({
@@ -368,7 +368,7 @@
           if (result['error'] == false && result['data'] != '') {
             console.log(result['data'].id);
             $("#update_id").val(result['data'].id);
-            $("#type").val(result['data'].id);
+            $("#type").val(result['data'].name);
             $("#starting_time").val(result['data'].starting_time);
             $("#ending_time").val(result['data'].ending_time);
             $("#break_start").val(result['data'].break_start);

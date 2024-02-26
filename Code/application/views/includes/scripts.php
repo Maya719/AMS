@@ -212,4 +212,6 @@
             $("#loader").css("display", "none");
         }, 400);
     }
+
+    var ModelProgress = '<div class="loader-progress"><div class="overlay"></div><span class="loader2"></span></div>';
 </script>

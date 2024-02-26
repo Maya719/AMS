@@ -120,12 +120,8 @@
                 <input type="hidden" name="update_id" id="update_id">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
-                        <select name="type" class="form-control select2" id="type">
-                            <?php foreach ($shift_types as $shift_type) { ?>
-                                <option value="<?= $shift_type['id'] ?>"><?= $shift_type['name'] ?></option>
-                            <?php } ?>
-                        </select>
+                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="type" class="form-control" required="">
                     </div>
 
                     <div class="row mb-3">
@@ -135,18 +131,18 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="ending_time" id="ending_time" class="form-control timepicker" required="" >
+                            <input type="text" name="ending_time" id="ending_time" class="form-control timepicker" required="">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6 form-group">
                             <label><?= $this->lang->line('break_start') ? $this->lang->line('break_start') : 'Break Start' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="break_start" id="break_start" class="form-control timepicker" required="" >
+                            <input type="text" name="break_start" id="break_start" class="form-control timepicker" required="">
                         </div>
                         <div class="col-md-6 form-group">
                             <label><?= $this->lang->line('break_end') ? $this->lang->line('break_end') : 'Break End' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="break_end" id="break_end" class="form-control timepicker" required="" >
+                            <input type="text" name="break_end" id="break_end" class="form-control timepicker" required="">
                         </div>
                     </div>
                     <div class="row">
@@ -162,7 +158,7 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <div class="col-lg-4">
-                        <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
+                        <button type="button" class="btn btn-edit btn-block btn-primary">Save</button>
                     </div>
                 </div>
             </form>

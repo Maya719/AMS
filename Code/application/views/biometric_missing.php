@@ -28,7 +28,7 @@
         Main wrapper start
     ***********************************-->
   <div id="main-wrapper">
-  <?php $this->load->view('includes/sidebar'); ?>
+    <?php $this->load->view('includes/sidebar'); ?>
 
     <div class="content-body default-height">
       <!-- row -->
@@ -137,6 +137,7 @@
                 <label><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="reason" class="form-control" required=""></textarea>
               </div>
+
             </div>
             <div class="modal-footer d-flex justify-content-center">
               <div class="col-lg-4">
@@ -400,12 +401,20 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
         success: function(result) {
           if (result['error'] == false) {
+
             location.reload();
           } else {
+
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
+        },
+        complete: function() {
+          $(".loader-progress").remove();
         }
       });
 
@@ -421,12 +430,18 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
         success: function(result) {
           if (result['error'] == false) {
             location.reload();
           } else {
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
+        },
+        complete: function() {
+          $(".loader-progress").remove();
         }
       });
 
@@ -441,6 +456,9 @@
         url: base_url + 'biometric_missing/get_biometric_by_id',
         data: "id=" + id,
         dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
         success: function(result) {
           if (result['error'] == false && result['data'] != '') {
             var date = moment(result['data'][0].date, 'YYYY-MM-DD').format(date_format_js);
@@ -449,11 +467,12 @@
             $("#employee_id").val(result['data'][0].employee_id);
             $("#user_id").val(result['data'][0].user);
             $('#date').daterangepicker({
-              locale: { 
-              format: date_format_js },
+              locale: {
+                format: date_format_js
+              },
               singleDatePicker: true,
               startDate: date,
-              });
+            });
             var time = moment(result['data'][0].time, 'HH:mm:ss').format('HH:mm');
 
             $('#timepicker2').bootstrapMaterialDatePicker({
@@ -464,7 +483,7 @@
             });
             $('#timepicker2').val(time);
             $("#reason").val(result['data'][0].reason);
-	        	$("#status").val(result['data'][0].status);
+            $("#status").val(result['data'][0].status);
           } else {
             iziToast.error({
               title: something_wrong_try_again,
@@ -472,6 +491,9 @@
               position: 'topRight'
             });
           }
+        },
+        complete: function() {
+          $(".loader-progress").remove();
         }
       });
     })

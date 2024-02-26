@@ -298,7 +298,7 @@ class Leaves_model extends CI_Model
                     $slice =1;
                 }
             }
-            $total_leaves = $total_leaves/$slice;
+            $total_leaves = $total_leaves*$slice;
             $remaining_leaves =  $total_leaves-$consumed_leaves;
         } elseif ($probationYear === $currentYear) {
             $total_leaves =0;

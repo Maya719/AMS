@@ -2,6 +2,7 @@
 <style>
 </style>
 </head>
+
 <body>
 
   <!--*******************
@@ -639,12 +640,18 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
         success: function(result) {
           if (result['error'] == false) {
             location.reload();
           } else {
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
+        },
+        complete: function() {
+          $(".loader-progress").remove();
         }
       });
 
@@ -812,12 +819,18 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
         success: function(result) {
           if (result['error'] == false) {
             location.reload();
           } else {
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
+        },
+        complete: function() {
+          $(".loader-progress").remove();
         }
       });
 
