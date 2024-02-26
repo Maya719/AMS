@@ -103,32 +103,32 @@ class Home_model extends CI_Model
 
                 if (!isset($formattedData[$user->employee_id]['dates'][$from])) {
                     if ($this->checkLeave($user->employee_id, $from)) {
-                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
+                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-success">L</span>';
                         $leaveArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
                             'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
                             'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
                             'dates' => [],
                         ];
-                        $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">Leave</span>';
+                        $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">L</span>';
                     } elseif ($this->attendance_model->holidayCheck($user->employee_id, $from)) {
-                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
+                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">H</span>';
                         $absentArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
                             'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
                             'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
                             'dates' => [],
                         ];
-                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-info">Holiday</span>';
+                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-info">H</span>';
                     } else {
-                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
+                        $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-danger">A</span>';
                         $absentArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
                             'user' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->employee_id . '</a>',
                             'name' => '<a href="' . base_url('attendance/user_attendance/' . $user->employee_id) . '">' . $user->first_name . ' ' . $user->last_name . '</a>',
                             'dates' => [],
                         ];
-                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-danger">Absent</span>';
+                        $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-danger">A</span>';
                     }
                 }
             }

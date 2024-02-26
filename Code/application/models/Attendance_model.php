@@ -615,7 +615,7 @@ class Attendance_model extends CI_Model
                 $zk->setTime($cdate);
                 $users = $zk->getUser();
                 $attendance = $zk->getAttendance();
-                // $zk->clearAttendance();
+                $zk->clearAttendance();
                 $zk->enableDevice();
                 $zk->disconnect();
                 foreach ($attendance as $key => $attendances) {

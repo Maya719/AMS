@@ -605,6 +605,9 @@
             user_id: user_id,
             type: type
           },
+          beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
           success: function(response) {
             console.log(response);
             var totalLeaves = response.total_leaves;
@@ -625,6 +628,9 @@
             }
             $('#remaining_leaves').val(remainingLeaves);
           },
+          complete: function() {
+          $(".loader-progress").remove();
+        }
         });
       }
     });
