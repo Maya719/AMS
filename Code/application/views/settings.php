@@ -149,7 +149,7 @@
             console.log(result);
             $("#update_id").val(result['data'].id);
             $("#name").val(result['data'].name);
-            $("#duration").val(result['data'].duration);
+            $("#duration").val(result['data'].duration).trigger('change');
             $("#count").val(result['data'].leave_counts);
 
           } else {

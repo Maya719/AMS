@@ -22,7 +22,7 @@
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
-    <?php $this->load->view('includes/sidebar'); ?>
+        <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
             <!-- row -->
             <div class="container-fluid">
@@ -230,6 +230,29 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                            <li>
+                                                <div class="timeline-badge dark">
+                                                </div>
+                                                <div class="title">
+                                                    <h5 class="text-primary ms-5 mt-2">Resignation / Termination</h5>
+                                                </div>
+                                                <div class="row ms-5">
+                                                    <div class="ms-3 col-12 mb-2 form-check">
+                                                        <input class="form-check-input" type="checkbox" name="resigned" id="flexCheckDefault8" <?= $data->resign_date != '' ? 'checked' : '' ?>>
+                                                        <label class="form-check-label" for="flexCheckDefault8">
+                                                            Resign / Termination
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-6 mb-3" id="resignationDateContainer" style="<?= $data->resign_date != '' ? '' : 'display:none' ?>">
+                                                        <label for="exampleFormControlInput14" class="form-label">Resignation Date</label>
+                                                        <input type="Date" class="form-control" name="resign_date" value="<?= $data->resign_date ?>" id="exampleFormControlInput14">
+                                                    </div>
+                                                    <div class="col-12 mb-3" id="remarksContainer" style="<?= $data->resign_date != '' ? '' : 'display:none' ?>">
+                                                        <label for="exampleFormControlInput11" class="form-label">Remarks</label>
+                                                        <textarea type="text" class="form-control" name="remarks" id="exampleFormControlInput11"><?= $data->remarks ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </li>
                                         </ul>
                                         <div class="row ms-3 mt-5 mb-3 justify-content-between">
                                             <div class="col-5">
@@ -407,6 +430,23 @@
 
             e.preventDefault();
         });
+    </script>
+    <script>
+        function toggleElements() {
+            var checkbox = document.getElementById('flexCheckDefault8');
+            var resignationDateContainer = document.getElementById('resignationDateContainer');
+            var remarksContainer = document.getElementById('remarksContainer');
+            if (checkbox.checked) {
+                resignationDateContainer.style.display = '';
+                remarksContainer.style.display = '';
+            } else {
+                resignationDateContainer.style.display = 'none';
+                remarksContainer.style.display = 'none';
+            }
+        }
+
+        toggleElements();
+        document.getElementById('flexCheckDefault8').addEventListener('change', toggleElements);
     </script>
 </body>
 

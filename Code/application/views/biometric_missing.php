@@ -291,12 +291,17 @@
             from: from,
             too: too
           },
+          beforeSend: function() {
+            showLoader();
+          },
           success: function(response) {
             var tableData = JSON.parse(response);
             console.log(response);
             showTable(tableData);
           },
-          complete: function() {},
+          complete: function() {
+            hideLoader();
+          },
           error: function(error) {
             console.error(error);
           }

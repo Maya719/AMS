@@ -567,7 +567,7 @@ class Users extends CI_Controller
 				$user_id = $tempRow['id'];
 				$tempRow['first_name'] = $system_user->first_name;
 				$tempRow['last_name'] = $system_user->last_name;
-				$tempRow['name'] = '<a href="' . base_url('users/detail/' . $system_user->id) . '">' . $system_user->first_name . ' ' . $system_user->last_name . '</a>';
+				$tempRow['name'] = '<a href="' . base_url('users/edit_user/' . $system_user->id) . '">' . $system_user->first_name . ' ' . $system_user->last_name . '</a>';
 				$tempRow['father_name'] = $system_user->father_name;
 				$tempRow['cnic'] = $system_user->cnic;
 				$tempRow['gender'] = $system_user->gender;
