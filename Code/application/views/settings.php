@@ -343,6 +343,7 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
+        
         success: function(result) {
           if (result['error'] == false) {
             location.reload();
@@ -365,8 +366,8 @@
         data: "id=" + id,
         dataType: "json",
         success: function(result) {
+          console.log(result);
           if (result['error'] == false && result['data'] != '') {
-            console.log(result['data'].id);
             $("#update_id").val(result['data'].id);
             $("#type").val(result['data'].name);
             $("#starting_time").val(result['data'].starting_time);

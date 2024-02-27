@@ -321,7 +321,7 @@
                 <div id="short_leave_dates_edit" class="row" style="display: none;">
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="date" name="date" class="form-control" required="">
+                    <input type="text" id="date" name="date" class="form-control datepicker-default" required="">
                   </div>
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
@@ -751,21 +751,17 @@
                 startDate: startingDate,
               });
 
-              var time24 = true;
-              $('#starting_time').timepicker({
-                format: 'HH:mm',
+              $('#starting_time').bootstrapMaterialDatePicker({
+                format: time_format_js,
                 showMeridian: false,
-                time24Hour: time24
               });
-              $('#starting_time').timepicker('setTime', startingTime);
+              $('#starting_time').val(startingTime);
 
-              $('#ending_time').timepicker({
-                format: 'HH:mm',
+              $('#ending_time').bootstrapMaterialDatePicker({
+                format: time_format_js,
                 showMeridian: false,
-                time24Hour: time24
-
               });
-              $('#ending_time').timepicker('setTime', endingTime);
+              $('#ending_time').val(endingTime);
 
               $('#full_day_dates_edit').hide();
               $('#short_leave_dates_edit').show();
@@ -878,6 +874,12 @@
         minDate: moment(starting_date_create, date_format_js).toDate()
       });
     }
+
+    $('.timepicker').bootstrapMaterialDatePicker({
+      format: time_format_js,
+      time: true,
+      date: false
+    });
   </script>
 </body>
 

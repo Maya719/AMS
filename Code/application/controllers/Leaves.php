@@ -561,6 +561,7 @@ class Leaves extends CI_Controller
 					$data['ending_date'] = date("Y-m-d", strtotime($ending_date));
 					$data['starting_time'] = format_date($checkInDept, "H:i:s");
 					$data['ending_time'] = format_date($checkOutDept, "H:i:s");
+					
 					$data['leave_duration'] = 1 + round(abs(strtotime($this->input->post('ending_date')) - strtotime($this->input->post('starting_date'))) / 86400) . " Full Day/s";
 					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
 						$data['ending_date'] = date("Y-m-d", strtotime("+1 day", strtotime($starting_date)));
@@ -634,6 +635,7 @@ class Leaves extends CI_Controller
 				if ($this->db->insert('leaves', $data)) {
 					$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 					$this->session->set_flashdata('message_type', 'success');
+					$this->data['data'] = $data;
 					$this->data['error'] = false;
 					$this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
 					echo json_encode($this->data);

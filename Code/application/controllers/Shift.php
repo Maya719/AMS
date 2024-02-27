@@ -143,11 +143,6 @@ class Shift extends CI_Controller
 
 				if($this->shift_model->edit($this->input->post('update_id'), $data)){
 
-					$user_ids = $this->input->post('users')?$this->input->post('users'):'';
-
-					// Update users with shift_id
-					$this->shift_model->updateUserShiftId($this->input->post('update_id'), $user_ids);
-
 					$this->session->set_flashdata('message', $this->lang->line('updated_successfully')?$this->lang->line('updated_successfully'):"Updated successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;

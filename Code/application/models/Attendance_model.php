@@ -482,8 +482,8 @@ class Attendance_model extends CI_Model
                         } else {
                             if ($min["lateMinutes"]) {
                                 $totalLateMinutes += $min["lateMinutes"];
-                                $userData["status"][] = ''.$min["lateMinutes"].'';
-                            }else{
+                                $userData["status"][] = '' . $min["lateMinutes"] . '';
+                            } else {
                                 $userData["status"][] = 'P';
                             }
                         }
@@ -646,7 +646,6 @@ class Attendance_model extends CI_Model
                                 'to_id' => $id
                             );
                             $notification_id = $this->notifications_model->create($notification_data);
-
                             $template_data['NAME'] = $name;
                             $template_data['TIME'] = $time;
                             $template_data['DASHBOARD_URL'] = 'https://pms.mobipixels.com';
