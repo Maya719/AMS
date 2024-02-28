@@ -230,12 +230,12 @@
             emptyDataTable(table);
             var uniqueDates = getUniqueDates(data.data);
             var thead = table.find('thead');
-            var theadRow = '<tr><td style="background=#FAFAFA;border:2px solid #FAFAFA;" colspan="3"></td> ';
+            var theadRow = '<tr><td style="background=#FAFAFA;border:2px solid #FAFAFA;" colspan="4"></td> ';
             const dataArray = Object.entries(data.range);
             dataArray.forEach(([month, value]) => {
                 theadRow += '<td class="text-center" style="background=#FAFAFA; font-weight:600; border:2px solid #FAFAFA;" colspan="' + value + '">' + month + '</td>';
             });
-            theadRow += '</tr><tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px;  width:20px;">Employee</th>';
+            theadRow += '</tr><tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px;  width:20px;">Employee</th><th style="font-size:12px;  width:20px;">Summary</th>';
 
             uniqueDates.forEach(date => {
                 var filterOption = $('#dateFilter').val();
@@ -277,6 +277,7 @@
                 userRow += '<td style="font-size:12px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
                 userRow += '<td style="font-size:12px;">' + user.user + '</td>';
                 userRow += '<td style="font-size:12px;">' + user.name + '</td>';
+                userRow += '<td style="font-size:12px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + user.summery + '</a></td>';
 
                 uniqueDates.forEach(date => {
                     if (user.dates[date]) {

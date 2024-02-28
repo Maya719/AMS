@@ -4732,13 +4732,14 @@ fieldset:disabled .btn {
   }
 
 }
+
 @media (max-width: 574px) {
   .nav-pills .nav-link {
     border-radius: 0.5rem;
     background-color: #FFFFFF;
     padding: 1.2rem 3.5rem;
   }
-  
+
   .nav-pills a:nth-child(1) {
     margin: 5px 20px;
   }
@@ -15343,6 +15344,7 @@ label {
     opacity: 0;
   }
 }
+
 /* ajax Loader End */
 
 [data-theme-version="dark"] #preloader {
@@ -35769,14 +35771,14 @@ table.dataTable tfoot th {
 
 .dataTables_wrapper .dataTables_paginate span .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate span .paginate_button:hover {
-  background: var(--primary) !important;
-  color: #FFFFFF;
+  background: #E4E4E4 !important;
+  color: #657081;
 }
 
 .dataTables_wrapper .dataTables_paginate span .paginate_button.current:hover,
 .dataTables_wrapper .dataTables_paginate span .paginate_button:hover:hover {
-  background: var(--primary) !important;
-  color: #FFFFFF;
+  background: #E4E4E4 !important;
+  color: #657081;
 }
 
 .dataTables_wrapper input[type="search"],

@@ -321,7 +321,7 @@
                 <div id="short_leave_dates_edit" class="row" style="display: none;">
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                    <input type="text" id="date" name="date" class="form-control datepicker-default" required="">
+                    <input type="text" id="date5" name="date" class="form-control datepicker-default" required="">
                   </div>
                   <div class="col-md-4 form-group mb-3">
                     <label><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
@@ -705,6 +705,9 @@
         url: base_url + 'leaves/get_leaves_by_id',
         data: "id=" + id,
         dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
         success: function(result) {
           console.log(result);
           if (result['error'] == false && result['data'] != '') {
@@ -735,7 +738,6 @@
                 singleDatePicker: true,
                 startDate: endingDate,
                 minDate: startingDate
-
               });
 
               $('#full_day_dates_edit').show();
@@ -743,7 +745,9 @@
               $('#half_day_date_edit').hide();
               $("#leave").val('Full Day Leave');
             } else if (result['data'][0].leave_duration.includes('Short')) {
-              $('#date').daterangepicker({
+
+              console.log(startingDate);
+              $('#date5').daterangepicker({
                 locale: {
                   format: date_format_js
                 },
@@ -807,6 +811,9 @@
               position: 'topRight'
             });
           }
+        },
+        complete: function() {
+          $(".loader-progress").remove();
         }
       });
     })

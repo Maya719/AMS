@@ -55,7 +55,6 @@ class Attendance_model extends CI_Model
             $attendance = $this->get_attendance_for_admin($get);
             $formated_data = $this->formated_data($attendance, $get);
         } else {
-            // $attendance = $this->get_attendance_for_user($attendance);
             $leaves = [];
             $formated_data = [];
         }
@@ -107,15 +106,18 @@ class Attendance_model extends CI_Model
 
         foreach ($system_users as $user) {
             if ($user->active == 1 && $user->finger_config == 1) {
-                $userId = $user->employee_id;
-                $userLink = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>';
-                $userName = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user->first_name . ' ' . $user->last_name . '</a>';
-                $formattedData[$userId] = [
-                    'user_id' => $userId,
-                    'user' => $userLink,
-                    'name' => $userName,
-                    'dates' => [],
-                ];
+                $userjoin = new DateTime($user->join_date);
+                if ($userjoin < $toDate || $userjoin < $fromDate) {
+                    $userId = $user->employee_id;
+                    $userLink = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>';
+                    $userName = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user->first_name . ' ' . $user->last_name . '</a>';
+                    $formattedData[$userId] = [
+                        'user_id' => $userId,
+                        'user' => $userLink,
+                        'name' => $userName,
+                        'dates' => [],
+                    ];
+                }
             }
         }
 
@@ -127,18 +129,37 @@ class Attendance_model extends CI_Model
         }
 
         foreach ($formattedData as &$userData) {
+            $leave = '0.0';
+            $absent = '0.0';
+            $latemin = 0;
+            $attendancePageSummery2 = [];
+            $user_id = $userData['user_id'];
             foreach ($dateArray as $date) {
                 if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
-                    $user_id = $userData['user_id'];
                     if ($this->checkLeave($user_id, $date)) {
+                        $leave++;
                         $userData['dates'][$date][] = '<span class="text-success">L</span>';
                     } elseif ($this->holidayCheck($user_id, $date)) {
                         $userData['dates'][$date][] = '<span class="text-primary">H</span>';
                     } else {
-                        $userData['dates'][$date][] = '<span class="text-danger">A</span>';
+                        if ($this->checkJoined($user_id, $date)) {
+                            $userData['dates'][$date][] = '<span class="text-danger">A</span>';
+                            $absent = '' . floatval($absent) + floatval(1) . '';
+                        } else {
+                            $userData['dates'][$date][] = '<span class="text-muted">--</span>';
+                        }
+                    }
+                } else {
+                    $attendancePageSummery = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                    $attendancePageSummery2[] = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                    if ($attendancePageSummery["halfDay"]) {
+                        $absent = '' . floatval($absent) + floatval(1 / 2) . '';
+                    } else {
+                        $latemin = $latemin + $attendancePageSummery["lateMinutes"];
                     }
                 }
             }
+            $userData['summery'] = $absent . ' A/<br>' . $leave . ' L<br>' . $latemin . ' Min';
         }
 
         $groupedData = [];
@@ -161,6 +182,25 @@ class Attendance_model extends CI_Model
     }
 
 
+    public function checkJoined($user_id, $date)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('employee_id =', $user_id);
+        $query = $this->db->get();
+        $user = $query->row();
+        $userJoinDate = strtotime($user->join_date);
+        $providedDate = strtotime($date);
+
+        if ($userJoinDate === false || $providedDate === false) {
+            return false;
+        }
+
+        if ($providedDate < $userJoinDate) {
+            return false;
+        }
+        return true;
+    }
     public function holidayCheck($user_id, $date)
     {
         $this->db->select('*');

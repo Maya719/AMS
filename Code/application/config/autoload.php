@@ -158,5 +158,6 @@ $autoload['model'] = array(
     'shift_model',
     'department_model',
     'home_model',
-    'holiday_model' 
+    'holiday_model',
+    'events_model'
 );
