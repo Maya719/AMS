@@ -14236,7 +14236,7 @@ p {
 
 body>* {
   scrollbar-width: thin;
-  scrollbar-color: rgba(111, 133, 147, 0.1) #fff0;
+  scrollbar-color: var(--theme-color) #fff0;
 }
 
 ::-webkit-scrollbar {
@@ -14245,7 +14245,7 @@ body>* {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(111, 133, 147, 0.1);
+  background: var(--theme-color);
 }
 
 div,

@@ -129,8 +129,8 @@ class Attendance_model extends CI_Model
         }
 
         foreach ($formattedData as &$userData) {
-            $leave = '0.0';
-            $absent = '0.0';
+            $leave = '0';
+            $absent = '0';
             $latemin = 0;
             $attendancePageSummery2 = [];
             $user_id = $userData['user_id'];
@@ -159,7 +159,7 @@ class Attendance_model extends CI_Model
                     }
                 }
             }
-            $userData['summery'] = $absent . ' A/<br>' . $leave . ' L<br>' . $latemin . ' Min';
+            $userData['summery'] = $absent . '/' . $leave . '/' . $latemin;
         }
 
         $groupedData = [];
@@ -589,13 +589,13 @@ class Attendance_model extends CI_Model
                 if ($checkInDateTime > $halfDayStartDateTime || $checkOutDateTime < $halfDayEndDateTime) {
                     $halfDay = true;
                     if ($checkInDateTime > $shiftStartDateTime) {
-                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
                     } else {
                         $lateMinutes = 0;
                     }
                 } else {
                     if ($checkInDateTime > $shiftStartDateTime) {
-                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
                     } else {
                         $lateMinutes = 0;
                     }
@@ -603,7 +603,7 @@ class Attendance_model extends CI_Model
             }
             if ($date !== date('Y-m-d')) {
                 if ($shiftEndDateTime > $checkOutDateTime && !$halfDayLeave) {
-                    $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
+                    $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%h') * 60 + $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
                     $lateMinutes += $lateMinutes2;
                 }
             }

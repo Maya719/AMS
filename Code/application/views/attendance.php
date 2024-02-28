@@ -15,7 +15,7 @@
     }
 
     #attendance_list tbody td {
-        padding: 1px 10px;
+        padding: 1px 0px;
     }
 </style>
 </head>
@@ -235,7 +235,7 @@
             dataArray.forEach(([month, value]) => {
                 theadRow += '<td class="text-center" style="background=#FAFAFA; font-weight:600; border:2px solid #FAFAFA;" colspan="' + value + '">' + month + '</td>';
             });
-            theadRow += '</tr><tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px;  width:20px;">Employee</th><th style="font-size:12px;  width:20px;">Summary</th>';
+            theadRow += '</tr><tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px;  width:100px;">Employee</th><th style="font-size:12px;  width:20px;">A/L/Min</th>';
 
             uniqueDates.forEach(date => {
                 var filterOption = $('#dateFilter').val();
@@ -274,14 +274,14 @@
             var count = 1;
             data.data.forEach(user => {
                 var userRow = '<tr>';
-                userRow += '<td style="font-size:12px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
-                userRow += '<td style="font-size:12px;">' + user.user + '</td>';
-                userRow += '<td style="font-size:12px;">' + user.name + '</td>';
-                userRow += '<td style="font-size:12px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + user.summery + '</a></td>';
+                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
+                userRow += '<td style="font-size:10px;">' + user.user + '</td>';
+                userRow += '<td style="font-size:10px;">' + user.name + '</td>';
+                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + user.summery + '</a></td>';
 
                 uniqueDates.forEach(date => {
                     if (user.dates[date]) {
-                        userRow += '<td style="font-size:12px;">' + user.dates[date].join('<br>') + '</td>';
+                        userRow += '<td style="font-size:10px;">' + user.dates[date].join('<br>') + '</td>';
                     } else {
                         userRow += '<td style="font-size:10px;">Absent</td>';
                     }
