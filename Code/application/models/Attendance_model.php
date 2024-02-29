@@ -151,7 +151,6 @@ class Attendance_model extends CI_Model
                     }
                 } else {
                     $attendancePageSummery = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
-                    $attendancePageSummery2[] = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
                     if ($attendancePageSummery["halfDay"] && date('Y-m-d') != $date) {
                         $absent = '' . floatval($absent) + floatval(1 / 2) . '';
                         $userData['dates'][$date][] = '<span class="text-info">HD</span>';
@@ -163,7 +162,6 @@ class Attendance_model extends CI_Model
                     }
                 }
             }
-            $userData['summery2'] = $attendancePageSummery2;
             $userData['summery'] = $absent . '/' . $leave . '/' . $latemin;
         }
 
@@ -608,6 +606,7 @@ class Attendance_model extends CI_Model
             }
             if ($date !== date('Y-m-d')) {
                 if ($shiftEndDateTime > $checkOutDateTime && !$halfDayLeave) {
+                    
                     $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%h') * 60 + $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
                     $lateMinutes += $lateMinutes2;
                 }

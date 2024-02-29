@@ -302,7 +302,19 @@
                 "info": false,
                 "dom": '<"top"i>rt<"bottom"lp><"clear">',
                 "lengthMenu": [10, 20, 50, 500],
-                "pageLength": 10
+                "pageLength": 10,
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [1, 2]
+                    }, 
+                    {
+                        "orderable": false,
+                        "targets": '_all'
+                    } 
+                ],
+                "order": [
+                    [0, 'asc']
+                ] 
             });
         }
         $(document).ready(function() {

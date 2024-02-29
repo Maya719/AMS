@@ -90,7 +90,7 @@ class Home_model extends CI_Model
 
         $system_users = $this->ion_auth->members_all()->result();
         foreach ($system_users as $user) {
-            if ($user->finger_config == '1' && $user->active == '1') {
+            if ($user->finger_config == '1' && $user->active == '1' && $user->join_date && strtotime($user->join_date) <= strtotime($from)) {
 
                 if (!isset($formattedData[$user->employee_id])) {
                     $formattedData[$user->employee_id] = [
@@ -163,7 +163,7 @@ class Home_model extends CI_Model
 
         foreach ($system_users as $user) {
             $userPresent = false;
-            if ($user->finger_config == '1' && $user->active == '1') {
+            if ($user->finger_config == '1' && $user->active == '1' && $user->join_date && strtotime($user->join_date) <= strtotime($date)) {
                 foreach ($results as $attendance) {
                     if ($user->employee_id == $attendance["user_id"]) {
                         $present++;
