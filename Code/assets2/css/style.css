@@ -35853,7 +35853,7 @@ table.dataTable.no-footer {
   color: #657081;
   border-radius: 0.625rem;
   padding: 2px 0;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   margin-right: 5rem;
 }
 
@@ -35950,7 +35950,8 @@ table.dataTable thead .sorting_asc {
   color: #657081;
   border-radius: 0.625rem;
   padding: 2px 0;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 @media only screen and (max-width: 35.9375rem) {

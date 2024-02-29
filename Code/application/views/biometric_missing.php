@@ -353,7 +353,7 @@
         });
         table.DataTable({
           "paging": true,
-          "searching": false,
+          "searching": true,
           "language": {
             "paginate": {
               "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
@@ -361,12 +361,11 @@
             }
           },
           "info": false,
-          "dom": '<"top"i>rt<"bottom"lp><"clear">',
+          "lengthChange": true,
           "lengthMenu": [10, 20, 50, 500],
-          "order": [
-            [3, 'desc']
-          ],
-          "pageLength": 10
+          "order": false,
+          "pageLength": 10,
+          "dom": '<"top"f>rt<"bottom"lp><"clear">'
         });
       }
 

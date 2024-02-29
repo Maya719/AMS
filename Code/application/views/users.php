@@ -70,7 +70,7 @@
         <div class="row mt-3">
           <div class="col-lg-12">
             <div class="card">
-              <div class="card-body">
+              <div class="card-body p-1">
                 <div class="table-responsive">
                   <table id="employee_list" class="table table-sm mb-0">
                     <thead>
@@ -183,7 +183,7 @@
         });
         table.DataTable({
           "paging": true,
-          "searching": false,
+          "searching": true,
           "language": {
             "paginate": {
               "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
@@ -191,9 +191,11 @@
             }
           },
           "info": false,
-          "dom": '<"top"i>rt<"bottom"lp><"clear">',
-          "lengthMenu": [10, 20, 50, 500], // Include -1 for all rows and "All" as the corresponding label
-          "pageLength": 10
+          "lengthChange": true,
+          "lengthMenu": [10, 20, 50, 500],
+          "order": false,
+          "pageLength": 10,
+          "dom": '<"top"f>rt<"bottom"lp><"clear">'
         });
 
       }

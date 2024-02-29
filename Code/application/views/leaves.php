@@ -482,7 +482,6 @@
         theadRow += '<th>Ending Time</th>';
         theadRow += '<th>Paid</th>';
         theadRow += '<th>Status</th>';
-        theadRow += '<th style="display:none;"></th>';
         theadRow += '<th>Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
@@ -500,7 +499,6 @@
           userRow += '<td style="font-size:13px;">' + user.ending_date + ' ' + user.ending_time + '</td>';
           userRow += '<td style="font-size:13px;">' + user.paid + '</td>';
           userRow += '<td style="font-size:13px;">' + user.status + '</td>';
-          userRow += '<td style="font-size:13px; display:none;">' + user.created + '</td>';
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           if (user.btn) {
@@ -518,7 +516,7 @@
         });
         table.DataTable({
           "paging": true,
-          "searching": false,
+          "searching": true,
           "language": {
             "paginate": {
               "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
@@ -526,13 +524,13 @@
             }
           },
           "info": false,
-          "dom": '<"top"i>rt<"bottom"lp><"clear">',
+          "lengthChange": true,
           "lengthMenu": [10, 20, 50, 500],
-          "order": [
-            [9, 'desc']
-          ],
-          "pageLength": 10
+          "order": false,
+          "pageLength": 10,
+          "dom": '<"top"f>rt<"bottom"lp><"clear">'
         });
+
       }
 
       function emptyDataTable(table) {
@@ -606,8 +604,8 @@
             type: type
           },
           beforeSend: function() {
-          $(".modal-body").append(ModelProgress);
-        },
+            $(".modal-body").append(ModelProgress);
+          },
           success: function(response) {
             console.log(response);
             var totalLeaves = response.total_leaves;
@@ -629,8 +627,8 @@
             $('#remaining_leaves').val(remainingLeaves);
           },
           complete: function() {
-          $(".loader-progress").remove();
-        }
+            $(".loader-progress").remove();
+          }
         });
       }
     });

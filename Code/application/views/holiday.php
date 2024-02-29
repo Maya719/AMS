@@ -230,18 +230,21 @@
   <?php $this->load->view('includes/scripts'); ?>
   <script>
     var table3 = $('#holiday_list').DataTable({
-      language: {
-        paginate: {
-          next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-          previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
-        }
-      },
-      "info": false,
-      "searching": false,
-      "dom": '<"top"i>rt<"bottom"lp><"clear">',
-      "lengthMenu": [5, 10, 15],
-
-    });
+          "paging": true,
+          "searching": true,
+          "language": {
+            "paginate": {
+              "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+              "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+            }
+          },
+          "info": false,
+          "lengthChange": true,
+          "lengthMenu": [10, 20, 50, 500],
+          "order": false,
+          "pageLength": 10,
+          "dom": '<"top"f>rt<"bottom"lp><"clear">'
+        });
     $(document).ready(function() {
       $('#apply2').change(function() {
         var selectedValue = $(this).val();
