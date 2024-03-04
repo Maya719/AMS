@@ -193,7 +193,6 @@
           "info": false,
           "lengthChange": true,
           "lengthMenu": [10, 20, 50, 500],
-          "order": false,
           "pageLength": 10,
           "dom": '<"top"f>rt<"bottom"lp><"clear">'
         });

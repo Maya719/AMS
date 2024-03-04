@@ -735,7 +735,7 @@ th {
 }
 
 .table td a {
-  color: #21252B;
+  color: #151617;
   font-size: 15px;
   font-weight: 400;
   line-height: 22.50px;
@@ -35668,7 +35668,7 @@ table.dataTable thead th {
 }
 
 table.dataTable tbody td {
-  padding: 14px 5px;
+  padding: 8px 5px;
   border-bottom: 1;
 }
 

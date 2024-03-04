@@ -26,25 +26,49 @@ class Leaves_model extends CI_Model
     function get_leaves_by_id($id)
     {
         $where = "";
-        if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) {
-            $where .= " WHERE id = $id ";
-        } else {
-            $where .= " WHERE id = $id ";
-        }
-
+        $where .= " WHERE id = $id ";
         $where .= " AND saas_id = " . $this->session->userdata('saas_id');
-
         $query = $this->db->query("SELECT * FROM leaves " . $where);
-
         $results = $query->result_array();
         foreach ($results as &$value) {
             $query = $this->db->query("SELECT id FROM users WHERE employee_id = " . $value["user_id"]);
             $user = $query->row();
             $value["user_id"] = $user->id;
+            $value["starting_date"] = format_date($value['starting_date'], system_date_format());
+            $value["ending_date"] = format_date($value['ending_date'], system_date_format());
+            $stepResult = $this->getStatusForword($id);
+            $step = $stepResult["level"];
+            $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
+            $current_group_id = $group[0]->id;
+            $forword_result = $this->is_forworded($current_group_id, $step);
+            if ($value["status"] == 1) {
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
+            }elseif ($value["status"] == 2) {
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>Rejected</button>';
+            }
+            elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin()) ) {
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To '.$forword_result["forworded_to"].'</button>';
+            }else{
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2">Save</button>';
+                if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
+                    $value["btnHTML"] .= '<button type="button" class="btn btn-delete-leave btn-block btn-danger">Delete</button>';
+                }
+            }
+            $value["forword_result"] = $forword_result;
         }
         return $results;
     }
 
+    function getStatusForword($id)
+    {
+        $saas_id = $this->session->userdata('saas_id');
+        $this->db->where('leave_id', $id);
+        $this->db->order_by('level', 'DESC');
+        $this->db->limit(1);
+        $logs_query = $this->db->get('leave_logs');
+        $latest_log = $logs_query->row_array();
+        return $latest_log;
+    }
     function get_leaves()
     {
         $get = $this->input->get();
@@ -101,15 +125,15 @@ class Leaves_model extends CI_Model
             } else {
                 $leave['paid'] = ($this->lang->line('unpaid') ? htmlspecialchars($this->lang->line('unpaid')) : 'Unpaid Leave');
             }
+            $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
+            $current_group_id = $group[0]->id;
+            $step = $leave['step'];
+            $forword_result = $this->is_forworded($current_group_id, $step);
             if ($leave['status'] == 0) {
-                $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
-                $current_group_id = $group[0]->id;
-                $step = $leave['step'];
-                $forword_result = $this->is_forworded($current_group_id, $step);
                 if ($forword_result["is_forworded"]) {
                     if (permissions('leaves_status') || $this->ion_auth->is_admin()) {
                         $leave['btn'] = false;
-                        $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     }
                 } else {
                     $leave['btn'] = true;
@@ -118,9 +142,14 @@ class Leaves_model extends CI_Model
             } elseif ($leave['status'] == 1) {
                 $leave['btn'] = false;
                 $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved') . '</span>';
-            } else {
-                $leave['btn'] = false;
-                $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('rejected') ? htmlspecialchars($this->lang->line('rejected')) : 'Rejected') . '</span>';
+            } elseif ($leave['status'] == 2) {
+                if ($forword_result["is_forworded"]) {
+                    $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                    $leave['btn'] = false;
+                } else {
+                    $leave['btn'] = false;
+                    $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('rejected') ? htmlspecialchars($this->lang->line('rejected')) : 'Rejected') . '</span>';
+                }
             }
         }
 
@@ -163,6 +192,13 @@ class Leaves_model extends CI_Model
     function create($data)
     {
         if ($this->db->insert('leaves', $data))
+            return $this->db->insert_id();
+        else
+            return $this->db->last_query();;
+    }
+    function createLog($data)
+    {
+        if ($this->db->insert('leave_logs', $data))
             return $this->db->insert_id();
         else
             return $this->db->last_query();;
@@ -216,11 +252,10 @@ class Leaves_model extends CI_Model
     {
 
         $total_leaves = 0;
-        $consumed_leaves = 0;
         $remaining_leaves = 0;
-        $type = $result['type'];
         $user_id2 = isset($result['user_id']) ? $result['user_id'] : $this->session->userdata('user_id');
         $user_id = get_employee_id_from_user_id($user_id2);
+        $saas_id = $this->session->userdata('saas_id');
         // get consume leaves
         $currentDate = date('Y-m-d');
         $currentYear = date('Y');
@@ -231,86 +266,54 @@ class Leaves_model extends CI_Model
 
         $this->db->from('leaves');
         $this->db->where('user_id', $user_id);
-        $this->db->where('type', $type);
         $this->db->where('status', '1');
         $this->db->where('starting_date >=', $from);
         $this->db->where('starting_date <=', $too);
         $query = $this->db->get();
-        if ($query) {
-            $result = $query->result();
-            foreach ($result as $leave) {
-                $startDate = new DateTime($leave->starting_date);
-                $endDate = new DateTime($leave->ending_date);
-                $leaveDuration = $endDate->diff($startDate)->days + 1;
-                if (strpos($leave->leave_duration, 'Full') !== false) {
-                    $consumed_leaves += $leaveDuration;
-                } elseif (strpos($leave->leave_duration, 'Half') !== false) {
-                    $consumed_leaves += $leaveDuration * 0.5;
+
+        $this->db->from('leaves_type');
+        $this->db->where('saas_id', $saas_id);
+        $leaveTypes = $this->db->get();
+        if ($query && $leaveTypes) {
+            $leaves = $query->result();
+            $leaves_types = $leaveTypes->result();
+            foreach ($leaves_types as $type) {
+                $consumed_leaves = 0;
+                $paid_leaves = 0;
+                $unpaid_leaves = 0;
+                foreach ($leaves as $leave) {
+                    if ($leave->type == $type->id) {
+                        $startDate = new DateTime($leave->starting_date);
+                        $endDate = new DateTime($leave->ending_date);
+                        $leaveDuration = $endDate->diff($startDate)->days + 1;
+                        if (strpos($leave->leave_duration, 'Full') !== false) {
+                            $consumed_leaves += $leaveDuration;
+                        } elseif (strpos($leave->leave_duration, 'Half') !== false) {
+                            $consumed_leaves += $leaveDuration * 0.5;
+                        }
+                        if ($leave->paid == 0) {
+                            $paid_leaves += $leaveDuration;
+                        } else {
+                            $unpaid_leaves += $leaveDuration;
+                        }
+                    }
                 }
+
+                $TotalLeaveArray[] = $type->leave_counts;
+                $LeaveTypeArray[] = $type->name;
+                $consumeArray[] = $consumed_leaves;
+                $paidArray[] = $paid_leaves;
+                $unpaidArray[] = $unpaid_leaves;
             }
         }
-        $this->db->where('id', $type);
-        $query3 = $this->db->get('leaves_type');
-        $leave_type = $query3->row();
-        $total_leaves = $leave_type->leave_counts;
-        $duration = $leave_type->duration;
-        // get user probation
-        $probation_query = $this->db->select('probation')->from('users')->where('id', $user_id2)->get();
-        $probation_data = $probation_query->row();
-        $probation = $probation_data->probation;
-        $probationYear = date('Y', strtotime($probation));
-        $probationMonth = date('n', strtotime($probation));
-        if ($probation > date('Y-m-d')) {
-            $total_leaves = 0;
-            $remaining_leaves = 0;
-        } elseif ($probationYear < $currentYear) {
-            if($duration == '3_months'){
-                if ($currentMonth >= 1 && $currentMonth <= 3) {
-                    $slice = 4;
-                } elseif ($currentMonth >= 4 && $currentMonth <= 6) {
-                    $slice =3;
 
-                } elseif ($currentMonth >= 7 && $currentMonth <= 9) {
-                    $slice =2;
-
-                } elseif ($currentMonth >= 10 && $currentMonth <= 12) {
-                    $slice =1;
-                }
-            }elseif($duration == '4_months'){
-
-                if ($currentMonth >= 1 && $currentMonth <= 4) {
-                    $slice =3;
-                } elseif ($currentMonth >= 5 && $currentMonth <= 8) {
-                    $slice =2;
-
-                } elseif ($currentMonth >= 9 && $currentMonth <= 12) {
-                    $slice =1;
-                }
-
-            }elseif($duration == '6_months'){
-
-                if ($currentMonth >= 1 && $currentMonth <= 6) {
-                    $slice =2;
-                } elseif ($currentMonth >= 7 && $currentMonth <= 12) {
-                    $slice =1;
-                }
-
-            }elseif($duration == 'year'){
-                if ($currentMonth >= 1 && $currentMonth <= 12) {
-                    $slice =1;
-                }
-            }
-            $total_leaves = $total_leaves*$slice;
-            $remaining_leaves =  $total_leaves-$consumed_leaves;
-        } elseif ($probationYear === $currentYear) {
-            $total_leaves =0;
-            $remaining_leaves =  0;
-        }
         return array(
-            'total_leaves' =>  $total_leaves,
-            'consumed_leaves' => $consumed_leaves,
-            'remaining_leaves' => $remaining_leaves,
-            'slice' => $slice,
+            'total_leaves' =>  $TotalLeaveArray,
+            'leave_types' =>  $LeaveTypeArray,
+            'consumed_leaves' => $consumeArray,
+            'paidArray' => $paidArray,
+            'unpaidArray' => $unpaidArray,
+            'user_id' => $user_id,
         );
     }
 

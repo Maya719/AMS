@@ -81,43 +81,26 @@ class Leaves extends CI_Controller
 				$data['leave_reason'] = $this->input->post('leave_reason');
 				$data['type'] = $this->input->post('type');
 				$data['paid'] = $this->input->post('paid');
-				if ($this->input->post('status') == 1) {
-					$this->db->where('id',  $this->input->post('update_id'));
-					$query = $this->db->get('leaves');
-					$leave = $query->row();
-					$step = $leave->step;
 
-					$this->db->where('saas_id', $this->session->userdata('saas_id'));
-					$this->db->order_by('step_no', 'desc'); 
-					$this->db->limit(1);
-					$heiQuery = $this->db->get('leave_hierarchy');
-					$heiResult = $heiQuery->row();
-					$highStep = $heiResult->step_no;
-					if ($step == $highStep) {
-						$data['status'] = '1';
-						$data['step'] = $step + 1;
-					} else {
-						$data['status_last'] = $this->input->post('status') ? $this->input->post('status') : '0';
-						$data['step'] = $step + 1;
-					}
-				} elseif ($this->input->post('status') == 2) {
-					$data['step'] = $highStep;
-					$data['status'] = '2';
-				} elseif ($this->input->post('status') == 0) {
-					$this->db->where('id',  $this->input->post('update_id'));
-					$query = $this->db->get('leaves');
-					$leave = $query->row();
-					$step = $leave->step;
-					$status = $leave->status;
-					if ($status != $this->input->post('status')) {
-						$data['status'] = '0';
-						$data['step'] = $step - 1;
-					}else{
-						$data['status'] = '0';
-					}
+				$this->db->where('leave_id',  $this->input->post('update_id'));
+				$this->db->order_by('level', 'desc');
+				$this->db->limit(1);
+				$query = $this->db->get('leave_logs');
+				$leave = $query->row();
+				$step = $leave->level;
+
+				$this->db->where('saas_id', $this->session->userdata('saas_id'));
+				$this->db->order_by('step_no', 'desc');
+				$this->db->limit(1);
+				$heiQuery = $this->db->get('leave_hierarchy');
+				$heiResult = $heiQuery->row();
+				$highStep = $heiResult->step_no;
+				if ($highStep == $step) {
+					$data['status'] = $this->input->post('status');
+				}else{
+					$data['status'] = '0';
 				}
 
-				// Get shift details based on shift_id
 				$shiftIdQuery = $this->db->select('shift_id')->get_where('users', array('id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id')));
 				$shiftIdRow = $shiftIdQuery->row();
 				$shiftId = $shiftIdRow->shift_id;
@@ -130,7 +113,6 @@ class Leaves extends CI_Controller
 					$breakStartDept = $shiftRow->break_start;
 					$checkOutDept = $shiftRow->ending_time;
 				} else {
-					// Set default times from shift with ID 1
 					$defaultShiftQuery = $this->db->get_where('shift', array('id' => 1));
 					$defaultShiftRow = $defaultShiftQuery->row();
 					$checkInDept = $defaultShiftRow->starting_time;
@@ -355,9 +337,26 @@ class Leaves extends CI_Controller
 				}
 
 				if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
-					$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated successfully.");
-					$this->session->set_flashdata('message_type', 'success');
+					$roler = $this->session->userdata('user_id');
+					$group = $this->ion_auth->get_users_groups($roler)->result();
+					$group_id = $group[0]->id;
+					$this->db->where('group_id', $group_id);
+
+					$getCurrentGroupStep = $this->db->get('leave_hierarchy');
+					$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
+					$Step = $heiCurrentGroupStepResult->step_no;
+
+					$log = [
+						'leave_id' => $this->input->post('update_id'),
+						'group_id' => $group_id,
+						'remarks' => $this->input->post('remarks'),
+						'status' => $this->input->post('status'),
+						'level' => $Step+1
+					];
+					$this->leaves_model->createLog($log);
 					$this->data['error'] = false;
+					$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated Successfully.");
+					$this->session->set_flashdata('message_type', 'success');
 					$this->data['message'] = $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated successfully.";
 					echo json_encode($this->data);
 				} else {
@@ -561,7 +560,7 @@ class Leaves extends CI_Controller
 					$data['ending_date'] = date("Y-m-d", strtotime($ending_date));
 					$data['starting_time'] = format_date($checkInDept, "H:i:s");
 					$data['ending_time'] = format_date($checkOutDept, "H:i:s");
-					
+
 					$data['leave_duration'] = 1 + round(abs(strtotime($this->input->post('ending_date')) - strtotime($this->input->post('starting_date'))) / 86400) . " Full Day/s";
 					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
 						$data['ending_date'] = date("Y-m-d", strtotime("+1 day", strtotime($starting_date)));
@@ -626,13 +625,27 @@ class Leaves extends CI_Controller
 					}
 					$data['leave_duration'] = ($data['leave_duration'] - $missing_finger_days) . " Full Day/s";
 				}
-				$this->db->where('saas_id', $this->session->userdata('saas_id'));
-				$this->db->order_by('step_no', 'asc'); 
-				$this->db->limit(1);
-				$heiQuery = $this->db->get('leave_hierarchy');
-				$heiResult = $heiQuery->row();
-				$data['step'] = $heiResult->step_no;
-				if ($this->db->insert('leaves', $data)) {
+				$leave_id = $this->leaves_model->create($data);
+				if ($leave_id) {
+					$roler = $this->session->userdata('user_id');
+					$group = $this->ion_auth->get_users_groups($roler)->result();
+					$group_id = $group[0]->id;
+					$log[] = [
+						'leave_id' => $leave_id,
+						'group_id' => $group_id,
+						'remarks' => $this->input->post('leave_reason'),
+						'status' => -1,
+						'level' => 0
+					];
+					$log[] = [
+						'leave_id' => $leave_id,
+						'group_id' => $group_id,
+						'status' => 0,
+						'level' => 1
+					];
+					foreach ($log as $value) {
+						$this->leaves_model->createLog($value);
+					}
 					$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['data'] = $data;
@@ -658,23 +671,110 @@ class Leaves extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$user_id = $this->input->post('user_id');
-			$type = $this->input->post('type');
-			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
-				$result = [
-					'user_id' => $user_id,
-					'type' => $type,
-				];
-			} else {
-				$result = [
-					'type' => $type,
-				];
-			}
+			$result = [
+				'user_id' => $user_id,
+			];
 
 			$leaveReport = $this->leaves_model->get_leaves_count($result);
 
 			echo json_encode($leaveReport);
 		} else {
 			return '';
+		}
+	}
+	public function manage($id)
+	{
+		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+			$this->data['page_title'] = 'Leaves - ' . company_name();
+			$this->data['main_page'] = 'Leaves Application';
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+				$this->data['system_users'] = $this->ion_auth->members()->result();
+			} elseif (permissions('leaves_view_selected')) {
+				$selected = selected_users();
+				foreach ($selected as $user_id) {
+					$users[] = $this->ion_auth->user($user_id)->row();
+				}
+				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$this->data['system_users'] = $users;
+			}
+			$saas_id = $this->session->userdata('saas_id');
+			$this->db->where('saas_id', $saas_id);
+			$query = $this->db->get('leaves_type');
+			$this->data['leave'] = $this->leaves_model->get_leaves_by_id($id);
+			$this->data['leaves_types'] = $query->result_array();
+			$this->db->where('leave_id', $id);
+			$logs_query = $this->db->get('leave_logs');
+			$leaves_logs = $logs_query->result_array();
+			foreach ($leaves_logs as &$leaves_log) {
+				$leaves_log["created"] = $this->getTimeAgo($leaves_log["created"]);
+				$group_id = $leaves_log["group_id"];
+				$group = $this->ion_auth->group($group_id)->row();
+				if ($leaves_log["status"] == -1) {
+					$leaves_log["status"] = 'The ' . $group->description . ' has <strong class="text-info">Create</strong> Leave';
+					$leaves_log["class"] = 'info';
+				} elseif ($leaves_log["status"] == 1) {
+					$leaves_log["status"] = 'The ' . $group->description . ' has change the status to <strong class="text-success">Approve</strong>';
+					$leaves_log["class"] = 'success';
+				} else if ($leaves_log["status"] == 0) {
+					$leaves_log["status"] = 'The ' . $group->description . ' has change the status to  <strong class="text-primary">Pending</strong>';
+					$leaves_log["class"] = 'primary';
+				} else {
+					$leaves_log["status"] = 'The ' . $group->description . ' has change the status to  <strong class="text-danger">Reject</strong>';
+					$leaves_log["class"] = 'danger';
+				}
+			}
+			$this->data['leaves_logs'] = $leaves_logs;
+			$this->load->view('leaves-edit', $this->data);
+		} else {
+			redirect('auth', 'refresh');
+		}
+	}
+	public function create_leave()
+	{
+
+		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+			$this->data['page_title'] = 'Leaves - ' . company_name();
+			$this->data['main_page'] = 'Leaves Application';
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+				$this->data['system_users'] = $this->ion_auth->members()->result();
+			} elseif (permissions('leaves_view_selected')) {
+				$selected = selected_users();
+				foreach ($selected as $user_id) {
+					$users[] = $this->ion_auth->user($user_id)->row();
+				}
+				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$this->data['system_users'] = $users;
+			}
+			$saas_id = $this->session->userdata('saas_id');
+			$this->db->where('saas_id', $saas_id);
+			$query = $this->db->get('leaves_type');
+			$this->data['leaves_types'] = $query->result_array();
+			$this->load->view('leaves-create', $this->data);
+		} else {
+			redirect('auth', 'refresh');
+		}
+	}
+	public function getTimeAgo($timestamp)
+	{
+		$timestampDateTime = new DateTime($timestamp);
+		$currentDateTime = new DateTime();
+
+		$interval = $currentDateTime->diff($timestampDateTime);
+
+		if ($interval->y > 0) {
+			return $interval->format("%y years ago");
+		} elseif ($interval->m > 0) {
+			return $interval->format("%m months ago");
+		} elseif ($interval->d > 0) {
+			return $interval->format("%d days ago");
+		} elseif ($interval->h > 0) {
+			return $interval->format("%h hours ago");
+		} elseif ($interval->i > 0) {
+			return $interval->format("%i minutes ago");
+		} else {
+			return "just now";
 		}
 	}
 }
