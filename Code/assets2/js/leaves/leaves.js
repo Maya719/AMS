@@ -189,7 +189,13 @@ function showTable(data) {
         userRow += '<td style="font-size:13px;">' + user.status + '</td>';
         userRow += '<td>';
         userRow += '<div class="d-flex">';
-        userRow += '<span class="badge light badge-primary"><a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-solid fa-eye"></i></a></span>';
+        userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>';
+        if (user.btn) {
+            userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary ms-2 btn-delete-leave" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash text-danger"></i></a>';
+        }else{
+            userRow += '<a href="javascript:void(0);" class="text-primary ms-2" data-bs-toggle="tooltip" data-placement="top" title="Delete" disabled><i class="fa-solid fa-trash text-danger"></i></a>';
+        }
+        
         userRow += '</div>';
         userRow += '</td>';
         userRow += '</tr>';

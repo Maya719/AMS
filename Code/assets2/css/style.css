@@ -4428,6 +4428,7 @@ fieldset:disabled .btn {
 }
 
 .dropdown-menu.show {
+
   display: block;
 }
 
@@ -32740,6 +32741,7 @@ fieldset:disabled .btn {
   border: 0;
   z-index: 2;
   overflow: hidden;
+  position: absolute;
   border-radius: 0.625rem;
   box-shadow: 0 0 3.125rem 0 rgba(82, 63, 105, 0.15);
   margin-top: 0;

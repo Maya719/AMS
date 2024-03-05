@@ -136,7 +136,7 @@
                                         ?>
                                             <div class="form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
-                                                <select name="status" id="status" class="form-control">
+                                                <select name="status" id="status" class="form-control" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     <option value=""><?= $this->lang->line('select_status') ? $this->lang->line('select_status') : 'Select Status' ?></option>
                                                     <option value="0" <?= $leave[0]["status"] == 0 ? "selected" : "" ?>><?= $this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending' ?></option>
                                                     <option value="1" <?= $leave[0]["status"] == 1 ? "selected" : "" ?>><?= $this->lang->line('approve') ? htmlspecialchars($this->lang->line('approve')) : 'Approve' ?></option>
