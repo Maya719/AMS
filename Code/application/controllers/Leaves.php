@@ -89,13 +89,28 @@ class Leaves extends CI_Controller
 				$leave = $query->row();
 				$step = $leave->level;
 
+				/*
+				*
+				*	highest role??
+				*
+				*/
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->order_by('step_no', 'desc');
 				$this->db->limit(1);
 				$heiQuery = $this->db->get('leave_hierarchy');
 				$heiResult = $heiQuery->row();
 				$highStep = $heiResult->step_no;
-				if ($highStep == $step) {
+				/*
+				*
+				* 	current step Approver/Recommender
+				*/
+				$this->db->where('saas_id', $this->session->userdata('saas_id'));
+				$this->db->where('step_no', $step);
+				$this->db->limit(1);
+				$AppQuery = $this->db->get('leave_hierarchy');
+				$appResult = $AppQuery->row();
+				$AppOrRec = $appResult->recomender_approver;
+				if ($highStep == $step || $AppOrRec == 'approver') {
 					$data['status'] = $this->input->post('status');
 				}else{
 					$data['status'] = '0';

@@ -24,6 +24,7 @@
 //         }
 //     });
 // });
+
 $(document).on('click', '.btn-create-leave', function (e) {
     var form = $('#modal-create-leaves-part');
     var formData = form.serialize();
@@ -189,13 +190,12 @@ function showTable(data) {
         userRow += '<td style="font-size:13px;">' + user.status + '</td>';
         userRow += '<td>';
         userRow += '<div class="d-flex">';
-        userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>';
+        userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit text-primary"></i></a>';
         if (user.btn) {
             userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary ms-2 btn-delete-leave" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash text-danger"></i></a>';
         }else{
-            userRow += '<a href="javascript:void(0);" class="text-primary ms-2" data-bs-toggle="tooltip" data-placement="top" title="Delete" disabled><i class="fa-solid fa-trash text-danger"></i></a>';
+            userRow += '<a href="javascript:void(0);" class="text-primary ms-2" data-bs-toggle="tooltip" data-placement="top" title="Delete" disabled><i class="fa-solid fa-trash text-muted"></i></a>';
         }
-        
         userRow += '</div>';
         userRow += '</td>';
         userRow += '</tr>';
@@ -215,6 +215,7 @@ function showTable(data) {
         "lengthMenu": [10, 20, 50, 500],
         "pageLength": 10,
         "dom": '<"top"f>rt<"bottom"lp><"clear">',
+        "order": [[5, "desc"]]
     });
 
 }
@@ -319,6 +320,9 @@ $(document).ready(function () {
 $(document).on('click', '.btn-delete-leave', function (e) {
     e.preventDefault();
     var id = $("#update_id").val();
+    if (!id) {
+        var id = $(this).data('id');
+    }
     Swal.fire({
         title: 'Are you sure?',
         text: 'You won\'t be able to revert this!',
