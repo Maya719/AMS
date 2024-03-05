@@ -388,10 +388,11 @@
           .replace("d", formattedDate.slice(3, 5));
       }
     });
-    $('#timepicker').bootstrapMaterialDatePicker({
+    var time24 = true;
+    $('#timepicker').timepicker({
       format: 'HH:mm',
-      time: true,
-      date: false
+      showMeridian: false,
+      time24Hour: time24
     });
   </script>
   <script>
@@ -479,13 +480,12 @@
             });
             var time = moment(result['data'][0].time, 'HH:mm:ss').format('HH:mm');
 
-            $('#timepicker2').bootstrapMaterialDatePicker({
+            var time24 = true;
+            $('#timepicker2').timepicker({
               format: 'HH:mm',
-              time: true,
-              date: false,
-              defaultTime: time
+              showMeridian: false,
+              time24Hour: time24
             });
-            $('#timepicker2').val(time);
             $("#reason").val(result['data'][0].reason);
             $("#status").val(result['data'][0].status);
           } else {

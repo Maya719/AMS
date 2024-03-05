@@ -64,6 +64,7 @@
 <script src="<?= base_url('assets2/vendor/jquery-asColor/jquery-asColor.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/jquery-asGradient/jquery-asGradient.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/jquery-asColorPicker/js/jquery-asColorPicker.min.js') ?>"></script>
+<script src="<?=base_url('assets/modules/bootstrap-timepicker/timepicker.js')?>"></script>
 <script src="<?= base_url('assets2/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/pickadate/picker.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/pickadate/picker.time.js') ?>"></script>

@@ -591,11 +591,6 @@ class Attendance_model extends CI_Model
             } else {
                 if ($checkInDateTime > $halfDayStartDateTime || $checkOutDateTime < $halfDayEndDateTime) {
                     $halfDay = true;
-                    if ($checkInDateTime > $shiftStartDateTime) {
-                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
-                    } else {
-                        $lateMinutes = 0;
-                    }
                 } else {
                     if ($checkInDateTime > $shiftStartDateTime) {
                         $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
@@ -605,11 +600,7 @@ class Attendance_model extends CI_Model
                 }
             }
             if ($date !== date('Y-m-d')) {
-                if ($shiftEndDateTime > $checkOutDateTime && !$halfDayLeave) {
-                    
-                    $lateMinutes2 = $shiftEndDateTime->diff($checkOutDateTime)->format('%h') * 60 + $shiftEndDateTime->diff($checkOutDateTime)->format('%i');
-                    $lateMinutes += $lateMinutes2;
-                }
+                
             }
         }
 

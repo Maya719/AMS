@@ -112,7 +112,7 @@ class Leaves extends CI_Controller
 				$AppOrRec = $appResult->recomender_approver;
 				if ($highStep == $step || $AppOrRec == 'approver') {
 					$data['status'] = $this->input->post('status');
-				}else{
+				} else {
 					$data['status'] = '0';
 				}
 
@@ -352,23 +352,25 @@ class Leaves extends CI_Controller
 				}
 
 				if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
-					$roler = $this->session->userdata('user_id');
-					$group = $this->ion_auth->get_users_groups($roler)->result();
-					$group_id = $group[0]->id;
-					$this->db->where('group_id', $group_id);
 
-					$getCurrentGroupStep = $this->db->get('leave_hierarchy');
-					$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
-					$Step = $heiCurrentGroupStepResult->step_no;
+					if ($this->ion_auth->is_admin() || permissions('leaves_status')) {
+						$roler = $this->session->userdata('user_id');
+						$group = $this->ion_auth->get_users_groups($roler)->result();
+						$group_id = $group[0]->id;
+						$this->db->where('group_id', $group_id);
+						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
+						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
+						$Step = $heiCurrentGroupStepResult->step_no;
 
-					$log = [
-						'leave_id' => $this->input->post('update_id'),
-						'group_id' => $group_id,
-						'remarks' => $this->input->post('remarks'),
-						'status' => $this->input->post('status'),
-						'level' => $Step+1
-					];
-					$this->leaves_model->createLog($log);
+						$log = [
+							'leave_id' => $this->input->post('update_id'),
+							'group_id' => $group_id,
+							'remarks' => $this->input->post('remarks'),
+							'status' => $this->input->post('status'),
+							'level' => $Step + 1
+						];
+						$this->leaves_model->createLog($log);
+					}
 					$this->data['error'] = false;
 					$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated Successfully.");
 					$this->session->set_flashdata('message_type', 'success');

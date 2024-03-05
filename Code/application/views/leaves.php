@@ -342,7 +342,7 @@
                 <label class="col-form-label"><?= $this->lang->line('leave_reason') ? $this->lang->line('leave_reason') : 'Leave Reason' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="leave_reason" id="leave_reason" class="form-control" required=""></textarea>
               </div>
-              <?php if ($this->ion_auth->in_group(1) || permissions('leaves_status')) {
+              <?php if ($this->ion_auth->is_admin() || permissions('leaves_status')) {
               ?>
                 <div class="form-group mb-3">
                   <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>

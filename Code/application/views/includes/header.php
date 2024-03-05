@@ -73,6 +73,8 @@ if($my_current_lang){
 
 <link href="<?=base_url('assets2/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')?>" rel="stylesheet" type="text/css"/>	
 
+<link rel="stylesheet" href="<?=base_url('assets/modules/bootstrap-timepicker/timepicker.css')?>">
+
 <link href="<?=base_url('assets2/vendor/bootstrap-datepicker-master/css/bootstrap-datepicker.min.css')?>" rel="stylesheet" type="text/css"/>	
 
 <link href="<?=base_url('assets2/vendor/pickadate/themes/default.css')?>" rel="stylesheet" type="text/css"/>	
