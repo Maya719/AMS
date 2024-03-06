@@ -91,7 +91,7 @@
                                             </select>
                                         </div>
                                         <div id="custom-date-range" style="display: none;">
-                                            <div class="row">
+                                            <div class="row mt-2">
                                                 <div class="col-lg-3">
                                                     <input name="datepicker" class="datepicker-default form-control" placeholder="From Date" id="from">
                                                 </div>

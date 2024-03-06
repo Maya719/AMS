@@ -354,7 +354,6 @@
                   </select>
                 </div>
               <?php } ?>
-
             </div>
             <div class="modal-footer d-flex justify-content-center">
               <div class="col-lg-4">

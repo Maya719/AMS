@@ -127,13 +127,19 @@ class Leaves_model extends CI_Model
             }
             $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
             $current_group_id = $group[0]->id;
-            $step = $leave['step'];
+            $logs = $this->getStatusForword($leave['id']);
+            $step = $logs["level"];
+            $Logstatus = $logs["status"];
             $forword_result = $this->is_forworded($current_group_id, $step);
             if ($leave['status'] == 0) {
                 if ($forword_result["is_forworded"]) {
                     if (permissions('leaves_status') || $this->ion_auth->is_admin()) {
                         $leave['btn'] = false;
-                        $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        if ($Logstatus == 1) {
+                            $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        }elseif ($Logstatus == 2) {
+                            $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        }
                     }
                 } else {
                     $leave['btn'] = true;
