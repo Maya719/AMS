@@ -56,7 +56,7 @@
                                             <?php } ?>
                                             <div class="col-lg-6 form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
-                                                <select class="form-control select2"name="type_add" id="type">
+                                                <select class="form-control select2" name="type_add" id="type">
                                                     <?php foreach ($leaves_types as $leaves) { ?>
                                                         <option value="<?= $leaves['id'] ?>"><?= $leaves['name'] ?></option>
                                                     <?php
@@ -153,6 +153,51 @@
                                     </div>
                                     <div class="card-body">
                                         <div id="chartBar" class="chartBar"></div>
+                                        <div class="d-flex ms-4">
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFA26D" />
+                                                    </svg>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Tatal Leave</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FF5ED2" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Consume</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#4CAF50" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Paid</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#f44336" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Unpaid</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -177,6 +222,7 @@
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/js/leaves/leaves.js') ?>"></script>
     <script>
+        var chartBarInstance;
         var chartBar = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
@@ -339,9 +385,12 @@
                         },
 
                     };
+                    if (chartBarInstance) {
+                        chartBarInstance.destroy();
+                    }
                     if (jQuery("#chartBar").length > 0) {
-                        var chartBar1 = new ApexCharts(document.querySelector("#chartBar"), options);
-                        chartBar1.render();
+                        chartBarInstance = new ApexCharts(document.querySelector("#chartBar"), options);
+                        chartBarInstance.render();
                     }
 
                 },

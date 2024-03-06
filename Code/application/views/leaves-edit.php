@@ -79,10 +79,10 @@
                                                 </div>
                                             <?php } ?>
                                             <?php
-                                                $leaveValue = showTypeDate($leave[0]["leave_duration"]);
-                                                
+                                            $leaveValue = showTypeDate($leave[0]["leave_duration"]);
+
                                             ?>
-                                            <div class="form-group form-check form-check-inline col-md-6 md-3 mb-3">
+                                            <div class="form-group form-check form-check-inline col-md-6 md-3 mb-3 ms-4">
                                                 <input class="form-check-input" type="checkbox" id="half_day" name="half_day" <?= $leaveValue === "Half" ? "checked" : ""; ?>>
                                                 <label class="form-check-label text-danger" for="half_day"><?= $this->lang->line('half_day') ? $this->lang->line('half_day') : 'Half Day' ?></label>
                                             </div>
@@ -92,17 +92,17 @@
                                                 <label class="form-check-label text-danger" for="short_leave"><?= $this->lang->line('short_leave') ? $this->lang->line('short_leave') : 'Short Leave' ?></label>
                                             </div>
                                         </div>
-                                        
+
                                         <div id="date_fields">
                                             <div id="full_day_dates" class="<?= $leaveValue === "Full" ? "" : "hide"; ?>">
                                                 <div class="row">
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="starting_date" name="starting_date" class="form-control datepicker-default required" value="<?=$leave[0]["starting_date"]?>">
+                                                        <input type="text" id="starting_date" name="starting_date" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>">
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="ending_date" name="ending_date" class="form-control datepicker-default required" value="<?=$leave[0]["ending_date"]?>">
+                                                        <input type="text" id="ending_date" name="ending_date" class="form-control datepicker-default required" value="<?= $leave[0]["ending_date"] ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,7 +111,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text"id="date_half2" name="date_half" class="form-control datepicker-default required" value="<?=$leave[0]["starting_date"]?>">
+                                                        <input type="text" id="date_half2" name="date_half" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>">
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
@@ -124,20 +124,20 @@
 
                                             </div>
                                             <div id="short_leave_dates" class="<?= $leaveValue === "Short" ? "" : "hide"; ?>">
-                                            <div class="row">
-                                                <div class="col-md-4 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="date5" name="date" class="form-control datepicker-default required" value="<?=$leave[0]["starting_date"]?>">
+                                                <div class="row">
+                                                    <div class="col-md-4 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="date5" name="date" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>">
+                                                    </div>
+                                                    <div class="col-md-4 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="starting_time" name="starting_time" class="form-control timepicker" value="<?= $leave[0]["starting_time"] ?>">
+                                                    </div>
+                                                    <div class="col-md-4 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="ending_time" name="ending_time" class="form-control timepicker" value="<?= $leave[0]["ending_time"] ?>">
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
-                                                    <input type="text"id="starting_time" name="starting_time" class="form-control timepicker" value="<?=$leave[0]["starting_time"]?>">
-                                                </div>
-                                                <div class="col-md-4 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="ending_time" name="ending_time" class="form-control timepicker" value="<?=$leave[0]["ending_time"]?>">
-                                                </div>
-                                            </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -188,7 +188,53 @@
                                     </div>
                                     <div class="card-body">
                                         <div id="chartBar" class="chartBar"></div>
+                                        <div class="d-flex ms-4">
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFA26D" />
+                                                    </svg>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Tatal Leave</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FF5ED2" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Consume</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#4CAF50" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Paid</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex me-5">
+                                                <div class="mt-2">
+                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#f44336" />
+                                                    </svg>
+
+                                                </div>
+                                                <div class="ms-3">
+                                                    <p class="mt-2">Unpaid</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="col-12">
@@ -448,7 +494,7 @@
             return '';
         }
     }
-       ?>
+    ?>
 </body>
 
 </html>
