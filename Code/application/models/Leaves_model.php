@@ -43,12 +43,11 @@ class Leaves_model extends CI_Model
             $forword_result = $this->is_forworded($current_group_id, $step);
             if ($value["status"] == 1) {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
-            }elseif ($value["status"] == 2) {
+            } elseif ($value["status"] == 2) {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>Rejected</button>';
-            }
-            elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin()) ) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To '.$forword_result["forworded_to"].'</button>';
-            }else{
+            } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin())) {
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
+            } else {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2">Save</button>';
                 if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
                     $value["btnHTML"] .= '<button type="button" class="btn btn-delete-leave btn-block btn-danger">Delete</button>';
@@ -137,7 +136,7 @@ class Leaves_model extends CI_Model
                         $leave['btn'] = false;
                         if ($Logstatus == 1) {
                             $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
-                        }elseif ($Logstatus == 2) {
+                        } elseif ($Logstatus == 2) {
                             $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                         }
                     }
@@ -256,9 +255,6 @@ class Leaves_model extends CI_Model
 
     public function get_leaves_count($result)
     {
-
-        $total_leaves = 0;
-        $remaining_leaves = 0;
         $user_id2 = isset($result['user_id']) ? $result['user_id'] : $this->session->userdata('user_id');
         $user_id = get_employee_id_from_user_id($user_id2);
         $saas_id = $this->session->userdata('saas_id');
@@ -270,47 +266,50 @@ class Leaves_model extends CI_Model
         $from = $currentYear . '-01-01';
         $too = $currentYear . '-12-31';
 
-        $this->db->from('leaves');
-        $this->db->where('user_id', $user_id);
-        $this->db->where('status', '1');
-        $this->db->where('starting_date >=', $from);
-        $this->db->where('starting_date <=', $too);
-        $query = $this->db->get();
+
 
         $this->db->from('leaves_type');
         $this->db->where('saas_id', $saas_id);
         $leaveTypes = $this->db->get();
-        if ($query && $leaveTypes) {
+        $leaves_types = $leaveTypes->result();
+        foreach ($leaves_types as $type) {
+            $consumed_leaves = 0;
+            $paid_leaves = 0;
+            $unpaid_leaves = 0;
+            $this->db->from('leaves');
+            $this->db->where('user_id', $user_id);
+            $this->db->where('status', '1');
+            $this->db->where('type', $type->id);
+            $this->db->where('starting_date >=', $from);
+            $this->db->where('starting_date <=', $too);
+            $query = $this->db->get();
             $leaves = $query->result();
-            $leaves_types = $leaveTypes->result();
-            foreach ($leaves_types as $type) {
-                $consumed_leaves = 0;
-                $paid_leaves = 0;
-                $unpaid_leaves = 0;
-                foreach ($leaves as $leave) {
-                    if ($leave->type == $type->id) {
-                        $startDate = new DateTime($leave->starting_date);
-                        $endDate = new DateTime($leave->ending_date);
-                        $leaveDuration = $endDate->diff($startDate)->days + 1;
-                        if (strpos($leave->leave_duration, 'Full') !== false) {
-                            $consumed_leaves += $leaveDuration;
-                        } elseif (strpos($leave->leave_duration, 'Half') !== false) {
-                            $consumed_leaves += $leaveDuration * 0.5;
-                        }
-                        if ($leave->paid == 0) {
-                            $paid_leaves += $leaveDuration;
-                        } else {
-                            $unpaid_leaves += $leaveDuration;
-                        }
+            foreach ($leaves as $leave) {
+                $startDate = new DateTime($leave->starting_date);
+                $endDate = new DateTime($leave->ending_date);
+                $leaveDuration = $endDate->diff($startDate)->days + 1;
+                if (strpos($leave->leave_duration, 'Full') !== false) {
+                    $consumed_leaves += $leaveDuration;
+                    if ($leave->paid == 0) {
+                        $paid_leaves += $leaveDuration;
+                    } else {
+                        $unpaid_leaves += $leaveDuration;
+                    }
+                } elseif (strpos($leave->leave_duration, 'Half') !== false) {
+                    $consumed_leaves += $leaveDuration * 0.5;
+                    if ($leave->paid == 0) {
+                        $paid_leaves += 0.5;
+                    } else {
+                        $unpaid_leaves += 0.5;
                     }
                 }
-
-                $TotalLeaveArray[] = $type->leave_counts;
-                $LeaveTypeArray[] = $type->name;
-                $consumeArray[] = $consumed_leaves;
-                $paidArray[] = $paid_leaves;
-                $unpaidArray[] = $unpaid_leaves;
             }
+            $leavesArray[] = $leaves;
+            $TotalLeaveArray[] = $type->leave_counts;
+            $LeaveTypeArray[] = $type->name;
+            $consumeArray[] = $consumed_leaves;
+            $paidArray[] = $paid_leaves;
+            $unpaidArray[] = $unpaid_leaves;
         }
 
         return array(
@@ -320,6 +319,7 @@ class Leaves_model extends CI_Model
             'paidArray' => $paidArray,
             'unpaidArray' => $unpaidArray,
             'user_id' => $user_id,
+            'leavesArray' => $leavesArray,
         );
     }
 
