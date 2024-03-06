@@ -1,5 +1,8 @@
 <?php $this->load->view('includes/header'); ?>
 <style>
+    .hide {
+        display: none;
+    }
 </style>
 </head>
 
@@ -56,6 +59,7 @@
                                                     </select>
                                                 </div>
                                             <?php } ?>
+
                                             <div class="col-lg-6 form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
                                                 <select class="form-control select2" name="type" id="type">
@@ -66,7 +70,7 @@
                                                 </select>
                                             </div>
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
-                                                <div class="col-lg-6 form-group mb-3">
+                                                <div class="col-lg-12 form-group mb-3">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
                                                     <select name="paid" id="paid" class="form-control select2">
                                                         <option value="0" <?= $leave[0]["paid"] == 0 ? "selected" : "" ?>><?= $this->lang->line('paid') ? $this->lang->line('paid') : 'Paid Leave' ?></option>
@@ -74,50 +78,66 @@
                                                     </select>
                                                 </div>
                                             <?php } ?>
-                                            <div class="col-lg-6 form-group mb-3">
-                                                <label class="col-form-label"><?= $this->lang->line('leave') ? $this->lang->line('leave') : 'Leave' ?><span class="text-danger">*</span></label>
-                                                <input type="text" name="leave" id="leave" value="<?= getLeaveValue($leave[0]["leave_duration"]) ?>" class="form-control" required="" readonly>
+                                            <?php
+                                                $leaveValue = showTypeDate($leave[0]["leave_duration"]);
+                                                
+                                            ?>
+                                            <div class="form-group form-check form-check-inline col-md-6 md-3 mb-3">
+                                                <input class="form-check-input" type="checkbox" id="half_day" name="half_day" <?= $leaveValue === "Half" ? "checked" : ""; ?>>
+                                                <label class="form-check-label text-danger" for="half_day"><?= $this->lang->line('half_day') ? $this->lang->line('half_day') : 'Half Day' ?></label>
+                                            </div>
+
+                                            <div class="form-group form-check form-check-inline col-md-5 mb-3">
+                                                <input class="form-check-input" type="checkbox" id="short_leave" name="short_leave" <?= $leaveValue === "Short" ? "checked" : ""; ?>>
+                                                <label class="form-check-label text-danger" for="short_leave"><?= $this->lang->line('short_leave') ? $this->lang->line('short_leave') : 'Short Leave' ?></label>
                                             </div>
                                         </div>
-
+                                        
                                         <div id="date_fields">
-                                            <div id="full_day_dates_edit" class="row">
-                                                <div class="col-md-6 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="starting_date" value="<?= $leave[0]["starting_date"] ?>" name="starting_date" class="form-control datepicker-default" required="">
-                                                </div>
-                                                <div class="col-md-6 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="ending_date" name="ending_date" value="<?= $leave[0]["ending_date"] ?>" class="form-control datepicker-default" required="">
+                                            <div id="full_day_dates" class="<?= $leaveValue === "Full" ? "" : "hide"; ?>">
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="starting_date" name="starting_date" class="form-control datepicker-default required" value="<?=$leave[0]["starting_date"]?>">
+                                                    </div>
+                                                    <div class="col-md-6 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="ending_date" name="ending_date" class="form-control datepicker-default required" value="<?=$leave[0]["ending_date"]?>">
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div id="half_day_date_edit" class="row" style="display: none;">
-                                                <div class="col-md-6 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="date_half2" name="date_half" class="form-control datepicker-default" required="">
+                                            <div id="half_day_date" class="<?= $leaveValue === "Half" ? "" : "hide"; ?>">
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text"id="date_half2" name="date_half" class="form-control datepicker-default required" value="<?=$leave[0]["starting_date"]?>">
+                                                    </div>
+                                                    <div class="col-md-6 form-group mb-3">
+                                                        <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
+                                                        <select name="half_day_period" id="half_day_period" class=" form-group form-control">
+                                                            <option value="0" <?= $leave[0]["leave_duration"] == "First Time Half Day" ? "selected" : ""; ?>>First Time</option>
+                                                            <option value="1" <?= $leave[0]["leave_duration"] == "Second Time Half Day" ? "selected" : ""; ?>>Second Time</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6 form-group mb-3">
-                                                    <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
-                                                    <select name="half_day_period" id="half_day_period" class=" form-group form-control select2">
-                                                        <option value="0">First Time</option>
-                                                        <option value="1">Second Time</option>
-                                                    </select>
-                                                </div>
+
                                             </div>
-                                            <div id="short_leave_dates_edit" class="row" style="display: none;">
+                                            <div id="short_leave_dates" class="<?= $leaveValue === "Short" ? "" : "hide"; ?>">
+                                            <div class="row">
                                                 <div class="col-md-4 form-group mb-3">
                                                     <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="date5" name="date" class="form-control datepicker-default" required="">
+                                                    <input type="text" id="date5" name="date" class="form-control datepicker-default required" value="<?=$leave[0]["starting_date"]?>">
                                                 </div>
                                                 <div class="col-md-4 form-group mb-3">
                                                     <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="starting_time" name="starting_time" class="form-control timepicker" required="">
+                                                    <input type="text"id="starting_time" name="starting_time" class="form-control timepicker" value="<?=$leave[0]["starting_time"]?>">
                                                 </div>
                                                 <div class="col-md-4 form-group mb-3">
                                                     <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                                                    <input type="text" id="ending_time" name="ending_time" class="form-control timepicker" required="">
+                                                    <input type="text" id="ending_time" name="ending_time" class="form-control timepicker" value="<?=$leave[0]["ending_time"]?>">
                                                 </div>
+                                            </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -152,7 +172,7 @@
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
                                         <div class="col-lg-6 d-flex">
-                                            <?=$leave[0]["btnHTML"]?>
+                                            <?= $leave[0]["btnHTML"] ?>
                                         </div>
                                     </div>
                                 </form>
@@ -416,19 +436,19 @@
         });
     </script>
     <?php
-    function getLeaveValue($duration)
+    function showTypeDate($duration)
     {
         if (strpos($duration, 'Full') !== false) {
-            return 'Full Day`s Leave';
+            return 'Full';
         } elseif (strpos($duration, 'Short') !== false) {
-            return 'Short Leave';
+            return 'Short';
         } elseif (strpos($duration, 'Half') !== false) {
-            return 'Half Day Leave';
+            return 'Half';
         } else {
             return '';
         }
     }
-    ?>
+       ?>
 </body>
 
 </html>

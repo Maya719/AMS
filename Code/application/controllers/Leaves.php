@@ -64,6 +64,7 @@ class Leaves extends CI_Controller
 		}
 	}
 
+
 	public function edit()
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
@@ -90,10 +91,10 @@ class Leaves extends CI_Controller
 				$step = $leave->level;
 
 				/*
-				*
-				*	highest role??
-				*
-				*/
+			*
+			*	highest role??
+			*
+			*/
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->order_by('step_no', 'desc');
 				$this->db->limit(1);
@@ -101,9 +102,9 @@ class Leaves extends CI_Controller
 				$heiResult = $heiQuery->row();
 				$highStep = $heiResult->step_no;
 				/*
-				*
-				* 	current step Approver/Recommender
-				*/
+			*
+			* 	current step Approver/Recommender
+			*/
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->where('step_no', $step);
 				$this->db->limit(1);
@@ -135,8 +136,89 @@ class Leaves extends CI_Controller
 					$breakStartDept = $defaultShiftRow->break_start;
 					$checkOutDept = $defaultShiftRow->ending_time;
 				}
+				$timeValidated = true;
+				if ($this->input->post('half_day')) {
+					$half_day_period = $this->input->post('half_day_period');
+					$startingTime = $half_day_period === "0" ? $checkInDept : $breakEndDept;
+					$endingTime = $half_day_period === "0" ? $breakStartDept : $checkOutDept;
+					$half_day_period = $half_day_period === "0" ? "First Time" : "Second Time";
+					$data['starting_date'] = date("Y-m-d", strtotime($this->input->post('date_half')));
+					$data['ending_date'] = date("Y-m-d", strtotime($this->input->post('date_half')));
+					$data['starting_time'] = date("H:i:s", strtotime($startingTime));
+					$data['ending_time'] = date("H:i:s", strtotime($endingTime));
+					$data['leave_duration'] = $half_day_period . " Half Day";
+					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
+						$tempStartingDate = date("Y-m-d", strtotime($this->input->post('date_half')));
+						$tempEndingDate = date("Y-m-d", strtotime("+1 day", strtotime($tempStartingDate)));
 
-				if (strpos($this->input->post('leave_duration'), 'Full') !== false) {
+						if ($half_day_period === "Second Time" && strtotime($startingTime) >= strtotime('00:00:00', strtotime($tempStartingDate))) {
+							$startingDate = $tempEndingDate;
+						}
+
+						if (strtotime($endingTime) >= strtotime('00:00:00', strtotime($tempStartingDate))) {
+							$endingDate = $tempEndingDate;
+						}
+						$data['starting_date'] = $startingDate;
+						$data['ending_date'] = $endingDate;
+					}
+				} elseif ($this->input->post('short_leave')) {
+					if (date("H:i:s", strtotime($this->input->post('starting_time'))) < date("H:i:s", strtotime($this->input->post('ending_time')))) {
+						$data['starting_date'] = date("Y-m-d", strtotime($this->input->post('date')));
+						$data['ending_date'] = date("Y-m-d", strtotime($this->input->post('date')));
+						$data['starting_time'] = date("H:i:s", strtotime($this->input->post('starting_time')));
+						$data['ending_time'] = date("H:i:s", strtotime($this->input->post('ending_time')));
+						$startingTime = strtotime($this->input->post('starting_time'));
+						$endingTime = strtotime($this->input->post('ending_time'));
+						$durationSeconds = $endingTime - $startingTime;
+						$durationHours = floor($durationSeconds / 3600);
+						$durationMinutes = floor(($durationSeconds % 3600) / 60);
+						$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
+
+						if (strtotime($checkInDept) > strtotime($checkOutDept)) {
+							$startingDate = date("Y-m-d", strtotime($this->input->post('date')));
+							$endingDate = date("Y-m-d", strtotime($this->input->post('date')));
+							$tempEndingDate = date("Y-m-d", strtotime("+1 day", strtotime($startingDate)));
+
+							if ($startingTime >= strtotime('00:00:00', strtotime($tempEndingDate))) {
+								$startingDate = $tempEndingDate;
+							}
+
+							if ($endingTime >= strtotime('00:00:00', strtotime($startingDate))) {
+								$endingDate = $tempEndingDate;
+							}
+
+							if ($startingTime < $endingTime) {
+								$startingDate = $tempEndingDate;
+								$endingDate = $tempEndingDate;
+							}
+
+
+							if ($endingTime < $startingTime) {
+								$startOfDay = strtotime('00:00:00', strtotime($data['starting_date']));
+								$durationFirstDay = strtotime('23:59:59', strtotime($data['starting_date'])) - $startingTime;
+
+								$endOfDay = strtotime('23:59:59', strtotime($data['ending_date']));
+								$durationSecondDay = $endingTime - $startOfDay;
+
+								$durationSeconds = $durationFirstDay + $durationSecondDay;
+							} else {
+								$durationSeconds = $endingTime - $startingTime;
+							}
+							$durationHours = floor($durationSeconds / 3600);
+							$durationMinutes = floor(($durationSeconds % 3600) / 60);
+							$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
+							$data['starting_date'] = $startingDate;
+							$data['ending_date'] = $endingDate;
+						}
+						if (($durationHours < 3) || ($durationHours == 3 && $durationMinutes == 0)) {
+							$timeValidated = true;
+						} else {
+							$timeValidated = false;
+						}
+					} else {
+						$timeValidated = false;
+					}
+				} else {
 					$starting_date = $this->input->post('starting_date');
 					$ending_date = $this->input->post('ending_date');
 					$data['starting_date'] = date("Y-m-d", strtotime($starting_date));
@@ -179,8 +261,6 @@ class Leaves extends CI_Controller
 					$employee_id_query = $this->db->query("SELECT employee_id FROM users WHERE id = $user_id");
 					$employee_id_result = $employee_id_query->row_array();
 					$employee_id = $employee_id_result['employee_id'];
-
-
 					while ($current_date < $end_date) {
 						$formatted_date = $current_date->format('Y-m-d');
 						$execution = false;
@@ -226,88 +306,9 @@ class Leaves extends CI_Controller
 
 						$current_date->modify('+1 day');
 					}
-
 					// Subtract the number of missing finger days and holidays from the leave_duration
 					$data['leave_duration'] = ($data['leave_duration'] - $missing_finger_days) . " Full Day/s";
-				} elseif (strpos($this->input->post('leave_duration'), 'Half') !== false) {
-					$half_day_period = $this->input->post('half_day_period');
-					$startingTime = $half_day_period === "0" ? $checkInDept : $breakEndDept;
-					$endingTime = $half_day_period === "0" ? $breakStartDept : $checkOutDept;
-					$half_day_period = $half_day_period === "0" ? "First Time" : "Second Time";
-					$data['starting_date'] = date("Y-m-d", strtotime($this->input->post('date_half')));
-					$data['ending_date'] = date("Y-m-d", strtotime($this->input->post('date_half')));
-					$data['starting_time'] = date("H:i:s", strtotime($startingTime));
-					$data['ending_time'] = date("H:i:s", strtotime($endingTime));
-					$data['leave_duration'] = $half_day_period . " Half Day";
-					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
-						$tempStartingDate = date("Y-m-d", strtotime($this->input->post('date_half')));
-						$tempEndingDate = date("Y-m-d", strtotime("+1 day", strtotime($tempStartingDate)));
-
-						// Check if starting time is after the temp ending date
-						if ($half_day_period === "Second Time" && strtotime($startingTime) >= strtotime('00:00:00', strtotime($tempStartingDate))) {
-							$startingDate = $tempEndingDate;
-						}
-
-						// Check if ending time is after the starting date
-						if (strtotime($endingTime) >= strtotime('00:00:00', strtotime($tempStartingDate))) {
-							$endingDate = $tempEndingDate;
-						}
-						$data['starting_date'] = $startingDate;
-						$data['ending_date'] = $endingDate;
-					}
-				} elseif (strpos($this->input->post('leave_duration'), 'Short') !== false) {
-					$data['starting_date'] = date("Y-m-d", strtotime($this->input->post('date')));
-					$data['ending_date'] = date("Y-m-d", strtotime($this->input->post('date')));
-					$data['starting_time'] = date("H:i:s", strtotime($this->input->post('starting_time')));
-					$data['ending_time'] = date("H:i:s", strtotime($this->input->post('ending_time')));
-					$startingTime = strtotime($this->input->post('starting_time'));
-					$endingTime = strtotime($this->input->post('ending_time'));
-					$durationSeconds = $endingTime - $startingTime;
-					$durationHours = floor($durationSeconds / 3600);
-					$durationMinutes = floor(($durationSeconds % 3600) / 60);
-					$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
-					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
-						$startingDate = date("Y-m-d", strtotime($this->input->post('date')));
-						$endingDate = date("Y-m-d", strtotime($this->input->post('date')));
-						$tempEndingDate = date("Y-m-d", strtotime("+1 day", strtotime($startingDate)));
-
-						// Check if starting time is after the temp ending date
-						if ($startingTime >= strtotime('00:00:00', strtotime($tempEndingDate))) {
-							$startingDate = $tempEndingDate;
-						}
-
-						if ($endingTime >= strtotime('00:00:00', strtotime($startingDate))) {
-							$endingDate = $tempEndingDate;
-						}
-
-						if ($startingTime < $endingTime) {
-							$startingDate = $tempEndingDate;
-							$endingDate = $tempEndingDate;
-						}
-
-						$data['starting_date'] = $startingDate;
-						$data['ending_date'] = $endingDate;
-
-						if ($endingTime < $startingTime) {
-							// Calculate duration for the first day
-							$startOfDay = strtotime('00:00:00', strtotime($data['starting_date']));
-							$durationFirstDay = strtotime('23:59:59', strtotime($data['starting_date'])) - $startingTime;
-
-							// Calculate duration for the second day
-							$endOfDay = strtotime('23:59:59', strtotime($data['ending_date']));
-							$durationSecondDay = $endingTime - $startOfDay;
-
-							$durationSeconds = $durationFirstDay + $durationSecondDay;
-						} else {
-							$durationSeconds = $endingTime - $startingTime;
-						}
-
-						$durationHours = floor($durationSeconds / 3600);
-						$durationMinutes = floor(($durationSeconds % 3600) / 60);
-						$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
-					}
 				}
-
 				if ($this->input->post('status')) {
 					if ($this->input->post('status') == 1) {
 						$to_user = $this->ion_auth->user($this->input->post('user_id'))->row();
@@ -351,33 +352,39 @@ class Leaves extends CI_Controller
 					}
 				}
 
-				if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
-					if (($this->ion_auth->is_admin() || permissions('leaves_status')) && $this->input->post('remarks')) {
-						$roler = $this->session->userdata('user_id');
-						$group = $this->ion_auth->get_users_groups($roler)->result();
-						$group_id = $group[0]->id;
-						$this->db->where('group_id', $group_id);
-						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
-						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
-						$Step = $heiCurrentGroupStepResult->step_no;
+				if ($timeValidated) {
+					if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
+						if (($this->ion_auth->is_admin() || permissions('leaves_status')) && $this->input->post('remarks')) {
+							$roler = $this->session->userdata('user_id');
+							$group = $this->ion_auth->get_users_groups($roler)->result();
+							$group_id = $group[0]->id;
+							$this->db->where('group_id', $group_id);
+							$getCurrentGroupStep = $this->db->get('leave_hierarchy');
+							$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
+							$Step = $heiCurrentGroupStepResult->step_no;
 
-						$log = [
-							'leave_id' => $this->input->post('update_id'),
-							'group_id' => $group_id,
-							'remarks' => $this->input->post('remarks'),
-							'status' => $this->input->post('status'),
-							'level' => $Step + 1
-						];
-						$this->leaves_model->createLog($log);
+							$log = [
+								'leave_id' => $this->input->post('update_id'),
+								'group_id' => $group_id,
+								'remarks' => $this->input->post('remarks'),
+								'status' => $this->input->post('status'),
+								'level' => $Step + 1
+							];
+							$this->leaves_model->createLog($log);
+						}
+						$this->data['error'] = false;
+						$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated Successfully.");
+						$this->session->set_flashdata('message_type', 'success');
+						$this->data['message'] = $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated successfully.";
+						echo json_encode($this->data);
+					} else {
+						$this->data['error'] = true;
+						$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+						echo json_encode($this->data);
 					}
-					$this->data['error'] = false;
-					$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated Successfully.");
-					$this->session->set_flashdata('message_type', 'success');
-					$this->data['message'] = $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated successfully.";
-					echo json_encode($this->data);
 				} else {
 					$this->data['error'] = true;
-					$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+					$this->data['message'] = $this->lang->line('check_times_manualy') ? $this->lang->line('check_times_manualy') : "Check times manualy Or Short leave time exceed from 3 hours";
 					echo json_encode($this->data);
 				}
 			} else {
@@ -435,7 +442,6 @@ class Leaves extends CI_Controller
 			$this->form_validation->set_rules('ending_date', 'Ending Date', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('leave_reason', 'Leave Reason', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('type_add', 'Leave Type', 'trim|required|strip_tags|xss_clean');
-			$post = $this->input->post('leave_reason');
 			if ($this->form_validation->run() == TRUE) {
 				if ($this->input->post('remaining_leaves') == 0) {
 					$paidUnpaid = 1;
@@ -448,7 +454,6 @@ class Leaves extends CI_Controller
 					'type' => $this->input->post('type_add'),
 					'paid' => $paidUnpaid
 				);
-
 				$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id')));
 				if ($employeeIdQuery->num_rows() > 0) {
 					$employeeIdRow = $employeeIdQuery->row();
@@ -494,6 +499,7 @@ class Leaves extends CI_Controller
 						$data['document'] = $uploaded_data;
 					}
 				}
+				$timeValidated = true;
 				if ($this->input->post('half_day')) {
 					$half_day_period = $this->input->post('half_day_period');
 					$startingTime = $half_day_period === "0" ? $checkInDept : $breakEndDept;
@@ -520,54 +526,63 @@ class Leaves extends CI_Controller
 						$data['starting_date'] = $startingDate;
 						$data['ending_date'] = $endingDate;
 					}
+					$timeValidated = true;
 				} elseif ($this->input->post('short_leave')) {
-					$data['starting_date'] = date("Y-m-d", strtotime($this->input->post('date')));
-					$data['ending_date'] = date("Y-m-d", strtotime($this->input->post('date')));
-					$data['starting_time'] = date("H:i:s", strtotime($this->input->post('starting_time')));
-					$data['ending_time'] = date("H:i:s", strtotime($this->input->post('ending_time')));
-					$startingTime = strtotime($this->input->post('starting_time'));
-					$endingTime = strtotime($this->input->post('ending_time'));
-					$durationSeconds = $endingTime - $startingTime;
-					$durationHours = floor($durationSeconds / 3600);
-					$durationMinutes = floor(($durationSeconds % 3600) / 60);
-					$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
-
-					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
-						$startingDate = date("Y-m-d", strtotime($this->input->post('date')));
-						$endingDate = date("Y-m-d", strtotime($this->input->post('date')));
-						$tempEndingDate = date("Y-m-d", strtotime("+1 day", strtotime($startingDate)));
-
-						if ($startingTime >= strtotime('00:00:00', strtotime($tempEndingDate))) {
-							$startingDate = $tempEndingDate;
-						}
-
-						if ($endingTime >= strtotime('00:00:00', strtotime($startingDate))) {
-							$endingDate = $tempEndingDate;
-						}
-
-						if ($startingTime < $endingTime) {
-							$startingDate = $tempEndingDate;
-							$endingDate = $tempEndingDate;
-						}
-
-						$data['starting_date'] = $startingDate;
-						$data['ending_date'] = $endingDate;
-
-						if ($endingTime < $startingTime) {
-							$startOfDay = strtotime('00:00:00', strtotime($data['starting_date']));
-							$durationFirstDay = strtotime('23:59:59', strtotime($data['starting_date'])) - $startingTime;
-
-							$endOfDay = strtotime('23:59:59', strtotime($data['ending_date']));
-							$durationSecondDay = $endingTime - $startOfDay;
-
-							$durationSeconds = $durationFirstDay + $durationSecondDay;
-						} else {
-							$durationSeconds = $endingTime - $startingTime;
-						}
-
+					if (date("H:i:s", strtotime($this->input->post('starting_time'))) < date("H:i:s", strtotime($this->input->post('ending_time')))) {
+						$data['starting_date'] = date("Y-m-d", strtotime($this->input->post('date')));
+						$data['ending_date'] = date("Y-m-d", strtotime($this->input->post('date')));
+						$data['starting_time'] = date("H:i:s", strtotime($this->input->post('starting_time')));
+						$data['ending_time'] = date("H:i:s", strtotime($this->input->post('ending_time')));
+						$startingTime = strtotime($this->input->post('starting_time'));
+						$endingTime = strtotime($this->input->post('ending_time'));
+						$durationSeconds = $endingTime - $startingTime;
 						$durationHours = floor($durationSeconds / 3600);
 						$durationMinutes = floor(($durationSeconds % 3600) / 60);
 						$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
+
+						if (strtotime($checkInDept) > strtotime($checkOutDept)) {
+							$startingDate = date("Y-m-d", strtotime($this->input->post('date')));
+							$endingDate = date("Y-m-d", strtotime($this->input->post('date')));
+							$tempEndingDate = date("Y-m-d", strtotime("+1 day", strtotime($startingDate)));
+
+							if ($startingTime >= strtotime('00:00:00', strtotime($tempEndingDate))) {
+								$startingDate = $tempEndingDate;
+							}
+
+							if ($endingTime >= strtotime('00:00:00', strtotime($startingDate))) {
+								$endingDate = $tempEndingDate;
+							}
+
+							if ($startingTime < $endingTime) {
+								$startingDate = $tempEndingDate;
+								$endingDate = $tempEndingDate;
+							}
+
+
+							if ($endingTime < $startingTime) {
+								$startOfDay = strtotime('00:00:00', strtotime($data['starting_date']));
+								$durationFirstDay = strtotime('23:59:59', strtotime($data['starting_date'])) - $startingTime;
+
+								$endOfDay = strtotime('23:59:59', strtotime($data['ending_date']));
+								$durationSecondDay = $endingTime - $startOfDay;
+
+								$durationSeconds = $durationFirstDay + $durationSecondDay;
+							} else {
+								$durationSeconds = $endingTime - $startingTime;
+							}
+							$durationHours = floor($durationSeconds / 3600);
+							$durationMinutes = floor(($durationSeconds % 3600) / 60);
+							$data['leave_duration'] = $durationHours . " hrs " . $durationMinutes . " mins " . " Short Leave";
+							$data['starting_date'] = $startingDate;
+							$data['ending_date'] = $endingDate;
+						}
+						if (($durationHours < 3) || ($durationHours == 3 && $durationMinutes == 0)) {
+							$timeValidated = true;
+						} else {
+							$timeValidated = false;
+						}
+					} else {
+						$timeValidated = false;
 					}
 				} else {
 					$starting_date = $this->input->post('starting_date');
@@ -601,8 +616,6 @@ class Leaves extends CI_Controller
 
 						$holidayQuery = $this->db->query("SELECT * FROM holiday");
 						$holidays = $holidayQuery->result_array();
-
-
 						foreach ($holidays as $value4) {
 							$startDate = $value4["starting_date"];
 							$endDate = $value4["ending_date"];
@@ -636,37 +649,42 @@ class Leaves extends CI_Controller
 								}
 							}
 						}
-
 						$current_date->modify('+1 day');
 					}
 					$data['leave_duration'] = ($data['leave_duration'] - $missing_finger_days) . " Full Day/s";
 				}
-				$leave_id = $this->leaves_model->create($data);
-				if ($leave_id) {
-					$roler = $this->session->userdata('user_id');
-					$group = $this->ion_auth->get_users_groups($roler)->result();
-					$group_id = $group[0]->id;
-					$log[] = [
-						'leave_id' => $leave_id,
-						'group_id' => $group_id,
-						'remarks' => $this->input->post('leave_reason'),
-						'status' => -1,
-						'level' => 0
-					];
-					$log[] = [
-						'leave_id' => $leave_id,
-						'group_id' => $group_id,
-						'status' => 0,
-						'level' => 1
-					];
-					foreach ($log as $value) {
-						$this->leaves_model->createLog($value);
+				if ($timeValidated) {
+					$leave_id = $this->leaves_model->create($data);
+					if ($leave_id) {
+						$roler = $this->session->userdata('user_id');
+						$group = $this->ion_auth->get_users_groups($roler)->result();
+						$group_id = $group[0]->id;
+						$log[] = [
+							'leave_id' => $leave_id,
+							'group_id' => $group_id,
+							'remarks' => $this->input->post('leave_reason'),
+							'status' => -1,
+							'level' => 0
+						];
+						$log[] = [
+							'leave_id' => $leave_id,
+							'group_id' => $group_id,
+							'status' => 0,
+							'level' => 1
+						];
+						foreach ($log as $value) {
+							$this->leaves_model->createLog($value);
+						}
+						$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
+						$this->session->set_flashdata('message_type', 'success');
+						$this->data['data'] = $data;
+						$this->data['error'] = false;
+						$this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
+						echo json_encode($this->data);
 					}
-					$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
-					$this->session->set_flashdata('message_type', 'success');
-					$this->data['data'] = $data;
-					$this->data['error'] = false;
-					$this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
+				} else {
+					$this->data['error'] = true;
+					$this->data['message'] = $this->lang->line('check_times_manualy') ? $this->lang->line('check_times_manualy') : "Check times manualy Or Short leave time exceed from 3 hours";
 					echo json_encode($this->data);
 				}
 			} else {

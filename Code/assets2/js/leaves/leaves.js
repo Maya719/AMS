@@ -193,7 +193,7 @@ function showTable(data) {
         userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit text-primary"></i></a>';
         if (user.btn) {
             userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary ms-2 btn-delete-leave" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash text-danger"></i></a>';
-        }else{
+        } else {
             userRow += '<a href="javascript:void(0);" class="text-primary ms-2" data-bs-toggle="tooltip" data-placement="top" title="Delete" disabled><i class="fa-solid fa-trash text-muted"></i></a>';
         }
         userRow += '</div>';
@@ -433,8 +433,11 @@ function closeEnddate2() {
     });
 }
 
-$('.timepicker').bootstrapMaterialDatePicker({
+var time24 = true;
+var minimumTime = "08:00"; 
+$('.timepicker').timepicker({
     format: time_format_js,
-    time: true,
-    date: false
+    showMeridian: false,
+    time24Hour: time24,
+    minTime: minimumTime
 });
