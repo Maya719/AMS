@@ -352,8 +352,7 @@ class Leaves extends CI_Controller
 				}
 
 				if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
-
-					if ($this->ion_auth->is_admin() || permissions('leaves_status')) {
+					if (($this->ion_auth->is_admin() || permissions('leaves_status')) && $this->input->post('remarks')) {
 						$roler = $this->session->userdata('user_id');
 						$group = $this->ion_auth->get_users_groups($roler)->result();
 						$group_id = $group[0]->id;
