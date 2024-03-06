@@ -283,6 +283,7 @@
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/js/leaves/leaves.js') ?>"></script>
     <script>
+        var chartBarInstance;
         var chartBar = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
@@ -445,9 +446,12 @@
                         },
 
                     };
+                    if (chartBarInstance) {
+                        chartBarInstance.destroy();
+                    }
                     if (jQuery("#chartBar").length > 0) {
-                        var chartBar1 = new ApexCharts(document.querySelector("#chartBar"), options);
-                        chartBar1.render();
+                        chartBarInstance = new ApexCharts(document.querySelector("#chartBar"), options);
+                        chartBarInstance.render();
                     }
 
                 },
@@ -459,10 +463,11 @@
                 }
             });
 
-
-
         }
         $(document).ready(function() {
+            chartBar();
+        });
+        $('#user_id').on('change', function() {
             chartBar();
         });
     </script>

@@ -266,8 +266,6 @@ class Leaves_model extends CI_Model
         $from = $currentYear . '-01-01';
         $too = $currentYear . '-12-31';
 
-
-
         $this->db->from('leaves_type');
         $this->db->where('saas_id', $saas_id);
         $leaveTypes = $this->db->get();
