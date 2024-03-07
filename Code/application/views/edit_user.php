@@ -203,7 +203,7 @@
                                                 <div class="row ms-5">
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput12" class="form-label">Email</label>
-                                                        <input type="email" name="email" class="form-control" value="<?= $data->email ?>" id="exampleFormControlInput12">
+                                                        <input type="email" name="email" class="form-control" value="<?= $data->email ?>" id="exampleFormControlInput12" readonly>
                                                     </div>
                                                     <div class="col-6 mb-3">
                                                         <label for="exampleFormControlInput13" class="form-label">Password</label>

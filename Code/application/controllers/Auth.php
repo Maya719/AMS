@@ -878,14 +878,18 @@ class Auth extends CI_Controller
 				$device_ids_str = '[]';
 				$finger_config = '';
 			}
-			$probition_period = $this->input->post('probation_period');
-			$joinDate = date("Y-m-d", strtotime($this->input->post('join_date')));
-
-			if ($probition_period >= 1 && $probition_period <= 3) {
-				$joinDate = new DateTime($joinDate);
-				$joinDate->modify("+$probition_period months");
-				$period = $joinDate->format('Y-m-d');
+			if ($this->input->post('probation_period') && $this->input->post('join_date')) {
+				$probition_period = $this->input->post('probation_period');
+				$joinDate = date("Y-m-d", strtotime($this->input->post('join_date')));
+				if ($probition_period >= 1 && $probition_period <= 3) {
+					$joinDate = new DateTime($joinDate);
+					$joinDate->modify("+$probition_period months");
+					$period = $joinDate->format('Y-m-d');
+				}
+			}else{
+				$period = '';
 			}
+
 			$document_paths = array();
 			if (!empty($_FILES['files']['name'])) {
 				$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/';
@@ -928,7 +932,7 @@ class Auth extends CI_Controller
 				'company' => $this->input->post('company'),
 				'father_name' => $this->input->post('father_name')?$this->input->post('father_name'):'',
 				'phone' => $this->input->post('phone'),
-				'martial_status' => $this->input->post('martial_status'),
+				'martial_status' => $this->input->post('martial_status')?$this->input->post('martial_status'):'',
 				'gender' => $this->input->post('gender')?$this->input->post('gender'):'',
 				'cnic' => $this->input->post('cnic')?$this->input->post('cnic'):'',
 				'desgnation' => $this->input->post('desgnation')?$this->input->post('desgnation'):'',
