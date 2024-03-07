@@ -35,7 +35,7 @@ $(document).on('click', '.btn-create-leave', function (e) {
         data: formData,
         dataType: "json",
         beforeSend: function () {
-            $(".btn-create-leave").prop("disabled", true);
+            $(".btn-create-leave").prop("disabled", true).html('Creating...');
         },
         success: function (result) {
             if (result['error'] == false) {
@@ -62,7 +62,7 @@ $(document).on('click', '.btn-create-leave', function (e) {
             }
         },
         complete: function () {
-            $(".btn-create-leave").prop("disabled", false);
+            $(".btn-create-leave").prop("disabled", false).html('Create');
         }
     });
 

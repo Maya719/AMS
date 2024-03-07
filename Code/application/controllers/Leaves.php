@@ -309,48 +309,7 @@ class Leaves extends CI_Controller
 					// Subtract the number of missing finger days and holidays from the leave_duration
 					$data['leave_duration'] = ($data['leave_duration'] - $missing_finger_days) . " Full Day/s";
 				}
-				if ($this->input->post('status')) {
-					if ($this->input->post('status') == 1) {
-						$to_user = $this->ion_auth->user($this->input->post('user_id'))->row();
-						$template_data = array();
-						$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
-						$type = $this->input->post('type');
-						$template_data['LEAVE_TYPE'] = '';
-						$querys = $this->db->query("SELECT * FROM leaves_type");
-						$leaves = $querys->result_array();
-						if (!empty($leaves)) {
-							foreach ($leaves as $leave) {
-								if ($type == $leave['id']) {
-									$template_data['LEAVE_TYPE'] = $leave['name'];
-								}
-							}
-						}
 
-						$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
-						$template_data['REASON'] = $this->input->post('leave_reason');
-						$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
-						$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
-						$email_template = render_email_template('leave_accept', $template_data);
-						send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
-						$notification_data = array(
-							'notification' => 'leave request accepted',
-							'type' => 'leave_request_accepted',
-							'type_id' => $this->input->post('update_id'),
-							'from_id' => $this->session->userdata('user_id'),
-							'to_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
-						);
-						$notification_id = $this->notifications_model->create($notification_data);
-					} elseif ($this->input->post('status') == 2) {
-						$notification_data = array(
-							'notification' => 'leave request rejected',
-							'type' => 'leave_request_rejected',
-							'type_id' => $this->input->post('update_id'),
-							'from_id' => $this->session->userdata('user_id'),
-							'to_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
-						);
-						$notification_id = $this->notifications_model->create($notification_data);
-					}
-				}
 
 				if ($timeValidated) {
 					if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
@@ -371,6 +330,46 @@ class Leaves extends CI_Controller
 								'level' => $Step + 1
 							];
 							$this->leaves_model->createLog($log);
+							if ($this->input->post('status') == 1) {
+								$to_user = $this->ion_auth->user($this->input->post('user_id'))->row();
+								$template_data = array();
+								$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
+								$type = $this->input->post('type');
+								$template_data['LEAVE_TYPE'] = '';
+								$querys = $this->db->query("SELECT * FROM leaves_type");
+								$leaves = $querys->result_array();
+								if (!empty($leaves)) {
+									foreach ($leaves as $leave) {
+										if ($type == $leave['id']) {
+											$template_data['LEAVE_TYPE'] = $leave['name'];
+										}
+									}
+								}
+
+								$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
+								$template_data['REASON'] = $this->input->post('leave_reason');
+								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+								$email_template = render_email_template('leave_accept', $template_data);
+								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+								$notification_data = array(
+									'notification' => 'leave request accepted ',
+									'type' => 'leave_request_accepted',
+									'type_id' => $this->input->post('update_id'),
+									'from_id' => $this->session->userdata('user_id'),
+									'to_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
+								);
+								$notification_id = $this->notifications_model->create($notification_data);
+							} elseif ($this->input->post('status') == 2) {
+								$notification_data = array(
+									'notification' => 'leave request rejected',
+									'type' => 'leave_request_rejected',
+									'type_id' => $this->input->post('update_id'),
+									'from_id' => $this->session->userdata('user_id'),
+									'to_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
+								);
+								$notification_id = $this->notifications_model->create($notification_data);
+							}
 						}
 						$this->data['error'] = false;
 						$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated Successfully.");
@@ -656,6 +655,42 @@ class Leaves extends CI_Controller
 				if ($timeValidated) {
 					$leave_id = $this->leaves_model->create($data);
 					if ($leave_id) {
+						$group = get_notifications_group_id();
+						$system_admins = $this->ion_auth->users($group)->result();
+						foreach ($system_admins as $system_user) {
+							if ($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')) {
+								$to_user = $this->ion_auth->user($system_user->user_id)->row();
+								$template_data = array();
+								$template_data['EMPLOYEE_NAME'] = $employee->first_name . ' ' . $employee->last_name;
+								$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
+								$type = $this->input->post('type_add');
+								$template_data['LEAVE_TYPE'] = ''; // Initialize the variable
+								$template_data['LEAVE_TYPE'] = '';
+								$querys = $this->db->query("SELECT * FROM leaves_type");
+								$leaves = $querys->result_array();
+								if (!empty($leaves)) {
+									foreach ($leaves as $leave) {
+										if ($type == $leave['id']) {
+											$template_data['LEAVE_TYPE'] = $leave['name'];
+										}
+									}
+								}
+								$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
+								$template_data['REASON'] = $this->input->post('leave_reason');
+								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+								$email_template = render_email_template('leave_request', $template_data);
+								// send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+								$notification_data = array(
+									'notification' => 'Leave request received',
+									'type' => 'leave_request',
+									'type_id' => $leave_id,
+									'from_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
+									'to_id' => $system_user->user_id,
+								);
+								$notification_id = $this->notifications_model->create($notification_data);
+							}
+						}
 						$roler = $this->session->userdata('user_id');
 						$group = $this->ion_auth->get_users_groups($roler)->result();
 						$group_id = $group[0]->id;
@@ -742,7 +777,7 @@ class Leaves extends CI_Controller
 					$leaves_log["status"] = '' . $group->description . ' <strong class="text-info">Create</strong>';
 					$leaves_log["class"] = 'info';
 				} elseif ($leaves_log["status"] == 1) {
-					$leaves_log["status"] = '' . $group->description . '<strong class="text-success">Approve</strong>';
+					$leaves_log["status"] = '' . $group->description . ' <strong class="text-success">Approve</strong>';
 					$leaves_log["class"] = 'success';
 				} else if ($leaves_log["status"] == 0) {
 					$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Pending</strong>';
