@@ -663,12 +663,6 @@ class Leaves extends CI_Controller
 							'leave_id' => $leave_id,
 							'group_id' => $group_id,
 							'remarks' => $this->input->post('leave_reason'),
-							'status' => -1,
-							'level' => 0
-						];
-						$log[] = [
-							'leave_id' => $leave_id,
-							'group_id' => $group_id,
 							'status' => 0,
 							'level' => 1
 						];
@@ -745,16 +739,16 @@ class Leaves extends CI_Controller
 				$group_id = $leaves_log["group_id"];
 				$group = $this->ion_auth->group($group_id)->row();
 				if ($leaves_log["status"] == -1) {
-					$leaves_log["status"] = 'The ' . $group->description . ' has <strong class="text-info">Create</strong> Leave';
+					$leaves_log["status"] = '' . $group->description . ' <strong class="text-info">Create</strong>';
 					$leaves_log["class"] = 'info';
 				} elseif ($leaves_log["status"] == 1) {
-					$leaves_log["status"] = 'The ' . $group->description . ' has change the status to <strong class="text-success">Approve</strong>';
+					$leaves_log["status"] = '' . $group->description . '<strong class="text-success">Approve</strong>';
 					$leaves_log["class"] = 'success';
 				} else if ($leaves_log["status"] == 0) {
-					$leaves_log["status"] = 'The ' . $group->description . ' has change the status to  <strong class="text-primary">Pending</strong>';
+					$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Pending</strong>';
 					$leaves_log["class"] = 'primary';
 				} else {
-					$leaves_log["status"] = 'The ' . $group->description . ' has change the status to  <strong class="text-danger">Reject</strong>';
+					$leaves_log["status"] = '' . $group->description . ' <strong class="text-danger">Reject</strong>';
 					$leaves_log["class"] = 'danger';
 				}
 			}
