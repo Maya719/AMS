@@ -32,6 +32,7 @@
     align-items: center;
     justify-content: center;
   }
+
   .box2 {
     border: 2px dashed #ccc;
     padding: 13px;
@@ -343,7 +344,7 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
-        
+
         success: function(result) {
           if (result['error'] == false) {
             location.reload();
@@ -887,7 +888,7 @@
       },
       "info": false,
       "dom": '<"top"i>rt<"bottom"lp><"clear">',
-      "lengthMenu": [10, 20,50,500],
+      "lengthMenu": [10, 20, 50, 500],
       "pageLength": 10
     });
   </script>
@@ -936,12 +937,12 @@
         $('.dd-item').each(function() {
           var groupId = $(this).data('id');
           var stepNo = $(this).data('step');
-          var selectedValue = $('input[name=level'+stepNo+']:checked').val();
+          var selectedValue = $('input[name=level' + stepNo + ']:checked').val();
           if (stepNo != 0 && !isNaN(stepNo)) {
             data.push({
               group_id: groupId,
               step_no: stepNo,
-              recomender_approver:selectedValue
+              recomender_approver: selectedValue
             });
           }
         });
@@ -965,64 +966,72 @@
   </script>
 
   <script>
-    $(document).ready(function(){
-    $('#departments, #shifts').change(function(){
+    $(document).ready(function() {
+      $('#departments, #shifts').change(function() {
         var departmentIds = $('#departments').val();
         var shiftIds = $('#shifts').val();
-        
-        $.ajax({
-            url: base_url + 'settings/get_user_by_shift_and_department',
-            type: 'POST',
-            dataType: 'json',
-            data: {departments: departmentIds, shifts: shiftIds},
-            success: function(response){
-                $('#users_create').empty();
-                $.each(response, function(index, user){
-                    $('#users_create').append($('<option>', {
-                        value: user.id,
-                        text: user.first_name + ' ' + user.last_name
-                    }));
-                });
-                
-                $('#users_create').multiSelect('refresh');
-            },
-            error: function(xhr, status, error){
-                console.error(error);
-            }
-        });
-    });
-});
 
+        $.ajax({
+          url: base_url + 'settings/get_user_by_shift_and_department',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            departments: departmentIds,
+            shifts: shiftIds
+          },
+          success: function(response) {
+            $('#users_create').empty();
+            $.each(response, function(index, user) {
+              $('#users_create').append($('<option>', {
+                value: user.id,
+                text: user.first_name + ' ' + user.last_name
+              }));
+            });
+
+            $('#users_create').multiSelect('refresh');
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+      });
+    });
   </script>
   <script>
-    $(document).ready(function(){
-    $('#departmentsEdit, #shiftsEdit').change(function(){
+    $(document).ready(function() {
+      $('#departmentsEdit, #shiftsEdit').change(function() {
         var departmentIds = $('#departmentsEdit').val();
         var shiftIds = $('#shiftsEdit').val();
-        
-        $.ajax({
-            url: base_url + 'settings/get_user_by_shift_and_department',
-            type: 'POST',
-            dataType: 'json',
-            data: {departments: departmentIds, shifts: shiftIds},
-            success: function(response){
-                $('#assigned_users').empty();
-                $.each(response, function(index, user){
-                    $('#assigned_users').append($('<option>', {
-                        value: user.id,
-                        text: user.first_name + ' ' + user.last_name
-                    }));
-                });
-                
-                $('#assigned_users').multiSelect('refresh');
-            },
-            error: function(xhr, status, error){
-                console.error(error);
-            }
-        });
-    });
-});
 
+        $.ajax({
+          url: base_url + 'settings/get_user_by_shift_and_department',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            departments: departmentIds,
+            shifts: shiftIds
+          },
+          success: function(response) {
+            $('#assigned_users').empty();
+            $.each(response, function(index, user) {
+              $('#assigned_users').append($('<option>', {
+                value: user.id,
+                text: user.first_name + ' ' + user.last_name
+              }));
+            });
+
+            $('#assigned_users').multiSelect('refresh');
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+      });
+    });
+    $(document).on('change', '.project_filter', function(e) {
+      var value = $(this).val();
+      window.location.replace(value);
+    });
   </script>
 </body>
 
