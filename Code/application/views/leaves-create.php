@@ -1,6 +1,5 @@
 <?php $this->load->view('includes/header'); ?>
-<style>
-</style>
+<link href="<?= base_url('assets2/vendor/chartist/css/chartist.min.css') ?>" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -148,16 +147,16 @@
                         <div class="row h-50">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="card-header border-0 pb-0 flex-wrap">
-                                        <h5 class="card-title">Leave Balances</h5>
+                                    <div class="card-header">
+                                        <h4 class="card-title">Leave balance</h4>
                                     </div>
-                                    <div class="card-body">
-                                        <div id="chartBar" class="chartBar"></div>
-                                        <div class="d-flex ms-4">
+                                    <div class="card-body py-2" style="height: 400px;">
+                                        <div id="multi-line-chart" class="ct-chart ct-golden-section chartlist-chart"></div>
+                                        <div class="d-flex ms-5">
                                             <div class="d-flex me-5">
                                                 <div class="mt-2">
                                                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFA26D" />
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?=theme_color()?>" />
                                                     </svg>
                                                 </div>
                                                 <div class="ms-3">
@@ -167,18 +166,7 @@
                                             <div class="d-flex me-5">
                                                 <div class="mt-2">
                                                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FF5ED2" />
-                                                    </svg>
-
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Consume</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#4CAF50" />
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#09BD3C" />
                                                     </svg>
 
                                                 </div>
@@ -189,7 +177,7 @@
                                             <div class="d-flex me-5">
                                                 <div class="mt-2">
                                                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#f44336" />
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFBF00" />
                                                     </svg>
 
                                                 </div>
@@ -221,9 +209,10 @@
     </div>
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/js/leaves/leaves.js') ?>"></script>
+    <script src="<?= base_url('assets2/vendor/chartist/js/chartist.min.js') ?>"></script>
+    <script src="<?= base_url('assets2/vendor/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js') ?>"></script>
     <script>
-        var chartBarInstance;
-        var chartBar = function() {
+        var multiLineChart = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
                 url: base_url + 'leaves/get_leaves_count',
@@ -237,161 +226,29 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    var options = {
-                        series: [{
-                                name: 'Total',
-                                data: response.total_leaves,
+                    new Chartist.Bar('#multi-line-chart', {
+                        labels: response.leave_types,
+                        series: [
+                            response.total_leaves,
+                            response.paidArray,
+                            response.unpaidArray
+                        ]
+                    }, {
+                        seriesBarDistance: 18,
+                        axisX: {
+                            offset: 18
+                        },
+                        axisY: {
+                            offset: 80,
+                            labelInterpolationFnc: function(value) {
+                                return value
                             },
-                            {
-                                name: 'Consume',
-                                data: response.consumed_leaves
-                            },
-                            {
-                                name: 'Paid',
-                                data: response.paidArray
-                            },
-                            {
-                                name: 'Unpaid',
-                                data: response.unpaidArray
-                            },
-
-                        ],
-                        chart: {
-                            type: 'bar',
-                            height: 300,
-
-                            toolbar: {
-                                show: false,
-                            },
-
+                            scaleMinSpace: 15
                         },
-                        plotOptions: {
-                            bar: {
-                                horizontal: false,
-                                columnWidth: '57%',
-                                endingShape: "rounded",
-                                borderRadius: 8,
-                            },
-
-                        },
-                        states: {
-                            hover: {
-                                filter: 'none',
-                            }
-                        },
-                        colors: ['#FFA26D', '#FF5ED2', '#4CAF50', '#f44336'],
-                        dataLabels: {
-                            enabled: false,
-                        },
-                        markers: {
-                            shape: "circle",
-                        },
-
-
-                        legend: {
-                            show: false,
-                            fontSize: '12px',
-                            labels: {
-                                colors: '#000000',
-
-                            },
-                            markers: {
-                                width: 18,
-                                height: 18,
-                                strokeWidth: 10,
-                                strokeColor: '#fff',
-                                fillColors: undefined,
-                                radius: 12,
-                            }
-                        },
-                        responsive: [{
-                            breakpoint: 768,
-                            options: {
-                                plotOptions: {
-                                    bar: {
-                                        horizontal: true,
-                                        columnWidth: '100%',
-                                        borderRadius: 5
-                                    },
-                                },
-                                legend: {
-                                    position: 'bottom',
-                                    horizontalAlign: 'center'
-                                }
-                            },
-                        }],
-                        stroke: {
-                            show: true,
-                            width: 4,
-                            curve: 'smooth',
-                            lineCap: 'round',
-                            colors: ['transparent']
-                        },
-                        grid: {
-                            borderColor: 'var(--border)',
-                        },
-                        xaxis: {
-                            position: 'bottom',
-                            categories: response.leave_types,
-                            labels: {
-                                style: {
-                                    colors: '#787878',
-                                    fontSize: '13px',
-                                    fontFamily: 'poppins',
-                                    fontWeight: 100,
-                                    cssClass: 'apexcharts-xaxis-label',
-                                },
-
-                            },
-                            axisTicks: {
-                                show: false,
-                            },
-                            crosshairs: {
-                                show: false,
-                            }
-                        },
-
-                        yaxis: {
-                            labels: {
-                                style: {
-                                    colors: '#787878',
-                                    fontSize: '13px',
-                                    fontFamily: 'poppins',
-                                    fontWeight: 100,
-                                    cssClass: 'apexcharts-xaxis-label',
-                                },
-                            },
-                        },
-                        fill: {
-                            type: 'gradient',
-                            gradient: {
-                                shade: 'white',
-                                type: "vertical",
-                                shadeIntensity: 0.2,
-                                gradientToColors: undefined,
-                                inverseColors: true,
-                                opacityFrom: 1,
-                                opacityTo: 1,
-                                stops: [0, 50, 50],
-                                colorStops: []
-                            }
-                        },
-                        tooltip: {
-                            y: {
-                                formatter: function(val) {
-                                    return val;
-                                }
-                            }
-                        },
-
-                    };
-                    if (chartBarInstance) {
-                        chartBarInstance.destroy();
-                    }
-                    if (jQuery("#chartBar").length > 0) {
-                        chartBarInstance = new ApexCharts(document.querySelector("#chartBar"), options);
-                        chartBarInstance.render();
-                    }
+                        plugins: [
+                            Chartist.plugins.tooltip()
+                        ]
+                    });
 
                 },
                 complete: function() {
@@ -401,15 +258,12 @@
                     console.error(error);
                 }
             });
-
-
-
         }
         $(document).ready(function() {
-            chartBar();
+            multiLineChart();
         });
         $('#user_id').on('change', function() {
-            chartBar();
+            multiLineChart();
         });
     </script>
 </body>
