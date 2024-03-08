@@ -43,10 +43,11 @@
                                 <h5 class="card-title">Edit Leave Application</h5>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('leaves/edit') ?>" method="POST" id="modal-edit-leaves-part">
+                                <form action="<?= base_url('leaves/edit') ?>" method="POST" id="modal-edit-leaves-part" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <input type="hidden" name="update_id" id="update_id" value="<?= $leave[0]["id"] ?>">
                                         <input type="hidden" name="leave_duration" id="leave_duration" value="<?= $leave[0]["leave_duration"] ?>">
+                                        <input type="hidden" name="document" id="document" value="<?= $leave[0]["document"] ?>">
                                         <div class="row">
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                                                 <div class="col-lg-6 form-group mb-3">
@@ -145,8 +146,10 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="mb-3">
-                                                <label class="col-form-label"><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?> <i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= $this->lang->line('if_any_leave_document') ? $this->lang->line('if_any_leave_document') : "If any Document according to leave/s." ?>"></i></label>
-                                                <input class="form-control" type="file" id="formFile">
+                                                <label class="col-form-label"><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?> <?php if (!empty($leave[0]["document"])) : ?>
+                                                        (<a href="<?= base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/' . $leave[0]["document"]) ?>" download="<?= $leave[0]["document"] ?>"><?= $leave[0]["document"] ?></a>)
+                                                    <?php endif; ?></label>
+                                                <input class="form-control" type="file" name="documents" id="formFile">
                                             </div>
                                         </div>
                                         <div class="form-group mb-3">
@@ -195,7 +198,7 @@
                                             <div class="d-flex me-5">
                                                 <div class="mt-2">
                                                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?=theme_color()?>" />
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?= theme_color() ?>" />
                                                     </svg>
                                                 </div>
                                                 <div class="ms-3">

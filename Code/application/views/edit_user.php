@@ -1,7 +1,4 @@
 <?php $this->load->view('includes/header'); ?>
-<style>
-
-</style>
 </head>
 
 <body>
@@ -30,7 +27,7 @@
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="<?= base_url('auth/edit-user') ?>" method="post" id="form-part">
+                                <form action="<?= base_url('auth/edit-user') ?>" method="post" id="form-part" enctype="multipart/form-data">
                                     <input type="hidden" name="update_id" id="update_id" value="<?= $data->id ?>">
                                     <div id="DZ_W_TimeLine" class="widget-timeline dlab-scroll p-5">
                                         <ul class="timeline">
@@ -179,6 +176,17 @@
                                                 </div>
                                                 <div class="title">
                                                     <h5 class="text-primary ms-5 mt-2">Important Documents</h5>
+                                                </div>
+                                                <div class="row ms-5 mb-3">
+                                                    <?php
+                                                        $docs = json_decode($data->documents);
+                                                    ?>
+                                                    <?php foreach ($docs as $item) : ?>
+                                                        <input type="hidden" name="documents[]" id="docs" value="<?= $item ?>">
+                                                        <div class="col-lg-3">
+                                                            <a href="<?= base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/' . $item) ?>" download="<?=$item?>"><?=$item?></a>
+                                                        </div>
+                                                    <?php endforeach ?>
                                                 </div>
                                                 <div class="row ms-5" id="inputs">
                                                     <div class="col-10 mb-3">
@@ -412,24 +420,29 @@
             });
         });
         $(document).on('click', '.btn-edit-user', function(e) {
-            var form = $('#form-part');
-            var formData = form.serialize();
-            $.ajax({
-                type: 'POST',
-                url: form.attr('action'),
-                data: formData,
-                dataType: "json",
-                success: function(result) {
-                    if (result['error'] == false) {
-                        location.reload();
-                    } else {
-                        $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
-                    }
-                }
-            });
+    e.preventDefault();
 
-            e.preventDefault();
-        });
+    var form = $('#form-part')[0]; 
+    var formData = new FormData(form);
+
+    $.ajax({
+        type: 'POST',
+        url: $(form).attr('action'),
+        data: formData,
+        processData: false, 
+        contentType: false, 
+        dataType: "json",
+        success: function(result) {
+            if (result['error'] == false) {
+                console.log(result);
+                location.reload();
+            } else {
+                $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+            }
+        }
+    });
+});
+
     </script>
     <script>
         function toggleElements() {

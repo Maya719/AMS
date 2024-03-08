@@ -151,7 +151,7 @@
         theadRow += '<th style="font-size: 15px;">Employee Name</th>';
         theadRow += '<th style="font-size: 15px;">Email</th>';
         theadRow += '<th style="font-size: 15px;">Mobile</th>';
-        // theadRow += '<th style="font-size: 15px;">Role</th>';
+        theadRow += '<th style="font-size: 15px;">Role</th>';
         theadRow += '<th style="font-size: 15px;">Shift</th>';
         theadRow += '<th style="font-size: 15px;">Department</th>';
         theadRow += '<th style="font-size: 15px;">Join Date</th>';
@@ -168,7 +168,7 @@
           userRow += '<td style="font-size:13px;">' + user.name + '</td>';
           userRow += '<td style="font-size:13px;">' + user.email + '</td>';
           userRow += '<td style="font-size:13px;">' + user.mobile + '</td>';
-          // userRow += '<td style="font-size:13px;">' + user.role + '</td>';
+          userRow += '<td style="font-size:13px;">' + user.role + '</td>';
           userRow += '<td style="font-size:13px;">' + user.shift_type + '</td>';
           userRow += '<td style="font-size:13px;">' + user.department + '</td>';
           userRow += '<td style="font-size:13px;">' + user.joining_date + '</td>';

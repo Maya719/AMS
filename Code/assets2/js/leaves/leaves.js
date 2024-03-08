@@ -26,13 +26,19 @@
 // });
 
 $(document).on('click', '.btn-create-leave', function (e) {
-    var form = $('#modal-create-leaves-part');
-    var formData = form.serialize();
+    e.preventDefault();
+
+    var form = $('#modal-create-leaves-part')[0]; // Get the native DOM element
+    var formData = new FormData(form); // Create FormData object
+
     console.log(formData);
+
     $.ajax({
         type: 'POST',
-        url: form.attr('action'),
+        url: $(form).attr('action'),
         data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting contentType
         dataType: "json",
         beforeSend: function () {
             $(".btn-create-leave").prop("disabled", true).html('Creating...');
@@ -65,9 +71,8 @@ $(document).on('click', '.btn-create-leave', function (e) {
             $(".btn-create-leave").prop("disabled", false).html('Create');
         }
     });
-
-    e.preventDefault();
 });
+
 
 function setFilter() {
     var employee_id = $('#employee_id').val();
@@ -354,13 +359,21 @@ $(document).on('click', '.btn-delete-leave', function (e) {
     });
 });
 $(document).on('click', '.btn-edit-leave', function (e) {
-    var form = $('#modal-edit-leaves-part');
-    var formData = form.serialize();
+    var form = $('#modal-edit-leaves-part')[0]; // Get the native DOM element
+    if (!form || form.nodeName !== 'FORM') {
+        console.error('Form element not found or not a form');
+        return;
+    }
+    var formData = new FormData(form); // Create FormData object
+
     console.log(formData);
+
     $.ajax({
         type: 'POST',
-        url: form.attr('action'),
+        url: $(form).attr('action'), // Use $(form) to get the jQuery object and then retrieve the action attribute
         data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting contentType
         dataType: "json",
         beforeSend: function () {
             $(".btn-edit-leave").prop("disabled", true);
@@ -396,6 +409,7 @@ $(document).on('click', '.btn-edit-leave', function (e) {
 
     e.preventDefault();
 });
+
 
 
 $(document).on('change', '#starting_date_create', function (e) {
@@ -434,7 +448,7 @@ function closeEnddate2() {
 }
 
 var time24 = true;
-var minimumTime = "08:00"; 
+var minimumTime = "08:00";
 $('.timepicker').timepicker({
     format: time_format_js,
     showMeridian: false,

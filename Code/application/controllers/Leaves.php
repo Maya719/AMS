@@ -234,24 +234,7 @@ class Leaves extends CI_Controller
 					if (strtotime($checkInDept) > strtotime($checkOutDept)) {
 						$data['ending_date'] = date("Y-m-d", strtotime("+1 day", strtotime($starting_date)));
 					}
-					if (!empty($_FILES['documents']['name'])) {
-						$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
 
-						if (!is_dir($upload_path)) {
-							mkdir($upload_path, 0775, true);
-						}
-						$config['upload_path'] = $upload_path;
-						$config['allowed_types'] = '*';
-						$config['overwrite'] = false;
-						$config['max_size'] = 0;
-						$config['max_width'] = 0;
-						$config['max_height'] = 0;
-						$this->load->library('upload', $config);
-						if ($this->upload->do_upload('documents')) {
-							$uploaded_data = $this->upload->data('file_name');
-							$data['document'] = $uploaded_data;
-						}
-					}
 					$missing_finger_days = 0;
 					$finger_count = 0;
 					$holiday_count = 0;
@@ -306,12 +289,37 @@ class Leaves extends CI_Controller
 
 						$current_date->modify('+1 day');
 					}
-					// Subtract the number of missing finger days and holidays from the leave_duration
 					$data['leave_duration'] = ($data['leave_duration'] - $missing_finger_days) . " Full Day/s";
 				}
 
 
 				if ($timeValidated) {
+					if ($this->input->post('document') && !empty($_FILES['documents']['name'])) {
+						if (file_exists('assets/uploads/leaves/' . $this->input->post('document'))) {
+							$file_upload_path = 'assets/uploads/leaves/' . $this->input->post('document');
+						} else {
+							$file_upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/' . $this->input->post('document');
+							unlink($file_upload_path);
+						}
+					}
+					if (!empty($_FILES['documents']['name'])) {
+						$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
+
+						if (!is_dir($upload_path)) {
+							mkdir($upload_path, 0775, true);
+						}
+						$config['upload_path'] = $upload_path;
+						$config['allowed_types'] = '*';
+						$config['overwrite'] = false;
+						$config['max_size'] = 0;
+						$config['max_width'] = 0;
+						$config['max_height'] = 0;
+						$this->load->library('upload', $config);
+						if ($this->upload->do_upload('documents')) {
+							$uploaded_data = $this->upload->data('file_name');
+							$data['document'] = $uploaded_data;
+						}
+					}
 					if ($this->leaves_model->edit($this->input->post('update_id'), $data)) {
 						if (($this->ion_auth->is_admin() || permissions('leaves_status')) && $this->input->post('remarks')) {
 							$roler = $this->session->userdata('user_id');
@@ -371,6 +379,7 @@ class Leaves extends CI_Controller
 								$notification_id = $this->notifications_model->create($notification_data);
 							}
 						}
+
 						$this->data['error'] = false;
 						$this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated Successfully.");
 						$this->session->set_flashdata('message_type', 'success');
@@ -653,6 +662,26 @@ class Leaves extends CI_Controller
 					$data['leave_duration'] = ($data['leave_duration'] - $missing_finger_days) . " Full Day/s";
 				}
 				if ($timeValidated) {
+					$data['document'] = '';
+					if (!empty($_FILES['documents']['name'])) {
+						$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
+
+						if (!is_dir($upload_path)) {
+							mkdir($upload_path, 0775, true);
+						}
+						$config['upload_path'] = $upload_path;
+						$config['allowed_types'] = '*';
+						$config['overwrite'] = false;
+						$config['max_size'] = 0;
+						$config['max_width'] = 0;
+						$config['max_height'] = 0;
+						$this->load->library('upload', $config);
+
+						if ($this->upload->do_upload('documents')) {
+							$uploaded_data = $this->upload->data('file_name');
+							$data['document'] = $uploaded_data;
+						}
+					}
 					$leave_id = $this->leaves_model->create($data);
 					if ($leave_id) {
 						$group = get_notifications_group_id();

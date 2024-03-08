@@ -37,7 +37,7 @@
                                 <h5 class="card-title">Create Leave Application</h5>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('leaves/create') ?>" method="POST" id="modal-create-leaves-part">
+                                <form action="<?= base_url('leaves/create') ?>" method="POST" id="modal-create-leaves-part" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <div class="row">
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
@@ -126,7 +126,7 @@
                                         <div class="form-group">
                                             <div class="mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?> <i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= $this->lang->line('if_any_leave_document') ? $this->lang->line('if_any_leave_document') : "If any Document according to leave/s." ?>"></i></label>
-                                                <input class="form-control" type="file" id="formFile">
+                                                <input class="form-control" type="file" name="documents" id="formFile">
                                             </div>
                                         </div>
                                         <div class="form-group mb-3">
@@ -156,7 +156,7 @@
                                             <div class="d-flex me-5">
                                                 <div class="mt-2">
                                                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?=theme_color()?>" />
+                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?= theme_color() ?>" />
                                                     </svg>
                                                 </div>
                                                 <div class="ms-3">
