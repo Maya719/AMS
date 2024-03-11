@@ -131,15 +131,13 @@ class Leaves_model extends CI_Model
             $Logstatus = $logs["status"];
             $forword_result = $this->is_forworded($current_group_id, $step);
             if ($leave['status'] == 0) {
-                if ($forword_result["is_forworded"]) {
-                    if (permissions('leaves_status') || $this->ion_auth->is_admin()) {
+                if (($forword_result["is_forworded"]) && (permissions('leaves_status') || $this->ion_auth->is_admin())) {
                         $leave['btn'] = false;
                         if ($Logstatus == 1) {
                             $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                         } elseif ($Logstatus == 2) {
                             $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                         }
-                    }
                 } else {
                     $leave['btn'] = true;
                     $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
