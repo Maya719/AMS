@@ -22,11 +22,11 @@
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
-            <!--**********************************
+        <!--**********************************
     Sidebar start
 ***********************************-->
-    <?php $this->load->view('includes/sidebar'); ?>
-    <!--**********************************
+        <?php $this->load->view('includes/sidebar'); ?>
+        <!--**********************************
     Sidebar end
 ***********************************--> <!--**********************************
 	Content body start
@@ -36,203 +36,206 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xl-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="<?= base_url('auth/create-user') ?>" method="post" id="form-part">
-                                    <div id="DZ_W_TimeLine" class="widget-timeline dlab-scroll p-5">
-                                        <ul class="timeline">
-                                            <li>
-                                                <div class="timeline-badge dark">
-                                                </div>
-                                                <div class="title">
-                                                    <h5 class="text-primary ms-5 mt-2">Information</h5>
-                                                </div>
-                                                <div class="row ms-5">
-                                                    <div class="col-6 mb-3">
-                                                        <label for="employee_id_create" class="col-form-label">Employee ID</label>
-                                                        <input type="number" class="form-control" name="employee_id" id="employee_id_create" readonly>
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput1" class="col-form-label">First Name <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="first_name" id="exampleFormControlInput1">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput2" class="col-form-label">last Name <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="last_name" id="exampleFormControlInput2">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput301" class="col-form-label">Father Name</label>
-                                                        <input type="text" class="form-control" name="father_name" id="exampleFormControlInput301">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput3" class="col-form-label">Blood Group</label>
-                                                        <input type="text" class="form-control" name="blood_group" id="exampleFormControlInput3">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput4" class="col-form-label">Date Of Birth <span class="text-danger">*</span></label>
-                                                        <input type="date" class="form-control" name="date_of_birth" id="exampleFormControlInput4">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput5" class="col-form-label">CNIC</label>
-                                                        <input type="text" class="form-control" name="cnic" id="exampleFormControlInput5">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput6" class="col-form-label">Martial Status</label>
-                                                        <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
-                                                            <option value="" selected>Martial Status</option>
-                                                            <option value="single">Single</option>
-                                                            <option value="married">Married</option>
-                                                            <option value="other">Other</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput7" class="col-form-label">Gender <span class="text-danger">*</span></label>
-                                                        <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
-                                                            <option selected>Gender</option>
-                                                            <option value="male">Male</option>
-                                                            <option value="female">Female</option>
-                                                            <option value="other">Other</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput8" class="col-form-label">Phone Number <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" name="phone" id="exampleFormControlInput8">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput9" class="col-form-label">Emergency Person</label>
-                                                        <input type="text" class="form-control" name="emg_person" id="exampleFormControlInput9">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput10" class="col-form-label">Emergency Contact</label>
-                                                        <input type="text" class="form-control" name="emg_number" id="exampleFormControlInput10">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput14" class="col-form-label">Joining Date <span class="text-danger">*</span></label>
-                                                        <input type="Date" class="form-control" name="join_date" id="exampleFormControlInput14">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput15" class="col-form-label">Probation</label>
-                                                        <select class="form-select" name="probation_period" id="exampleFormControlInput15" aria-label="Default select example">
-                                                            <option selected>Probation</option>
-                                                            <option value="1">1 Month</option>
-                                                            <option value="2">2 months</option>
-                                                            <option value="3">3 Months</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput16" class="col-form-label">Designation</label>
-                                                        <input type="text" class="form-control" name="desgnation" id="exampleFormControlInput16">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput15" class="col-form-label">Department</label>
-                                                        <select class="form-select" name="department" id="exampleFormControlInput15" aria-label="Default select example">
-                                                            <option selected value="">Department</option>
-                                                            <?php foreach ($departments as $department) : ?>
-                                                                <option value="<?=$department["id"]?>"><?=$department["department_name"]?></option>
-                                                            <?php endforeach ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12 mb-3">
-                                                        <label for="exampleFormControlInput11" class="col-form-label">Address</label>
-                                                        <textarea type="text" class="form-control" name="address" id="exampleFormControlInput11"></textarea>
-                                                    </div>
-                                                </div>
+                        <form action="<?= base_url('auth/create-user') ?>" method="post" id="form-part">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Nav tabs -->
+                                    <div class="custom-tab-1">
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#home1"><i class="la la-user me-2"></i> Information</a>
                                             </li>
-                                            <li>
-                                                <div class="timeline-badge dark">
-                                                </div>
-                                                <div class="title">
-                                                    <h5 class="text-primary ms-5 mt-2">Attendance Configuration</h5>
-                                                </div>
-                                                <div class="row ms-5">
-                                                    <div class="ms-3 col-12 mb-2 form-check">
-                                                        <input class="form-check-input" type="checkbox" name="finger_config" id="flexCheckDefault" checked>
-                                                        <label class="form-check-label" for="flexCheckDefault">
-                                                            Biometric
-                                                        </label>
-                                                        <a type="button" class="text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Enable Punch will checked for those emplyee who will punch in/out and it will recorded." title="Help"><i class="fas fa-circle-question"></i></a>
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput2" class="col-form-label">Shift <span class="text-danger">*</span></label>
-                                                        <select class="form-select enable-disable-select" name="type" aria-label="Default select example">
-                                                            <option selected value="">Shift</option>
-                                                            <?php foreach ($shift_types as $shift_type) : ?>
-                                                                <option value="<?= $shift_type["id"] ?>"><?= $shift_type["name"] ?></option>
-                                                            <?php endforeach ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput3" class="col-form-label">Device <span class="text-danger">*</span></label>
-                                                        <select class="form-select enable-disable-select" name="device" aria-label="Default select example">
-                                                            <option selected value="">Device</option>
-                                                            <?php foreach ($devices as $device) : ?>
-                                                                <option value="<?= $device["id"] ?>"><?= $device["device_name"] ?></option>
-                                                            <?php endforeach ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#profile1"><i class="la la-fingerprint me-2"></i> Attendance Configuration</a>
                                             </li>
-                                            <li>
-                                                <div class="timeline-badge dark">
-                                                </div>
-                                                <div class="title">
-                                                    <h5 class="text-primary ms-5 mt-2">Important Documents</h5>
-                                                </div>
-                                                <div class="row ms-3" id="inputs">
-                                                    <div class="col-10 mb-3">
-                                                        <input class="form-control" type="file" name="files[]" id="formFile">
-                                                    </div>
-                                                    <div class="col-2 mb-3">
-                                                        <a class="btn text-primary fw-600 remove-btn">Remove</a>
-                                                    </div>
-                                                </div>
-                                                <div class="row ms-3">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-primary add-btn">+ Add</button>
-                                                    </div>
-                                                </div>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#contact1"><i class="la la-file-contract me-2"></i> Important Documents</a>
                                             </li>
-                                            <li>
-                                                <div class="timeline-badge dark">
-                                                </div>
-                                                <div class="title">
-                                                    <h5 class="text-primary ms-5 mt-2">Portal Setting</h5>
-                                                </div>
-                                                <div class="row ms-3">
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput12" class="col-form-label">Email <span class="text-danger">*</span></label>
-                                                        <input type="email" name="email" class="form-control" id="exampleFormControlInput12">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput13" class="col-form-label">Password <span class="text-danger">*</span></label>
-                                                        <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
-                                                    </div>
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput14" class="col-form-label">Confirm Password <span class="text-danger">*</span></label>
-                                                        <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
-                                                    </div>
-
-                                                    <div class="col-6 mb-3">
-                                                        <label for="exampleFormControlInput15" class="col-form-label">Role <span class="text-danger">*</span></label>
-                                                        <select class="form-select" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
-                                                            <option selected>Role</option>
-                                                            <?php foreach ($user_groups as $user_group) : ?>
-                                                                <option value="<?= $user_group->id ?>"><?= $user_group->description ?></option>
-                                                            <?php endforeach ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
                                             </li>
                                         </ul>
-                                        <div class="row ms-3 mt-5 mb-3 justify-content-between">
-                                            <div class="col-5">
-                                                <button type="button" class="btn btn-create btn-primary">Submit</button>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="home1" role="tabpanel">
+                                                <div class="pt-4">
+                                                    <div class="row ms-5">
+                                                        <div class="col-6 mb-3">
+                                                            <label for="employee_id_create" class="col-form-label">Employee ID</label>
+                                                            <input type="number" class="form-control" name="employee_id" id="employee_id_create" readonly>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput1" class="col-form-label">First Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="first_name" id="exampleFormControlInput1">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput2" class="col-form-label">last Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="last_name" id="exampleFormControlInput2">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput301" class="col-form-label">Father Name</label>
+                                                            <input type="text" class="form-control" name="father_name" id="exampleFormControlInput301">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput3" class="col-form-label">Blood Group</label>
+                                                            <input type="text" class="form-control" name="blood_group" id="exampleFormControlInput3">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput4" class="col-form-label">Date Of Birth <span class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" name="date_of_birth" id="exampleFormControlInput4">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput5" class="col-form-label">CNIC</label>
+                                                            <input type="text" class="form-control" name="cnic" id="exampleFormControlInput5">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput6" class="col-form-label">Martial Status</label>
+                                                            <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
+                                                                <option value="" selected>Martial Status</option>
+                                                                <option value="single">Single</option>
+                                                                <option value="married">Married</option>
+                                                                <option value="other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput7" class="col-form-label">Gender <span class="text-danger">*</span></label>
+                                                            <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
+                                                                <option selected>Gender</option>
+                                                                <option value="male">Male</option>
+                                                                <option value="female">Female</option>
+                                                                <option value="other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput8" class="col-form-label">Phone Number <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="phone" id="exampleFormControlInput8">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput9" class="col-form-label">Emergency Person</label>
+                                                            <input type="text" class="form-control" name="emg_person" id="exampleFormControlInput9">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput10" class="col-form-label">Emergency Contact</label>
+                                                            <input type="text" class="form-control" name="emg_number" id="exampleFormControlInput10">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput14" class="col-form-label">Joining Date <span class="text-danger">*</span></label>
+                                                            <input type="Date" class="form-control" name="join_date" id="exampleFormControlInput14">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput15" class="col-form-label">Probation</label>
+                                                            <select class="form-select" name="probation_period" id="exampleFormControlInput15" aria-label="Default select example">
+                                                                <option selected>Probation</option>
+                                                                <option value="1">1 Month</option>
+                                                                <option value="2">2 months</option>
+                                                                <option value="3">3 Months</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput16" class="col-form-label">Designation</label>
+                                                            <input type="text" class="form-control" name="desgnation" id="exampleFormControlInput16">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput15" class="col-form-label">Department</label>
+                                                            <select class="form-select" name="department" id="exampleFormControlInput15" aria-label="Default select example">
+                                                                <option selected value="">Department</option>
+                                                                <?php foreach ($departments as $department) : ?>
+                                                                    <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
+                                                                <?php endforeach ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-12 mb-3">
+                                                            <label for="exampleFormControlInput11" class="col-form-label">Address</label>
+                                                            <textarea type="text" class="form-control" name="address" id="exampleFormControlInput11"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="profile1">
+                                                <div class="pt-4">
+                                                    <div class="row ms-5">
+                                                        <div class="ms-3 col-12 mb-2 form-check">
+                                                            <input class="form-check-input" type="checkbox" name="finger_config" id="flexCheckDefault" checked>
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Biometric
+                                                            </label>
+                                                            <a type="button" class="text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Enable Punch will checked for those emplyee who will punch in/out and it will recorded." title="Help"><i class="fas fa-circle-question"></i></a>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput2" class="col-form-label">Shift <span class="text-danger">*</span></label>
+                                                            <select class="form-select enable-disable-select" name="type" aria-label="Default select example">
+                                                                <option selected value="">Shift</option>
+                                                                <?php foreach ($shift_types as $shift_type) : ?>
+                                                                    <option value="<?= $shift_type["id"] ?>"><?= $shift_type["name"] ?></option>
+                                                                <?php endforeach ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput3" class="col-form-label">Device <span class="text-danger">*</span></label>
+                                                            <select class="form-select enable-disable-select" name="device" aria-label="Default select example">
+                                                                <option selected value="">Device</option>
+                                                                <?php foreach ($devices as $device) : ?>
+                                                                    <option value="<?= $device["id"] ?>"><?= $device["device_name"] ?></option>
+                                                                <?php endforeach ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="contact1">
+                                                <div class="pt-4">
+                                                    <div class="row ms-3" id="inputs">
+                                                        <div class="col-10 mb-3">
+                                                            <input class="form-control" type="file" name="files[]" id="formFile">
+                                                        </div>
+                                                        <div class="col-2 mb-3">
+                                                            <a class="btn text-primary fw-600 remove-btn">Remove</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row ms-3">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary add-btn">+ Add</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="message1">
+                                                <div class="pt-4">
+                                                    <div class="row ms-3">
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput12" class="col-form-label">Email <span class="text-danger">*</span></label>
+                                                            <input type="email" name="email" class="form-control" id="exampleFormControlInput12">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput13" class="col-form-label">Password <span class="text-danger">*</span></label>
+                                                            <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput14" class="col-form-label">Confirm Password <span class="text-danger">*</span></label>
+                                                            <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
+                                                        </div>
+
+                                                        <div class="col-6 mb-3">
+                                                            <label for="exampleFormControlInput15" class="col-form-label">Role <span class="text-danger">*</span></label>
+                                                            <select class="form-select" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
+                                                                <option selected>Role</option>
+                                                                <?php foreach ($user_groups as $user_group) : ?>
+                                                                    <option value="<?= $user_group->id ?>"><?= $user_group->description ?></option>
+                                                                <?php endforeach ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                                <div class="row card-footer">
+                                    <div class="col-5">
+                                        <button type="button" class="btn btn-create btn-primary">Submit</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -260,11 +263,29 @@
             $(document).on("click", ".remove-btn", function() {
                 $(this).closest("#inputs").remove();
             });
-            $("#flexCheckDefault").change(function() {
-                var isChecked = $(this).prop("checked");
-                $(".enable-disable-select").prop("disabled", !isChecked);
-            });
+
         });
+        $(document).ready(function() {
+            // Function to enable or disable based on checkbox state
+            function toggleElements() {
+                var isChecked = $("#flexCheckDefault").prop("checked");
+                $(".enable-disable-select").prop("disabled", !isChecked);
+            }
+
+            // Execute toggleElements() when the checkbox state changes
+            $("#flexCheckDefault").change(function() {
+                toggleElements();
+            });
+
+            // Execute toggleElements() after a short delay to ensure the DOM is fully loaded
+            setTimeout(function() {
+                toggleElements();
+            }, 100);
+        });
+
+
+
+
         $(document).ready(function() {
             function getEmployeeId() {
 
@@ -296,7 +317,7 @@
                 },
                 success: function(result) {
                     if (result['error'] == false) {
-                        location.href=base_url+'users';
+                        location.href = base_url + 'users';
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }

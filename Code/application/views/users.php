@@ -33,11 +33,18 @@
       <!-- row -->
       <div class="container-fluid">
 
-        <div class="row d-flex justify-content-end">
-          <div class="col-xl-2 col-sm-3 mt-2 ">
-            <a href="<?= base_url('users/create_user') ?>" id="modal-add-leaves" class="btn btn-block btn-primary">+ ADD</a>
+        <?php
+        if (permissions('user_create')) {
+        ?>
+          <div class="row d-flex justify-content-end">
+            <div class="col-xl-2 col-sm-3 mt-2 ">
+              <a href="<?= base_url('users/create_user') ?>" id="modal-add-leaves" class="btn btn-block btn-primary">+ ADD</a>
+            </div>
           </div>
-        </div>
+        <?php
+        }
+        ?>
+
         <div class="card mt-3">
           <div class="card-body">
             <div class="row">
