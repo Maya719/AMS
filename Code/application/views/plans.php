@@ -22,7 +22,7 @@
             <div class="section-header-breadcrumb">
               <div class="breadcrumb-item active"><a href="<?=base_url()?>"><?=$this->lang->line('dashboard')?$this->lang->line('dashboard'):'Dashboard'?></a></div>
               <div class="breadcrumb-item">
-              <?=$this->lang->line('subscription_plans')?$this->lang->line('subscription_plans'):'Plans'?>
+                <?=$this->lang->line('subscription_plans')?$this->lang->line('subscription_plans'):'Plans'?>
               </div>
             </div>
           </div>

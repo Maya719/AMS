@@ -197,7 +197,7 @@ class Users extends CI_Controller
 			$this->data['page_title'] = 'Employee - ' . company_name();
 			$this->data['main_page'] = 'Employee';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			
+
 			$query = $this->db->get('shift');
 			$this->data['shift_types'] = $query->result_array();
 
@@ -205,7 +205,73 @@ class Users extends CI_Controller
 			$this->data['departments'] = $query3->result_array();
 			$query = $this->db->get('devices');
 			$this->data['devices'] = $query->result_array();
-			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+			if (is_saas_admin()) {
+				$system_users = $this->ion_auth->users(array(3))->result();
+				foreach ($system_users as $system_user) {
+					if ($this->session->userdata('saas_id') == $system_user->saas_id) {
+						$tempRow['employee_id'] = $system_user->employee_id;
+						$tempRow['id'] = $system_user->user_id;
+						$tempRow['email'] = $system_user->email;
+						$tempRow['active'] = $system_user->active;
+						$tempRow['first_name'] = $system_user->first_name;
+						$tempRow['last_name'] = $system_user->last_name;
+						$tempRow['father_name'] = $system_user->father_name;
+						$tempRow['cnic'] = $system_user->cnic;
+						$tempRow['gender'] = $system_user->gender;
+						$tempRow['join_date'] = $system_user->join_date;
+						$tempRow['company'] = company_details('company_name', $system_user->user_id);
+						$tempRow['phone'] = $system_user->phone != 0 ? $system_user->phone : '';
+						$user_id = $tempRow['id'];
+						$tempRow['status'] = (($system_user->active == 1) ? '<span class="badge badge-success mb-1">' . ($this->lang->line('active') ? $this->lang->line('active') : 'Active') . '</span>' : '<span class="badge badge-danger mb-1">' . ($this->lang->line('deactive') ? $this->lang->line('deactive') : 'Deactive') . '</span>');
+
+
+						$shift_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
+						$shift_result = $shift_query->row_array();
+						$shift_id = $shift_result['shift_id'];
+
+						if ($shift_id === '0') {
+							$tempRow['shift_type'] = '<span class="text-muted">No Shift Assigned</span>';
+						} else {
+							$shift_query = $this->db->query("SELECT * FROM shift WHERE id = $shift_id");
+							$shift_result = $shift_query->row_array();
+							$tempRow['shift_type'] = $shift_result['name'];
+						}
+						$tempRow['profile'] = '';
+						if ($system_user->profile) {
+							if (file_exists('assets/uploads/profiles/' . $system_user->profile)) {
+								$file_upload_path = 'assets/uploads/profiles/' . $system_user->profile;
+							} else {
+								$file_upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $system_user->profile;
+							}
+							$tempRow['profile'] = base_url($file_upload_path);
+						}
+
+						$shift_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
+						$shift_result = $shift_query->row_array();
+						$department_id = $shift_result['department'];
+
+						if ($department_id === '0' || $department_id === '') {
+							$tempRow['department'] = '';
+						} else {
+							$departmentQuery = $this->db->query("SELECT * FROM departments WHERE id = $department_id");
+							$department_result = $departmentQuery->row_array();
+							$tempRow['department'] = $department_result['department_name'];
+						}
+
+						$tempRow['short_name'] = mb_substr($system_user->first_name, 0, 1, "utf-8") . '' . mb_substr($system_user->last_name, 0, 1, "utf-8");
+						$group = $this->ion_auth->get_users_groups($system_user->user_id)->result();
+
+						if (!empty($group)) {
+							$tempRow['role'] = $group[0]->description;
+						}
+						$tempRow['group_id'] = $group[0]->id;
+						$tempRow['projects_count'] = get_count('id', 'project_users', 'user_id=' . $system_user->user_id);
+						$tempRow['tasks_count'] = get_count('id', 'task_users', 'user_id=' . $system_user->user_id);
+						$rows[] = $tempRow;
+					}
+				}
+				$this->data['saas_users'] = $rows;
+			} elseif ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (permissions('leaves_view_selected')) {
 				$selected = selected_users();
@@ -216,7 +282,7 @@ class Users extends CI_Controller
 				$this->data['system_users'] = $users;
 			}
 			$this->data['user_groups'] = $this->ion_auth->get_all_groups();
-			if ($this->ion_auth->in_group(3)) {
+			if (is_saas_admin()) {
 				$this->load->view('saas-admins', $this->data);
 			} else {
 				$this->load->view('users', $this->data);
@@ -228,7 +294,7 @@ class Users extends CI_Controller
 
 	public function get_saas_users()
 	{
-		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
+		if ($this->ion_auth->logged_in() && is_saas_admin()) {
 			return $this->users_model->get_saas_users();
 		} else {
 			return '';
@@ -237,12 +303,15 @@ class Users extends CI_Controller
 
 	public function saas()
 	{
-		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
+		
+		if ($this->ion_auth->logged_in() && is_saas_admin()) {
 			set_expire_all_expired_plans();
 			$this->notifications_model->edit('', 'new_user', '', '', '');
 			$this->data['page_title'] = 'Users - ' . company_name();
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['plans'] = $this->plans_model->get_plans();
+			$this->data['saas_users'] = $this->users_model->get_saas_users();
+			// echo json_encode($this->data);
 			$this->load->view('saas-users', $this->data);
 		} else {
 			redirect('auth', 'refresh');

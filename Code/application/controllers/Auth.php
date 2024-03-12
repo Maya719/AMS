@@ -618,6 +618,7 @@ class Auth extends CI_Controller
 			$additional_data = [
 				'first_name' => $this->input->post('first_name'),
 				'last_name' => $this->input->post('last_name'),
+				'phone' => $this->input->post('phone'),
 			];
 			$group = array($this->input->post('groups') ? $this->input->post('groups') : '2');
 		}
@@ -893,7 +894,7 @@ class Auth extends CI_Controller
 			$token = $this->input->post('token');
 			$action = $this->input->post('action');
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, "https:// ANCHOR www.google.com/recaptcha/api/siteverify");
+			curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => $recaptcha_secret_key, 'response' => $token)));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
