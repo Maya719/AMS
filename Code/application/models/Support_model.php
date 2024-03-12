@@ -10,7 +10,7 @@ class Support_model extends CI_Model
     
     function get_unread_support_msg_count($user_id){
         
-        if($this->ion_auth->in_group(3)){
+        if(is_saas_admin()){
             $query = $this->db->query("SELECT id FROM support_messages WHERE from_id != $user_id AND is_read = 0");
             return $query->result_array();
         }
@@ -125,10 +125,8 @@ class Support_model extends CI_Model
 
     function get_support(){
  
-        $offset = 0;$limit = 10;
-        $sort = 'a.id'; $order = 'ASC';
         $get = $this->input->get();
-        if($this->ion_auth->in_group(3)){
+        if(is_saas_admin()){
             if(isset($get['user_id']) && !empty($get['user_id'])){
                 $where = " WHERE a.user_id = ".$get['user_id'];
             }else{
@@ -141,18 +139,7 @@ class Support_model extends CI_Model
                 $where = " WHERE a.user_id = ".$this->session->userdata('user_id');
             // }  
         }
-        if(isset($get['sort']))
-            $sort = strip_tags($get['sort']);
-        if(isset($get['offset']))
-            $offset = strip_tags($get['offset']);
-        if(isset($get['limit']))
-            $limit = strip_tags($get['limit']);
-        if(isset($get['order']))
-            $order = strip_tags($get['order']);
-        if(isset($get['search']) &&  !empty($get['search'])){
-            $search = strip_tags($get['search']);
-            $where .= " AND (a.id like '%".$search."%' OR u.first_name like '%".$search."%' OR u.last_name like '%".$search."%' OR a.user_id like '%".$search."%' OR a.subject like '%".$search."%' OR a.status like '%".$search."%' OR a.created like '%".$search."%')";
-        }
+       
 
         if(isset($get['status']) && !empty($get['status'])){
             $where .= " AND a.status = ".$get['status'];
@@ -171,7 +158,7 @@ class Support_model extends CI_Model
             $total = $row['total'];
         }
         
-        $query = $this->db->query("SELECT a.*, CONCAT(u.first_name, ' ', u.last_name) as user, CONCAT('#', LPAD(a.id,6,'0')) as ticket_id FROM support a $LEFT_JOIN ".$where." ORDER BY ".$sort." ".$order." LIMIT ".$offset.", ".$limit);
+        $query = $this->db->query("SELECT a.*, CONCAT(u.first_name, ' ', u.last_name) as user, CONCAT('#', LPAD(a.id,6,'0')) as ticket_id FROM support a $LEFT_JOIN ".$where);
     
         $results = $query->result_array();  
     
@@ -192,7 +179,7 @@ class Support_model extends CI_Model
                 $tempRow['created'] = format_date($result['created'],system_date_format()." ".system_time_format());
 
                 if($result['status'] == 1){
-                    if($this->ion_auth->in_group(3)){
+                    if(is_saas_admin()){
                         $tempRow['status'] = '<div class="badge badge-danger">'.($this->lang->line('received')?htmlspecialchars($this->lang->line('received')):'Received').'</div>';
                     }else{
                         $tempRow['status'] = '<div class="badge badge-danger">'.($this->lang->line('sent')?htmlspecialchars($this->lang->line('sent')):'Sent').'</div>';
@@ -203,10 +190,14 @@ class Support_model extends CI_Model
                     $tempRow['status'] = '<div class="badge badge-success">'.($this->lang->line('resolved_and_closed')?htmlspecialchars($this->lang->line('resolved_and_closed')):'Resolved and Closed').'</div>';
                 }
                 
-                if($this->ion_auth->in_group(3)){
-                    $tempRow['action'] = '<span class="d-flex"><a href="'.(base_url('support/chat/'.$result['id'])).'" class="btn btn-icon btn-sm btn-success mr-1" data-toggle="tooltip" title="'.($this->lang->line('chat')?htmlspecialchars($this->lang->line('chat')):'Chat').'"><i class="fas fa-comments"></i></a><a href="#" class="btn btn-icon btn-sm btn-primary mr-1 modal-edit-support" data-edit="'.$result['id'].'" data-toggle="tooltip" title="'.($this->lang->line('edit')?htmlspecialchars($this->lang->line('edit')):'Edit').'"><i class="fas fa-pen"></i></a><a href="#" class="btn btn-icon btn-sm btn-danger mr-1 delete_support" data-id="'.$result['id'].'" data-toggle="tooltip" title="'.($this->lang->line('delete')?htmlspecialchars($this->lang->line('delete')):'Delete').'"><i class="fas fa-trash"></i></a></span>';
-                }else{
+                if(is_saas_admin()){
 
+                    $tempRow['action'] = '<div class="d-flex">
+                     <span class="badge light badge-primary"><a href="'.(base_url('support/chat/'.$result['id'])).'" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-comments"></i></a></span>
+                     <span class="badge light badge-primary ms-2"><a href="javascript:void()"  data-id="'.$result['id'].'" data-bs-toggle="modal" data-bs-target="#edit-support-modal" class="text-primary modal-edit-support" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-pen"></i></a></span>
+                    <span class="badge light badge-danger ms-2"><a href="javascript:void()" data-id="'.$result['id'].'" class="text-danger delete_support" data-bs-toggle="tooltip" data-placement="top" title="'.($this->lang->line('delete')?htmlspecialchars($this->lang->line('delete')):'Delete').'"><i class="fas fa-trash"></i></a></span>
+                    </div>';
+                }else{
                     $tempRow['action'] = '<span class="d-flex"><a href="'.(base_url('support/chat/'.$result['id'])).'" class="btn btn-icon btn-sm btn-primary mr-1" data-toggle="tooltip" title="'.($this->lang->line('chat')?htmlspecialchars($this->lang->line('chat')):'Chat').'"><i class="fas fa-comments"></i></a></span>';
                 }
                 

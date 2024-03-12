@@ -1,30 +1,3 @@
-// $(document).on('click', '.btn-create-leave', function (e) {
-//     var modal = $('#leave-modal');
-//     var form = $('#modal-add-leaves-part');
-//     var formData = form.serialize();
-//     console.log(formData);
-//     e.preventDefault();
-//     $.ajax({
-//         type: 'POST',
-//         url: form.attr('action'),
-//         data: formData,
-//         dataType: "json",
-//         beforeSend: function () {
-//             $(".modal-body").append(ModelProgress);
-//         },
-//         success: function (result) {
-//             if (result['error'] == false) {
-//                 location.reload();
-//             } else {
-//                 modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
-//             }
-//         },
-//         complete: function () {
-//             $(".loader-progress").remove();
-//         }
-//     });
-// });
-
 $(document).on('click', '.btn-create-leave', function (e) {
     e.preventDefault();
 
@@ -195,7 +168,7 @@ function showTable(data) {
         userRow += '<td style="font-size:13px;">' + user.status + '</td>';
         userRow += '<td>';
         userRow += '<div class="d-flex">';
-        userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit text-primary"></i></a>';
+        userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-eye text-primary"></i></a>';
         if (user.btn) {
             userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary ms-2 btn-delete-leave" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash text-danger"></i></a>';
         } else {

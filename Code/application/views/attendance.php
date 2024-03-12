@@ -53,15 +53,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form class="row">
+                                    <div class="row">
                                         <div class="col-lg-3">
-                                            <select class="form-select" id="employee_id">
-                                                <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
-                                                <?php foreach ($system_users as $system_user) {
-                                                    if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
-                                                        <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
-                                                <?php }
-                                                } ?>
+                                            <select name="status" class="form-control">
+                                                <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
+                                                <option value="2"><?= $this->lang->line('opened_and_resolving') ? htmlspecialchars($this->lang->line('opened_and_resolving')) : 'Opened and Resolving' ?></option>
+                                                <option value="3"><?= $this->lang->line('resolved_and_closed') ? htmlspecialchars($this->lang->line('resolved_and_closed')) : 'Resolved and Closed' ?></option>
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
@@ -100,7 +97,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -306,15 +303,15 @@
                 "columnDefs": [{
                         "orderable": true,
                         "targets": [1, 2]
-                    }, 
+                    },
                     {
                         "orderable": false,
                         "targets": '_all'
-                    } 
+                    }
                 ],
                 "order": [
                     [0, 'asc']
-                ] 
+                ]
             });
         }
         $(document).ready(function() {

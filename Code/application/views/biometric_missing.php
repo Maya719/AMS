@@ -479,13 +479,17 @@
               startDate: date,
             });
             var time = moment(result['data'][0].time, 'HH:mm:ss').format('HH:mm');
-
             var time24 = true;
+
+            // Initialize the timepicker
             $('#timepicker2').timepicker({
               format: 'HH:mm',
               showMeridian: false,
               time24Hour: time24
             });
+
+            // Set the time in the timepicker
+            $('#timepicker2').timepicker('setTime', time);
             $("#reason").val(result['data'][0].reason);
             $("#status").val(result['data'][0].status);
           } else {
