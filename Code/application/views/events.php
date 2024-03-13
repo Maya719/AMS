@@ -85,12 +85,12 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label><?= $this->lang->line('start_date') ? $this->lang->line('date') : 'Start' ?><span class="text-danger">*</span></label>
-                                <input type="text" name="start" class="form-control datepicker-default" required="">
+                                <input type="text" name="start" id="startingDate" class="form-control" required="">
                             </div>
 
                             <div class="form-group mb-3">
                                 <label><?= $this->lang->line('end_date') ? $this->lang->line('end_date') : 'End' ?><span class="text-danger">*</span></label>
-                                <input type="text" name="end" class="form-control datepicker-default" required="">
+                                <input type="text" name="end" id="endingDate" class="form-control" required="">
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-center">
@@ -238,6 +238,33 @@
         <script src="<?= base_url('assets2/vendor/moment/moment.min.js') ?>"></script>
         <script src="<?= base_url('assets2/js/plugins-init/calendar.js') ?>"></script>
 
+        <script>
+            $(document).ready(function() {
+                $('#startingDate').daterangepicker({
+                    locale: {
+                        format: date_format_js
+                    },
+                    singleDatePicker: true,
+                });
+                $('#endingDate').daterangepicker({
+                    locale: {
+                        format: date_format_js
+                    },
+                    singleDatePicker: true,
+                    minDate: start
+                });
+                $('#startingDate').on('change', function() {
+                    var start = $('#startingDate').val();
+                    $('#endingDate').daterangepicker({
+                        locale: {
+                            format: date_format_js
+                        },
+                        singleDatePicker: true,
+                        minDate: start
+                    });
+                });
+            });
+        </script>
 </body>
 
 </html>

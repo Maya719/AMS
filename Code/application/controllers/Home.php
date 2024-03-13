@@ -23,7 +23,6 @@ class Home extends CI_Controller
 				$this->data['transaction_chart'] = $this->plans_model->get_transaction_chart();
 				$this->load->view('saas-home', $this->data);
 			} else {
-				$system_users = $this->ion_auth->members_all()->result();
 				$this->data["report"] = $this->attendance_model->get_count_abs();
 				$this->data["events"] = $this->home_model->Get_events();
 				$this->load->view('home', $this->data);

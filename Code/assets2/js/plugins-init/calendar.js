@@ -64,6 +64,7 @@ function fullCalender(events) {
 				},
 				singleDatePicker: true,
 				startDate: endingDate,
+				minDate:startingDate
 			});
 		}
 	});

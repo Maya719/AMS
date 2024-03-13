@@ -457,7 +457,7 @@ class Home_model extends CI_Model
                 $join_date = $user->join_date;
                 $probation_date = $user->probation;
                 $date_of_birth = $user->DOB;
-        
+
                 // Check if any event falls within the next two months
                 if (
                     (date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
@@ -468,10 +468,12 @@ class Home_model extends CI_Model
                         date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths)))
                 ) {
                     $events = [];
-        
+
                     // Check for Birthday event
-                    if (date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
-                        date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))) {
+                    if (
+                        date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
+                        date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))
+                    ) {
                         $events[] = [
                             'user' => $user->first_name . ' ' . $user->last_name,
                             'profile' => $user->profile,
@@ -480,10 +482,12 @@ class Home_model extends CI_Model
                             'date' => date('j F', strtotime($date_of_birth))
                         ];
                     }
-        
+
                     // Check for Anniversary event
-                    if (date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
-                        date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))) {
+                    if (
+                        date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
+                        date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))
+                    ) {
                         $events[] = [
                             'user' => $user->first_name . ' ' . $user->last_name,
                             'profile' => $user->profile,
@@ -492,10 +496,12 @@ class Home_model extends CI_Model
                             'date' => date('j F', strtotime($join_date))
                         ];
                     }
-        
+
                     // Check for Probation Ending event
-                    if (date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
-                        date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))) {
+                    if (
+                        date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
+                        date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))
+                    ) {
                         $events[] = [
                             'user' => $user->first_name . ' ' . $user->last_name,
                             'profile' => $user->profile,
@@ -504,12 +510,37 @@ class Home_model extends CI_Model
                             'date' => date('j F', strtotime($probation_date))
                         ];
                     }
-        
+
                     $array = array_merge($array, $events);
                 }
             }
         }
-        
+        // events 
+        $saas_id = $this->session->userdata('saas_id');
+        $this->db->select('*');
+        $this->db->from('events');
+        $this->db->where('saas_id', $saas_id);
+        $query = $this->db->get();
+        $events = $query->result_array();
+        foreach ($events as $value) {
+            $id = $value["id"];
+            $title = $value["title"];
+            $start = $value["start"];
+            $end = $value["end"];
+            if (
+                (date('Y-m-d', strtotime($start)) >= date('Y-m-d', strtotime($currentDate)) && date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths))) ||
+                (date('Y-m-d', strtotime($start)) <= date('Y-m-d', strtotime($currentDate)) && date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths)) && date('Y-m-d', strtotime($end)) >= date('Y-m-d', strtotime($currentDate)))
+            ) {
+                $array[] = [
+                    'user' => $title,
+                    'profile' => '',
+                    'short' => strtoupper(substr($title, 0, 2)),
+                    'event' => 'Events',
+                    'date' => date('j F', strtotime($start)) . '-' . date('j F', strtotime($end))
+                ];
+            }
+        }
+
         usort($array, function ($a, $b) {
             return strtotime($a['date']) - strtotime($b['date']);
         });

@@ -478,23 +478,20 @@ class Settings extends CI_Controller
 
 			if ($this->input->post('enebleSandwich')) {
 				$sandwich = '1';
-				$sand_days_counter = $this->input->post('sand_days_counter');
-				$sand_grace_minutes = $this->input->post('sand_grace_minutes');
+				$period = $this->input->post('period');
 			} else {
 				$sandwich = '0';
-				$sand_days_counter = '0';
-				$sand_grace_minutes = '0';
+				$period = '0';
 			}
 
 			if ($this->form_validation->run() == TRUE) {
 
 				$data_json = array(
 					'apply' => $apply,
-					'days_counter' => $grace_day,
-					'sand_days_counter' => $sand_days_counter,
 					'grace_minutes' => $grace_minutes,
-					'sand_grace_minutes' => $sand_grace_minutes,
+					'days_counter' => $grace_day,
 					'sandwich' => $sandwich,
+					'period' => $period,
 				);
 
 				$data = array(
