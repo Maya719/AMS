@@ -457,50 +457,59 @@ class Home_model extends CI_Model
                 $join_date = $user->join_date;
                 $probation_date = $user->probation;
                 $date_of_birth = $user->DOB;
-                $formattedDateOfBirth = date('j F', strtotime($date_of_birth));
-                $formattedProbationDate = date('j F', strtotime($probation_date));
-                $formattedJoinDate = date('j F', strtotime($join_date));
-
+        
+                // Check if any event falls within the next two months
                 if (
-                    date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate))
-                    && date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))
+                    (date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
+                        date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))) ||
+                    (date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
+                        date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))) ||
+                    (date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
+                        date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths)))
                 ) {
-                    $formattedDateOfBirth = date('j F', strtotime($date_of_birth));
-                    $array[] = [
-                        'user' => $user->first_name . ' ' . $user->last_name,
-                        'profile' => $user->profile,
-                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
-                        'event' => 'Birthday',
-                        'date' => $formattedDateOfBirth
-                    ];
-                }
-
-                if (
-                    date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate))
-                    && date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))
-                ) {
-                    $array[] = [
-                        'user' => $user->first_name . ' ' . $user->last_name,
-                        'profile' => $user->profile,
-                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
-                        'event' => 'Anniversary',
-                        'date' => $formattedDateOfBirth
-                    ];
-                }
-                if (
-                    date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate))
-                    && date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))
-                ) {
-                    $array[] = [
-                        'user' => $user->first_name . ' ' . $user->last_name,
-                        'profile' => $user->profile,
-                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
-                        'event' => 'Probation Ending',
-                        'date' => $formattedProbationDate
-                    ];
+                    $events = [];
+        
+                    // Check for Birthday event
+                    if (date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
+                        date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))) {
+                        $events[] = [
+                            'user' => $user->first_name . ' ' . $user->last_name,
+                            'profile' => $user->profile,
+                            'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                            'event' => 'Birthday',
+                            'date' => date('j F', strtotime($date_of_birth))
+                        ];
+                    }
+        
+                    // Check for Anniversary event
+                    if (date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
+                        date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))) {
+                        $events[] = [
+                            'user' => $user->first_name . ' ' . $user->last_name,
+                            'profile' => $user->profile,
+                            'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                            'event' => 'Anniversary',
+                            'date' => date('j F', strtotime($join_date))
+                        ];
+                    }
+        
+                    // Check for Probation Ending event
+                    if (date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
+                        date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))) {
+                        $events[] = [
+                            'user' => $user->first_name . ' ' . $user->last_name,
+                            'profile' => $user->profile,
+                            'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                            'event' => 'Probation Ending',
+                            'date' => date('j F', strtotime($probation_date))
+                        ];
+                    }
+        
+                    $array = array_merge($array, $events);
                 }
             }
         }
+        
         usort($array, function ($a, $b) {
             return strtotime($a['date']) - strtotime($b['date']);
         });

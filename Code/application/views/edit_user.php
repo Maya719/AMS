@@ -268,14 +268,14 @@
                                     </div>
                                 </div>
                                 <?php
-                                if (permissions('user_edit')) { ?>
+                                if ($this->ion_auth->is_admin() || permissions('user_edit')) { ?>
                                     <div class="card-footer row">
                                         <div class="col-5">
                                             <button type="submit" class="btn btn-edit-user btn-primary">Submit</button>
                                         </div>
                                         <div class="col-6 text-end">
                                             <?php
-                                            if (permissions('user_delete')) { ?>
+                                            if ($this->ion_auth->is_admin() || permissions('user_delete')) { ?>
                                                 <button type="button" id="user_delete_btn" class="btn btn-danger">Delete Account</button>
                                             <?php
                                             }

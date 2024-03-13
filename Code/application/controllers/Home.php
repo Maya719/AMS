@@ -18,7 +18,7 @@ class Home extends CI_Controller
 			$this->data['system_users'] = $this->ion_auth->users(array(1, 2, 4))->result();
 			$this->data['project_status'] = project_status();
 			$this->data['task_status'] = task_status();
-			if ($this->ion_auth->in_group(3)) {
+			if (is_saas_admin()) {
 				$this->data['plans'] = $this->plans_model->get_plans();
 				$this->data['transaction_chart'] = $this->plans_model->get_transaction_chart();
 				$this->load->view('saas-home', $this->data);
