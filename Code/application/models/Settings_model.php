@@ -254,7 +254,7 @@ class Settings_model extends CI_Model
         $excludeIds = [1, 3];
         $excludeConditions = implode(',', $excludeIds);
         
-        $query = $this->db->query("SELECT * FROM groups WHERE id NOT IN ($excludeConditions)");
+        $query = $this->db->query("SELECT * FROM groups WHERE id NOT IN ($excludeConditions) AND saas_id = ".$this->session->userdata('saas_id'));
 
         $results = $query->result_array();
         if(!empty($results)){

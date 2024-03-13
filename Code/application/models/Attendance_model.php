@@ -370,7 +370,7 @@ class Attendance_model extends CI_Model
             $employee_id = get_employee_id_from_user_id($user_id);
             $where3 .= " AND biometric_missing.user_id = '" . $employee_id . "'";
         }
-        $BioQuery = $this->db->query("SELECT biometric_missing.*, CONCAT(users.first_name, ' ', users.last_name) AS user FROM biometric_missing " . $leftjoin3 . $where3);
+        $BioQuery = $this->db->query("SELECT biometric_missing.*, CONCAT(users.first_name, ' ', users.last_name) AS user FROM biometric_missing " . $leftjoin3 . $where3." AND biometric_missing.saas_id =".$this->session->userdata('saas_id'));
         $BioResults = $BioQuery->result_array();
         foreach ($BioResults as $BioResult) {
             if ($BioResult["status"] == '1') {

@@ -41,7 +41,6 @@ if($google_client_id){ ?>
                   <div class="form-group">
                     <label for="email"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?></label>
                     <input id="email" type="email" class="form-control" name="email" tabindex="3" required>
-                    
                   </div>
                   
                   <div class="row">
