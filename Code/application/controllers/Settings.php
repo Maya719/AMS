@@ -1837,7 +1837,7 @@ class Settings extends CI_Controller
 			$this->data['main_page2'] = 'leaves';
 			$this->data['main_page'] = 'Leaves Types';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$this->db->where('saas_id', 8);
+			$this->db->where('saas_id', $this->session->userdata('saas_id'));
 			$query = $this->db->get('leaves_type');
 			$this->data['leaves_type'] = $query->result_array();
 			$this->load->view('settings', $this->data);
