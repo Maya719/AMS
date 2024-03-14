@@ -753,7 +753,7 @@
             <span class="nav-text">Employees</span>
           </a>
         </li>
-        
+
         <li><a href="<?= base_url('events') ?>" aria-expanded="false">
             <i class="fas fa-calendar"></i>
             <span class="nav-text"><?= $this->lang->line('events') ? $this->lang->line('events') : 'Events' ?></span>
@@ -812,10 +812,11 @@
             <?php if (is_saas_admin()) { ?>
               <li><a href="<?= base_url('settings') ?>"><?= $this->lang->line('general') ? $this->lang->line('general') : 'General' ?></a></li>
               <li><a href="<?= base_url('settings/seo') ?>"><?= $this->lang->line('seo') ? $this->lang->line('seo') : 'SEO' ?></a></li>
+              <li><a href="<?= base_url('settings/payment') ?>"><?= $this->lang->line('payment_gateway') ? $this->lang->line('payment_gateway') : 'Payment Gateway' ?></a></li>
               <li><a href="<?= base_url('settings/logins') ?>"><?= $this->lang->line('social_login') ? htmlspecialchars($this->lang->line('social_login')) : 'Social Login' ?></a></li>
               <li><a href="<?= base_url('settings/email') ?>"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></a></li>
               <li><a href="<?= base_url('settings/email-templates') ?>"><?= $this->lang->line('email_templates') ? $this->lang->line('email_templates') : 'Email Templates' ?></a></li>
-              <li><a href="<?= base_url('languages') ?>"><?= $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages' ?></a></li>
+              <!-- <li><a href="<?= base_url('languages') ?>"><?= $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages' ?></a></li> -->
               <li><a href="<?= base_url('settings/update') ?>"><?= $this->lang->line('update') ? $this->lang->line('update') : 'Update' ?></a></li>
               <li><a href="<?= base_url('settings/recaptcha') ?>"><?= $this->lang->line('google_recaptcha') ? $this->lang->line('google_recaptcha') : 'Google reCAPTCHA' ?></a></li>
               <li><a href="<?= base_url('settings/custom-code') ?>"><?= $this->lang->line('custom_code') ? $this->lang->line('custom_code') : 'Custom Code' ?></a></li>

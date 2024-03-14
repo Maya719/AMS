@@ -1,77 +1,101 @@
-<?php $this->load->view('includes/head'); ?>
+<?php $this->load->view('includes/header'); ?>
+<style>
+  .hidden {
+    display: none;
+  }
+
+  #example3 tbody td a {
+    font-weight: bold;
+    font-size: 12px;
+  }
+</style>
 </head>
-<body class="sidebar-mini">
-  <div id="app">
-    <div class="main-wrapper">
-      <?php $this->load->view('includes/navbar'); ?>
-      <!-- Main Content -->
-      <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <div class="section-header-back">
-              <a href="javascript:history.go(-1)" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
-            </div>
-            <h1>
-              <?=$this->lang->line('orders')?$this->lang->line('orders'):'Orders'?>
-            </h1>
-            <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active"><a href="<?=base_url()?>"><?=$this->lang->line('dashboard')?$this->lang->line('dashboard'):'Dashboard'?></a></div>
-              <div class="breadcrumb-item">
-              <?=$this->lang->line('orders')?$this->lang->line('orders'):'Orders'?>
+
+<body>
+
+  <!--*******************
+        Preloader start
+    ********************-->
+  <div id="preloader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <!--*******************
+        Preloader end
+    ********************-->
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+  <div id="main-wrapper">
+    <?php $this->load->view('includes/sidebar'); ?>
+    <div class="content-body default-height">
+      <div class="container-fluid">
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example3" class="table table-sm mb-0">
+                    <thead>
+                      <tr>
+                        <th><?= $this->lang->line('user') ? $this->lang->line('user') : 'User' ?></th>
+                        <th><?= $this->lang->line('plan') ? $this->lang->line('plan') : 'Plan' ?></th>
+                        <th><?= $this->lang->line('price_usd') ? $this->lang->line('price_usd') . ' - ' . get_saas_currency('currency_code') : 'Price - ' . get_saas_currency('currency_code') ?></th>
+                        <th><?= $this->lang->line('billing_type') ? $this->lang->line('billing_type') : 'Billing Type' ?></th>
+                        <th><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?></th>
+                        <th><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php foreach ($temps as $temp) : ?>
+                        <tr>
+                            <td><?=$temp["user"]?></td>
+                            <td><?=$temp["title"]?></td>
+                            <td><?=$temp["price"]?></td>
+                            <td><?=$temp["billing_type"]?></td>
+                            <td><?=$temp["created"]?></td>
+                            <td><?=$temp["status"]?></td>
+                        </tr>
+                      <?php endforeach ?>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-          <div class="section-body">
-            
-            <div class="row">
-
-                
-                  <div class="col-md-12">
-                    <div class="card card-primary">
-                      <div class="card-body"> 
-                        <table class='table-striped' id='order_list'
-                          data-toggle="table"
-                          data-url="<?=base_url('plans/get_orders')?>"
-                          data-click-to-select="true"
-                          data-side-pagination="server"
-                          data-pagination="false"
-                          data-page-list="[5, 10, 20, 50, 100, 200]"
-                          data-search="false" data-show-columns="false"
-                          data-show-refresh="false" data-trim-on-search="false"
-                          data-sort-name="id" data-sort-order="asc"
-                          data-mobile-responsive="true"
-                          data-toolbar="" data-show-export="false"
-                          data-maintain-selected="true"
-                          data-export-types='["txt","excel"]'
-                          data-export-options='{
-                            "fileName": "orders-list",
-                            "ignoreColumn": ["state"] 
-                          }'
-                          data-query-params="queryParams">
-                          <thead>
-                            <tr>
-                              <th data-field="user" data-sortable="true"><?=$this->lang->line('user')?$this->lang->line('user'):'User'?></th>
-                              <th data-field="title" data-sortable="true"><?=$this->lang->line('plan')?$this->lang->line('plan'):'Plan'?></th>
-                              <th data-field="price" data-sortable="true"><?=$this->lang->line('price_usd')?$this->lang->line('price_usd').' - '.get_saas_currency('currency_code'):'Price - '.get_saas_currency('currency_code')?></th>
-                              <th data-field="billing_type" data-sortable="true"><?=$this->lang->line('billing_type')?$this->lang->line('billing_type'):'Billing Type'?></th>
-                              <th data-field="created" data-sortable="true"><?=$this->lang->line('date')?$this->lang->line('date'):'Date'?></th>
-                              <th data-field="status" data-sortable="true"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?></th>
-                            </tr>
-                          </thead>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-              
-          </div>
-        </section>
+        </div>
       </div>
-    
-    <?php $this->load->view('includes/footer'); ?>
     </div>
+    <!-- *******************************************
+  Footer -->
+    <?php $this->load->view('includes/footer'); ?>
+    <!--**********************************
+	Content body end
+***********************************-->
   </div>
+  <?php $this->load->view('includes/scripts'); ?>
+  <script src="<?= base_url('assets/js/page/saas-users.js') ?>"></script>
+  <script>
+    var table3 = $('#example3').DataTable({
+      "paging": true,
+      "searching": true,
+      "language": {
+        "paginate": {
+          "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+          "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+        }
+      },
+      "info": false,
+      "lengthChange": true,
+      "lengthMenu": [10, 20, 50, 500],
+      "order": false,
+      "pageLength": 10,
+      "dom": '<"top"f>rt<"bottom"lp><"clear">'
 
-<?php $this->load->view('includes/js'); ?>
-
+    });
+  </script>
 </body>
+
 </html>
