@@ -256,9 +256,11 @@
                             <strong>' . ($this->lang->line('tasks') ? $this->lang->line('tasks') : "Tasks") . ': </strong>' . (($plan["tasks"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["tasks"]) . '<br>
                             <strong>' . ($this->lang->line('users') ? $this->lang->line('users') : "Users") . ': </strong>' . (($plan["users"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["users"]);
 
-                          $tempAction = '<div class="d-flex">
-                          <a href="#" class="btn btn-success modal-edit-plan mr-1" data-id="' . $plan["id"] . '" data-bs-toggle="modal" data-bs-target="#plan-edit-modal"><i class="fas fa-pen"></i></a>
-                          <a href="#" class="btn btn-danger delete_plan ms-2" data-id="' . $plan["id"] . '" data-toggle="tooltip" title="' . ($this->lang->line('delete') ? htmlspecialchars($this->lang->line('delete')) : 'Delete') . '"><i class="fas fa-trash"></i></a></div>';
+                            $tempAction = '<div class="d-flex">
+					<span class="badge light badge-primary"><a href="#" data-id="' . $plan["id"] . '" class="text-primary btn-success modal-edit-plan mr-1" data-placement="top" title="' . ($this->lang->line('edit') ? htmlspecialchars($this->lang->line('edit')) : 'Edit') . '" data-bs-toggle="modal" data-bs-target="#plan-edit-modal"><i class="fas fa-pen"></i></a></span>
+					<span class="badge light badge-danger ms-2">
+          <a href="#" class="text-danger delete_plan" data-id="' . $plan["id"] . '" data-bs-toggle="tooltip"  data-placement="top" title="' . ($this->lang->line('delete') ? htmlspecialchars($this->lang->line('delete')) : 'Delete') . '"><i class="fas fa-trash"></i></a></span>
+				</div>';
                           ?>
                           <tr>
                             <td><?= $plan["title"] ?></td>

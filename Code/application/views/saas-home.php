@@ -130,6 +130,50 @@
               </div>
               <div class="card-body">
                 <div id="animating-donut" class="ct-chart ct-golden-section chartlist-chart"></div>
+                <div class="d-flex ms-5">
+                  <div class="d-flex me-5">
+                    <div class="mt-2">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?= theme_color() ?>" />
+                      </svg>
+                    </div>
+                    <div class="ms-3">
+                      <p class="mt-2">Active</p>
+                    </div>
+                  </div>
+                  <div class="d-flex me-5">
+                    <div class="mt-2">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="6.5" cy="6.5" r="6.5" fill="#09BD3C" />
+                      </svg>
+                    </div>
+                    <div class="ms-3">
+                      <p class="mt-2">Deactive</p>
+                    </div>
+                  </div>
+                  <div class="d-flex me-5">
+                    <div class="mt-2">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FC2E53" />
+                      </svg>
+
+                    </div>
+                    <div class="ms-3">
+                      <p class="mt-2">Paid</p>
+                    </div>
+                  </div>
+                  <div class="d-flex me-5">
+                    <div class="mt-2">
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFBF00" />
+                      </svg>
+
+                    </div>
+                    <div class="ms-3">
+                      <p class="mt-2">Free</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -256,20 +300,21 @@
       });
 
     }
+
     function hexToRGBA(hex, alpha) {
-    // Parse the hexadecimal color code
-    var r = parseInt(hex.slice(1, 3), 16);
-    var g = parseInt(hex.slice(3, 5), 16);
-    var b = parseInt(hex.slice(5, 7), 16);
+      // Parse the hexadecimal color code
+      var r = parseInt(hex.slice(1, 3), 16);
+      var g = parseInt(hex.slice(3, 5), 16);
+      var b = parseInt(hex.slice(5, 7), 16);
 
-    // Ensure alpha value is within range [0, 1]
-    if (alpha < 0 || alpha > 1) {
+      // Ensure alpha value is within range [0, 1]
+      if (alpha < 0 || alpha > 1) {
         alpha = 1;
-    }
+      }
 
-    // Return the RGBA string
-    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
-}
+      // Return the RGBA string
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+    }
 
     var areaChart1 = function() {
       var color = hexToRGBA(theme_color, 0.3);
@@ -341,9 +386,8 @@
         plugins: [
           Chartist.plugins.tooltip()
         ],
-        width: '100%', // Setting the width to 100%
-        height: 300 // Setting the height to 300 pixels
-
+        width: '100%',
+        height: 300
       };
 
       new Chartist.Bar('#bi-polar-bar', data, options);
