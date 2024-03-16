@@ -70,11 +70,11 @@
                                                 </div>
                                                 <div class="card-body row">
                                                     <div class="form-group col-md-12">
-                                                        <label><?=$this->lang->line('title')?$this->lang->line('title'):'Title'?><span class="text-danger">*</span></label>
+                                                        <label class="col-form-label"><?=$this->lang->line('title')?$this->lang->line('title'):'Title'?><span class="text-danger">*</span></label>
                                                         <input type="text" name="<?=htmlspecialchars($lan['language'])?>_title" value="<?=isset($home->{$lan['language']}->title)?htmlspecialchars($home->{$lan['language']}->title):''?>" class="form-control">
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
+                                                        <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
                                                         <textarea type="text" name="<?=$lan['language']?>_description" class="form-control"><?=isset($home->{$lan['language']}->description)?htmlspecialchars($home->{$lan['language']}->description):''?></textarea>
                                                     </div>
                                                 </div>

@@ -223,7 +223,7 @@
                             </h4>
                             <div class="form-group col-md-12">
                               <?php $feature_icon = json_decode($feature['icon']); ?>
-                              <label><?= $this->lang->line('icon') ? $this->lang->line('icon') : 'Icon' ?><span class="text-danger">*</span></label>
+                              <label class="col-form-label"><?= $this->lang->line('icon') ? $this->lang->line('icon') : 'Icon' ?><span class="text-danger">*</span></label>
                               <button class="icon btn btn-block btn-default border iconpicker" data-icon="<?= isset($feature_icon->{$lan['language']}) ? htmlspecialchars($feature_icon->{$lan['language']}) : '' ?>" id="<?= htmlspecialchars($lan['language']) ?>_icon" name="<?= htmlspecialchars($lan['language']) ?>_icon" title="" data-original-title="icon">
                                 <i class="<?= isset($feature_icon->{$lan['language']}) ? htmlspecialchars($feature_icon->{$lan['language']}) : '' ?>"></i>
                                 <span class="caret"></span>
@@ -231,12 +231,12 @@
                               </button>
                             </div>
                             <div class="form-group mt-3 col-md-12">
-                              <label><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
+                              <label class="col-form-label"><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
                               <?php $feature_title = json_decode($feature['title']); ?>
                               <input type="text" name="<?= htmlspecialchars($lan['language']) ?>_title" value="<?= isset($feature_title->{$lan['language']}) ? htmlspecialchars($feature_title->{$lan['language']}) : '' ?>" class="form-control">
                             </div>
                             <div class="form-group mt-3 col-md-12">
-                              <label><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
+                              <label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
                               <?php $feature_description = json_decode($feature['description']); ?>
                               <textarea type="text" name="<?= $lan['language'] ?>_description" class="form-control"><?= isset($feature_description->{$lan['language']}) ? htmlspecialchars($feature_description->{$lan['language']}) : '' ?></textarea>
                             </div>

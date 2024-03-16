@@ -80,28 +80,28 @@
 <form action="<?=base_url('shift/create')?>" method="POST" class="modal-part" id="modal-add-shift-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
     
     <div class="form-group">
-        <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
+        <label class="col-form-label"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
         <input type="text" name="name" class="form-control" required="">
     </div>
 
     <div class="row">
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
             <input type="text" name="starting_time" class="form-control timepicker" required="" value="9:00 AM">
         </div>
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
             <input type="text" name="ending_time" class="form-control timepicker" required="" value="6:00 PM">
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('break_start')?$this->lang->line('break_start'):'Break Start'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('break_start')?$this->lang->line('break_start'):'Break Start'?><span class="text-danger">*</span></label>
             <input type="text" name="break_start" class="form-control timepicker" required="" value="1:15 PM">
         </div>
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('break_end')?$this->lang->line('break_end'):'Break End'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('break_end')?$this->lang->line('break_end'):'Break End'?><span class="text-danger">*</span></label>
             <input type="text" name="break_end" class="form-control timepicker" required="" value="2:15 PM">
         </div>
     </div>
@@ -110,7 +110,7 @@
 
 <form action="<?=base_url('shift/shift_create')?>" method="POST" class="modal-part" id="modal-add-assign-shift-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
     <div class="form-group">
-        <label><?=$this->lang->line('type')?$this->lang->line('type'):'Type'?></label>
+        <label class="col-form-label"><?=$this->lang->line('type')?$this->lang->line('type'):'Type'?></label>
         <select name="type" class="form-control select2">
             <?php foreach($shift_types as $shift_type){ ?>
             <option value="<?= $shift_type['id'] ?>"><?= $shift_type['name'] ?></option>
@@ -120,28 +120,28 @@
 
     <div class="row">
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
             <input type="text" name="starting_time" class="form-control timepicker" required="" value="9:00 AM">
         </div>
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
             <input type="text" name="ending_time" class="form-control timepicker" required="" value="6:00 PM">
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('break_start')?$this->lang->line('break_start'):'Break Start'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('break_start')?$this->lang->line('break_start'):'Break Start'?><span class="text-danger">*</span></label>
             <input type="text" name="break_start" class="form-control timepicker" required="" value="1:15 PM">
         </div>
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('break_end')?$this->lang->line('break_end'):'Break End'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('break_end')?$this->lang->line('break_end'):'Break End'?><span class="text-danger">*</span></label>
             <input type="text" name="break_end" class="form-control timepicker" required="" value="2:15 PM">
         </div>
     </div>
 
     <div class="form-group">
-        <label><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
+        <label class="col-form-label"><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
         <select name="users[]" class="form-control select2" multiple="">
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
         <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -155,34 +155,34 @@
     <input type="hidden" name="update_id" id="update_id">
 
     <div class="form-group">
-        <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
+        <label class="col-form-label"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
         <input type="text" name="name" id="name" class="form-control" required="">
     </div>
 
     <div class="row">
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
             <input type="text" name="starting_time" id="starting_time" class="form-control timepicker" required="">
         </div>
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
             <input type="text" name="ending_time" id="ending_time" class="form-control timepicker" required="">
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('break_start')?$this->lang->line('break_start'):'Break Start'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('break_start')?$this->lang->line('break_start'):'Break Start'?><span class="text-danger">*</span></label>
             <input type="text" name="break_start" id="break_start" class="form-control timepicker" required="">
         </div>
         <div class="col-md-6 form-group">
-            <label><?=$this->lang->line('break_end')?$this->lang->line('break_end'):'Break End'?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?=$this->lang->line('break_end')?$this->lang->line('break_end'):'Break End'?><span class="text-danger">*</span></label>
             <input type="text" name="break_end" id="break_end" class="form-control timepicker" required="">
         </div>
     </div>
 
     <div class="form-group">
-    <label><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
     <select name="users[]" id="users" class="form-control select2" multiple="">
         <option value="0"><?=$this->lang->line('casual_leave')?$this->lang->line('casual_leave'):'Select Shift'?></option>
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>

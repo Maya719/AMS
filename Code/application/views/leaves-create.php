@@ -160,7 +160,7 @@
                                                     </svg>
                                                 </div>
                                                 <div class="ms-3">
-                                                    <p class="mt-2">Tatal Leave</p>
+                                                    <p class="mt-2">Total</p>
                                                 </div>
                                             </div>
                                             <div class="d-flex me-5">

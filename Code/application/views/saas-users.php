@@ -94,28 +94,28 @@
             <div class="modal-body">
               <div class="row">
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?><span class="text-danger">*</span></label>
                   <input type="text" name="first_name" class="form-control" required="">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('last_name') ? $this->lang->line('last_name') : 'Last Name' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('last_name') ? $this->lang->line('last_name') : 'Last Name' ?><span class="text-danger">*</span></label>
                   <input type="text" name="last_name" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?><span class="text-danger">*</span> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('this_email_will_not_be_updated_latter') ? $this->lang->line('this_email_will_not_be_updated_latter') : 'This email will not be updated latter.' ?>"></i></label>
+                  <label class="col-form-label"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?><span class="text-danger">*</span> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('this_email_will_not_be_updated_latter') ? $this->lang->line('this_email_will_not_be_updated_latter') : 'This email will not be updated latter.' ?>"></i></label>
                   <input type="email" name="email" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?></label>
                   <input type="text" name="phone" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?><span class="text-danger">*</span></label>
                   <input type="text" name="password" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('confirm_password') ? $this->lang->line('confirm_password') : 'Confirm Password' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('confirm_password') ? $this->lang->line('confirm_password') : 'Confirm Password' ?><span class="text-danger">*</span></label>
                   <input type="text" name="password_confirm" class="form-control">
                 </div>
                 <input type="hidden" name="groups" value="1">
@@ -146,27 +146,27 @@
                 <input type="hidden" name="old_profile_pic" id="old_profile_pic" value="">
                 <div class="row">
                   <div class="form-group col-md-6 mb-3">
-                    <label><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?><span class="text-danger">*</span></label>
+                    <label class="col-form-label"><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?><span class="text-danger">*</span></label>
                     <input type="text" id="first_name" name="first_name" class="form-control" required="">
                   </div>
                   <div class="form-group col-md-6 mb-3">
-                    <label><?= $this->lang->line('last_name') ? $this->lang->line('last_name') : 'Last Name' ?><span class="text-danger">*</span></label>
+                    <label class="col-form-label"><?= $this->lang->line('last_name') ? $this->lang->line('last_name') : 'Last Name' ?><span class="text-danger">*</span></label>
                     <input type="text" id="last_name" name="last_name" class="form-control">
                   </div>
                   <div class="form-group col-md-6 mb-3">
-                    <label><?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?></label>
+                    <label class="col-form-label"><?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?></label>
                     <input type="text" id="phone" name="phone" class="form-control">
                   </div>
                   <div class="form-group col-md-6 mb-3">
-                    <label><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') ? $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') : 'Leave Password and Confirm Password empty for no change in Password.' ?>"></i></label>
+                    <label class="col-form-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') ? $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') : 'Leave Password and Confirm Password empty for no change in Password.' ?>"></i></label>
                     <input type="text" name="password" class="form-control">
                   </div>
                   <div class="form-group col-md-6 mb-3">
-                    <label><?= $this->lang->line('confirm_password') ? $this->lang->line('confirm_password') : 'Confirm Password' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') ? $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') : 'Leave Password and Confirm Password empty for no change in Password.' ?>"></i></label>
+                    <label class="col-form-label"><?= $this->lang->line('confirm_password') ? $this->lang->line('confirm_password') : 'Confirm Password' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') ? $this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password') : 'Leave Password and Confirm Password empty for no change in Password.' ?>"></i></label>
                     <input type="text" name="password_confirm" class="form-control">
                   </div>
                   <div class="form-group col-md-6 mb-3">
-                    <label><?= $this->lang->line('user_plan') ? $this->lang->line('user_plan') : 'User Plan' ?></label>
+                    <label class="col-form-label"><?= $this->lang->line('user_plan') ? $this->lang->line('user_plan') : 'User Plan' ?></label>
                     <select name="plan_id" id="plan_id" class="form-control select2">
                       <?php foreach ($plans as $plan) { ?>
                         <option value="<?= htmlspecialchars($plan['id']) ?>"><?= ucfirst(htmlspecialchars($plan['title'])) ?></option>
@@ -174,7 +174,7 @@
                     </select>
                   </div>
                   <div class="form-group col-md-6">
-                    <label><?= $this->lang->line('plan_expiry_date') ? $this->lang->line('plan_expiry_date') : 'Plan Expiry Date' ?><span class="text-danger">*</span></label>
+                    <label class="col-form-label"><?= $this->lang->line('plan_expiry_date') ? $this->lang->line('plan_expiry_date') : 'Plan Expiry Date' ?><span class="text-danger">*</span></label>
                     <input type="text" id="end_date" name="end_date" class="form-control">
                   </div>
                 </div>

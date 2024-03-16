@@ -80,16 +80,16 @@
                     <form action="<?= base_url('events/create') ?>" method="POST" class="modal-part" id="modal-add-event-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="title">
                             </div>
                             <div class="form-group mb-3">
-                                <label><?= $this->lang->line('start_date') ? $this->lang->line('date') : 'Start' ?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?= $this->lang->line('start_date') ? $this->lang->line('date') : 'Start' ?><span class="text-danger">*</span></label>
                                 <input type="text" name="start" id="startingDate" class="form-control" required="">
                             </div>
 
                             <div class="form-group mb-3">
-                                <label><?= $this->lang->line('end_date') ? $this->lang->line('end_date') : 'End' ?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?= $this->lang->line('end_date') ? $this->lang->line('end_date') : 'End' ?><span class="text-danger">*</span></label>
                                 <input type="text" name="end" id="endingDate" class="form-control" required="">
                             </div>
                         </div>
@@ -114,16 +114,16 @@
                         <input type="hidden" name="update_id" id="update_id" class="form-control">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="title" name="title">
                             </div>
                             <div class="form-group mb-3">
-                                <label><?= $this->lang->line('start_date') ? $this->lang->line('date') : 'Start' ?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?= $this->lang->line('start_date') ? $this->lang->line('date') : 'Start' ?><span class="text-danger">*</span></label>
                                 <input type="text" name="start" id="start" class="form-control" required="">
                             </div>
 
                             <div class="form-group mb-3">
-                                <label><?= $this->lang->line('end_date') ? $this->lang->line('end_date') : 'End' ?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?= $this->lang->line('end_date') ? $this->lang->line('end_date') : 'End' ?><span class="text-danger">*</span></label>
                                 <input type="text" name="end" id="end" class="form-control" required="">
                             </div>
                         </div>

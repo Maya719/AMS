@@ -95,7 +95,7 @@ if ($google_client_id) { ?>
   <form class="modal-part" id="modal-forgot-password-part" action="<?= base_url('auth/forgot-password') ?>" class="needs-validation" novalidate="" data-title="<?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>" data-btn="<?= $this->lang->line('send') ? $this->lang->line('send') : 'Send' ?>">
     <p><?= $this->lang->line('we_will_send_a_link_to_reset_your_password') ? $this->lang->line('we_will_send_a_link_to_reset_your_password') : 'We will send a link to reset your password.' ?></p>
     <div class="form-group">
-      <label><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
+      <label class="col-form-label"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
       <div class="input-group">
         <div class="input-group-prepend">
           <div class="input-group-text">

@@ -74,11 +74,11 @@
 <form action="<?=base_url('device_config/create')?>" method="POST" class="modal-part" id="modal-add-leaves-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
     <div class="row" id="dates">
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('device_name')?$this->lang->line('device_name'):'Device name'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('device_name')?$this->lang->line('device_name'):'Device name'?><span class="text-danger">*</span></label>
           <input type="text" name="device_name" class="form-control" required="">
       </div>
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('device_ip')?$this->lang->line('device_ip'):'Device Ip Address'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('device_ip')?$this->lang->line('device_ip'):'Device Ip Address'?><span class="text-danger">*</span></label>
           <input type="text" name="device_ip" class="form-control" required="">
       </div>
     </div>
@@ -92,15 +92,15 @@
   <input type="hidden" name="update_id" id="update_id" value="">
   <div class="row" id="dates">
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('device_name')?$this->lang->line('device_name'):'Device name'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('device_name')?$this->lang->line('device_name'):'Device name'?><span class="text-danger">*</span></label>
           <input type="text" name="device_name" id="device_name" class="form-control" required="">
       </div>
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('device_ip')?$this->lang->line('device_ip'):'Device Ip Address'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('device_ip')?$this->lang->line('device_ip'):'Device Ip Address'?><span class="text-danger">*</span></label>
           <input type="text" name="device_ip" id="device_ip" class="form-control" required="">
       </div>
       <div class="form-group col-md-12">
-        <label><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
+        <label class="col-form-label"><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
         <select name="users[]" id="users" class="form-control" multiple="multiple">
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
         <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>

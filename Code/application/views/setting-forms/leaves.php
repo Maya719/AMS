@@ -61,11 +61,11 @@
             <form action="<?= base_url('settings/leaves_type_create') ?>" method="POST" class="modal-part" id="modal-add-leaves-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
                         <input type="text" name="name" class="form-control" required="">
                     </div>
                     <div class="form-group mb-3">
-                        <label><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?><span class="text-danger">*</span></label>
                         <select name="duration" class="form-control select2">
                             <option value="year">Annually</option>
                             <option value="3_months">For 3 Months</option>
@@ -74,7 +74,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
                         <input type="number" name="count" class="form-control" required="">
                     </div>
                 </div>
@@ -99,11 +99,11 @@
                 <div class="modal-body">
                     <input type="hidden" name="update_id" id="update_id">
                     <div class="form-group mb-3">
-                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
                         <input type="text" name="name" id="name" class="form-control" required="">
                     </div>
                     <div class="form-group mb-3">
-                        <label><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?><span class="text-danger">*</span></label>
                         <select name="duration" id="duration" class="form-control select2">
                             <option value="year">Annually</option>
                             <option value="3_months">For 3 Months</option>
@@ -112,7 +112,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
                         <input type="number" id="count" name="count" class="form-control" required="">
                     </div>
                 </div>

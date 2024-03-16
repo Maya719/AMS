@@ -71,11 +71,11 @@
 <form action="<?=base_url('department/create')?>" method="POST" class="modal-part" id="modal-add-leaves-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
     <div class="row" id="dates">
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company name'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company name'?><span class="text-danger">*</span></label>
           <input type="text" name="company_name" class="form-control" value="<?= company_name() ?>" disabled>
       </div>
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('department_name')?$this->lang->line('department_name'):'Department Name'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('department_name')?$this->lang->line('department_name'):'Department Name'?><span class="text-danger">*</span></label>
           <input type="text" name="department_name" class="form-control" required="">
       </div>
     </div>
@@ -89,11 +89,11 @@
   <input type="hidden" name="update_id" id="update_id" value="">
   <div class="row" id="dates">
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'company Name'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'company Name'?><span class="text-danger">*</span></label>
           <input type="text" name="company_name" id="company_name" class="form-control" value="<?= company_name() ?>" disabled>
       </div>
       <div class="form-group col-md-12">
-          <label><?=$this->lang->line('department_name')?$this->lang->line('department_name'):'Department Name'?><span class="text-danger">*</span></label>
+          <label class="col-form-label"><?=$this->lang->line('department_name')?$this->lang->line('department_name'):'Department Name'?><span class="text-danger">*</span></label>
           <input type="text" name="department_name" id="department_name" class="form-control" required="">
       </div>
   </div>

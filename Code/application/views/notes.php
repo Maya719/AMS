@@ -67,7 +67,7 @@
             <div class="modal-body">
               <div class="row">
                 <div class="form-group col-md-12">
-                  <label><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?><span class="text-danger">*</span></label>
                   <textarea type="text" name="description" class="form-control"></textarea>
                 </div>
               </div>
@@ -93,7 +93,7 @@
               <input type="hidden" name="update_id" id="update_id" value="">
               <div class="row">
                 <div class="form-group col-md-12">
-                  <label><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('note') ? $this->lang->line('note') : 'Note' ?><span class="text-danger">*</span></label>
                   <textarea type="text" name="description" id="description" class="form-control"></textarea>
                 </div>
               </div>

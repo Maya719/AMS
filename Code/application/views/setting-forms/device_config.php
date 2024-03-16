@@ -49,15 +49,15 @@
         <div class="modal-body">
           <div class="row" id="dates">
             <div class="form-group col-md-12 mb-3">
-              <label><?= $this->lang->line('device_name') ? $this->lang->line('device_name') : 'Device name' ?><span class="text-danger">*</span></label>
+              <label class="col-form-label"><?= $this->lang->line('device_name') ? $this->lang->line('device_name') : 'Device name' ?><span class="text-danger">*</span></label>
               <input type="text" name="device_name" class="form-control" required="">
             </div>
             <div class="form-group col-md-12 mb-3">
-              <label><?= $this->lang->line('device_ip') ? $this->lang->line('device_ip') : 'Device Ip Address' ?><span class="text-danger">*</span></label>
+              <label class="col-form-label"><?= $this->lang->line('device_ip') ? $this->lang->line('device_ip') : 'Device Ip Address' ?><span class="text-danger">*</span></label>
               <input type="text" name="device_ip" class="form-control" required="">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('port') ? $this->lang->line('port') : 'Device External Port' ?><span class="text-danger">*</span></label>
+              <label class="col-form-label"><?= $this->lang->line('port') ? $this->lang->line('port') : 'Device External Port' ?><span class="text-danger">*</span></label>
               <input type="text" name="port" class="form-control" required="">
             </div>
           </div>
@@ -84,15 +84,15 @@
           <input type="hidden" name="update_id" id="update_id" value="">
           <div class="row" id="dates">
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('device_name') ? $this->lang->line('device_name') : 'Device name' ?><span class="text-danger">*</span></label>
+              <label class="col-form-label"><?= $this->lang->line('device_name') ? $this->lang->line('device_name') : 'Device name' ?><span class="text-danger">*</span></label>
               <input type="text" name="device_name" id="device_name" class="form-control" required="">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('device_ip') ? $this->lang->line('device_ip') : 'Device Ip Address' ?><span class="text-danger">*</span></label>
+              <label class="col-form-label"><?= $this->lang->line('device_ip') ? $this->lang->line('device_ip') : 'Device Ip Address' ?><span class="text-danger">*</span></label>
               <input type="text" name="device_ip" id="device_ip" class="form-control" required="">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('port') ? $this->lang->line('port') : 'Device External Port' ?><span class="text-danger">*</span></label>
+              <label class="col-form-label"><?= $this->lang->line('port') ? $this->lang->line('port') : 'Device External Port' ?><span class="text-danger">*</span></label>
               <input type="text" name="port" id="port" class="form-control" required="">
             </div>
           </div>

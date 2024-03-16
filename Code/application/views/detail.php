@@ -66,7 +66,7 @@
                     <div class="card-body">
                         <div class="row">                             
                           <div class="form-group col-md-6 col-12">
-                            <label><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
+                            <label class="col-form-label"><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
                             <input type="hidden" name="update_id" value="<?=htmlspecialchars($profile_user['id'])?>">
                             <input type="hidden" name="employee_id" value="<?=htmlspecialchars($profile_user['employee_id'])?>">
                             <input type="hidden" name="old_profile_pic" value="<?=htmlspecialchars($profile_user['profile'])?>">
@@ -75,18 +75,18 @@
                         <?php if (!$this->ion_auth->is_admin() || permissions('user_view_all') || permissions('user_edit')){ ?>    readonly <?php } ?>>
                           </div>
                           <div class="form-group col-md-6 col-12">
-                            <label><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
+                            <label class="col-form-label"><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
                             <input type="text" name="last_name" class="form-control" value="<?=htmlspecialchars($profile_user['last_name'])?>" required=""
                         <?php if (!$this->ion_auth->is_admin() || permissions('user_edit')){ ?>    readonly <?php } ?>>
                           </div>
                         </div>
                         <div class="row">
                           <div class="form-group col-md-6 col-12">
-                            <label><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?><span class="text-danger">*</span></label>
+                            <label class="col-form-label"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?><span class="text-danger">*</span></label>
                             <input type="email" class="form-control" value="<?=htmlspecialchars($profile_user['email'])?>" required=""  readonly disabled> 
                           </div>
                           <div class="form-group col-md-6 col-12">
-                            <label><?=$this->lang->line('phone')?$this->lang->line('phone'):'Phone'?></label>
+                            <label class="col-form-label"><?=$this->lang->line('phone')?$this->lang->line('phone'):'Phone'?></label>
                             <input type="tel" name="phone" class="form-control" value="<?=htmlspecialchars($profile_user['phone'])?>" 
                         <?php if (!$this->ion_auth->is_admin() || permissions('user_edit')){ ?>    readonly <?php } ?>>
                           </div>
@@ -94,24 +94,24 @@
                         <?php if ($this->ion_auth->is_admin() || permissions('user_edit') || $this->ion_auth->in_group(3)){ ?>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
+                                <label class="col-form-label"><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
                                 <input type="text" name="password" class="form-control">
                               </div>
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
+                                <label class="col-form-label"><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
                                 <input type="text" name="password_confirm" class="form-control">
                               </div>
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                              <label><?=$this->lang->line('user_profile')?$this->lang->line('user_profile'):'User Profile'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_empty_for_no_changes')?$this->lang->line('leave_empty_for_no_changes'):"Leave empty for no changes."?>"></i></label>
+                              <label class="col-form-label"><?=$this->lang->line('user_profile')?$this->lang->line('user_profile'):'User Profile'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_empty_for_no_changes')?$this->lang->line('leave_empty_for_no_changes'):"Leave empty for no changes."?>"></i></label>
                                   <div class="custom-file mt-1">
                                       <input type="file" name="profile" class="custom-file-input" id="profile">
                                       <label class="custom-file-label" for="profile"><?=$this->lang->line('profile')?$this->lang->line('profile'):'Profile'?></label>
                                   </div>
                               </div>
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
                                 <select name="status" class="form-control select2" id="status">
                                   <option value="1">Active</option>
                                   <option value="0">Deactive</option>
@@ -120,7 +120,7 @@
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                  <label><?=$this->lang->line('role')?$this->lang->line('role'):'Role'?><span class="text-danger">*</span></label>
+                                  <label class="col-form-label"><?=$this->lang->line('role')?$this->lang->line('role'):'Role'?><span class="text-danger">*</span></label>
                                   <select name="groups" class="form-control select2">
                                     <?php foreach ($user_groups as $user_group) { ?>
                                       <option value="<?=htmlspecialchars($user_group->id)?>" <?php if($user_group->id == $profile_user['group_id']){?> selected <?php } ?> > <?=ucfirst(htmlspecialchars($user_group->description))?></option>
@@ -128,7 +128,7 @@
                                   </select>
                               </div>
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('type')?$this->lang->line('type'):'Shift Type'?></label>
+                                <label class="col-form-label"><?=$this->lang->line('type')?$this->lang->line('type'):'Shift Type'?></label>
                                 <select name="type" class="form-control select2">
                                     <?php foreach($shift_types as $shift_type){ ?>
                                     <option value="<?= $shift_type['id'] ?>"  <?php if($shift_type['id'] == $profile_user['shift_id']){?> selected <?php } ?> ><?= $shift_type['name'] ?></option>
@@ -138,17 +138,17 @@
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('cnic')?$this->lang->line('cnic'):'CNIC'?> </label>
+                                <label class="col-form-label"><?=$this->lang->line('cnic')?$this->lang->line('cnic'):'CNIC'?> </label>
                                 <input type="text" name="cnic" class="form-control" value="<?=htmlspecialchars($profile_user['cnic'])?>">
                               </div>
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('father_name')?$this->lang->line('father_name'):'Father Name'?></label>
+                                <label class="col-form-label"><?=$this->lang->line('father_name')?$this->lang->line('father_name'):'Father Name'?></label>
                                 <input type="text" name="father_name" class="form-control" value="<?=htmlspecialchars($profile_user['father_name'])?>">
                               </div>
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                  <label><?=$this->lang->line('department')?$this->lang->line('type'):'Department'?></label>
+                                  <label class="col-form-label"><?=$this->lang->line('department')?$this->lang->line('type'):'Department'?></label>
                                   <select  id="department" name="department" class="form-control select2">
                                       <?php foreach($departments as $department){ ?>
                                       <option value="<?= $department['id'] ?>"><?= $department['department_name'] ?></option>
@@ -156,7 +156,7 @@
                                   </select>
                               </div>
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('gender')?$this->lang->line('gender'):'Gender'?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?=$this->lang->line('gender')?$this->lang->line('gender'):'Gender'?><span class="text-danger">*</span></label>
                                 <select name="gender" class="form-control select2" id="genderSelect">
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
@@ -166,31 +166,31 @@
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('desgnation')?$this->lang->line('desgnation'):'Designation'?></label>
+                                <label class="col-form-label"><?=$this->lang->line('desgnation')?$this->lang->line('desgnation'):'Designation'?></label>
                                 <input type="text" name="desgnation" class="form-control" value="<?=htmlspecialchars($profile_user['desgnation'])?>">
                               </div>
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('emg_person')?$this->lang->line('emg_person'):'Emergency Person'?> </label>
+                                <label class="col-form-label"><?=$this->lang->line('emg_person')?$this->lang->line('emg_person'):'Emergency Person'?> </label>
                                 <input type="text" name="emg_person" class="form-control" value="<?=htmlspecialchars($profile_user['emg_person'])?>">
                               </div>
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('emg_number')?$this->lang->line('emg_number'):'Emergency Number'?></label>
+                                <label class="col-form-label"><?=$this->lang->line('emg_number')?$this->lang->line('emg_number'):'Emergency Number'?></label>
                                 <input type="text" name="emg_number" class="form-control" value="<?=htmlspecialchars($profile_user['emg_number'])?>">
                               </div>
                               <div class="form-group col-md-6">
-                              <label><?=$this->lang->line('date_of_birth')?$this->lang->line('date_of_birth'):'Date of Birth'?></label>
+                              <label class="col-form-label"><?=$this->lang->line('date_of_birth')?$this->lang->line('date_of_birth'):'Date of Birth'?></label>
                                 <input type="text" name="date_of_birth" class="form-control datepicker"  value="<?=htmlspecialchars($profile_user['date_of_birth'])?>">
                               </div>
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('join_date')?$this->lang->line('join_date'):'Join Date'?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?=$this->lang->line('join_date')?$this->lang->line('join_date'):'Join Date'?><span class="text-danger">*</span></label>
                                 <input type="text" name="join_date" class="form-control datepicker" value="<?=htmlspecialchars($profile_user['join_date'])?>">
                               </div>
                               <div class="form-group col-md-6">
-                                  <label><?=$this->lang->line('device')?$this->lang->line('device'):'Device'?></label>
+                                  <label class="col-form-label"><?=$this->lang->line('device')?$this->lang->line('device'):'Device'?></label>
                                   <select  id="device" name="device" class="form-control select2">
                                       <?php foreach($devices as $device){ ?>
                                       <option value="<?= $device['id'] ?>"><?= $device['device_name'] ?></option>
@@ -200,7 +200,7 @@
                           </div>
                           <div class="row">
                               <div class="form-group col-md-6">
-                                <label><?=$this->lang->line('address')?$this->lang->line('address'):'Address'?><span class="text-danger">*</span></label>
+                                <label class="col-form-label"><?=$this->lang->line('address')?$this->lang->line('address'):'Address'?><span class="text-danger">*</span></label>
                                 <textarea name="address" class="form-control" style="height:100px;" name="address" rows="10"  ><?=htmlspecialchars($profile_user['address'])?></textarea>
                               </div>
                           </div>

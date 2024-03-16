@@ -9,11 +9,11 @@
           </div>
           <div class="card-body row">
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('paypal_client_id') ? $this->lang->line('paypal_client_id') : 'Paypal Client ID' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('paypal_client_id') ? $this->lang->line('paypal_client_id') : 'Paypal Client ID' ?></label>
               <input type="text" name="paypal_client_id" value="<?= (isset($paypal_client_id) && !empty($paypal_client_id)) ? htmlspecialchars($paypal_client_id) : '' ?>" class="form-control">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('paypal_secret') ? htmlspecialchars($this->lang->line('paypal_secret')) : 'Paypal Secret' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('paypal_secret') ? htmlspecialchars($this->lang->line('paypal_secret')) : 'Paypal Secret' ?></label>
               <input type="text" name="paypal_secret" value="<?= (isset($paypal_secret) && !empty($paypal_secret)) ? htmlspecialchars($paypal_secret) : '' ?>" class="form-control">
             </div>
           </div>
@@ -23,11 +23,11 @@
           </div>
           <div class="card-body row">
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('publishable_key') ? $this->lang->line('publishable_key') : 'Publishable Key' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('publishable_key') ? $this->lang->line('publishable_key') : 'Publishable Key' ?></label>
               <input type="text" name="stripe_publishable_key" value="<?= (isset($stripe_publishable_key) && !empty($stripe_publishable_key)) ? htmlspecialchars($stripe_publishable_key) : '' ?>" class="form-control">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('secret_key') ? $this->lang->line('secret_key') : 'Secret Key' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('secret_key') ? $this->lang->line('secret_key') : 'Secret Key' ?></label>
               <input type="text" name="stripe_secret_key" value="<?= (isset($stripe_secret_key) && !empty($stripe_secret_key)) ? htmlspecialchars($stripe_secret_key) : '' ?>" class="form-control">
             </div>
           </div>
@@ -38,11 +38,11 @@
           </div>
           <div class="card-body row">
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('key_id') ? $this->lang->line('key_id') : 'Key ID' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('key_id') ? $this->lang->line('key_id') : 'Key ID' ?></label>
               <input type="text" name="razorpay_key_id" value="<?= (isset($razorpay_key_id) && !empty($razorpay_key_id)) ? htmlspecialchars($razorpay_key_id) : '' ?>" class="form-control">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('key_secret') ? htmlspecialchars($this->lang->line('key_secret')) : 'Key Secret' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('key_secret') ? htmlspecialchars($this->lang->line('key_secret')) : 'Key Secret' ?></label>
               <input type="text" name="razorpay_key_secret" value="<?= (isset($razorpay_key_secret) && !empty($razorpay_key_secret)) ? htmlspecialchars($razorpay_key_secret) : '' ?>" class="form-control">
             </div>
           </div>
@@ -52,11 +52,11 @@
           </div>
           <div class="card-body row">
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('paystack_public_key') ? $this->lang->line('paystack_public_key') : 'Paystack Public Key' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('paystack_public_key') ? $this->lang->line('paystack_public_key') : 'Paystack Public Key' ?></label>
               <input type="text" name="paystack_public_key" value="<?= (isset($paystack_public_key) && !empty($paystack_public_key)) ? htmlspecialchars($paystack_public_key) : '' ?>" class="form-control">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('paystack_secret_key') ? htmlspecialchars($this->lang->line('paystack_secret_key')) : 'Paystack Secret Key' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('paystack_secret_key') ? htmlspecialchars($this->lang->line('paystack_secret_key')) : 'Paystack Secret Key' ?></label>
               <input type="text" name="paystack_secret_key" value="<?= (isset($paystack_secret_key) && !empty($paystack_secret_key)) ? htmlspecialchars($paystack_secret_key) : '' ?>" class="form-control">
             </div>
           </div>
@@ -73,7 +73,7 @@
               </div>
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('add_details_for_bank_transfer_or_custom_payment') ? htmlspecialchars($this->lang->line('add_details_for_bank_transfer_or_custom_payment')) : 'Add details for bank transfer or custom payment' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('add_details_for_bank_transfer_or_custom_payment') ? htmlspecialchars($this->lang->line('add_details_for_bank_transfer_or_custom_payment')) : 'Add details for bank transfer or custom payment' ?></label>
               <textarea name="bank_details"><?= (isset($bank_details) && !empty($bank_details)) ? $bank_details : '' ?></textarea>
             </div>
           </div>

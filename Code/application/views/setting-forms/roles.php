@@ -53,15 +53,15 @@
             <form action="<?= base_url('settings/roles_create') ?>" method="POST" class="modal-part" id="modal-add-role-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
                         <input type="text" name="description" class="form-control" required="">
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
                         <input type="text" name="descriptive_name" class="form-control" required="">
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('show_permissions') ? $this->lang->line('show_permissions') : 'Show Permissions' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('show_permissions') ? $this->lang->line('show_permissions') : 'Show Permissions' ?><span class="text-danger">*</span></label>
                         <input type="checkbox" id="selectAllUsers"> Select All
                         <select name="permissions[]" id='users' multiple='multiple'>
                             <?php foreach ($permissions_list as $permission) { ?>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6 form-group mt-3">
-                            <label><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></label>
+                            <label class="col-form-label"><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></label>
                             <select name="departments" class="form-control select2" multiple="" id="departments">
                                 <?php foreach ($departments as $department) { ?>
                                     <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
@@ -80,7 +80,7 @@
                         </div>
     
                         <div class="col-lg-6 form-group mt-3">
-                            <label><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></label>
+                            <label class="col-form-label"><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></label>
                             <select name="shifts" class="form-control select2" multiple="" id="shifts">
                                 <?php foreach ($shifts as $shift) { ?>
                                     <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?></label>
+                        <label class="col-form-label"><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?></label>
                         <input type="checkbox" id="selectAllUsers_create"> Select All
                         <select name="users[]" id='users_create' multiple='multiple'>
                             <?php foreach ($system_users as $system_user) {
@@ -100,7 +100,7 @@
                         </select>
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?></label>
+                        <label class="col-form-label"><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?></label>
                         <select name="change_permissions_of[]" class="form-control select2" multiple="">
                             <?php foreach ($groups as $group) { ?>
                                 <option value="<?= $group->id ?>"><?= $group->description ?></option>
@@ -129,16 +129,16 @@
                 <input type="hidden" name="update_id" id="update_id">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
                         <input type="text" name="description" id="description" class="form-control" required="">
                     </div>
 
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
                         <input type="text" name="descriptive_name" id="descriptive_name" class="form-control" required="">
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('show_permissions') ? $this->lang->line('show_permissions') : 'Show Permissions' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('show_permissions') ? $this->lang->line('show_permissions') : 'Show Permissions' ?><span class="text-danger">*</span></label>
                         <input type="checkbox" id="selectAllPermissions"> Select All
                         <select name="permissions[]" id='permissions' multiple='multiple'>
                             <?php foreach ($permissions_list as $permission) { ?>
@@ -148,7 +148,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6 form-group mt-3">
-                            <label><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></label>
+                            <label class="col-form-label"><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></label>
                             <select name="departments" class="form-control select2" multiple="" id="departmentsEdit">
                                 <?php foreach ($departments as $department) { ?>
                                     <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
@@ -157,7 +157,7 @@
                         </div>
     
                         <div class="col-lg-6 form-group mt-3">
-                            <label><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></label>
+                            <label class="col-form-label"><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></label>
                             <select name="shifts" class="form-control select2" multiple="" id="shiftsEdit">
                                 <?php foreach ($shifts as $shift) { ?>
                                     <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
@@ -166,7 +166,7 @@
                         </div>
                     </div>
                     <div class="form-group mt-3" id="users_roles_div">
-                        <label><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?><span class="text-danger">*</span></label>
                         <input type="checkbox" id="selectAllUsers4"> Select All
                         <select name="users[]" id="assigned_users" class="form-control" multiple="">
                             <?php foreach ($system_users as $system_user) {
@@ -177,7 +177,7 @@
                         </select>
                     </div>
                     <div class="form-group mt-3">
-                        <label><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?><span class="text-danger">*</span></label>
                         <select name="change_permissions_of[]" id="change_permissions_of" class="form-control select2" multiple="">
                             <?php foreach ($groups as $group) { ?>
                                 <option value="<?= $group->id ?>"><?= $group->description ?></option>

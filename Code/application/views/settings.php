@@ -633,10 +633,11 @@
     });
   </script>
   <script>
-    $('.timepicker').bootstrapMaterialDatePicker({
+    var time24 = true;
+    $('.timepicker').timepicker({
       format: 'HH:mm',
-      time: true,
-      date: false,
+      showMeridian: false,
+      time24Hour: time24
     });
     $(".select7").select2();
   </script>

@@ -51,7 +51,7 @@
       <form action="<?= base_url('department/create') ?>" method="POST" class="modal-part" id="modal-add-department-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
         <div class="modal-body">
           <div class="form-group">
-            <label><?= $this->lang->line('department_name') ? $this->lang->line('department_name') : 'Department Name' ?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?= $this->lang->line('department_name') ? $this->lang->line('department_name') : 'Department Name' ?><span class="text-danger">*</span></label>
             <input type="text" name="department_name" class="form-control" required="">
           </div>
         </div>
@@ -76,7 +76,7 @@
         <input type="hidden" name="update_id" id="update_id">
         <div class="modal-body">
           <div class="form-group">
-            <label><?= $this->lang->line('department_name') ? $this->lang->line('department_name') : 'Department Name' ?><span class="text-danger">*</span></label>
+            <label class="col-form-label"><?= $this->lang->line('department_name') ? $this->lang->line('department_name') : 'Department Name' ?><span class="text-danger">*</span></label>
             <input type="text" name="department_name" id="department_name" class="form-control" required="">
           </div>
         </div>

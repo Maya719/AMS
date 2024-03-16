@@ -531,13 +531,23 @@ class Home_model extends CI_Model
                 (date('Y-m-d', strtotime($start)) >= date('Y-m-d', strtotime($currentDate)) && date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths))) ||
                 (date('Y-m-d', strtotime($start)) <= date('Y-m-d', strtotime($currentDate)) && date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths)) && date('Y-m-d', strtotime($end)) >= date('Y-m-d', strtotime($currentDate)))
             ) {
-                $array[] = [
-                    'user' => $title,
-                    'profile' => '',
-                    'short' => strtoupper(substr($title, 0, 2)),
-                    'event' => 'Events',
-                    'date' => date('j F', strtotime($start)) . '-' . date('j F', strtotime($end))
-                ];
+                if (date('j F', strtotime($start)) != date('j F', strtotime($end))) {
+                    $array[] = [
+                        'user' => $title,
+                        'profile' => '',
+                        'short' => strtoupper(substr($title, 0, 2)),
+                        'event' => 'Event',
+                        'date' => date('j F', strtotime($start)) . '-' . date('j F', strtotime($end))
+                    ];
+                }else{
+                    $array[] = [
+                        'user' => $title,
+                        'profile' => '',
+                        'short' => strtoupper(substr($title, 0, 2)),
+                        'event' => 'Event',
+                        'date' => date('j F', strtotime($start))
+                    ];
+                }
             }
         }
 

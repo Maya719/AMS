@@ -275,6 +275,12 @@
                                         </div>
                                         <div class="col-6 text-end">
                                             <?php
+                                            if ($this->ion_auth->is_admin()) { ?>
+                                                <button type="button" id="user_login_btn" class="btn btn-warning">Login</button>
+                                            <?php
+                                            }
+                                            ?>
+                                            <?php
                                             if ($this->ion_auth->is_admin() || permissions('user_delete')) { ?>
                                                 <button type="button" id="user_delete_btn" class="btn btn-danger">Delete Account</button>
                                             <?php
@@ -290,6 +296,7 @@
                                             <?php
                                             }
                                             ?>
+
                                         </div>
                                     </div>
                                 <?php
@@ -364,6 +371,35 @@
             });
         });
 
+        $(document).on('click', '#user_login_btn', function(e) {
+            e.preventDefault();
+            var id = $("#update_id").val();
+            Swal.fire({
+                title: are_you_sure,
+                text: you_will_be_logged_out_from_the_current_account,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'auth/login_as_admin',
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload();
+                            } else {
+                                modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+                            }
+                        }
+                    });
+                }
+            });
+        });
         $(document).on('click', '#user_active_btn', function(e) {
             e.preventDefault();
             var id = $("#update_id").val();

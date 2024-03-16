@@ -496,7 +496,7 @@
                   <form action="<?= base_url('plans/create-offline-request/') ?>" method="POST" id="bank-transfer-form">
                     <div class="card-footer bg-whitesmoke">
                       <div class="form-group">
-                        <label><?= $this->lang->line('upload_receipt') ? htmlspecialchars($this->lang->line('upload_receipt')) : 'Upload Receipt' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>" data-original-title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>"></i> </label>
+                        <label class="col-form-label"><?= $this->lang->line('upload_receipt') ? htmlspecialchars($this->lang->line('upload_receipt')) : 'Upload Receipt' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>" data-original-title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>"></i> </label>
                         <input type="file" name="receipt" class="form-control">
                         <input type="hidden" name="plan_id" id="plan_id">
                       </div>
@@ -529,16 +529,16 @@
             <div class="modal-body">
               <div class="row">
                 <div class="form-group col-md-12 mb-3">
-                  <label><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
                   <input type="text" name="title" class="form-control" required="">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('price_usd') ? $this->lang->line('price_usd') . ' - ' . get_saas_currency('currency_code') : 'Price - ' . get_saas_currency('currency_code') ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('price_usd') ? $this->lang->line('price_usd') . ' - ' . get_saas_currency('currency_code') : 'Price - ' . get_saas_currency('currency_code') ?><span class="text-danger">*</span></label>
                   <input type="number" name="price" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('billing_type') ? $this->lang->line('billing_type') : 'Billing Type' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('billing_type') ? $this->lang->line('billing_type') : 'Billing Type' ?><span class="text-danger">*</span></label>
                   <select name="billing_type" class="form-control select2">
                     <option value="Monthly"><?= $this->lang->line('monthly') ? $this->lang->line('monthly') : 'Monthly' ?></option>
                     <option value="Yearly"><?= $this->lang->line('yearly') ? $this->lang->line('yearly') : 'Yearly' ?></option>
@@ -551,19 +551,19 @@
                 </div>
 
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?> (GB)<span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?> (GB)<span class="text-danger">*</span></label>
                   <input type="number" name="storage" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?><span class="text-danger">*</span></label>
                   <input type="number" name="projects" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?><span class="text-danger">*</span></label>
                   <input type="number" name="tasks" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?><span class="text-danger">*</span></label>
                   <input type="number" name="users" class="form-control">
                 </div>
                 <div class="form-group col-md-12 mb-3">
@@ -764,17 +764,17 @@
             <div class="modal-body">
               <div class="row">
                 <div class="form-group col-md-12 mb-3">
-                  <label><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
                   <input type="hidden" name="update_id" id="update_id">
                   <input type="text" name="title" id="title" class="form-control" required="">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('price_usd') ? $this->lang->line('price_usd') . ' - ' . get_saas_currency('currency_code') : 'Price - ' . get_saas_currency('currency_code') ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('price_usd') ? $this->lang->line('price_usd') . ' - ' . get_saas_currency('currency_code') : 'Price - ' . get_saas_currency('currency_code') ?><span class="text-danger">*</span></label>
                   <input type="number" name="price" id="price" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('billing_type') ? $this->lang->line('billing_type') : 'Billing Type' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('billing_type') ? $this->lang->line('billing_type') : 'Billing Type' ?><span class="text-danger">*</span></label>
                   <select name="billing_type" id="billing_type" class="form-control select2">
                     <option value="Monthly"><?= $this->lang->line('monthly') ? $this->lang->line('monthly') : 'Monthly' ?></option>
                     <option value="Yearly"><?= $this->lang->line('yearly') ? $this->lang->line('yearly') : 'Yearly' ?></option>
@@ -787,19 +787,19 @@
                 </div>
 
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?> (GB)<span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?> (GB)<span class="text-danger">*</span></label>
                   <input type="number" name="storage" id="storage" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?><span class="text-danger">*</span></label>
                   <input type="number" name="projects" id="projects" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?><span class="text-danger">*</span></label>
                   <input type="number" name="tasks" id="tasks" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?><span class="text-danger">*</span></label>
                   <input type="number" name="users" id="users" class="form-control">
                 </div>
                 <div class="form-group col-md-12 mb-3">

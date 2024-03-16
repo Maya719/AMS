@@ -106,7 +106,7 @@
             <div class="modal-body">
               <?php if (is_saas_admin()) { ?>
                 <div class="form-group mb-3">
-                  <label><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></label>
                   <select name="user_id" class="form-control select2">
                     <?php foreach ($system_users as $system_user) { ?>
                       <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
@@ -114,7 +114,7 @@
                   </select>
                 </div>
                 <div class="form-group mb-3">
-                  <label><?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></label>
                   <select name="status" class="form-control">
                     <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
                     <option value="2"><?= $this->lang->line('opened_and_resolving') ? htmlspecialchars($this->lang->line('opened_and_resolving')) : 'Opened and Resolving' ?></option>
@@ -123,7 +123,7 @@
                 </div>
               <?php } ?>
               <div class="form-group">
-                <label><?= $this->lang->line('ticket') ? htmlspecialchars($this->lang->line('ticket')) : 'Ticket' ?> <?= $this->lang->line('subject') ? htmlspecialchars($this->lang->line('subject')) : 'Subject' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('ticket') ? htmlspecialchars($this->lang->line('ticket')) : 'Ticket' ?> <?= $this->lang->line('subject') ? htmlspecialchars($this->lang->line('subject')) : 'Subject' ?></label>
                 <input type="text" name="subject" class="form-control">
               </div>
             </div>
@@ -148,7 +148,7 @@
               <input type="hidden" name="update_id" id="update_id">
               <?php if (is_saas_admin()) { ?>
                 <div class="form-group mt-3">
-                  <label><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></label>
                   <select name="user_id" id="user_id" class="form-control">
                     <?php foreach ($system_users as $system_user) { ?>
                       <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
@@ -157,7 +157,7 @@
                 </div>
 
                 <div class="form-group mt-3">
-                  <label><?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></label>
                   <select name="status" id="status" class="form-control">
                     <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
                     <option value="2"><?= $this->lang->line('opened_and_resolving') ? htmlspecialchars($this->lang->line('opened_and_resolving')) : 'Opened and Resolving' ?></option>
@@ -166,7 +166,7 @@
                 </div>
               <?php } ?>
               <div class="form-group mt-3">
-                <label><?= $this->lang->line('ticket') ? htmlspecialchars($this->lang->line('ticket')) : 'Ticket' ?> <?= $this->lang->line('subject') ? htmlspecialchars($this->lang->line('subject')) : 'Subject' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('ticket') ? htmlspecialchars($this->lang->line('ticket')) : 'Ticket' ?> <?= $this->lang->line('subject') ? htmlspecialchars($this->lang->line('subject')) : 'Subject' ?></label>
                 <input type="text" name="subject" id="subject" class="form-control">
               </div>
             </div>

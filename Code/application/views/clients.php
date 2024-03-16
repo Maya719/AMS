@@ -99,32 +99,32 @@
   <div class="row">
     <div class="form-group col-md-6">
       <input type="hidden" name="groups" value="4">
-      <label><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
       <input type="text" name="first_name" class="form-control" required="">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
       <input type="text" name="last_name" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></label>
+      <label class="col-form-label"><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></label>
       <input type="text" id="company" name="company" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?><span class="text-danger">*</span> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('this_email_will_not_be_updated_latter')?$this->lang->line('this_email_will_not_be_updated_latter'):'This email will not be updated latter.'?>"></i></label>
+      <label class="col-form-label"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?><span class="text-danger">*</span> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('this_email_will_not_be_updated_latter')?$this->lang->line('this_email_will_not_be_updated_latter'):'This email will not be updated latter.'?>"></i></label>
       <input type="email" name="email"  class="form-control">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></label>
+      <label class="col-form-label"><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></label>
       <input type="text" name="phone"  class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?><span class="text-danger">*</span></label>
       <input type="text" name="password"  class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?><span class="text-danger">*</span></label>
       <input type="text" name="password_confirm"  class="form-control">
     </div>
   </div>
@@ -135,34 +135,34 @@
   <input type="hidden" name="old_profile_pic" id="old_profile_pic" value="">
   <div class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
       <input type="text" id="first_name" name="first_name" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
       <input type="text" id="last_name" name="last_name" class="form-control">
     </div>
     
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></label>
+      <label class="col-form-label"><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></label>
       <input type="text" id="company" name="company" class="form-control">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></label>
+      <label class="col-form-label"><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></label>
       <input type="text" id="phone" name="phone" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
+      <label class="col-form-label"><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
       <input type="text" name="password"  class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
+      <label class="col-form-label"><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password')?$this->lang->line('leave_password_and_confirm_password_empty_for_no_change_in_password'):'Leave Password and Confirm Password empty for no change in Password.'?>"></i></label>
       <input type="text" name="password_confirm"  class="form-control">
     </div>
     
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('role')?$this->lang->line('role'):'Role'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('role')?$this->lang->line('role'):'Role'?><span class="text-danger">*</span></label>
       <select name="groups" id="groups" class="form-control select2">
         <?php foreach ($user_groups as $user_group) { ?>
           <option value="<?=htmlspecialchars($user_group->id)?>"><?=ucfirst(htmlspecialchars($user_group->name))?></option>

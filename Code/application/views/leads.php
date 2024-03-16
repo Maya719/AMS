@@ -100,36 +100,36 @@
   
 <form action="<?=base_url('leads/create')?>" method="POST" class="modal-part" id="modal-add-leads-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
   <div class="form-group">
-    <label><?=$this->lang->line('company_name')?htmlspecialchars($this->lang->line('company_name')):'Company Name'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('company_name')?htmlspecialchars($this->lang->line('company_name')):'Company Name'?><span class="text-danger">*</span></label>
     <input type="text" name="company" class="form-control" required="">
   </div>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('value')?$this->lang->line('value'):'Value'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('value')?$this->lang->line('value'):'Value'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
       <input type="number" pattern="[0-9]" name="value" class="form-control" required="">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('source')?$this->lang->line('source'):'Source'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('source')?$this->lang->line('source'):'Source'?><span class="text-danger">*</span></label>
       <input type="text" name="source" placeholder="Facebook" class="form-control" required="">
     </div>
   </span>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('email')?htmlspecialchars($this->lang->line('email')):'Email'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('email')?htmlspecialchars($this->lang->line('email')):'Email'?><span class="text-danger">*</span></label>
       <input type="text" name="email" class="form-control" required="">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('phone')?htmlspecialchars($this->lang->line('phone')):'Phone'?></label>
+      <label class="col-form-label"><?=$this->lang->line('phone')?htmlspecialchars($this->lang->line('phone')):'Phone'?></label>
       <input type="text" name="mobile" class="form-control">
     </div>
   </span>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('status')?htmlspecialchars($this->lang->line('status')):'Status'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('status')?htmlspecialchars($this->lang->line('status')):'Status'?><span class="text-danger">*</span></label>
       <select name="status" class="form-control">
         <option value="new"><?=$this->lang->line('new')?$this->lang->line('new'):'New'?></option>
         <option value="qualified"><?=$this->lang->line('qualified')?$this->lang->line('qualified'):'Qualified'?></option>
@@ -141,7 +141,7 @@
     
     <?php if($this->ion_auth->is_admin() || permissions('lead_view')){ ?>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('assigned')?$this->lang->line('assigned'):'Assigned'?></label>
+      <label class="col-form-label"><?=$this->lang->line('assigned')?$this->lang->line('assigned'):'Assigned'?></label>
       <select name="assigned" class="form-control select2">
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
         <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -157,36 +157,36 @@
 <form action="<?=base_url('leads/edit')?>" method="POST" class="modal-part" id="modal-edit-leads-part" data-title="<?=$this->lang->line('edit')?$this->lang->line('edit'):'Edit'?>" data-btn="<?=$this->lang->line('update')?$this->lang->line('update'):'Update'?>">
   <input type="hidden" name="update_id" id="update_id">
   <div class="form-group">
-    <label><?=$this->lang->line('company_name')?htmlspecialchars($this->lang->line('company_name')):'Company Name'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('company_name')?htmlspecialchars($this->lang->line('company_name')):'Company Name'?><span class="text-danger">*</span></label>
     <input type="text" name="company" class="form-control company" required="">
   </div>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('value')?$this->lang->line('value'):'Value'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('value')?$this->lang->line('value'):'Value'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
       <input type="number" pattern="[0-9]" name="value" id="value" class="form-control" required="">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('source')?$this->lang->line('source'):'Source'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('source')?$this->lang->line('source'):'Source'?><span class="text-danger">*</span></label>
       <input type="text" name="source" id="source" placeholder="Facebook" class="form-control" required="">
     </div>
   </span>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('email')?htmlspecialchars($this->lang->line('email')):'Email'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('email')?htmlspecialchars($this->lang->line('email')):'Email'?><span class="text-danger">*</span></label>
       <input type="text" name="email" class="form-control email" required="">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('phone')?htmlspecialchars($this->lang->line('phone')):'Phone'?></label>
+      <label class="col-form-label"><?=$this->lang->line('phone')?htmlspecialchars($this->lang->line('phone')):'Phone'?></label>
       <input type="text" name="mobile" id="mobile" class="form-control">
     </div>
   </span>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('status')?htmlspecialchars($this->lang->line('status')):'Status'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('status')?htmlspecialchars($this->lang->line('status')):'Status'?><span class="text-danger">*</span></label>
       <select name="status" id="status" class="form-control">
         <option value="new"><?=$this->lang->line('new')?$this->lang->line('new'):'New'?></option>
         <option value="qualified"><?=$this->lang->line('qualified')?$this->lang->line('qualified'):'Qualified'?></option>
@@ -198,7 +198,7 @@
     
     <?php if($this->ion_auth->is_admin() || permissions('lead_view')){ ?>
       <div class="form-group col-md-6">
-        <label><?=$this->lang->line('assigned')?$this->lang->line('assigned'):'Assigned'?></label>
+        <label class="col-form-label"><?=$this->lang->line('assigned')?$this->lang->line('assigned'):'Assigned'?></label>
         <select name="assigned" id="assigned" class="form-control select2">
           <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
           <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -216,32 +216,32 @@
     <div class="form-group col-md-6">
       <input type="hidden" name="groups" value="4">
       <input type="hidden" name="delete_lead" id="delete_lead">
-      <label><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('first_name')?$this->lang->line('first_name'):'First Name'?><span class="text-danger">*</span></label>
       <input type="text" name="first_name" id="first_name" class="form-control" required="">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('last_name')?$this->lang->line('last_name'):'Last Name'?><span class="text-danger">*</span></label>
       <input type="text" name="last_name" value="Client" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></label>
+      <label class="col-form-label"><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></label>
       <input type="text" name="company" class="form-control company">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?><span class="text-danger">*</span> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('this_email_will_not_be_updated_latter')?$this->lang->line('this_email_will_not_be_updated_latter'):'This email will not be updated latter.'?>"></i></label>
+      <label class="col-form-label"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?><span class="text-danger">*</span> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('this_email_will_not_be_updated_latter')?$this->lang->line('this_email_will_not_be_updated_latter'):'This email will not be updated latter.'?>"></i></label>
       <input type="email" name="email" class="form-control email">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></label>
+      <label class="col-form-label"><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></label>
       <input type="text" name="phone" id="phone" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('password')?$this->lang->line('password'):'Password'?><span class="text-danger">*</span></label>
       <input type="text" name="password"  class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('confirm_password')?$this->lang->line('confirm_password'):'Confirm Password'?><span class="text-danger">*</span></label>
       <input type="text" name="password_confirm"  class="form-control">
     </div>
   </div>

@@ -103,7 +103,7 @@
 
   <?php if($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')){ ?>
     <div class="form-group">
-      <label><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
+      <label class="col-form-label"><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
       <select name="user_id" class="form-control select2 user_id">
         <option value=""><?=$this->lang->line('select_users')?$this->lang->line('select_users'):'Select Users'?></option>
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){  ?>
@@ -114,7 +114,7 @@
   <?php } ?>
 
   <div class="form-group">
-    <label><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?><span class="text-danger">*</span></label>
     <select name="project_id" class="form-control select2 project_id">
       <option value=""><?=$this->lang->line('select_project')?$this->lang->line('select_project'):'Select Project'?></option>
       <?php foreach($projects as $project){ ?>
@@ -124,24 +124,24 @@
   </div>
   
   <div class="form-group">
-    <label><?=$this->lang->line('task')?$this->lang->line('task'):'Task'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('task')?$this->lang->line('task'):'Task'?><span class="text-danger">*</span></label>
     <select name="task_id" class="form-control select2 task_id">
     </select>
   </div>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?></label>
       <input type="text" name="starting_time" class="form-control datetimepicker">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?></label>
+      <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?></label>
       <input type="text" name="ending_time" class="form-control datetimepicker">
     </div>
   </span>
 
   <div class="form-group">
-    <label><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
+    <label class="col-form-label"><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
     <textarea type="text" name="note" class="form-control"></textarea>
   </div>
 
@@ -153,7 +153,7 @@
 
   <?php if($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')){ ?>
     <div class="form-group">
-      <label><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
+      <label class="col-form-label"><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
       <select name="user_id" id="user_id" class="form-control select2 user_id">
         <option value=""><?=$this->lang->line('select_users')?$this->lang->line('select_users'):'Select Users'?></option>
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -164,7 +164,7 @@
   <?php } ?>
 
   <div class="form-group">
-    <label><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?><span class="text-danger">*</span></label>
     <select name="project_id" id="project_id" class="form-control select2">
       <option value=""><?=$this->lang->line('select_project')?$this->lang->line('select_project'):'Select Project'?></option>
       <?php foreach($projects as $project){ ?>
@@ -174,24 +174,24 @@
   </div>
   
   <div class="form-group">
-    <label><?=$this->lang->line('task')?$this->lang->line('task'):'Task'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('task')?$this->lang->line('task'):'Task'?><span class="text-danger">*</span></label>
     <select name="task_id" id="task_id" class="form-control select2">
     </select>
   </div>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?></label>
       <input type="text" name="starting_time" id="starting_time" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?></label>
+      <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?></label>
       <input type="text" name="ending_time" id="ending_time" class="form-control">
     </div>
   </span>
 
   <div class="form-group">
-    <label><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
+    <label class="col-form-label"><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
     <textarea type="text" name="note" id="note" class="form-control"></textarea>
   </div>
 

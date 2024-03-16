@@ -103,16 +103,16 @@
 <form action="<?=base_url('invoices/create')?>" method="POST" class="modal-part" id="modal-add-invoices-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
   <div class="row">
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('invoice_date')?$this->lang->line('invoice_date'):'Invoice Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('invoice_date')?$this->lang->line('invoice_date'):'Invoice Date'?><span class="text-danger">*</span></label>
       <input type="text" name="invoice_date" class="form-control datepicker">
     </div>
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
       <input type="text" name="due_date" class="form-control datepicker">
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('select_status')?$this->lang->line('select_status'):'Select Status'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('select_status')?$this->lang->line('select_status'):'Select Status'?><span class="text-danger">*</span></label>
       <select class="form-control select2" name="status">
         <option value="0"><?=$this->lang->line('due')?$this->lang->line('due'):'Due'?></option>
         <option value="1"><?=$this->lang->line('paid')?$this->lang->line('paid'):'Paid'?></option>
@@ -121,7 +121,7 @@
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('select_Observer')?$this->lang->line('select_Observer'):'Select Observer'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('select_Observer')?$this->lang->line('select_Observer'):'Select Observer'?><span class="text-danger">*</span></label>
       <select class="form-control select2" id="invoices_client" name="to_id">
         <option value=""><?=$this->lang->line('select_observer')?$this->lang->line('select_observer'):'Select Observer'?></option>
         <?php foreach($system_clients as $system_client){ if($system_client->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -130,14 +130,14 @@
       </select>
     </div>
     <div class="form-group col-md-8">
-      <label><?=$this->lang->line('projects')?$this->lang->line('projects'):'Projects'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('projects')?$this->lang->line('projects'):'Projects'?><span class="text-danger">*</span></label>
       <select name="items_id[]" id="items_id" class="form-control select2" multiple="" disabled>
       </select>
     </div>
     
     
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('products')?$this->lang->line('products'):'Products'?></label>
+      <label class="col-form-label"><?=$this->lang->line('products')?$this->lang->line('products'):'Products'?></label>
       <select name="products_id[]" class="form-control select2" multiple="">
       <?php if($products){ foreach($products as $product){ ?>
         <option value="<?=htmlspecialchars($product['id'])?>"><?=htmlspecialchars($product['name'])?></option>
@@ -146,7 +146,7 @@
     </div>
 
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('tax')?$this->lang->line('taxes'):'Taxes'?></label>
+      <label class="col-form-label"><?=$this->lang->line('tax')?$this->lang->line('taxes'):'Taxes'?></label>
       <select name="tax[]" class="form-control select2" multiple="">
         <?php foreach($taxes as $tax){ ?>
         <option value="<?=htmlspecialchars($tax['id'])?>"><?=htmlspecialchars($tax['title'])?> (<?=htmlspecialchars($tax['tax'])?>%)</option>
@@ -155,7 +155,7 @@
     </div>
 
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
+      <label class="col-form-label"><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
       <textarea type="text" name="note" class="form-control"></textarea>
     </div>
 
@@ -174,16 +174,16 @@
   <div class="row">
     <input type="hidden" name="update_id" id="update_id">
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('invoice_date')?$this->lang->line('invoice_date'):'Invoice Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('invoice_date')?$this->lang->line('invoice_date'):'Invoice Date'?><span class="text-danger">*</span></label>
       <input type="text" name="invoice_date" id="invoice_date" class="form-control datepicker">
     </div>
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
       <input type="text" name="due_date" id="due_date" class="form-control datepicker">
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('select_status')?$this->lang->line('select_status'):'Select Status'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('select_status')?$this->lang->line('select_status'):'Select Status'?><span class="text-danger">*</span></label>
       <select class="form-control select2" id="status" name="status">
         <option value="0"><?=$this->lang->line('due')?$this->lang->line('due'):'Due'?></option>
         <option value="1"><?=$this->lang->line('paid')?$this->lang->line('paid'):'Paid'?></option>
@@ -192,7 +192,7 @@
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('select_clients')?$this->lang->line('select_clients'):'Select Client'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('select_clients')?$this->lang->line('select_clients'):'Select Client'?><span class="text-danger">*</span></label>
       <select class="form-control select2" id="to_id" name="to_id">
         <option value=""><?=$this->lang->line('select_clients')?$this->lang->line('select_clients'):'Select Clients'?></option>
         <?php foreach($system_clients as $system_client){ if($system_client->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -201,13 +201,13 @@
       </select>
     </div>
     <div class="form-group col-md-8">
-      <label><?=$this->lang->line('projects')?$this->lang->line('projects'):'Projects'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('projects')?$this->lang->line('projects'):'Projects'?><span class="text-danger">*</span></label>
       <select name="items_id[]" id="update_items_id" class="form-control select2" multiple="">
       </select>
     </div>
 
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('products')?$this->lang->line('products'):'Products'?></label>
+      <label class="col-form-label"><?=$this->lang->line('products')?$this->lang->line('products'):'Products'?></label>
       <select name="products_id[]" id="products_id" class="form-control select2" multiple="">
       <?php if($products){ foreach($products as $product){ ?>
         <option value="<?=htmlspecialchars($product['id'])?>"><?=htmlspecialchars($product['name'])?></option>
@@ -216,7 +216,7 @@
     </div>
 
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('tax')?$this->lang->line('taxes'):'Taxes'?></label>
+      <label class="col-form-label"><?=$this->lang->line('tax')?$this->lang->line('taxes'):'Taxes'?></label>
       <select name="tax[]" id="tax" class="form-control select2" multiple="">
         <?php foreach($taxes as $tax){ ?>
         <option value="<?=htmlspecialchars($tax['id'])?>"><?=htmlspecialchars($tax['title'])?> (<?=htmlspecialchars($tax['tax'])?>%)</option>
@@ -225,7 +225,7 @@
     </div>
 
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
+      <label class="col-form-label"><?=$this->lang->line('note')?$this->lang->line('note'):'Note'?></label>
       <textarea type="text" name="note" id="note" class="form-control"></textarea>
     </div>
 

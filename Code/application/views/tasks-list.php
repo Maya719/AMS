@@ -362,7 +362,7 @@
 <form action="<?=base_url('projects/create-task')?>" method="POST" class="modal-part" id="modal-add-task-part" data-title="<?=$this->lang->line('create_new_task')?$this->lang->line('create_new_task'):'Create New Task'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
 
   <div class="form-group">
-    <label><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?><span class="text-danger">*</span></label>
     <select name="project_id" id="project_id" class="form-control select2">
       <option value=""><?=$this->lang->line('select_project')?$this->lang->line('select_project'):'Select Project'?></option>
       <?php foreach($projects as $project){ ?>
@@ -372,11 +372,11 @@
   </div>
   
   <div class="form-group">
-    <label><?=$this->lang->line('task_title')?$this->lang->line('task_title'):'Task Title'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('task_title')?$this->lang->line('task_title'):'Task Title'?><span class="text-danger">*</span></label>
     <input type="text" name="title" class="form-control" required>
   </div>
   <div class="form-group">
-    <label><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
     <textarea type="text" name="description" class="form-control" rows="10"></textarea>
   </div>
   <div class="form-group">
@@ -385,30 +385,30 @@
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
       <input type="text" name="starting_date" class="form-control datepicker">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
       <input type="text" name="due_date"  class="form-control datepicker" required>
     </div>
   </span>
   
 <!--<span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
       <input type="text" name="starting_time" id="starting_time" class="form-control timepicker">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
       <input type="text" name="ending_time" id="engind_time"  class="form-control timepicker" required>
     </div>
   </span>-->
   
   <div class="form-group">
-    <label><?=$this->lang->line('priority')?$this->lang->line('priority'):'Priority'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('priority')?$this->lang->line('priority'):'Priority'?><span class="text-danger">*</span></label>
     <select name="priority" class="form-control select2" required>
       <?php foreach($task_priorities as $priorities){ ?>
       <option value="<?=htmlspecialchars($priorities['id'])?>"><?=htmlspecialchars($priorities['title'])?></option>
@@ -417,7 +417,7 @@
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
     <select name="status" class="form-control select2" required>
       <?php foreach($task_status as $status){ ?>
       <option value="<?=htmlspecialchars($status['id'])?>"><?=htmlspecialchars($status['title'])?></option>
@@ -426,7 +426,7 @@
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('assign_users')?$this->lang->line('assign_users'):'Assign Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task')?$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task'):"Assign task to the users who will work on this task. Only this users are able to see this task."?>"></i></label>
+    <label class="col-form-label"><?=$this->lang->line('assign_users')?$this->lang->line('assign_users'):'Assign Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task')?$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task'):"Assign task to the users who will work on this task. Only this users are able to see this task."?>"></i></label>
     <select name="users[]" id="users_append" class="form-control select2" multiple="">
       <?php if(!empty($project_id)){ foreach($projecr_users as $projecr_user){ ?>
       <option value="<?=htmlspecialchars($projecr_user['id'])?>"><?=htmlspecialchars($projecr_user['first_name'])?> <?=htmlspecialchars($projecr_user['last_name'])?></option>
@@ -445,39 +445,39 @@
   <input type="hidden" name="update_id" id="update_id" value="">
   <input type="hidden" name="status_duplicate" id="status_duplicate" value="">
   <div class="form-group col-md-12">
-    <label><?=$this->lang->line('task_title')?$this->lang->line('task_title'):'Task Title'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('task_title')?$this->lang->line('task_title'):'Task Title'?><span class="text-danger">*</span></label>
     <input type="text" name="title" id="title" class="form-control" required>
   </div>
   <div class="form-group col-md-12">
-    <label><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
     <textarea type="text" name="description" id="description" class="form-control"></textarea>
   </div>
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
       <input type="text" name="starting_date" id="starting_date" class="form-control datepicker">
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('due_date')?$this->lang->line('due_date'):'Due Date'?><span class="text-danger">*</span></label>
       <input type="text" name="due_date" id="due_date"  class="form-control datepicker" required>
     </div>
   </span>
   
  <!-- <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
       <input type="text" name="starting_time" id="starting_time" class="form-control timepicker"required>
     </div>
 
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('ending_time')?$this->lang->line('ending_time'):'Ending Time'?><span class="text-danger">*</span></label>
       <input type="text" name="ending_time" id="engind_time"  class="form-control timepicker" required>
     </div>
   </span>-->
 
   <div class="form-group col-md-12">
-    <label><?=$this->lang->line('priority')?$this->lang->line('priority'):'Priority'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('priority')?$this->lang->line('priority'):'Priority'?><span class="text-danger">*</span></label>
     <select name="priority" id="priority" class="form-control select2" required>
       <?php foreach($task_priorities as $priorities){ ?>
       <option value="<?=htmlspecialchars($priorities['id'])?>"><?=htmlspecialchars($priorities['title'])?></option>
@@ -486,7 +486,7 @@
   </div>
 
   <div class="form-group col-md-12">
-    <label><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
     <select name="status" id="status" class="form-control select2" required>
       <?php foreach($task_status as $status){ ?>
       <option value="<?=htmlspecialchars($status['id'])?>"><?=htmlspecialchars($status['title'])?></option>
@@ -495,7 +495,7 @@
   </div>
  
   <div class="form-group col-md-12">
-    <label><?=$this->lang->line('assign_users')?$this->lang->line('assign_users'):'Assign Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task')?$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task'):"Assign task to the users who will work on this task. Only this users are able to see this task."?>"></i></label>
+    <label class="col-form-label"><?=$this->lang->line('assign_users')?$this->lang->line('assign_users'):'Assign Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task')?$this->lang->line('assign_task_to_the_users_who_will_work_on_this_task_only_this_users_are_able_to_se_this_task'):"Assign task to the users who will work on this task. Only this users are able to see this task."?>"></i></label>
     <div id="users_div"></div>
   </div>
 

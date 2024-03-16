@@ -28464,11 +28464,12 @@ button.cancelBtn.btn.btn-sm.btn-inverse:active,
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-
   line-height: 2.9rem;
-  color: #657081;
+  color: #000;
   padding-left: 0.9375rem;
   min-height: 3rem;
+  border: 1px solid var(--theme-color);
+  border-radius: 10px;
 }
 
 .select2-container--default .select2-selection--multiple {

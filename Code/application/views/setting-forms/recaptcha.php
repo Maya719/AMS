@@ -9,11 +9,11 @@
           </div>
           <div class="card-body row">
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('site_key') ? htmlspecialchars($this->lang->line('site_key')) : 'Site Key' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('site_key') ? htmlspecialchars($this->lang->line('site_key')) : 'Site Key' ?></label>
               <input type="text" name="site_key" value="<?= (isset($site_key) && !empty($site_key)) ? htmlspecialchars($site_key) : '' ?>" class="form-control">
             </div>
             <div class="form-group col-md-12">
-              <label><?= $this->lang->line('secret_key') ? htmlspecialchars($this->lang->line('secret_key')) : 'Secret Key' ?></label>
+              <label class="col-form-label"><?= $this->lang->line('secret_key') ? htmlspecialchars($this->lang->line('secret_key')) : 'Secret Key' ?></label>
               <input type="text" name="secret_key" value="<?= (isset($secret_key) && !empty($secret_key)) ? htmlspecialchars($secret_key) : '' ?>" class="form-control">
             </div>
           </div>

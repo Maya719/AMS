@@ -526,17 +526,17 @@ function queryParams(params) {
 <form action="<?=base_url('projects/edit-project')?>" method="POST"  class="modal-part" id="modal-edit-project-part" data-title="<?=$this->lang->line('edit_project')?$this->lang->line('edit_project'):'Edit Project'?>" data-btn="<?=$this->lang->line('update')?$this->lang->line('update'):'Update'?>">
   <input type="hidden" name="update_id" id="update_id">
   <div class="form-group">
-    <label><?=$this->lang->line('project_title')?$this->lang->line('project_title'):'Project Title'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('project_title')?$this->lang->line('project_title'):'Project Title'?><span class="text-danger">*</span></label>
     <input type="text" name="title" id="title" class="form-control" required="">
   </div>
   <div class="form-group">
-    <label><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
     <textarea type="text" name="description" id="description" class="form-control"></textarea>
   </div>
 
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
       <input type="text" name="starting_date" id="starting_date" class="form-control datepicker">
     </div>
     <div class="form-group col-md-6">
@@ -552,11 +552,11 @@ function queryParams(params) {
   
   <span class="row">
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('budget')?$this->lang->line('budget'):'Budget'?> - <?=get_currency('currency_code')?></label>
+      <label class="col-form-label"><?=$this->lang->line('budget')?$this->lang->line('budget'):'Budget'?> - <?=get_currency('currency_code')?></label>
       <input type="number" pattern="[0-9]" name="budget" id="budget" class="form-control">
     </div>
     <div class="form-group col-md-6">
-      <label><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
       <select name="status" id="status" class="form-control select2">
         <?php foreach($project_status as $status){ ?>
         <option value="<?=htmlspecialchars($status['id'])?>"><?=htmlspecialchars($status['title'])?></option>
@@ -566,7 +566,7 @@ function queryParams(params) {
   </span>
 
   <div class="form-group">
-    <label><?=$this->lang->line('project_users')?$this->lang->line('project_users'):'Project Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project')?$this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project'):"Add users who will work on this project. Only this users are able to see this project."?>"></i></label>
+    <label class="col-form-label"><?=$this->lang->line('project_users')?$this->lang->line('project_users'):'Project Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project')?$this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project'):"Add users who will work on this project. Only this users are able to see this project."?>"></i></label>
     <select name="users[]" id="users" class="form-control select2" multiple="">
       <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
       <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -575,7 +575,7 @@ function queryParams(params) {
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('project_client')?$this->lang->line('project_client'):'Project Client'?></label>
+    <label class="col-form-label"><?=$this->lang->line('project_client')?$this->lang->line('project_client'):'Project Client'?></label>
     <select name="client" id="client" class="form-control select2">
       <option value=""><?=$this->lang->line('select_clients')?$this->lang->line('select_clients'):'Select Clients'?></option>
       <?php foreach($system_clients as $system_client){ if($system_client->saas_id == $this->session->userdata('saas_id')){ ?>

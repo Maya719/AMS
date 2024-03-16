@@ -4,7 +4,7 @@
       <form action="<?= base_url('settings/save-email-templates-setting') ?>" method="POST" id="language-form">
         <div class="card-body row">
           <div class="form-group col-md-12">
-            <label><?= $this->lang->line('select_template') ? $this->lang->line('select_template') : 'Select Email Template' ?></label>
+            <label class="col-form-label"><?= $this->lang->line('select_template') ? $this->lang->line('select_template') : 'Select Email Template' ?></label>
             <select name="select_template" id="select_template" class="form-control select2 project_filter">
 
               <option value="<?= base_url('settings/email-templates/new_user_registration') ?>" <?= ($this->uri->segment(3) == 'new_user_registration') ? "selected" : "" ?>> <?= $this->lang->line('new_user_registration') ? htmlspecialchars($this->lang->line('new_user_registration')) : 'New user registration' ?> </option>
@@ -38,12 +38,12 @@
             </select>
           </div>
           <div class="form-group col-md-12">
-            <label><?= $this->lang->line('email_subject') ? $this->lang->line('email_subject') : 'Email Subject' ?></label>
+            <label class="col-form-label"><?= $this->lang->line('email_subject') ? $this->lang->line('email_subject') : 'Email Subject' ?></label>
             <input type="hidden" name="name" value="<?= $template ? $template[0]['name'] : '' ?>">
             <input type="text" name="subject" value="<?= $template ? $template[0]['subject'] : '' ?>" class="form-control" required="">
           </div>
           <div class="form-group col-md-12">
-            <label><?= $this->lang->line('email_message') ? $this->lang->line('email_message') : 'Email Message' ?></label>
+            <label class="col-form-label"><?= $this->lang->line('email_message') ? $this->lang->line('email_message') : 'Email Message' ?></label>
             <textarea type="text" name="message" class="form-control"><?= $template ? $template[0]['message'] : '' ?></textarea>
           </div>
 

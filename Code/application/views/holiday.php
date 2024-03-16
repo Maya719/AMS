@@ -93,7 +93,7 @@
           <form action="<?= base_url('holiday/create') ?>" method="POST" class="modal-part" id="modal-add-holiday-part">
             <div class="modal-body">
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
                 <select name="type_add" id="type_add" class="form-control select2">
                   <option value="0"><?= $this->lang->line('national_day') ? $this->lang->line('national_day') : 'National Day' ?></option>
                   <option value="1"><?= $this->lang->line('rest_day') ? $this->lang->line('rest_day') : 'Rest Day' ?></option>
@@ -103,16 +103,16 @@
               </div>
               <div class="row" id="dates">
                 <div class="col-md-6 form-group mb-3">
-                  <label><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
                   <input type="text" id="starting_date_create" name="starting_date" class="form-control datepicker-default" required="">
                 </div>
                 <div class="col-md-6 form-group mb-3">
-                  <label><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
                   <input type="text" id="ending_date_create" name="ending_date" class="form-control datepicker-default" required="">
                 </div>
               </div>
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('applyon') ? $this->lang->line('applyon') : 'Apply On' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('applyon') ? $this->lang->line('applyon') : 'Apply On' ?></label>
                 <select name="applyforcreate" id="apply2" class="select2" style="width:100%;">
                   <option value="0"><?= $this->lang->line('all') ? $this->lang->line('all') : 'All Employee' ?></option>
                   <option value="1"><?= $this->lang->line('Department') ? $this->lang->line('Department') : 'Department' ?></option>
@@ -121,7 +121,7 @@
               </div>
 
               <div id="department2" class="form-group mb-3 hidden">
-                <label><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select Department/s' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select Department/s' ?></label>
                 <select name="department[]" class="select2" style="width:100%;" multiple="multiple">
                   <?php foreach ($departments as $department) { ?>
                     <option value="<?= $department['id'] ?>"><?= $department['department_name'] ?></option>
@@ -129,7 +129,7 @@
                 </select>
               </div>
               <div id="users2" class="form-group mb-3 hidden">
-                <label><?= $this->lang->line('type') ? $this->lang->line('type') : 'Select Employee/s' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Select Employee/s' ?></label>
                 <select name="users[]" class="form-control select2" multiple="multiple">
                   <?php foreach ($system_users as $system_user) {
                     if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -139,7 +139,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <label><?= $this->lang->line('remarks') ? $this->lang->line('remarks') : 'Remarks' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('remarks') ? $this->lang->line('remarks') : 'Remarks' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="remarks" class="form-control" required=""></textarea>
               </div>
             </div>
@@ -163,7 +163,7 @@
             <div class="modal-body">
               <input type="hidden" name="update_id" id="update_id" value="">
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
                 <select name="type" id="type" class="form-control select2">
                   <option value="0"><?= $this->lang->line('national_day') ? $this->lang->line('national_day') : 'National Day' ?></option>
                   <option value="1"><?= $this->lang->line('rest_day') ? $this->lang->line('rest_day') : 'Rest Day' ?></option>
@@ -174,16 +174,16 @@
               <input type="hidden" name="leave_duration" id="leave_duration" value="">
               <div class="row" id="dates2">
                 <div class="col-md-6 form-group mb-3">
-                  <label><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
                   <input type="text" id="starting_date2" name="starting_date" class="form-control datepicker-default" required="">
                 </div>
                 <div class="col-md-6 form-group mb-3">
-                  <label><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
                   <input type="text" id="ending_date" name="ending_date" class="form-control datepicker-default" required="">
                 </div>
               </div>
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('applyfor') ? $this->lang->line('applyfor') : 'Apply for' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('applyfor') ? $this->lang->line('applyfor') : 'Apply for' ?></label>
                 <select name="applyforedit" id="apply4" class="form-control select2">
                   <option value="0"><?= $this->lang->line('all') ? $this->lang->line('all') : 'All Users' ?></option>
                   <option value="1"><?= $this->lang->line('Department') ? $this->lang->line('Department') : 'Department' ?></option>
@@ -191,7 +191,7 @@
                 </select>
               </div>
               <div id="department" class="form-group mb-3 hidden">
-                <label><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select Department/s' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select Department/s' ?></label>
                 <select name="department[]" id="department3" class="form-control select2" multiple>
                   <?php foreach ($departments as $department) { ?>
                     <option value="<?= $department['id'] ?>"><?= $department['department_name'] ?></option>
@@ -199,7 +199,7 @@
                 </select>
               </div>
               <div id="users" class="form-group mb-3 hidden">
-                <label><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select User/s' ?></label>
+                <label class="col-form-label"><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select User/s' ?></label>
                 <select name="users[]" id="users3" class="form-control select2" multiple>
                   <?php foreach ($system_users as $system_user) {
                     if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -210,7 +210,7 @@
               </div>
 
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('remarks') ? $this->lang->line('remarks') : 'Remarks' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('remarks') ? $this->lang->line('remarks') : 'Remarks' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="remarks" id="remarks" class="form-control" required=""></textarea>
               </div>
             </div>

@@ -104,7 +104,7 @@
                             <input type="text" class="form-control" value="<?= htmlspecialchars($profile_user['emg_number']) ?>" name="emg_number" id="exampleFormControlInput10">
                           </div>
                           <div class="col-12 mb-3">
-                            <label><?= $this->lang->line('user_profile') ? $this->lang->line('user_profile') : 'User Profile' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_empty_for_no_changes') ? $this->lang->line('leave_empty_for_no_changes') : "Leave empty for no changes." ?>"></i></label>
+                            <label class="col-form-label"><?= $this->lang->line('user_profile') ? $this->lang->line('user_profile') : 'User Profile' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_empty_for_no_changes') ? $this->lang->line('leave_empty_for_no_changes') : "Leave empty for no changes." ?>"></i></label>
                             <input class="form-control" type="file" name="profile" id="formFile">
                           </div>
                           <div class="col-12 mb-3">

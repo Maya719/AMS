@@ -71,12 +71,12 @@
 <form action="<?=base_url('products/create')?>" method="POST" class="modal-part" id="modal-add-products-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
   
   <div class="form-group">
-    <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
     <input type="text" name="name" class="form-control" required="">
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('price')?$this->lang->line('price'):'Price'?> - <?=get_currency('currency_code')?> <span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('price')?$this->lang->line('price'):'Price'?> - <?=get_currency('currency_code')?> <span class="text-danger">*</span></label>
     <input type="number" pattern="[0-9]" name="price" class="form-control" required="">
   </div>
 
@@ -86,12 +86,12 @@
   <input type="hidden" name="update_id" id="update_id" value="">
 
   <div class="form-group">
-    <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?><span class="text-danger">*</span></label>
     <input type="text" name="name" id="name" class="form-control" required="">
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('price')?$this->lang->line('price'):'Price'?> - <?=get_currency('currency_code')?> <span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('price')?$this->lang->line('price'):'Price'?> - <?=get_currency('currency_code')?> <span class="text-danger">*</span></label>
     <input type="number" pattern="[0-9]" name="price" id="price" class="form-control" required="">
   </div>
 

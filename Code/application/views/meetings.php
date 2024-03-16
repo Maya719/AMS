@@ -77,21 +77,21 @@
   <form action="<?=base_url('meetings/create')?>" method="POST" class="modal-part" id="modal-add-meetings-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
 
   <div class="form-group">
-    <label><?=$this->lang->line('title')?$this->lang->line('title'):'Title'?><span class="text-danger">*</span><i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('any_special_characters_not_allowed')?$this->lang->line('any_special_characters_not_allowed'):"Any special characters not allowed"?>"></i></label>
+    <label class="col-form-label"><?=$this->lang->line('title')?$this->lang->line('title'):'Title'?><span class="text-danger">*</span><i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('any_special_characters_not_allowed')?$this->lang->line('any_special_characters_not_allowed'):"Any special characters not allowed"?>"></i></label>
     <input type="text" name="title" class="form-control" required="">
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
     <input type="text" name="starting_date_and_time" class="form-control datetimepicker">
   </div>
   <div class="form-group">
-    <label><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration (Minutes)'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration (Minutes)'?><span class="text-danger">*</span></label>
     <input type="number" pattern="[0-9]" name="duration" class="form-control">
   </div>
 
   <div class="form-group">
-    <label><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
     <select name="users[]" class="form-control select2" multiple="">
       <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
       <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -112,21 +112,21 @@
 <input type="hidden" name="update_id" id="update_id">
 
 <div class="form-group">
-  <label><?=$this->lang->line('title')?$this->lang->line('title'):'Title'?><span class="text-danger">*</span><i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('any_special_characters_not_allowed')?$this->lang->line('any_special_characters_not_allowed'):"Any special characters not allowed"?>"></i></label>
+  <label class="col-form-label"><?=$this->lang->line('title')?$this->lang->line('title'):'Title'?><span class="text-danger">*</span><i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('any_special_characters_not_allowed')?$this->lang->line('any_special_characters_not_allowed'):"Any special characters not allowed"?>"></i></label>
   <input type="text" name="title" id="title" class="form-control" required="">
 </div>
 
 <div class="form-group">
-  <label><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
+  <label class="col-form-label"><?=$this->lang->line('starting_time')?$this->lang->line('starting_time'):'Starting Time'?><span class="text-danger">*</span></label>
   <input type="text" name="starting_date_and_time" id="starting_date_and_time" class="form-control datetimepicker">
 </div>
 <div class="form-group">
-  <label><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration (Minutes)'?><span class="text-danger">*</span></label>
+  <label class="col-form-label"><?=$this->lang->line('duration')?$this->lang->line('duration'):'Duration (Minutes)'?><span class="text-danger">*</span></label>
   <input type="number" pattern="[0-9]" name="duration" id="duration" class="form-control">
 </div>
 
 <div class="form-group">
-  <label><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
+  <label class="col-form-label"><?=$this->lang->line('users')?$this->lang->line('users'):'Users'?><span class="text-danger">*</span></label>
   <select name="users[]" id="users" class="form-control select2" multiple="">
     <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
     <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -135,7 +135,7 @@
 </div>
 
 <div class="form-group">
-  <label><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
+  <label class="col-form-label"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
   <select name="status" id="status" class="form-control select2">
     <option value="0"><?=$this->lang->line('scheduled')?$this->lang->line('scheduled'):'Scheduled'?></option>
     <option value="1"><?=$this->lang->line('running')?$this->lang->line('running'):'Running'?></option>

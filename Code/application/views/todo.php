@@ -136,11 +136,11 @@
 						<div class="modal-body">
 							<div class="row">
 								<div class="form-group col-md-12">
-									<label><?= $this->lang->line('todo') ? $this->lang->line('todo') : 'ToDo' ?><span class="text-danger">*</span></label>
+									<label class="col-form-label"><?= $this->lang->line('todo') ? $this->lang->line('todo') : 'ToDo' ?><span class="text-danger">*</span></label>
 									<textarea type="text" name="todo" class="form-control"></textarea>
 								</div>
 								<div class="form-group col-md-12">
-									<label><?= $this->lang->line('due_date') ? $this->lang->line('due_date') : 'Due Date' ?><span class="text-danger">*</span></label>
+									<label class="col-form-label"><?= $this->lang->line('due_date') ? $this->lang->line('due_date') : 'Due Date' ?><span class="text-danger">*</span></label>
 									<input type="text" name="due_date" class="form-control datepicker-default">
 								</div>
 							</div>
@@ -167,11 +167,11 @@
 							<input type="hidden" name="update_id" id="update_id" value="">
 							<div class="row">
 								<div class="form-group col-md-12">
-									<label><?= $this->lang->line('todo') ? $this->lang->line('todo') : 'ToDo' ?><span class="text-danger">*</span></label>
+									<label class="col-form-label"><?= $this->lang->line('todo') ? $this->lang->line('todo') : 'ToDo' ?><span class="text-danger">*</span></label>
 									<textarea type="text" name="todo" id="todo" class="form-control"></textarea>
 								</div>
 								<div class="form-group col-md-12">
-									<label><?= $this->lang->line('due_date') ? $this->lang->line('due_date') : 'Due Date' ?><span class="text-danger">*</span></label>
+									<label class="col-form-label"><?= $this->lang->line('due_date') ? $this->lang->line('due_date') : 'Due Date' ?><span class="text-danger">*</span></label>
 									<input type="text" name="due_date" id="due_date" class="form-control datepicker-default">
 								</div>
 							</div>

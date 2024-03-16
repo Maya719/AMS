@@ -111,7 +111,7 @@
             <div class="modal-body">
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
                 <div class="form-group mb-3">
-                  <label><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id_add" class="form-control">
                     <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
                     <?php foreach ($system_users as $system_user) {
@@ -124,17 +124,17 @@
               <?php } ?>
 
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
                 <input type="text" name="date" class="form-control datepicker-default" required="">
               </div>
 
               <div class="form-group clockpicker mb-3">
-                <label><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
                 <input class="form-control" name="time" id="timepicker">
               </div>
 
               <div class="form-group">
-                <label><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="reason" class="form-control" required=""></textarea>
               </div>
 
@@ -164,7 +164,7 @@
 
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
                 <div class="form-group mb-3">
-                  <label><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id" class="form-control">
                     <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
                     <?php foreach ($system_users as $system_user) {
@@ -177,23 +177,23 @@
               <?php } ?>
 
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
                 <input type="text" name="date" id="date" class="form-control datepicker-default" required="">
               </div>
 
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
                 <input class="form-control" name="time" id="timepicker2">
               </div>
 
               <div class="form-group mb-3">
-                <label><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="reason" id="reason" class="form-control" required=""></textarea>
               </div>
 
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_status')) { ?>
                 <div class="form-group">
-                  <label><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
                   <select name="status" id="status" class="form-control select2">
                     <option value="0"><?= $this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending' ?></option>
                     <option value="1"><?= $this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved' ?></option>

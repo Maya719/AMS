@@ -117,7 +117,7 @@
   <div class="row">
     <input type="hidden" value="By Admin" name="payment_type">
     <div class="form-group col-md-12">
-      <label><?=$this->lang->line('select_invoice')?htmlspecialchars($this->lang->line('select_invoice')):'Select Invoice'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('select_invoice')?htmlspecialchars($this->lang->line('select_invoice')):'Select Invoice'?><span class="text-danger">*</span></label>
       <select class="form-control select2" id="invoices_id" name="invoices_id">
         <option value=""><?=$this->lang->line('select_invoice')?htmlspecialchars($this->lang->line('select_invoice')):'Select Invoice'?></option>
         <?php foreach($invoices as $invoice){ ?>

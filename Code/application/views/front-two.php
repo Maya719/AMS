@@ -171,7 +171,7 @@
                   <div class="card-body">
                     <form action="<?=base_url('front/send-mail')?>" id="front_contact_form" method="POST">
                       <div class="form-group floating-addon">
-                        <label><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?></label>
+                        <label class="col-form-label"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?></label>
                         <div class="input-group">
                           <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -183,7 +183,7 @@
                       </div>
 
                       <div class="form-group floating-addon">
-                        <label><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?></label>
+                        <label class="col-form-label"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?></label>
                         <div class="input-group">
                           <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -195,7 +195,7 @@
                       </div>
 
                       <div class="form-group">
-                        <label><?=$this->lang->line('message')?$this->lang->line('message'):'Message'?></label>
+                        <label class="col-form-label"><?=$this->lang->line('message')?$this->lang->line('message'):'Message'?></label>
                         <textarea class="form-control" placeholder="<?=$this->lang->line('type_your_message')?$this->lang->line('type_your_message'):'Type your message'?>" name="msg" data-height="150"></textarea>
                       </div>
                       <div class="result"></div>

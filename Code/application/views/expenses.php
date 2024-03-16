@@ -105,23 +105,23 @@
 <form action="<?=base_url('expenses/create')?>" method="POST" class="modal-part" id="modal-add-expenses-part" data-title="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>" data-btn="<?=$this->lang->line('create')?$this->lang->line('create'):'Create'?>">
   
   <div class="form-group">
-    <label><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
     <textarea type="text" name="description" class="form-control"></textarea>
   </div>
 
   <span class="row">
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('date')?$this->lang->line('date'):'Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('date')?$this->lang->line('date'):'Date'?><span class="text-danger">*</span></label>
       <input type="text" name="date" class="form-control datepicker">
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('amount_usd')?$this->lang->line('amount_usd'):'Amount'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('amount_usd')?$this->lang->line('amount_usd'):'Amount'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
       <input type="number" pattern="[0-9]" name="amount" class="form-control">
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
+      <label class="col-form-label"><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
       <select name="team_member_id" class="form-control select2 user_id">
         <option value=""><?=$this->lang->line('select_users')?$this->lang->line('select_users'):'Select Users'?></option>
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -133,7 +133,7 @@
   
   <span class="row">
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('Observer')?$this->lang->line('Observer'):'observer'?></label>
+      <label class="col-form-label"><?=$this->lang->line('Observer')?$this->lang->line('Observer'):'observer'?></label>
       <select class="form-control select2 client_id" name="client_id">
         <option value=""><?=$this->lang->line('select_observer')?$this->lang->line('select_observer'):'Select Observer'?></option>
         <?php foreach($system_clients as $system_client){ if($system_client->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -143,7 +143,7 @@
     </div>
 
     <div class="form-group col-md-8">
-      <label><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?></label>
+      <label class="col-form-label"><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?></label>
       <select name="project_id" class="form-control select2 project_id">
         <option value=""><?=$this->lang->line('select_project')?$this->lang->line('select_project'):'Select Project'?></option>
         <?php foreach($projects as $project){ ?>
@@ -154,7 +154,7 @@
   </span>
   
   <div class="form-group">
-    <label><?=$this->lang->line('receipt')?$this->lang->line('receipt'):'Receipt'?></label>
+    <label class="col-form-label"><?=$this->lang->line('receipt')?$this->lang->line('receipt'):'Receipt'?></label>
     <input type="file" name="receipt" class="form-control">
   </div>
   
@@ -165,22 +165,22 @@
   <input type="hidden" name="old_receipt" id="old_receipt" value="">
 
   <div class="form-group">
-    <label><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
+    <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
     <textarea type="text" name="description" id="description" class="form-control"></textarea>
   </div>
   <span class="row">
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('date')?$this->lang->line('date'):'Date'?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('date')?$this->lang->line('date'):'Date'?><span class="text-danger">*</span></label>
       <input type="text" name="date" id="date" class="form-control datepicker">
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('amount_usd')?$this->lang->line('amount_usd'):'Amount'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
+      <label class="col-form-label"><?=$this->lang->line('amount_usd')?$this->lang->line('amount_usd'):'Amount'?> - <?=get_currency('currency_code')?><span class="text-danger">*</span></label>
       <input type="number" pattern="[0-9]" name="amount" id="amount" class="form-control">
     </div>
 
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
+      <label class="col-form-label"><?=$this->lang->line('team_members')?$this->lang->line('team_members'):'Team Members'?></label>
       <select name="team_member_id" id="team_member_id" class="form-control select2 user_id">
         <option value=""><?=$this->lang->line('select_users')?$this->lang->line('select_users'):'Select Users'?></option>
         <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -192,7 +192,7 @@
   
   <span class="row">
     <div class="form-group col-md-4">
-      <label><?=$this->lang->line('observer')?$this->lang->line('observer'):'Observer'?></label>
+      <label class="col-form-label"><?=$this->lang->line('observer')?$this->lang->line('observer'):'Observer'?></label>
       <select class="form-control select2" name="client_id" id="client_id">
         <option value=""><?=$this->lang->line('select_Observer')?$this->lang->line('select_Observer'):'Select Observer'?></option>
         <?php foreach($system_clients as $system_client){ if($system_client->saas_id == $this->session->userdata('saas_id')){ ?>
@@ -202,7 +202,7 @@
     </div>
 
     <div class="form-group col-md-8">
-      <label><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?></label>
+      <label class="col-form-label"><?=$this->lang->line('project')?$this->lang->line('project'):'Project'?></label>
       <select name="project_id" id="project_id" class="form-control select2">
         <option value=""><?=$this->lang->line('select_project')?$this->lang->line('select_project'):'Select Project'?></option>
         <?php foreach($projects as $project){ ?>
@@ -213,7 +213,7 @@
   </span>
   
   <div class="form-group">
-    <label><?=$this->lang->line('receipt')?$this->lang->line('receipt'):'Receipt'?></label>
+    <label class="col-form-label"><?=$this->lang->line('receipt')?$this->lang->line('receipt'):'Receipt'?></label>
     <input type="file" name="receipt" class="form-control">
   </div>
 

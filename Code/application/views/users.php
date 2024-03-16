@@ -34,7 +34,7 @@
       <div class="container-fluid">
 
         <?php
-        if (permissions('user_create')) {
+        if (permissions('user_create') || $this->ion_auth->is_admin()) {
         ?>
           <div class="row d-flex justify-content-end">
             <div class="col-xl-2 col-sm-3 mt-2 ">
