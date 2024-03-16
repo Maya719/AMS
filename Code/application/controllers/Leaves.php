@@ -690,10 +690,9 @@ class Leaves extends CI_Controller
 							if ($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')) {
 								$to_user = $this->ion_auth->user($system_user->user_id)->row();
 								$template_data = array();
-								$template_data['EMPLOYEE_NAME'] = $employee->first_name . ' ' . $employee->last_name;
+								$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
 								$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
 								$type = $this->input->post('type_add');
-								$template_data['LEAVE_TYPE'] = ''; // Initialize the variable
 								$template_data['LEAVE_TYPE'] = '';
 								$querys = $this->db->query("SELECT * FROM leaves_type");
 								$leaves = $querys->result_array();
@@ -709,7 +708,7 @@ class Leaves extends CI_Controller
 								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
 								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
 								$email_template = render_email_template('leave_request', $template_data);
-								// send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 								$notification_data = array(
 									'notification' => 'Leave request received',
 									'type' => 'leave_request',
@@ -718,6 +717,7 @@ class Leaves extends CI_Controller
 									'to_id' => $system_user->user_id,
 								);
 								$notification_id = $this->notifications_model->create($notification_data);
+								$this->data['system_admins'] = $system_admins;
 							}
 						}
 						$roler = $this->session->userdata('user_id');

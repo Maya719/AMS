@@ -44,9 +44,13 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" data-bs-toggle="tab" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" data-bs-toggle="tab" href="#message2"><i class="la la-sign-out me-2"></i>Resignation / Termination</a>
-                                            </li>
+                                            <?php
+                                            if ((permissions('user_edit') && permissions('user_view'))|| $this->ion_auth->is_admin()) {
+                                                ?>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#message2"><i class="la la-sign-out me-2"></i>Resignation / Termination</a>
+                                                </li>
+                                            <?php }?>
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active" id="home1" role="tabpanel">

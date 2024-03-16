@@ -18,6 +18,7 @@ $(document).on('click', '.btn-create-leave', function (e) {
         },
         success: function (result) {
             if (result['error'] == false) {
+                // console.log(result);
                 location.href = base_url + "leaves"
             } else {
                 toastr.error(result['message'], "Error", {
