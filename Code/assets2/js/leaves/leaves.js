@@ -355,6 +355,7 @@ $(document).on('click', '.btn-edit-leave', function (e) {
         success: function (result) {
             if (result['error'] == false) {
                 location.reload();
+                // console.log(result);
             } else {
                 toastr.error(result['message'], "Error", {
                     positionClass: "toast-top-right",

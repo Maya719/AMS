@@ -338,11 +338,14 @@ class Leaves extends CI_Controller
 								'level' => $Step + 1
 							];
 							$this->leaves_model->createLog($log);
-							if ($this->input->post('status') == 1) {
-								$to_user = $this->ion_auth->user($this->input->post('user_id'))->row();
-								$template_data = array();
-								$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
-								$type = $this->input->post('type');
+							$to_user = $this->ion_auth->user($this->input->post('user_id'))->row();
+							$template_data = array();
+							$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
+
+							$type = $this->input->post('type');
+							$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
+								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
 								$template_data['LEAVE_TYPE'] = '';
 								$querys = $this->db->query("SELECT * FROM leaves_type");
 								$leaves = $querys->result_array();
@@ -353,11 +356,8 @@ class Leaves extends CI_Controller
 										}
 									}
 								}
-
-								$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
-								$template_data['REASON'] = $this->input->post('leave_reason');
-								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
-								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+							if ($this->input->post('status') == 1) {
+								$template_data['REASON'] = $this->input->post('remarks').'<br> Approved: '.$group[0]->description;;
 								$email_template = render_email_template('leave_accept', $template_data);
 								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 								$notification_data = array(
@@ -368,6 +368,7 @@ class Leaves extends CI_Controller
 									'to_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
 								);
 								$notification_id = $this->notifications_model->create($notification_data);
+								$this->data['template_data'] = $template_data;
 							} elseif ($this->input->post('status') == 2) {
 								$notification_data = array(
 									'notification' => 'leave request rejected',
