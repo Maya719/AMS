@@ -686,8 +686,11 @@ class Leaves extends CI_Controller
 					if ($leave_id) {
 						$group = get_notifications_group_id();
 						$system_admins = $this->ion_auth->users($group)->result();
+						$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
+						$employee_id_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
+						$employee_id_result = $employee_id_query->row_array();
 						foreach ($system_admins as $system_user) {
-							if ($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')) {
+							if (($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')) && $system_user->active == 1) {
 								$to_user = $this->ion_auth->user($system_user->user_id)->row();
 								$template_data = array();
 								$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
@@ -717,7 +720,6 @@ class Leaves extends CI_Controller
 									'to_id' => $system_user->user_id,
 								);
 								$notification_id = $this->notifications_model->create($notification_data);
-								$this->data['system_admins'] = $system_admins;
 							}
 						}
 						$roler = $this->session->userdata('user_id');
