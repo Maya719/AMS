@@ -325,10 +325,8 @@
         theadRow += '<th>Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
-
         // Add table body
         var tbody = table.find('tbody');
-
         data.forEach(user => {
           var userRow = '<tr>';
           userRow += '<td>' + user.user_id + '</td>';
@@ -340,11 +338,11 @@
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           if (user.btn) {
-            userRow += '<span class="badge light badge-primary"><a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>';
-            userRow += '<span class="badge light badge-danger ms-2"><a href="#" class="text-danger delete-bio" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>';
+            userRow += '<a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a>';
+            userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
           } else {
-            userRow += '<span class="badge light badge-light"><a href="#" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Disabled" disabled><i class="fa fa-pencil color-muted"></i></a></span>';
-            userRow += '<span class="badge light badge-light ms-2"><a href="#" class="text-danger" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>';
+            userRow += '<a href="#" class="text-muted" disabled><i class="fa fa-pencil"></i></a>';
+            userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
           }
           userRow += '</div>';
           userRow += '</td>';

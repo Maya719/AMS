@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <form action="<?= base_url('settings/save-seo-setting') ?>" method="POST" id="language-form">
+        <form action="<?= base_url('settings/save-seo-setting') ?>" method="POST" id="setting-form">
           <div class="card-header">
             <h4><?= $this->lang->line('seo') ? $this->lang->line('seo') : 'SEO' ?></h4>
           </div>
@@ -20,10 +20,10 @@
               <input type="text" name="meta_keywords" value="<?= (isset($meta_keywords) && !empty($meta_keywords)) ? htmlspecialchars($meta_keywords) : '' ?>" class="form-control">
             </div>
           </div>
-          <div class="card-footer bg-whitesmoke text-md-right">
+          <div class="card-footer bg-whitesmoke text-end">
             <button class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
           </div>
-          <div class="result"></div>
+          <div class="message"></div>
         </form>
       </div>
     </div>

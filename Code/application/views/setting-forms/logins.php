@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <form action="<?= base_url('settings/save-logins-setting') ?>" method="POST" id="language-form">
+        <form action="<?= base_url('settings/save-logins-setting') ?>" method="POST" id="setting-form">
           <div class="card-header">
             <h4><?= $this->lang->line('social_login') ? htmlspecialchars($this->lang->line('social_login')) : 'Social Login' ?></h4>
           </div>
@@ -16,10 +16,10 @@
               <input type="text" name="google_client_secret" value="<?= (isset($google_client_secret) && !empty($google_client_secret)) ? htmlspecialchars($google_client_secret) : '' ?>" class="form-control">
             </div>
           </div>
-          <div class="card-footer bg-whitesmoke text-md-right">
+          <div class="card-footer bg-whitesmoke text-end">
             <button class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
           </div>
-          <div class="result"></div>
+          <div class="message"></div>
         </form>
       </div>
     </div>

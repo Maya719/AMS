@@ -288,7 +288,7 @@
       <div class="container pb-300">
         <div class="row text-center justify-content-center">
           <div class="col-lg-10">
-            <!--<h2 class="display-3 text-white"><?=$this->lang->line('features')?$this->lang->line('features'):'Features'?></h2>-->
+            <h2 class="display-3 text-white"><?=$this->lang->line('features')?$this->lang->line('features'):'Features'?></h2>
           </div>
         </div>
         <div class="row row-grid mt-5">

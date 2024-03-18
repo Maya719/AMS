@@ -172,12 +172,12 @@
       var options = $('#leaves_list').bootstrapTable('getOptions');
       const rowCount = $('#leaves_list tbody tr').length;
       console.log(rowCount);
-      const maxVisibleRows = 4; // Adjust this value as needed
+      const maxVisibleRows = 4; 
 
       if (rowCount <= maxVisibleRows) {
-          options.height = 'auto'; // Set auto height for fewer rows
+          options.height = 'auto'; 
       } else {
-          options.height = 700; // Set fixed height for more rows
+          options.height = 700; 
       }
 
       $('#leaves_list').bootstrapTable('refreshOptions', options);

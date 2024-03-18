@@ -134,12 +134,12 @@
     <?php } ?>
 
   </div>
-  <?php if ($this->ion_auth->is_admin() || $this->ion_auth->in_group(3) || permissions('general_edit')) { ?>
-    <div class="card-footer bg-whitesmoke text-md-right">
+  <?php if ($this->ion_auth->is_admin() || is_saas_admin() || permissions('general_edit')) { ?>
+    <div class="card-footer bg-whitesmoke text-end">
       <button class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
     </div>
   <?php } ?>
-  <div class="result"></div>
+  <div class="message"></div>
 </form>
     </div>
   </div>

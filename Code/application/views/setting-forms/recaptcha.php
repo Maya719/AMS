@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <form action="<?= base_url('settings/save-recaptcha-setting') ?>" method="POST" id="language-form">
+        <form action="<?= base_url('settings/save-recaptcha-setting') ?>" method="POST" id="setting-form">
 
           <div class="card-header">
             <h4><?= $this->lang->line('google_recaptcha') ? $this->lang->line('google_recaptcha') : 'Google reCAPTCHA' ?> V3</h4>
@@ -18,10 +18,10 @@
             </div>
           </div>
 
-          <div class="card-footer bg-whitesmoke text-md-right">
+          <div class="card-footer bg-whitesmoke text-end">
             <button class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
           </div>
-          <div class="result"></div>
+          <div class="message"></div>
         </form>
       </div>
     </div>

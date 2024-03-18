@@ -1,7 +1,7 @@
 <div class="row">
   <div class="card">
     <div class="card-body">
-      <form action="<?= base_url('settings/save-email-templates-setting') ?>" method="POST" id="language-form">
+      <form action="<?= base_url('settings/save-email-templates-setting') ?>" method="POST" id="setting-form">
         <div class="card-body row">
           <div class="form-group col-md-12">
             <label class="col-form-label"><?= $this->lang->line('select_template') ? $this->lang->line('select_template') : 'Select Email Template' ?></label>
@@ -53,12 +53,12 @@
           </div>
 
         </div>
-        <?php if ($this->ion_auth->in_group(3)) { ?>
-          <div class="card-footer bg-whitesmoke text-md-right">
+        <?php if (is_saas_admin()) { ?>
+          <div class="card-footer bg-whitesmoke text-end">
             <button class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
           </div>
         <?php } ?>
-        <div class="result"></div>
+        <div class="message"></div>
       </form>
     </div>
   </div>
