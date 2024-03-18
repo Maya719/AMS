@@ -343,7 +343,7 @@
             userRow += '<td class="text-danger">' + status + '</td>';
           } else if (status == 'H') {
             userRow += '<td class="text-warning">' + status + '</td>';
-          } else if (status == 'L' || status == 'HD L' || status == 'HD') {
+          } else if (status == 'L' || status == 'HD L' || status == 'HD' || status == 'SL') {
             userRow += '<td class="text-info">' + status + '</td>';
           } else {
             userRow += '<td class="text-muted">' + status + ' m</td>';

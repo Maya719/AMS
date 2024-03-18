@@ -154,10 +154,12 @@ class Attendance_model extends CI_Model
                     if ($attendancePageSummery["halfDay"] && date('Y-m-d') != $date) {
                         $absent = '' . floatval($absent) + floatval(1 / 2) . '';
                         $userData['dates'][$date][] = '<span class="text-info">HD</span>';
-                    } if ($attendancePageSummery["halfDayLeave"] && date('Y-m-d') != $date) {
+                    }
+                    if ($attendancePageSummery["halfDayLeave"] && date('Y-m-d') != $date) {
                         $leave = '' . floatval($leave) + floatval(1 / 2) . '';
                         $userData['dates'][$date][] = '<span class="text-info">HD L</span>';
                     } else {
+
                         $latemin = $latemin + $attendancePageSummery["lateMinutes"];
                     }
                 }
@@ -370,7 +372,7 @@ class Attendance_model extends CI_Model
             $employee_id = get_employee_id_from_user_id($user_id);
             $where3 .= " AND biometric_missing.user_id = '" . $employee_id . "'";
         }
-        $BioQuery = $this->db->query("SELECT biometric_missing.*, CONCAT(users.first_name, ' ', users.last_name) AS user FROM biometric_missing " . $leftjoin3 . $where3." AND biometric_missing.saas_id =".$this->session->userdata('saas_id'));
+        $BioQuery = $this->db->query("SELECT biometric_missing.*, CONCAT(users.first_name, ' ', users.last_name) AS user FROM biometric_missing " . $leftjoin3 . $where3 . " AND biometric_missing.saas_id =" . $this->session->userdata('saas_id'));
         $BioResults = $BioQuery->result_array();
         foreach ($BioResults as $BioResult) {
             if ($BioResult["status"] == '1') {
@@ -519,7 +521,9 @@ class Attendance_model extends CI_Model
                         $userData["checkin"][] = $min;
                     } else {
                         $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
-                        if ($min["halfDay"]) {
+                        if ($min["shortLeave"]) {
+                            $userData["status"][] = 'SL';
+                        } elseif ($min["halfDay"]) {
                             $userData["status"][] = 'HD';
                             $absent = '' . floatval($absent) + floatval(1 / 2) . '';
                         } else {
@@ -567,7 +571,6 @@ class Attendance_model extends CI_Model
         $shift_id = $user->shift_id;
         $shift = $this->shift_model->get_shift_by_id($shift_id);
         $shiftStartTime = $shift["starting_time"];
-        $shiftStartTime = $shift["starting_time"];
         $shiftEndTime = $shift["ending_time"];
 
         $halfDayCheckIn = $shift["half_day_check_in"];
@@ -582,10 +585,11 @@ class Attendance_model extends CI_Model
         $shiftStartDateTime = new DateTime($date . ' ' . $shiftStartTime);
 
         $halfDay = false;
+        $shortLeave = false;
         $halfDayLeave = false;
         $checkInDateTime = new DateTime($date . ' ' . $checkInTime);
         if ($checkInDateTime != $checkOutDateTime) {
-            if ($this->checkHalfDayLeave($date, $employee_id)) {
+            if ($this->checkHalfDayLeave($date, $employee_id, $date,)) {
                 $halfDayLeave = true;
                 $lateMinutes = 0;
             } else {
@@ -593,14 +597,21 @@ class Attendance_model extends CI_Model
                     $halfDay = true;
                 } else {
                     if ($checkInDateTime > $shiftStartDateTime) {
-                        $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                        if ($this->checkFirstTimeShort($checkInTime, $shiftStartTime, $employee_id, $date)) {
+                            $shortLeave = true;
+                            $lateMinutes = 0;
+                        } else {
+                            $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                        }
+                    } elseif ($checkOutDateTime < $shiftEndDateTime) {
+                        if ($this->checkSecondTimeShort($checkOutTime, $shiftEndTime, $employee_id, $date)) {
+                            $shortLeave = true;
+                            $lateMinutes = 0;
+                        }
                     } else {
                         $lateMinutes = 0;
                     }
                 }
-            }
-            if ($date !== date('Y-m-d')) {
-                
             }
         }
 
@@ -612,10 +623,54 @@ class Attendance_model extends CI_Model
             'halfDayCheckIn' => $halfDayCheckIn,
             'halfDayCheckOut' => $halfDayCheckOut,
             'halfDay' => $halfDay,
+            'shortLeave' => $shortLeave,
             'halfDayLeave' => $halfDayLeave,
             'lateMinutes' => $lateMinutes,
             'shift_id' => $shift_id,
         ];
+    }
+
+    public function checkFirstTimeShort($checkInTime, $shiftStartTime, $employee_id, $date)
+    {
+        $this->db->select('*');
+        $this->db->from('leaves');
+        $this->db->where('user_id', $employee_id);
+        $this->db->where('starting_date <=', $date);
+        $this->db->where('ending_date >=', $date);
+        $this->db->where('status', 1);
+        $this->db->where('leave_duration LIKE', '%Short%');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $results = $query->row();
+            $leaveStart = $results->starting_time;
+            if ($shiftStartTime <= $leaveStart) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    public function checkSecondTimeShort($checkOutTime, $shiftEndTime, $employee_id, $date)
+    {
+        $this->db->select('*');
+        $this->db->from('leaves');
+        $this->db->where('user_id', $employee_id);
+        $this->db->where('starting_date <=', $date);
+        $this->db->where('ending_date >=', $date);
+        $this->db->where('status', 1);
+        $this->db->where('leave_duration LIKE', '%Short%');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $results = $query->row();
+            $ending_time = $results->ending_time;
+            if ($checkOutTime <= $shiftEndTime) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
     public function checkHalfDayLeave($date, $user_id)
     {
