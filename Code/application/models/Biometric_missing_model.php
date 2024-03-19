@@ -16,32 +16,40 @@ class Biometric_missing_model extends CI_Model
             $result = $this->db->get('biometric_missing');
             if ($result->num_rows() > 0) {
                 $data = $result->row();
-                $date = $data->date;
-                $time = $data->time;
-                $user_id = $data->user_id;
-                $datetime = $date . ' ' . $time;
-
-                $this->db->where('finger', $datetime);
-                $this->db->where('user_id', $user_id);
-                $attendance_query = $this->db->get('attendance');
-
-                if ($attendance_query->num_rows() > 0) {
-                    $this->db->trans_start();
-                    $this->db->where('id', $id);
-                    $this->db->where('saas_id', $this->session->userdata('saas_id'));
-                    $this->db->delete('biometric_missing');
+                $status = $data->status;
+                if ($status == 1) {
+                    $date = $data->date;
+                    $time = $data->time;
+                    $user_id = $data->user_id;
+                    $datetime = $date . ' ' . $time;
 
                     $this->db->where('finger', $datetime);
                     $this->db->where('user_id', $user_id);
-                    $this->db->delete('attendance');
-                    $this->db->trans_complete();
-                    if ($this->db->trans_status() === false) {
-                        return false;
+                    $attendance_query = $this->db->get('attendance');
+
+                    if ($attendance_query->num_rows() > 0) {
+                        $this->db->trans_start();
+                        $this->db->where('id', $id);
+                        $this->db->where('saas_id', $this->session->userdata('saas_id'));
+                        $this->db->delete('biometric_missing');
+
+                        $this->db->where('finger', $datetime);
+                        $this->db->where('user_id', $user_id);
+                        $this->db->delete('attendance');
+                        $this->db->trans_complete();
+                        if ($this->db->trans_status() === false) {
+                            return false;
+                        } else {
+                            return true;
+                        }
                     } else {
-                        return true;
+                        return false;
                     }
                 } else {
-                    return false;
+                    $this->db->where('id', $id);
+                    $this->db->where('saas_id', $this->session->userdata('saas_id'));
+                    $this->db->delete('biometric_missing');
+                    return true;
                 }
             } else {
                 return false;

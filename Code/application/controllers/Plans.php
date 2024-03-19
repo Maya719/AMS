@@ -62,7 +62,7 @@ class Plans extends CI_Controller
 
 	public function index()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || $this->ion_auth->in_group(3))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_saas_admin())) {
 			if ($this->ion_auth->is_admin()) {
 				$this->notifications_model->edit('', 'offline_request', '', '', '');
 			}
@@ -396,13 +396,70 @@ class Plans extends CI_Controller
 			return '';
 		}
 	}
+	public function get_offline_requests2($id = '')
+	{
+		if ($this->ion_auth->logged_in()) {
+			$offline_requests = $this->plans_model->get_offline_requests($id);
+			if ($offline_requests) {
+				foreach ($offline_requests as $key => $offline_request) {
+					$temp[$key] = $offline_request;
+					$temp[$key]['user'] = $offline_request['first_name'] . " " . $offline_request['last_name'];
+
+					if ($offline_request["billing_type"] == 'One Time') {
+						$billing_type = $this->lang->line('one_time') ? $this->lang->line('one_time') : 'One Time';
+					} elseif ($offline_request["billing_type"] == 'Monthly') {
+						$billing_type = $this->lang->line('monthly') ? $this->lang->line('monthly') : 'Monthly';
+					} elseif ($offline_request["billing_type"] == 'three_days_trial_plan') {
+						$billing_type = $this->lang->line('three_days_trial_plan') ? htmlspecialchars($this->lang->line('three_days_trial_plan')) : '3 days trial plan';
+					} elseif ($offline_request["billing_type"] == 'seven_days_trial_plan') {
+						$billing_type = $this->lang->line('seven_days_trial_plan') ? htmlspecialchars($this->lang->line('seven_days_trial_plan')) : '7 days trial plan';
+					} elseif ($offline_request["billing_type"] == 'fifteen_days_trial_plan') {
+						$billing_type = $this->lang->line('fifteen_days_trial_plan') ? htmlspecialchars($this->lang->line('fifteen_days_trial_plan')) : '15 days trial plan';
+					} elseif ($offline_request["billing_type"] == 'thirty_days_trial_plan') {
+						$billing_type = $this->lang->line('thirty_days_trial_plan') ? htmlspecialchars($this->lang->line('thirty_days_trial_plan')) : '30 days trial plan';
+					} else {
+						$billing_type = $this->lang->line('yearly') ? $this->lang->line('yearly') : 'Yearly';
+					}
+
+					$temp[$key]['title'] = '<b>' . $offline_request['title'] . "</b><br><b>" . ($this->lang->line('billing_type') ? htmlspecialchars($this->lang->line('billing_type')) : 'Billing Type') . ':</b> ' . $billing_type . "<br><b>" . ($this->lang->line('price_usd') ? $this->lang->line('price_usd') : 'Price') . ':</b> ' . get_saas_currency('currency_sy') . ' ' . $offline_request['price'];
+
+					$temp[$key]['created'] = format_date($offline_request['created'], system_date_format());
+
+					if ($offline_request['receipt']) {
+						$file_upload_path = '';
+						if (file_exists('assets/uploads/receipt/' . $offline_request['receipt'])) {
+							$file_upload_path = 'assets/uploads/receipt/' . $offline_request['receipt'];
+						}
+						$temp[$key]['receipt'] = '<span class="d-flex"><a target="_blank" href="' . base_url($file_upload_path) . '" class="btn btn-icon btn-sm btn-primary mr-1" data-toggle="tooltip" title="' . ($this->lang->line('view') ? htmlspecialchars($this->lang->line('view')) : 'View') . '"><i class="fas fa-eye"></i></a><a download="' . $offline_request['receipt'] . '" href="' . base_url($file_upload_path) . '" class="btn btn-icon btn-sm btn-primary mr-1" data-toggle="tooltip" title="' . ($this->lang->line('download') ? htmlspecialchars($this->lang->line('download')) : 'Download') . '"><i class="fas fa-download"></i></a></span>';
+					}
+
+					if ($offline_request['status'] == 0) {
+						$temp[$key]['status'] = '<div class="badge badge-info">' . ($this->lang->line('pending') ? $this->lang->line('pending') : 'Pending') . '</div>';
+						$temp[$key]['action'] = '<span class="d-flex"><a href="#" class="btn btn-icon btn-sm btn-success mr-1 accept_request" data-id="' . $offline_request["id"] . '" data-plan_id="' . $offline_request["plan_id"] . '" data-saas_id="' . $offline_request["saas_id"] . '" data-toggle="tooltip" title="' . ($this->lang->line('accept') ? htmlspecialchars($this->lang->line('accept')) : 'Accept') . '"><i class="fas fa-check"></i></a><a href="#" class="btn btn-icon btn-sm btn-danger reject_request" data-id="' . $offline_request["id"] . '" data-plan_id="' . $offline_request["plan_id"] . '" data-toggle="tooltip" title="' . ($this->lang->line('reject') ? htmlspecialchars($this->lang->line('reject')) : 'Reject') . '"><i class="fas fa-times"></i></a></span>';
+					} elseif ($offline_request['status'] == 1) {
+						$temp[$key]['status'] = '<div class="badge badge-success">' . ($this->lang->line('accepted') ? $this->lang->line('accepted') : 'Accepted') . '</div>';
+						$temp[$key]['action'] = '<span class="d-flex"><a href="#" class="disabled btn btn-icon btn-sm btn-success mr-1" data-toggle="tooltip" title="' . ($this->lang->line('accept') ? htmlspecialchars($this->lang->line('accept')) : 'Accept') . '"><i class="fas fa-check"></i></a><a href="#" class="disabled btn btn-icon btn-sm btn-danger" data-toggle="tooltip" title="' . ($this->lang->line('reject') ? htmlspecialchars($this->lang->line('reject')) : 'Reject') . '"><i class="fas fa-times"></i></a></span>';
+					} else {
+						$temp[$key]['status'] = '<div class="badge badge-danger">' . ($this->lang->line('rejected') ? $this->lang->line('rejected') : 'Rejected') . '</div>';
+						$temp[$key]['action'] = '<span class="d-flex"><a href="#" class="disabled btn btn-icon btn-sm btn-success mr-1" data-toggle="tooltip" title="' . ($this->lang->line('accept') ? htmlspecialchars($this->lang->line('accept')) : 'Accept') . '"><i class="fas fa-check"></i></a><a href="#" class="disabled btn btn-icon btn-sm btn-danger" data-toggle="tooltip" title="' . ($this->lang->line('reject') ? htmlspecialchars($this->lang->line('reject')) : 'Reject') . '"><i class="fas fa-times"></i></a></span>';
+					}
+				}
+				return $temp;
+			} else {
+				return '';
+			}
+		} else {
+			return '';
+		}
+	}
 
 	public function offline_requests()
 	{
-		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
+		if ($this->ion_auth->logged_in() && is_saas_admin()) {
 			$this->notifications_model->edit('', 'offline_request', '', '', '');
 			$this->data['page_title'] = 'Offline Requests - ' . company_name();
 			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$this->data['offline_requests'] = $this->get_offline_requests2();
 			$this->load->view('offline_requests', $this->data);
 		} else {
 			redirect('auth', 'refresh');

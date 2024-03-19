@@ -208,7 +208,7 @@ class Users extends CI_Controller
 			if (is_saas_admin()) {
 				$system_users = $this->ion_auth->users(array(3))->result();
 				foreach ($system_users as $system_user) {
-					if ($this->session->userdata('saas_id') == $system_user->saas_id) {
+					if ($this->session->userdata('saas_id') == $system_user->saas_id && $this->session->userdata('email') != $system_user->email) {
 						$tempRow['employee_id'] = $system_user->employee_id;
 						$tempRow['id'] = $system_user->user_id;
 						$tempRow['email'] = $system_user->email;

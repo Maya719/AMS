@@ -17,8 +17,7 @@ class Biometric_missing extends CI_Controller
 			if(empty($id)){
 				$id = $this->uri->segment(3)?$this->uri->segment(3):'';
 			}
-
-			if(!empty($id) && is_numeric($id) && $this->biometric_missing_model->delete($id)){
+			if($this->biometric_missing_model->delete($id)){
 				$this->session->set_flashdata('message', $this->lang->line('deleted_successfully')?$this->lang->line('deleted_successfully'):"Deleted successfully.");
 				$this->session->set_flashdata('message_type', 'success');
 				$this->data['error'] = false;

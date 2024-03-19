@@ -322,19 +322,23 @@
         theadRow += '<th>Date</th>';
         theadRow += '<th>Time</th>';
         theadRow += '<th>Status</th>';
+        theadRow += '<th>Created</th>';
         theadRow += '<th>Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
         // Add table body
         var tbody = table.find('tbody');
         data.forEach(user => {
+          var date = moment(user.date, 'YYYY-MM-DD').format(date_format_js);
+          var created = moment(user.created, 'YYYY-MM-DD').format(date_format_js);
           var userRow = '<tr>';
           userRow += '<td>' + user.user_id + '</td>';
           userRow += '<td>' + user.user + '</td>';
           userRow += '<td>' + user.reason + '</td>';
-          userRow += '<td>' + user.date + '</td>';
+          userRow += '<td>' + date + '</td>';
           userRow += '<td>' + user.time + '</td>';
           userRow += '<td>' + user.status + '</td>';
+          userRow += '<td>' + created + '</td>';
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           if (user.btn) {
@@ -363,7 +367,8 @@
           "lengthMenu": [10, 20, 50, 500],
           "order": false,
           "pageLength": 10,
-          "dom": '<"top"f>rt<"bottom"lp><"clear">'
+          "dom": '<"top"f>rt<"bottom"lp><"clear">',
+          "order": [[6, "desc"]]
         });
       }
 
@@ -386,10 +391,10 @@
           .replace("d", formattedDate.slice(3, 5));
       }
     });
-    var time24 = true;
+    var time24 = false;
     $('#timepicker').timepicker({
       format: 'HH:mm',
-      showMeridian: false,
+      showMeridian: true,
       time24Hour: time24
     });
   </script>
@@ -477,15 +482,13 @@
               startDate: date,
             });
             var time = moment(result['data'][0].time, 'HH:mm:ss').format('HH:mm');
-            var time24 = true;
-
+            var time24 = false;
             // Initialize the timepicker
             $('#timepicker2').timepicker({
               format: 'HH:mm',
-              showMeridian: false,
+              showMeridian: true,
               time24Hour: time24
             });
-
             // Set the time in the timepicker
             $('#timepicker2').timepicker('setTime', time);
             $("#reason").val(result['data'][0].reason);
