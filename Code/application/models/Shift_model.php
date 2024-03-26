@@ -53,24 +53,16 @@ class Shift_model extends CI_Model
     }
     function get_shift_log_by_id($id, $date)
     {
-        $timestamp = strtotime($date);
         $this->db->where('shift_id', $id);
-        $this->db->where('created <', $date);
         $this->db->order_by('created', 'ASC');
-        $this->db->limit(1);
         $query = $this->db->get('shift_logs');
-        $shift = $query->row_array();
-        if ($shift) {
-            return $shift;
-        } else {
-            $this->db->where('shift_id', $id);
-            $this->db->where('created >', $date);
-            $this->db->order_by('created', 'ASC');
-            $this->db->limit(1);
-            $query = $this->db->get('shift_logs');
-            $shift = $query->row_array();
-            return $shift;
+        $shifts = $query->result_array();
+        foreach ($shifts as $shift) {
+            if ($shift["created"] <= $date) {
+                $return = $shift;
+            }
         }
+        return $return;
     }
 
 
