@@ -1,16 +1,17 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Shift_model extends CI_Model
-{ 
+{
     public function __construct()
-	{
-		parent::__construct();
+    {
+        parent::__construct();
     }
-    
-    function delete($id){
+
+    function delete($id)
+    {
         $this->db->where('id', $id);
-        if($this->db->delete('shift'))
+        if ($this->db->delete('shift'))
             return true;
         else
             return false;
@@ -42,12 +43,41 @@ class Shift_model extends CI_Model
 
         return array();
     }
+    function get_shift_by_id2($id)
+    {
+        $this->db->where('saas_id', $this->session->userdata('saas_id'));
+        $this->db->where('id', $id);
+        $query = $this->db->get('shift');
+        $shift = $query->row();
+        return $shift;
+    }
+    function get_shift_log_by_id($id, $date)
+    {
+        $timestamp = strtotime($date);
+        $this->db->where('shift_id', $id);
+        $this->db->where('created <=', $date);
+        $this->db->order_by('created', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('shift_logs');
+        $shift = $query->row_array();
+        if ($shift) {
+            return $shift;
+        } else {
+            $this->db->where('saas_id', $this->session->userdata('saas_id'));
+            $this->db->where('id', $id);
+            $query = $this->db->get('shift');
+            $shift = $query->row_array();
+            return $shift;
+        }
+    }
 
 
-    function get_user_details($user_id) {
+
+    function get_user_details($user_id)
+    {
         $query = $this->db->query("SELECT first_name, last_name, profile FROM users WHERE id = ?", $user_id);
-        $user_details = $query->row_array(); 
-    
+        $user_details = $query->row_array();
+
         return $user_details;
     }
 
@@ -107,47 +137,47 @@ class Shift_model extends CI_Model
         foreach ($results as $result) {
             $saas_id = $result['saas_id'];
             if ($this->session->userdata('saas_id') == $saas_id) {
-            $tempRow = $result;
-            $user_ids = $result['user_ids'];
-            $user_ids_array = explode(',', $user_ids);
+                $tempRow = $result;
+                $user_ids = $result['user_ids'];
+                $user_ids_array = explode(',', $user_ids);
 
-            $tempRow['users'] = [];
+                $tempRow['users'] = [];
 
-            foreach ($user_ids_array as $user_id) {
-                $user_details = $this->get_user_details($user_id);
+                foreach ($user_ids_array as $user_id) {
+                    $user_details = $this->get_user_details($user_id);
 
-                if (!empty($user_details)) {
-                    $first_name = htmlspecialchars($user_details['first_name']);
-                    $last_name = htmlspecialchars($user_details['last_name']);
-                    $tempRow['users'][] = $first_name . ' ' . $last_name;
+                    if (!empty($user_details)) {
+                        $first_name = htmlspecialchars($user_details['first_name']);
+                        $last_name = htmlspecialchars($user_details['last_name']);
+                        $tempRow['users'][] = $first_name . ' ' . $last_name;
+                    }
                 }
-            }
-            
-            $tempRow['users'] = implode('<br>', $tempRow['users']);
 
-            $tempRow['starting_time'] = format_date($result['starting_time'], system_time_format());
-            $tempRow['ending_time'] = format_date($result['ending_time'], system_time_format());
-            $tempRow['break_start'] = format_date($result['break_start'], system_time_format());
-            $tempRow['break_end'] = format_date($result['break_end'], system_time_format());
-            $tempRow['half_day_check_in'] = format_date($result['half_day_check_in'], system_time_format());
-            $tempRow['half_day_check_out'] = format_date($result['half_day_check_out'], system_time_format());
-            $tempRow['sr_no'] = $counter;
-            if($this->ion_auth->is_admin() || permissions('shift_edit')){
-                $edit_btn = '<a href="#" class="btn btn-icon btn-sm btn-primary mr-1 modal-edit-shift" data-edit="' . $result['id'] . '" data-toggle="tooltip" title="' . ($this->lang->line('edit') ? htmlspecialchars($this->lang->line('edit')) : 'Edit') . '"><i class="fas fa-pen"></i></a>';
-            }else{
-                $edit_btn = '<a href="#" class="btn btn-icon btn-sm btn-primary mr-1 disabled" data-toggle="tooltip" title="'.($this->lang->line('edit')?htmlspecialchars($this->lang->line('edit')):'Edit').'"><i class="fas fa-pen"></i></a>';
-            }
+                $tempRow['users'] = implode('<br>', $tempRow['users']);
 
-            if($this->ion_auth->is_admin() || permissions('shift_delete')){
-                $delete_btn = '<a href="#" class="btn btn-icon btn-sm btn-danger mr-1 delete_shift" data-id="' . $result['id'] . '" data-toggle="tooltip" title="' . ($this->lang->line('delete') ? htmlspecialchars($this->lang->line('delete')) : 'Delete') . '"><i class="fas fa-trash"></i></a>';
-            }else{
-                $delete_btn = '<a href="#" class="btn btn-icon btn-sm btn-danger mr-1 disabled" data-toggle="tooltip" title="'.($this->lang->line('delete')?htmlspecialchars($this->lang->line('delete')):'Delete').'"><i class="fas fa-trash"></i></a>';
-            }
+                $tempRow['starting_time'] = format_date($result['starting_time'], system_time_format());
+                $tempRow['ending_time'] = format_date($result['ending_time'], system_time_format());
+                $tempRow['break_start'] = format_date($result['break_start'], system_time_format());
+                $tempRow['break_end'] = format_date($result['break_end'], system_time_format());
+                $tempRow['half_day_check_in'] = format_date($result['half_day_check_in'], system_time_format());
+                $tempRow['half_day_check_out'] = format_date($result['half_day_check_out'], system_time_format());
+                $tempRow['sr_no'] = $counter;
+                if ($this->ion_auth->is_admin() || permissions('shift_edit')) {
+                    $edit_btn = '<a href="#" class="btn btn-icon btn-sm btn-primary mr-1 modal-edit-shift" data-edit="' . $result['id'] . '" data-toggle="tooltip" title="' . ($this->lang->line('edit') ? htmlspecialchars($this->lang->line('edit')) : 'Edit') . '"><i class="fas fa-pen"></i></a>';
+                } else {
+                    $edit_btn = '<a href="#" class="btn btn-icon btn-sm btn-primary mr-1 disabled" data-toggle="tooltip" title="' . ($this->lang->line('edit') ? htmlspecialchars($this->lang->line('edit')) : 'Edit') . '"><i class="fas fa-pen"></i></a>';
+                }
 
-            $tempRow['action'] = '<span class="d-flex">'.$edit_btn.''.$delete_btn.'</span>';
-           
-            $rows[] = $tempRow;
-            $counter++;
+                if ($this->ion_auth->is_admin() || permissions('shift_delete')) {
+                    $delete_btn = '<a href="#" class="btn btn-icon btn-sm btn-danger mr-1 delete_shift" data-id="' . $result['id'] . '" data-toggle="tooltip" title="' . ($this->lang->line('delete') ? htmlspecialchars($this->lang->line('delete')) : 'Delete') . '"><i class="fas fa-trash"></i></a>';
+                } else {
+                    $delete_btn = '<a href="#" class="btn btn-icon btn-sm btn-danger mr-1 disabled" data-toggle="tooltip" title="' . ($this->lang->line('delete') ? htmlspecialchars($this->lang->line('delete')) : 'Delete') . '"><i class="fas fa-trash"></i></a>';
+                }
+
+                $tempRow['action'] = '<span class="d-flex">' . $edit_btn . '' . $delete_btn . '</span>';
+
+                $rows[] = $tempRow;
+                $counter++;
             }
         }
 
@@ -155,40 +185,45 @@ class Shift_model extends CI_Model
         print_r(json_encode($bulkData));
     }
 
-    function create($data){
-        if($this->db->insert('shift', $data))
+    function create($data)
+    {
+        if ($this->db->insert('shift', $data))
             return $this->db->insert_id();
         else
-            return false; 
+            return false;
+    }
+    function create_log($data)
+    {
+        if ($this->db->insert('shift_logs', $data))
+            return $this->db->insert_id();
+        else
+            return false;
     }
 
-    function edit($id, $data){
+    function edit($id, $data)
+    {
         $this->db->where('id', $id);
-        if($this->db->update('shift', $data))
+        if ($this->db->update('shift', $data))
             return true;
         else
             return false;
     }
-    public function saas_shifts(){
-        $query = $this->db->query("SELECT * FROM shift WHERE saas_id = ".$this->session->userdata('saas_id'));
+    public function saas_shifts()
+    {
+        $query = $this->db->query("SELECT * FROM shift WHERE saas_id = " . $this->session->userdata('saas_id'));
         $result = $query->result_array();
         return $result;
     }
 
     public function updateUserShiftId($type, $user_ids)
-	{
-		$this->db->set('shift_id', $type);
-		$this->db->where_in('id', $user_ids);
-		$this->db->update('users');
+    {
+        $this->db->set('shift_id', $type);
+        $this->db->where_in('id', $user_ids);
+        $this->db->update('users');
 
         $this->db->where_not_in('id', $user_ids);
         $this->db->where('shift_id', $type);
         $this->db->set('shift_id', 0);
         $this->db->update('users');
-	}
-
-
-    
-    
-
+    }
 }

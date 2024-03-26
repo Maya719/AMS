@@ -371,12 +371,61 @@
           if (result['error'] == false && result['data'] != '') {
             $("#update_id").val(result['data'].id);
             $("#type").val(result['data'].name);
-            $("#starting_time").val(result['data'].starting_time);
-            $("#ending_time").val(result['data'].ending_time);
-            $("#break_start").val(result['data'].break_start);
-            $("#break_end").val(result['data'].break_end);
-            $("#half_day_check_in").val(result['data'].half_day_check_in);
-            $("#half_day_check_out").val(result['data'].half_day_check_out);
+
+            var starting_time = moment(result['data'].starting_time, 'HH:mm:ss').format('HH:mm');
+            var time24 = false;
+            $('#starting_time').timepicker({
+              format: 'HH:mm',
+              showMeridian: true,
+              time24Hour: time24
+            });
+            $('#starting_time').timepicker('setTime', starting_time);
+
+            var ending_time = moment(result['data'].ending_time, 'HH:mm:ss').format('HH:mm');
+            var time24 = false;
+            $('#ending_time').timepicker({
+              format: 'HH:mm',
+              showMeridian: true,
+              time24Hour: time24
+            });
+            $('#ending_time').timepicker('setTime', ending_time);
+            // 
+            var break_start = moment(result['data'].break_start, 'HH:mm:ss').format('HH:mm');
+            var time24 = false;
+            $('#break_start').timepicker({
+              format: 'HH:mm',
+              showMeridian: true,
+              time24Hour: time24
+            });
+            $('#break_start').timepicker('setTime', break_start);
+            // 
+            var break_end = moment(result['data'].break_end, 'HH:mm:ss').format('HH:mm');
+            var time24 = false;
+            $('#break_end').timepicker({
+              format: 'HH:mm',
+              showMeridian: true,
+              time24Hour: time24
+            });
+            $('#break_end').timepicker('setTime', break_end);
+            // 
+            var half_day_check_in = moment(result['data'].half_day_check_in, 'HH:mm:ss').format('HH:mm');
+            var time24 = false;
+            $('#half_day_check_in').timepicker({
+              format: 'HH:mm',
+              showMeridian: true,
+              time24Hour: time24
+            });
+            $('#half_day_check_in').timepicker('setTime', half_day_check_in);
+
+            // 
+            var half_day_check_out = moment(result['data'].half_day_check_out, 'HH:mm:ss').format('HH:mm');
+            var time24 = false;
+            $('#half_day_check_out').timepicker({
+              format: 'HH:mm',
+              showMeridian: true,
+              time24Hour: time24
+            });
+            $('#half_day_check_out').timepicker('setTime', half_day_check_out);
           } else {
             iziToast.error({
               title: something_wrong_try_again,

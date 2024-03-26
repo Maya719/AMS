@@ -143,54 +143,57 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="row h-50">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Leave balance</h4>
+                    <div class="col-xl-6 col-xxl-4 col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Leave balance</h4>
+                            </div>
+                            <div class="chart-wrapper" style="height: 400px;">
+                                <div id="multi-line-chart" class="ct-chart ct-golden-section chartlist-chart"></div>
+                                <div class="d-flex ms-5">
+                                    <div class="d-flex me-5">
+                                        <div class="mt-2">
+                                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="6.5" cy="6.5" r="6.5" fill="<?= theme_color() ?>" />
+                                            </svg>
+                                        </div>
+                                        <div class="ms-3">
+                                            <p class="mt-2">Total</p>
+                                        </div>
                                     </div>
-                                    <div class="card-body py-2" style="height: 400px;">
-                                        <div id="multi-line-chart" class="ct-chart ct-golden-section chartlist-chart"></div>
-                                        <div class="d-flex ms-5">
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?= theme_color() ?>" />
-                                                    </svg>
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Total</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#09BD3C" />
-                                                    </svg>
+                                    <div class="d-flex me-5">
+                                        <div class="mt-2">
+                                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="6.5" cy="6.5" r="6.5" fill="#09BD3C" />
+                                            </svg>
 
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Paid</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFBF00" />
-                                                    </svg>
+                                        </div>
+                                        <div class="ms-3">
+                                            <p class="mt-2">Paid</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex me-5">
+                                        <div class="mt-2">
+                                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="6.5" cy="6.5" r="6.5" fill="#FFBF00" />
+                                            </svg>
 
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Unpaid</p>
-                                                </div>
-                                            </div>
+                                        </div>
+                                        <div class="ms-3">
+                                            <p class="mt-2">Unpaid</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-body" style="margin-top: -30px;">
+                                <h4 class="card-title">Total By Consume</h4>
+                                <div class="row" id="totalLeaves">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -226,6 +229,22 @@
                 },
                 success: function(response) {
                     console.log(response);
+                    var temp = '';
+                    $.each(response.leave_types, function(index, leave_type) {
+                        var consumedValue = response.paidArray[index];
+                        var typeValue = response.total_leaves[index];
+
+                        temp += '<div class="col-12 mt-4">';
+                        temp += '<div class="d-flex justify-content-between">';
+                        temp += '<h6>' + consumedValue + ' / ' + typeValue + '</h6>';
+                        temp += '<span>' + leave_type + '</span>';
+                        temp += '</div>';
+                        temp += '<div class="progress">';
+                        temp += '<div class="progress-bar bg-success" style="width: ' + (consumedValue / typeValue) * 100 + '%"></div>';
+                        temp += '</div>';
+                        temp += '</div>';
+                    });
+                    $('#totalLeaves').html(temp);
                     new Chartist.Bar('#multi-line-chart', {
                         labels: response.leave_types,
                         series: [

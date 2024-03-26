@@ -127,32 +127,32 @@
                     <div class="row mb-3">
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="starting_time" id="starting_time" class="form-control timepicker" required="">
+                            <input type="text" name="starting_time" id="starting_time" class="form-control" required="">
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="ending_time" id="ending_time" class="form-control timepicker" required="">
+                            <input type="text" name="ending_time" id="ending_time" class="form-control" required="">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('break_start') ? $this->lang->line('break_start') : 'Break Start' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="break_start" id="break_start" class="form-control timepicker" required="">
+                            <input type="text" name="break_start" id="break_start" class="form-control" required="">
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('break_end') ? $this->lang->line('break_end') : 'Break End' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="break_end" id="break_end" class="form-control timepicker" required="">
+                            <input type="text" name="break_end" id="break_end" class="form-control" required="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('half_day_check_in') ? $this->lang->line('half_day_check_in') : 'Half Day Check In' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="half_day_check_in" id="half_day_check_in" class="form-control timepicker" required="">
+                            <input type="text" name="half_day_check_in" id="half_day_check_in" class="form-control" required="">
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('half_day_check_out') ? $this->lang->line('half_day_check_out') : 'Half Day Check Out' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="half_day_check_out" id="half_day_check_out" class="form-control timepicker" required="">
+                            <input type="text" name="half_day_check_out" id="half_day_check_out" class="form-control" required="">
                         </div>
                     </div>
                 </div>

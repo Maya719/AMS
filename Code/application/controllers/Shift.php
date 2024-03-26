@@ -130,7 +130,6 @@ class Shift extends CI_Controller
 			$this->form_validation->set_rules('name', 'Name', 'trim|required|strip_tags|xss_clean');
 
 			if($this->form_validation->run() == TRUE){
-
 				$data = array(
 					'starting_time' => format_date($this->input->post('starting_time'),"H:i:s"),
 					'ending_time' => format_date($this->input->post('ending_time'),"H:i:s"),
@@ -140,9 +139,17 @@ class Shift extends CI_Controller
 					'half_day_check_in' => format_date($this->input->post('half_day_check_in'),"H:i:s"),
 					'name' => $this->input->post('name'),
 				);
-
+				$shift = $this->shift_model->get_shift_by_id2($this->input->post('update_id'));
+				$dd["shift_id"] = $shift->id;
+				$dd["name"] = $shift->name;
+				$dd["starting_time"] = $shift->starting_time;
+				$dd["ending_time"] = $shift->ending_time;
+				$dd["break_start"] = $shift->break_start;
+				$dd["break_end"] = $shift->break_end;
+				$dd["half_day_check_in"] = $shift->half_day_check_in;
+				$dd["half_day_check_out"] = $shift->half_day_check_out;
 				if($this->shift_model->edit($this->input->post('update_id'), $data)){
-
+					$id = $this->shift_model->create_log($dd);
 					$this->session->set_flashdata('message', $this->lang->line('updated_successfully')?$this->lang->line('updated_successfully'):"Updated successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;

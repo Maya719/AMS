@@ -320,6 +320,7 @@ class Settings extends CI_Controller
 			$this->db->where('saas_id', $this->session->userdata('saas_id'));
 			$query = $this->db->get('shift');
 			$shift_types = $query->result_array();
+			
 			foreach ($shift_types as &$shift_type) {
 				$shift_type["starting_time"] =  date("h:i A", strtotime($shift_type["starting_time"]));
 				$shift_type["ending_time"] =  date("h:i A", strtotime($shift_type["ending_time"]));
@@ -328,6 +329,7 @@ class Settings extends CI_Controller
 				$shift_type["half_day_check_in"] =  date("h:i A", strtotime($shift_type["half_day_check_in"]));
 				$shift_type["half_day_check_out"] =  date("h:i A", strtotime($shift_type["half_day_check_out"]));
 			}
+
 			$this->data['shift_types'] = $shift_types;
 
 			$this->load->view('settings', $this->data);

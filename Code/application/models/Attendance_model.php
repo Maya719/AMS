@@ -569,7 +569,7 @@ class Attendance_model extends CI_Model
         $user_id = get_user_id_from_employee_id($employee_id);
         $user = $this->ion_auth->user($user_id)->row();
         $shift_id = $user->shift_id;
-        $shift = $this->shift_model->get_shift_by_id($shift_id);
+        $shift = $this->shift_model->get_shift_log_by_id($shift_id,$date);
         $shiftStartTime = $shift["starting_time"];
         $shiftEndTime = $shift["ending_time"];
 
@@ -627,6 +627,7 @@ class Attendance_model extends CI_Model
             'halfDayLeave' => $halfDayLeave,
             'lateMinutes' => $lateMinutes,
             'shift_id' => $shift_id,
+            'shift' => $shift,
         ];
     }
 

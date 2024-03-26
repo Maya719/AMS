@@ -597,7 +597,7 @@
           if (is_module_allowed('notifications')) {
             echo get_notifications_live2();
           } ?>
-          <li class="nav-item dropdown  header-profile">
+          <li class="nav-item dropdown header-profile">
             <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
               <?php if (isset($current_user->profile) && !empty($current_user->profile)) {
                 if (file_exists('assets/uploads/profiles/' . $current_user->profile)) {
@@ -710,8 +710,29 @@
       <?php
       }
       ?>
+      <!-- <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
+        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+            <i class="fas fa-bezier-curve"></i>
+            <span class="nav-text"><?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?></span>
+          </a>
+          <ul aria-expanded="false">
+            <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('project_view'))) { ?>
+              <li><a href="<?= base_url('projects/list') ?>"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></a></li>
+            <?php } ?>
 
+            <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
+              <li><a href="<?= base_url('backlog') ?>"><?= $this->lang->line('backlog') ? $this->lang->line('backlog') : 'Backlog' ?></a></li>
+            <?php } ?>
 
+            <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
+              <li><a href="<?= base_url('board') ?>"><?= $this->lang->line('Board') ? $this->lang->line('Board') : 'Board' ?></a></li>
+            <?php } ?>
+
+          </ul>
+        </li>
+      <?php
+      }
+      ?> -->
 
       <?php if (is_saas_admin()) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
