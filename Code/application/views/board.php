@@ -1,4 +1,39 @@
 <?php $this->load->view('includes/header'); ?>
+<style>
+    .kanbanimg li span {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50px;
+        line-height: 2rem;
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .section .section-title {
+        font-size: 18px;
+        color: #191d21;
+        font-weight: 600;
+        position: relative;
+        margin: 30px 0 25px 0;
+    }
+
+    .section-title:before {
+        content: ' ';
+        border-radius: 5px;
+        height: 8px;
+        width: 30px;
+        background-color: var(--theme-color);
+        display: inline-block;
+        float: left;
+        margin-top: 6px;
+        margin-right: 15px;
+    }
+
+    .section-title+.section-lead {
+        margin-top: -20px;
+    }
+</style>
 </head>
 
 <body>
@@ -28,25 +63,26 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form class="row">
+                                    <div class="row">
                                         <div class="col-lg-6">
-                                            <select class="form-select">
+                                            <select class="form-select" id="sprint_id">
+                                                <option value="" selected>Sprint</option>
                                                 <?php foreach ($sprints as $sprint) : ?>
-                                                    <option value="<?=$sprint["id"]?>"><?=$sprint["title"]?></option>
+                                                    <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
                                         <div class="col-lg-6">
-                                            <select class="form-select">
-                                                <option value="tmonth" selected>Member</option>
+                                            <select class="form-select" id="user_id">
+                                                <option value="" selected>Member</option>
                                                 <?php foreach ($system_users as $system_user) : ?>
                                                     <?php if ($system_user->active == '1') : ?>
-                                                        <option value="lmonth"><?=$system_user->first_name.' '.$system_user->last_name?></option>
+                                                        <option value="<?= $system_user->id ?>"><?= $system_user->first_name . ' ' . $system_user->last_name ?></option>
                                                     <?php endif ?>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -57,6 +93,7 @@
                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                     <div>
                                         <h3>Fillow Company Profile Website Phase 1</h3>
+                                        <!-- <h3>Fillow Company Profile Website Phase 1 <?php var_dump($issues) ?></h3> -->
                                         <span>Created by <strong class="text-black">Hajime Mahmuden</strong> on June 31,
                                             2020</span>
                                     </div>
@@ -92,7 +129,7 @@
                                 <div class="draggable-zone dropzoneContainer">
                                     <div class="sub-card align-items-center d-flex justify-content-between mb-4">
                                         <div>
-                                            <h4 class="mb-0"><?=$task_status["title"]?></h4>
+                                            <h4 class="mb-0"><?= $task_status["title"] ?></h4>
                                         </div>
                                     </div>
                                     <?php foreach ($issues as $issue) : ?>
@@ -100,12 +137,29 @@
                                             <div class="card draggable-handle draggable">
                                                 <div class="card-body">
                                                     <div class="d-flex justify-content-between mb-2">
-                                                        <span class="sub-title">
-                                                            <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <circle cx="5" cy="5" r="5" fill="#FFA7D7" />
-                                                            </svg>
-                                                            Deisgner
-                                                        </span>
+                                                        <?php if ($issue["priority"] == 1) : ?>
+                                                            <span class="text-info">
+                                                                <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <circle cx="5" cy="5" r="5" fill="#D653C1" />
+                                                                </svg>
+                                                                <?= $issue["project_name"] ?>
+                                                            </span>
+                                                        <?php elseif ($issue["priority"] == 2) : ?>
+                                                            <span class="text-warning">
+                                                                <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <circle cx="5" cy="5" r="5" fill="#FFCF6D" />
+                                                                </svg>
+                                                                <?= $issue["project_name"] ?>
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="text-danger">
+                                                                <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <circle cx="5" cy="5" r="5" fill="#FC2E53" />
+                                                                </svg>
+                                                                <?= $issue["project_name"] ?>
+                                                            </span>
+                                                        <?php endif ?>
+
                                                         <div class="dropdown">
                                                             <div class="btn-link" data-bs-toggle="dropdown">
                                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,19 +174,29 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <h5 class="mb-0"><a href="javascript:void(0);" class="text-black">Create
-                                                            wireframe for landing page phase 1</a></h5>
-                                                    <div class="progress default-progress my-4">
-                                                        <div class="progress-bar bg-design progress-animated" style="width: 45%; height:7px;" role="progressbar">
-                                                            <span class="sr-only">45% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row justify-content-between align-items-center kanban-user">
-                                                        <ul class="users col-6">
-                                                            <li><img src="<?= base_url('assets2/images/contacts/pic11.jpg') ?>" alt=""></li>
-                                                            <li><img src="<?= base_url('assets2/images/contacts/pic22.jpg') ?>" alt=""></li>
-                                                            <li><img src="<?= base_url('assets2/images/contacts/pic33.jpg') ?>" alt=""></li>
-                                                        </ul>
+                                                    <h5 class="mb-0"><a href="javascript:void(0);" class="text-black"> <?= $issue["title"] ?></a></h5>
+                                                    <?php if ($issue["priority"] == 1) : ?>
+                                                        <div class="section-title mt-3 mb-1"><?= $this->lang->line('priority') ? htmlspecialchars($this->lang->line('priority')) : 'Priority' ?></div>
+                                                        <span class="badge light badge-info">Low</span>
+                                                    <?php elseif ($issue["priority"] == 2) : ?>
+                                                        <div class="section-title mt-3 mb-1"><?= $this->lang->line('priority') ? htmlspecialchars($this->lang->line('priority')) : 'Priority' ?></div>
+                                                        <span class="badge light badge-warning">Medium</span>
+                                                    <?php else : ?>
+                                                        <div class="section-title mt-3 mb-1"><?= $this->lang->line('priority') ? htmlspecialchars($this->lang->line('priority')) : 'Priority' ?></div>
+                                                        <span class="badge light badge-danger">High</span>
+                                                    <?php endif ?>
+                                                    <div class="row justify-content-between align-items-center kanban-user" id="kanban_footer">
+                                                        <div class="section-title mt-3 mb-1"><?= $this->lang->line('team_members') ? htmlspecialchars($this->lang->line('team_members')) : 'Team Members' ?></div>
+                                                        <?php if ($issue["profile"]) : ?>
+                                                            <ul class="users col-6">
+                                                                <li style="cursor: pointer;"><img data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="<?= $issue["user_name"] ?>" src="<?= $issue["user"] ?>" alt="<?= $issue["user"] ?>"></li>
+                                                            </ul>
+                                                        <?php else : ?>
+                                                            <ul class="kanbanimg col-6">
+                                                                <li><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="<?= $issue["user_name"] ?>"><?= $issue["user"] ?></span></li>
+                                                            </ul>
+                                                        <?php endif ?>
+
                                                         <div class="col-6 d-flex justify-content-end">
                                                             <span class="fs-14"><i class="far fa-clock me-2"></i>Due in 4
                                                                 days</span>
@@ -163,7 +227,34 @@
     </div>
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/vendor/draggable/draggable.js') ?>"></script>
+    <script>
+        $(document).ready(function() {
+                ajaxCall();
+            $('#sprint_id, #user_id').change(function() {
+                ajaxCall();
+            });
+        });
 
+        function ajaxCall() {
+            var sprintId = $('#sprint_id').val();
+            var userId = $('#user_id').val();
+            $.ajax({
+                url: 'board/filter_board',
+                type: 'POST',
+                data: {
+                    sprint_id: sprintId,
+                    user_id: userId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log('AJAX Success:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
