@@ -266,18 +266,15 @@
 
         });
         $(document).ready(function() {
-            // Function to enable or disable based on checkbox state
             function toggleElements() {
                 var isChecked = $("#flexCheckDefault").prop("checked");
                 $(".enable-disable-select").prop("disabled", !isChecked);
             }
 
-            // Execute toggleElements() when the checkbox state changes
             $("#flexCheckDefault").change(function() {
                 toggleElements();
             });
 
-            // Execute toggleElements() after a short delay to ensure the DOM is fully loaded
             setTimeout(function() {
                 toggleElements();
             }, 100);

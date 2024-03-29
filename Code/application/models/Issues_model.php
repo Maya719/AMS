@@ -40,4 +40,17 @@ class Issues_model extends CI_Model
         else
             return false;
     }
+    public function delete_issue($id)
+    {
+        $this->db->where('issue_id', $id);
+        $this->db->delete('issues_users');
+
+        $this->db->where('issue_id', $id);
+        $this->db->delete('issues_sprint');
+        $this->db->where('id', $id);
+        if ($this->db->delete('issues'))
+            return true;
+        else
+            return false;
+    }
 }

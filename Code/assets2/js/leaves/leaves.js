@@ -150,6 +150,7 @@ function showTable(data) {
     theadRow += '<th>Ending Time</th>';
     theadRow += '<th>Paid</th>';
     theadRow += '<th>Status</th>';
+    theadRow += '<th>Document</th>';
     theadRow += '<th>Action</th>';
     theadRow += '</tr>';
     thead.html(theadRow);
@@ -167,6 +168,7 @@ function showTable(data) {
         userRow += '<td style="font-size:13px;">' + user.ending_date + ' ' + user.ending_time + '</td>';
         userRow += '<td style="font-size:13px;">' + user.paid + '</td>';
         userRow += '<td style="font-size:13px;">' + user.status + '</td>';
+        userRow += '<td style="font-size:13px;">' + user.document + '</td>';
         userRow += '<td>';
         userRow += '<div class="d-flex">';
         userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-eye text-primary"></i></a>';

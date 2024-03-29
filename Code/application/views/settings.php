@@ -682,10 +682,10 @@
     });
   </script>
   <script>
-    var time24 = true;
+    var time24 = false;
     $('.timepicker').timepicker({
       format: 'HH:mm',
-      showMeridian: false,
+      showMeridian: true,
       time24Hour: time24
     });
     $(".select7").select2();

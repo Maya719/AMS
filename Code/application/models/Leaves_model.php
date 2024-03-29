@@ -119,6 +119,10 @@ class Leaves_model extends CI_Model
             $leave['ending_date'] = date('d M, Y', strtotime($leave['ending_date']));
             $leave['starting_time'] = date('h:i A', strtotime($leave['starting_time']));
             $leave['ending_time'] = date('h:i A', strtotime($leave['ending_time']));
+            $upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
+            if ($leave['document']) {
+                $leave['document'] = '<a class="btn btn-link btn-sm" href="'.base_url($upload_path.$leave['document']).'" download><i class="fas fa-download"></i> click</a>';
+            }
             if ($leave['paid'] == 0) {
                 $leave['paid'] = ($this->lang->line('paid') ? htmlspecialchars($this->lang->line('paid')) : 'Paid Leave');
             } else {
@@ -157,7 +161,6 @@ class Leaves_model extends CI_Model
                 }
             }
         }
-
         return $results;
     }
 

@@ -78,6 +78,18 @@
                                                 <option value="task">Task</option>
                                             </select>
                                         </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label">Priority </label>
+                                            <select class="form-control" name="priority">
+                                                <option value="low">Low</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="high">High</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label">Story Points</label>
+                                            <input type="text" class="form-control" name="story_points">
+                                        </div>
                                         <div class="col-sm-12 mb-3">
                                             <label class="form-label">Title <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="title">
@@ -89,6 +101,7 @@
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Assignee</label>
                                             <select class="form-control" name="user">
+                                                <option value="">Member</option>
                                                 <?php foreach ($system_users as $system_user) {
                                                     if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                                                         <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
