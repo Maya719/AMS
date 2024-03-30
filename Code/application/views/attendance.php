@@ -55,10 +55,13 @@
                                 <div class="basic-form">
                                     <div class="row">
                                         <div class="col-lg-3">
-                                            <select name="status" class="form-control">
-                                                <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
-                                                <option value="2"><?= $this->lang->line('opened_and_resolving') ? htmlspecialchars($this->lang->line('opened_and_resolving')) : 'Opened and Resolving' ?></option>
-                                                <option value="3"><?= $this->lang->line('resolved_and_closed') ? htmlspecialchars($this->lang->line('resolved_and_closed')) : 'Resolved and Closed' ?></option>
+                                            <select class="form-select" id="employee_id">
+                                                <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
+                                                <?php foreach ($system_users as $system_user) {
+                                                    if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
+                                                        <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                                                <?php }
+                                                } ?>
                                             </select>
                                         </div>
                                         <div class="col-lg-3">

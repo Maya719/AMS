@@ -59,7 +59,7 @@ class Board extends CI_Controller
                     }
                     $item["profile"] = true;
                 } else {
-                    $file_upload_path = mb_substr(htmlspecialchars($issues_users->first_name), 0, 1, "utf-8") . '' . mb_substr(htmlspecialchars($issues_users->last_name), 0, 1, "utf-8");
+                    $file_upload_path = mb_substr(($issues_users->first_name), 0, 1, "utf-8") . '' . mb_substr(($issues_users->last_name), 0, 1, "utf-8");
                     $item["profile"] = false;
                 }
                 $item["user"] =   $file_upload_path;
@@ -174,56 +174,121 @@ class Board extends CI_Controller
     }
     public function filter_board()
     {
+        $sprint_id = $this->input->post('sprint_id');
+        $user_id = $this->input->post('user_id');
 
-        $this->db->select('s.id as sprint_id, s.title as sprint_title, i.id as issue_id, i.title as issue_title, u.id as user_id, u.first_name as user_first_name, u.last_name as user_last_name, u.profile as user_profile');
-        $this->db->from('sprints s');
-        $this->db->join('issues_sprint ispr', 's.id = ispr.sprint_id', 'left');
-        $this->db->join('issues i', 'ispr.issue_id = i.id', 'left');
-        $this->db->join('issues_users iu', 'i.id = iu.issue_id', 'left');
-        $this->db->join('users u', 'iu.user_id = u.id', 'left');
+        $this->db->select('*');
+        $this->db->from('task_status');
+        $status_query = $this->db->get();
+        $statuses = $status_query->result_array();
 
-        if ($this->input->post('sprint_id') && trim($this->input->post('sprint_id')) !== '') {
-            $sprint_id = $this->input->post('sprint_id');
-            $this->db->where('s.id', $sprint_id);
+
+        $this->db->select('*');
+        $this->db->from('sprints');
+        if ($sprint_id && trim($sprint_id) !== '') {
+            $this->db->where('id', $sprint_id);
         }
-        if ($this->input->post('user_id') && trim($this->input->post('user_id')) !== '') {
-            $user_id = $this->input->post('user_id');
-            $this->db->where('u.id', $user_id);
-        }
-        $query = $this->db->get();
-        $sprints_with_issues_users_filtered = $query->result_array();
+        $sprint_query = $this->db->get();
+        $sprint_data = $sprint_query->row_array();
 
-        foreach ($sprints_with_issues_users_filtered as &$value) {
-            $tempHTML = '';
-            if (isset($value["user_profile"]) && !empty($value["user_profile"])) {
-                if (file_exists('assets/uploads/profiles/' . $value["user_profile"])) {
-                    $file_upload_path = 'assets/uploads/profiles/' . $value["user_profile"];
-                } else {
-                    $file_upload_path = base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $value["user_profile"]);
+        $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
+        $this->db->from('issues i');
+        $this->db->join('issues_sprint is', 'is.issue_id = i.id', 'left');
+        $this->db->join('projects p', 'p.id = i.project_id', 'left');
+        $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
+        $this->db->join('issues_users iu', 'iu.issue_id = i.id', 'left');
+        $this->db->join('users u', 'u.id = iu.user_id', 'left');
+        if ($sprint_id && trim($sprint_id) !== '') {
+            $this->db->where('is.sprint_id', $sprint_id);
+        }
+        if ($user_id && trim($user_id) !== '') {
+            $this->db->where('iu.user_id', $user_id);
+        }
+        $issues_query = $this->db->get();
+        $issues_data = $issues_query->result_array();
+
+        $html = '';
+        foreach ($statuses as $status) {
+            $html .= '<div class="col-xl-3 col-md-6 px-0">
+            <div class="kanbanPreview-bx">
+                <div class="draggable-zone dropzoneContainer">
+                    <div class="sub-card align-items-center d-flex justify-content-between mb-4">
+                        <div>
+                            <h4 class="mb-0">' . $status["title"] . '</h4>
+                        </div>
+                    </div>
+                ';
+            // 
+            foreach ($issues_data as $issue) {
+                if ($status["id"] == $issue["status"]) {
+                    if (isset($issue["profile"]) && !empty($issue["profile"])) {
+                        if (file_exists('assets/uploads/profiles/' . $issue["profile"])) {
+                            $file_upload_path = base_url('assets/uploads/profiles/' . $issue["profile"]);
+                        } else {
+                            $file_upload_path = base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $issue["profile"]);
+                        }
+                        $item["profile"] = true;
+                    }
+                    $html .= '<div class="card draggable-handle draggable">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-'.$issue["priority_class"].'"> <!-- priority class -->
+                                        <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="5" cy="5" r="5" class="custom-circle-fill-'.$issue["priority_class"].'" />
+                                        </svg>
+                                        ' . ($issue['project_title']) . '
+                                    </span>
+                                    <div class="dropdown">
+                                        <div class="btn-link" data-bs-toggle="dropdown">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="3.5" cy="11.5" r="2.5" transform="rotate(-90 3.5 11.5)" fill="#717579" />
+                                                <circle cx="11.5" cy="11.5" r="2.5" transform="rotate(-90 11.5 11.5)" fill="#717579" />
+                                                <circle cx="19.5" cy="11.5" r="2.5" transform="rotate(-90 19.5 11.5)" fill="#717579" />
+                                            </svg>
+                                        </div>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="mb-0"><a href="javascript:void(0);" class="text-black">' . ($issue['title']) . '</a></h5>
+                                <div class="section-title mt-3 mb-1">' . ($this->lang->line('priority') ? ($this->lang->line('priority')) : 'Priority') . '</div>
+                                <span class="badge light badge-'.$issue["priority_class"].'">' . ($issue['priority_title']) . '</span>
+                                <div class="row justify-content-between align-items-center kanban-user" id="kanban_footer">
+                                    <div class="section-title mt-3 mb-1">' . ($this->lang->line('team_members') ? ($this->lang->line('team_members')) : 'Team Members') . '</div>';
+
+                    if (!empty($issue["first_name"]) && !empty($issue["last_name"])) {
+                        $html .= '<ul class="users col-6">
+                                <li style="cursor: pointer;"><img data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . ($issue["first_name"] . ' ' . $issue["last_name"]) . '" src="'.$file_upload_path.'" alt="'.$file_upload_path.'"></li>
+                            </ul>';
+                    } else {
+                        $html .= '<ul class="kanbanimg col-6">
+                                <li><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . ($issue["first_name"] . ' ' . $issue["last_name"]) . '">' . (substr($issue["first_name"], 0, 1) . substr($issue["last_name"], 0, 1)) . '</span></li>
+                            </ul>';
+                    }
+
+                    $html .= '<div class="col-6 d-flex justify-content-end">
+                                            <span class="fs-14"><i class="far fa-clock me-2"></i>Due in 4 days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
                 }
-                $tempHTML .= '<div class="section-title mt-3 mb-1">' . ($this->lang->line('team_members') ? htmlspecialchars($this->lang->line('team_members')) : 'Team Members') . '</div>';
-                $tempHTML .= '<ul class="users col-6">';
-                $tempHTML .= '<li style="cursor: pointer;"><img data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . $value["user_first_name"] . ' ' . $value["user_last_name"] . '" src="' . $file_upload_path . '" alt="' . $value["user_last_name"] . '"></li>';
-                $tempHTML .= '</ul>';
-            } else {
-                $file_upload_path = mb_substr(htmlspecialchars($value["user_first_name"]), 0, 1, "utf-8") . '' . mb_substr(htmlspecialchars($value["user_last_name"]), 0, 1, "utf-8");
-                $tempHTML .= '<div class="section-title mt-3 mb-1">' . ($this->lang->line('team_members') ? htmlspecialchars($this->lang->line('team_members')) : 'Team Members') . '</div>';
-                $tempHTML .= '<ul class="kanbanimg col-6">';
-                $tempHTML .= '<li><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . $value["user_first_name"] . ' ' . $value["user_last_name"] . '">' . $file_upload_path . '</span></li>';
-                $tempHTML .= '</ul>';
             }
-
-            $tempHTML .= '<div class="col-6 d-flex justify-content-end">
-                            <span class="fs-14"><i class="far fa-clock me-2"></i>Due in 4
-                                days
-                            </span>
-                        </div>';
-            $value["user_profile"] = $tempHTML;
+            $html .= '</div>
+                </div>
+            </div>';
         }
 
-        echo json_encode(array(
-            'status' => true,
-            'issues' => $sprints_with_issues_users_filtered
-        ));
+
+
+        $result = array(
+            'sprint' => $sprint_data,
+            'issues' => $issues_data,
+            'html' => $html 
+        );
+
+        echo json_encode($result);
     }
 }
