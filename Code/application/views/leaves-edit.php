@@ -5,6 +5,11 @@
     .hide {
         display: none;
     }
+
+    .table th,
+    .table td {
+        padding: 5px;
+    }
 </style>
 </head>
 
@@ -192,41 +197,21 @@
                                     <div class="card-header">
                                         <h4 class="card-title">Leave balance</h4>
                                     </div>
-                                    <div class="card-body py-2" style="height: 400px;">
-                                        <div id="multi-line-chart" class="ct-chart ct-golden-section chartlist-chart"></div>
-                                        <div class="d-flex ms-5">
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="<?= theme_color() ?>" />
-                                                    </svg>
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Total</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#09BD3C" />
-                                                    </svg>
-
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Paid</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex me-5">
-                                                <div class="mt-2">
-                                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="6.5" cy="6.5" r="6.5" fill="#FFBF00" />
-                                                    </svg>
-
-                                                </div>
-                                                <div class="ms-3">
-                                                    <p class="mt-2">Unpaid</p>
-                                                </div>
-                                            </div>
+                                    <div class="card-body" style="height: 250px;">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm mb-0" id="typesTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Leave Type</th>
+                                                        <th>Total</th>
+                                                        <th>Consume</th>
+                                                        <th>Paid</th>
+                                                        <th>Unpaid</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="table_body">
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -250,7 +235,6 @@
                                                         </a>
                                                     </li>
                                                 <?php endforeach ?>
-
                                             </ul>
                                         </div>
                                     </div>
@@ -293,29 +277,18 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    new Chartist.Bar('#multi-line-chart', {
-                        labels: response.leave_types,
-                        series: [
-                            response.total_leaves,
-                            response.paidArray,
-                            response.unpaidArray
-                        ]
-                    }, {
-                        seriesBarDistance: 18,
-                        axisX: {
-                            offset: 18
-                        },
-                        axisY: {
-                            offset: 80,
-                            labelInterpolationFnc: function(value) {
-                                return value
-                            },
-                            scaleMinSpace: 15
-                        },
-                        plugins: [
-                            Chartist.plugins.tooltip()
-                        ]
+                    var html = '';
+                    response.leave_types.forEach((value, index) => {
+                        html += '<tr>';
+                        html += '<td>'+ value +'</td>';
+                        html += '<td>'+ response.total_leaves[index] +'</td>';
+                        html += '<td>'+ response.consumed_leaves[index] +'</td>';
+                        html += '<td>'+ response.paidArray[index] +'</td>';
+                        html += '<td>'+ response.unpaidArray[index] +'</td>';
+                        html += '</tr>';
                     });
+                    console.log(html);
+                    $("#table_body").html(html);
 
                 },
                 complete: function() {
