@@ -1816,7 +1816,8 @@ class Projects extends CI_Controller
 
 			$this->form_validation->set_rules('title', 'Project Title', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('client', 'Client', 'trim|strip_tags|xss_clean');
-
+			$this->form_validation->set_rules('board', 'Board', 'trim|strip_tags|xss_clean');
+			
 			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
 
 			if ($this->form_validation->run() == TRUE) {
@@ -1829,6 +1830,7 @@ class Projects extends CI_Controller
 					'created_by' => $this->session->userdata('user_id'),
 					'title' => $this->input->post('title'),
 					'description' => $this->input->post('description'),
+					'dash_type' => $this->input->post('board'),
 					'status' => 1,
 				);
 
