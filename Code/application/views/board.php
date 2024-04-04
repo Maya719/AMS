@@ -33,14 +33,16 @@
     .section-title+.section-lead {
         margin-top: -20px;
     }
-    .custom-circle-fill-info{
+
+    .custom-circle-fill-info {
         fill: #D653C1;
     }
 
-    .custom-circle-fill-danger{
+    .custom-circle-fill-danger {
         fill: #FC2E53;
     }
-    .custom-circle-fill-warning{
+
+    .custom-circle-fill-warning {
         fill: #FFCF6D;
     }
 </style>
@@ -52,6 +54,12 @@
         Preloader start
     ********************-->
     <div id="preloader">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div id="loader">
         <div class="lds-ripple">
             <div></div>
             <div></div>
@@ -74,14 +82,28 @@
                             <div class="card-body">
                                 <div class="basic-form">
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-3">
+                                            <select class="form-select" id="board_type">
+                                                <option value="1"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></option>
+                                                <option value="0"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select class="form-select" id="project_id">
+                                                <option value="" selected>Project</option>
+                                                <?php foreach ($projects as $project) : ?>
+                                                    <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3" id="sprintCol">
                                             <select class="form-select" id="sprint_id">
                                                 <?php foreach ($sprints as $sprint) : ?>
                                                     <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-3">
                                             <select class="form-select" id="user_id">
                                                 <option value="" selected>Member</option>
                                                 <?php foreach ($system_users as $system_user) : ?>
@@ -96,13 +118,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-12 px-3">
+                    <div class="col-xl-12 px-3" id="sprint_detail">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                     <div>
                                         <h3 id="sprint_name"></h3>
-                                        <!-- <h3>Fillow Company Profile Website Phase 1 <?php var_dump($issues) ?></h3> -->
                                         <span id="from-to"></span>
                                     </div>
                                     <div class="mt-xl-0 mt-3">
@@ -130,7 +151,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row kanban-bx px-3"  id="html-here">
+                <div class="row kanban-bx px-3" id="html">
                 </div>
             </div>
         </div>
@@ -150,35 +171,142 @@
     <script src="<?= base_url('assets2/vendor/draggable/draggable.js') ?>"></script>
     <script>
         $(document).ready(function() {
+
             ajaxCall();
-            $('#sprint_id, #user_id').change(function() {
+            $('#sprint_id, #user_id, #project_id').change(function() {
                 ajaxCall();
             });
-        });
 
-        function ajaxCall() {
-            var sprintId = $('#sprint_id').val();
-            var userId = $('#user_id').val();
-            $.ajax({
-                url: 'board/filter_board',
-                type: 'POST',
-                data: {
-                    sprint_id: sprintId,
-                    user_id: userId
-                },
-                dataType: 'json',
-                success: function(response) {
-                    console.log('AJAX Success:', response);
-                    $('#html-here').html(response.html);
-                    $('#sprint_name').html(response.sprint.title);
-                    var from_to = response.sprint.starting_date + ' - ' + response.sprint.starting_date
-                    $('#from-to').html(from_to);
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
+            loading = true;
+
+            function ajaxCall() {
+                const sprintId = $('#sprint_id').val();
+                const userId = $('#user_id').val();
+                const projectId = $('#project_id').val();
+                const board = $('#board_type').val();
+                $.ajax({
+                    url: 'board/filter_board',
+                    type: 'POST',
+                    data: {
+                        sprint_id: sprintId,
+                        user_id: userId,
+                        project_id: projectId,
+                        board: board,
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        showLoader();
+                    },
+                    success: function(response) {
+                        console.log('AJAX Success:', response);
+                        $('#html').html(response.html);
+                        initSorting();
+                        initPopovers();
+                        $('#sprint_name').html(response.sprint.title);
+                        const from_to = response.sprint.starting_date + ' - ' + response.sprint.starting_date;
+                        $('#from-to').html(from_to);
+                    },
+                    complete: function() {
+                        hideLoader();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                    }
+                });
+            }
+
+            function initSorting() {
+                const zones = document.querySelectorAll(".draggable-zone");
+                if (zones.length === 0) return;
+
+                new Sortable.default(zones, {
+                    draggable: ".draggable",
+                    handle: ".draggable-handle",
+                    mirror: {
+                        appendTo: "body",
+                        constrainDimensions: true
+                    },
+                }).on("drag:stop", (event) => {
+                    setTimeout(() => {
+                        jQuery(".dropzoneContainer").each(function() {
+                            const count = jQuery(this).find(".draggable-handle").length;
+                            jQuery(this).find(".totalCount").html(count);
+                        });
+                    }, 200);
+
+                    console.log("Sortable event data:", event);
+
+                    const draggedCard = event.data.originalSource;
+
+                    if (!draggedCard) {
+                        console.error("Dragged card is undefined.");
+                        return;
+                    }
+
+                    // Get the closest drop zone (assuming .dropzoneContainer is the drop zone class)
+                    const dropZone = draggedCard.closest(".dropzoneContainer");
+                    if (!dropZone) {
+                        console.error("Drop zone not found.");
+                        return;
+                    }
+
+                    const statusId = dropZone.dataset.statusId;
+                    const issueId = draggedCard.dataset.issueId;
+
+                    if (!statusId || !issueId) {
+                        console.error("Missing status ID or issue ID on dragged card.");
+                        return;
+                    }
+
+                    console.log("Drop Zone:", dropZone);
+                    console.log("Dropped at Status ID:", statusId);
+                    console.log("Issue ID:", issueId);
+                });
+            }
+
+            function initPopovers() {
+                $('[data-bs-toggle="popover"]').popover({
+                    trigger: 'hover focus',
+                    placement: 'auto'
+                });
+            }
+
+            $('#board_type').change(function() {
+                var boardType = $(this).val();
+                if (boardType == '0') {
+                    $('#sprintCol').hide();
+                    $('#sprint_detail').hide();
+                } else {
+                    $('#sprintCol').show();
+                    $('#sprint_detail').show();
                 }
+                $.ajax({
+                    url: 'board/get_project_by_board_type',
+                    type: 'POST',
+                    data: {
+                        boardType: boardType,
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        showLoader();
+                    },
+                    success: function(response) {
+                        $('#project_id').empty();
+                        $('#project_id').append('<option value="">Project</option>');
+                        $.each(response, function(index, project) {
+                            $('#project_id').append('<option value="' + project.id + '">' + project.title + '</option>');
+                        });
+                        ajaxCall();
+                    },
+                    complete: function() {
+                        hideLoader();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
             });
-        }
+        });
     </script>
 </body>
 

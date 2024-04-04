@@ -47,7 +47,6 @@ class Leaves extends CI_Controller
 			if (!empty($id) && is_numeric($id) && $this->leaves_model->delete($id)) {
 				$this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
 				$this->session->set_flashdata('message_type', 'success');
-
 				$this->data['error'] = false;
 				$this->data['message'] = $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.";
 				echo json_encode($this->data);

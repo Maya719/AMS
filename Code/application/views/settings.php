@@ -473,7 +473,9 @@
   </script>
   <script>
     /*
+     *
      * Device Setting
+     *
      */
     $("#add-device-modal").on('click', '.btn-create', function(e) {
       var modal = $('#add-device-modal');
@@ -873,7 +875,7 @@
             }
             var newArray = [];
             if (result['data'].change_permissions_of != '' && result['data'].change_permissions_of != null) {
-              var inputString = result['data'].change_permissions_of.replace(/[\[\]"]+/g, ''); // Remove brackets and double quotes
+              var inputString = result['data'].change_permissions_of.replace(/[\[\]"]+/g, ''); 
               newArray = inputString.split(',');
             }
 
@@ -959,8 +961,8 @@
       var targetBox = ev.target.closest(".box");
 
       if (targetBox) {
-        var match = targetBox.id.match(/\d+/); // Extract numeric part from id
-        var newStep = match ? parseInt(match[0]) : 0; // Parse as integer or set to 0 if not found
+        var match = targetBox.id.match(/\d+/); 
+        var newStep = match ? parseInt(match[0]) : 0; 
         draggedItem.setAttribute("data-step", newStep);
         targetBox.appendChild(draggedItem.cloneNode(true));
         draggedItem.parentNode.removeChild(draggedItem);

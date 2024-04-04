@@ -58,7 +58,7 @@ class Issues extends CI_Controller
 
 
             $this->db->select('*');
-            $this->db->from('issues');
+            $this->db->from('tasks');
             $this->db->where('id', $id);
             $query2 = $this->db->get();
             $this->data['issue'] = $query2->row();
@@ -68,6 +68,12 @@ class Issues extends CI_Controller
             $this->db->where('issue_id', $id);
             $query2 = $this->db->get();
             $this->data['issues_sprint'] = $query2->row();
+
+            $this->db->select('*');
+            $this->db->from('issues_users');
+            $this->db->where('issue_id', $id);
+            $query2 = $this->db->get();
+            $this->data['issues_users'] = $query2->row();
 
             $this->db->select('*');
             $this->db->from('sprints');
@@ -106,6 +112,7 @@ class Issues extends CI_Controller
                     'issue_type' => $this->input->post('issue_type'),
                     'story_points' => $this->input->post('story_points'),
                     'priority' => $this->input->post('priority'),
+                    'created_by' => $this->session->userdata('user_id'),
                     'description' => $this->input->post('description') ? $this->input->post('description') : '',
                 ];
                 $id = $this->issues_model->create_issue($data);
@@ -250,7 +257,7 @@ class Issues extends CI_Controller
         $data = ['status' => $status];
 
         $this->db->where('id', $issue);
-        $this->db->update('issues', $data);
+        $this->db->update('tasks', $data);
 
         $response = [
             'success' => true,
@@ -265,6 +272,8 @@ class Issues extends CI_Controller
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
             }
             if (!empty($id) && is_numeric($id) && $this->issues_model->delete_issue($id)) {
+                $this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
+				$this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;
                 $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Started successfully.";
                 echo json_encode($this->data);
@@ -292,5 +301,19 @@ class Issues extends CI_Controller
             'success' => true,
         ];
         echo json_encode($response);
+    }
+    public function get_issue_by_id($id = '')
+    {
+        if ($this->ion_auth->logged_in()) {
+            if (empty($id)) {
+                $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
+            }
+            $data = $this->issues_model->get_issue_by_id($id);
+            echo json_encode($data);
+        } else {
+            $this->data['error'] = true;
+            $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
+            echo json_encode($this->data);
+        }
     }
 }

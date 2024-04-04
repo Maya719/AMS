@@ -680,6 +680,7 @@
           </ul>
         </li>
       <?php } ?>
+
       <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-list"></i>
@@ -710,14 +711,15 @@
       <?php
       }
       ?>
-      <!-- <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
+      
+      <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-bezier-curve"></i>
             <span class="nav-text"><?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?></span>
           </a>
           <ul aria-expanded="false">
             <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('project_view'))) { ?>
-              <li><a href="<?= base_url('projects/list') ?>"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></a></li>
+              <li><a href="<?= base_url('projects') ?>"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></a></li>
             <?php } ?>
 
             <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
@@ -732,7 +734,7 @@
         </li>
       <?php
       }
-      ?> -->
+      ?>
 
       <?php if (is_saas_admin()) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
@@ -772,6 +774,12 @@
         <li><a href="<?= base_url('users') ?>" aria-expanded="false">
             <i class="fas fa-user"></i>
             <span class="nav-text">Employees</span>
+          </a>
+        </li>
+
+        <li><a href="<?= base_url('users/client') ?>" aria-expanded="false">
+            <i class="fas fa-handshake"></i>
+            <span class="nav-text">Clients</span>
           </a>
         </li>
 

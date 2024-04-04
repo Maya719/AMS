@@ -34,11 +34,10 @@ class Backlog extends CI_Controller
 
             $this->data["sprints"] = $sprints;
             $this->db->select('*');
-            $this->db->from('issues');
+            $this->db->from('tasks');
             $this->db->where_in('saas_id', $this->session->userdata());
             $query = $this->db->get();
             $issues = $query->result_array();
-
             foreach ($issues as &$issue) {
                 $id = $issue["id"];
                 $this->db->select('*');
@@ -65,8 +64,18 @@ class Backlog extends CI_Controller
                     $issue["user"] = $row5->user_id;
                 }
             }
-
-            $this->data['issues'] = $issues;
+            $tasks = [];
+            foreach ($issues as $issue) {
+                $project_id = $issue["project_id"];
+                $this->db->select('*');
+                $this->db->where('id', $project_id);
+                $query = $this->db->get('projects');
+                $row = $query->row();
+                if ($row->dash_type == 1) {
+                    $tasks[] = $issue;
+                }
+            }
+            $this->data['issues'] = $tasks;
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
             } elseif (permissions('project_view_selected')) {
@@ -84,12 +93,12 @@ class Backlog extends CI_Controller
     }
     public function start_sprint($id = '')
     {
-        if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('plan_holiday_view'))) {
+        if ($this->ion_auth->logged_in()) {
             if (empty($id)) {
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
             }
             $data = [
-                'status'=>1
+                'status' => 1
             ];
             if (!empty($id) && is_numeric($id) && $this->board_model->status_change_sprint($id, $data)) {
                 $this->data['error'] = false;
@@ -113,7 +122,7 @@ class Backlog extends CI_Controller
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
             }
             $data = [
-                'status'=>2
+                'status' => 2
             ];
             if (!empty($id) && is_numeric($id) && $this->board_model->status_change_sprint($id, $data)) {
                 $this->data['error'] = false;

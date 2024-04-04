@@ -109,8 +109,8 @@ class Attendance_model extends CI_Model
                 $userjoin = new DateTime($user->join_date);
                 if ($userjoin < $toDate || $userjoin < $fromDate) {
                     $userId = $user->employee_id;
-                    $userLink = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $userId . '</a>';
-                    $userName = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '">' . $user->first_name . ' ' . $user->last_name . '</a>';
+                    $userLink = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '" target="_blank">' . $userId . '</a>';
+                    $userName = '<a href="' . base_url('attendance/user_attendance/' . $userId) . '" target="_blank">' . $user->first_name . ' ' . $user->last_name . '</a>';
                     $formattedData[$userId] = [
                         'user_id' => $userId,
                         'user' => $userLink,

@@ -65,6 +65,7 @@
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Project <span class="text-danger">*</span></label>
                                             <select class="form-control wide" name="project_id">
+                                                <option value="">Project</option>
                                                 <?php foreach ($projects as $project) : ?>
                                                     <option value="<?= $project["id"] ?>" <?= ($issue->project_id === $project["id"]) ? 'selected' : ''; ?>><?= $project["title"] ?></option>
                                                 <?php endforeach ?>
@@ -89,9 +90,10 @@
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Assignee</label>
                                             <select class="form-control wide" name="user">
+                                                <option value="">Assignee</option>
                                                 <?php foreach ($system_users as $system_user) {
                                                     if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
-                                                        <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                                                        <option value="<?= htmlspecialchars($system_user->id) ?>" <?= ($system_user->id == $issues_users->user_id) ? 'selected':''?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                                 <?php }
                                                 } ?>
                                             </select>
@@ -101,7 +103,7 @@
                                             <select class="form-control" name="sprint">
                                                 <option value="">Sprint</option>
                                                 <?php foreach ($sprints as $sprint) : ?>
-                                                    <option value="<?= $sprint["id"] ?>" <?= ($sprint["id"] == $issues_sprint->id) ? 'selected':''?>><?= $sprint["title"] ?></option>
+                                                    <option value="<?= $sprint["id"] ?>" <?= ($sprint["id"] == $issues_sprint->sprint_id) ? 'selected':''?>><?= $sprint["title"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
@@ -156,11 +158,11 @@
                 dataType: "json",
                 success: function(result) {
                     console.log(result);
-                    // if (result['error'] == false) {
-                    //     location.reload();
-                    // } else {
-                    //     $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
-                    // }
+                    if (result['error'] == false) {
+                        location.reload();
+                    } else {
+                        $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+                    }
                 },
             });
 

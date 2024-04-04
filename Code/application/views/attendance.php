@@ -274,10 +274,10 @@
             var count = 1;
             data.data.forEach(user => {
                 var userRow = '<tr>';
-                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
+                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '" target="_blank">' + count + '</a></td>';
                 userRow += '<td style="font-size:10px;">' + user.user + '</td>';
                 userRow += '<td style="font-size:10px;">' + user.name + '</td>';
-                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + user.summery + '</a></td>';
+                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '" target="_blank">' + user.summery + '</a></td>';
 
                 uniqueDates.forEach(date => {
                     if (user.dates[date]) {
