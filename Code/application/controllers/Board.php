@@ -185,6 +185,7 @@ class Board extends CI_Controller
             if ($project_id && trim($project_id) !== '') {
                 $this->db->where('p.id', $project_id);
             }
+            $this->db->order_by('created', 'desc');
             $issues_query = $this->db->get();
             $issues_data = $issues_query->result_array();
         } else {
@@ -202,11 +203,14 @@ class Board extends CI_Controller
                 $this->db->where('p.id', $project_id);
             }
 
+            $this->db->order_by('created', 'desc');
             $issues_query = $this->db->get();
             $issues_data = $issues_query->result_array();
         }
 
+        $total = 0;
         $html = '';
+        $completed = 0;
         foreach ($statuses as $status) {
             $html .= '<div class="col-xl-3 col-md-6 px-0">
             <div class="kanbanPreview-bx">
@@ -217,19 +221,36 @@ class Board extends CI_Controller
                         </div>
                     </div>
                 ';
-            foreach ($issues_data as $issue) {                     // issue cards
+            foreach ($issues_data as $issue) {                  // issue cards
                 $html .= $this->html_generating($status, $issue);
+                if ($status["id"] == $issue["status"]) {
+                    $total++;
+                    if ($status["id"] == 4) {
+                        $completed++;
+                    }
+                }
             }
             $html .= '</div>
                 </div>
             </div>';
         }
 
+        if ($completed != 0) {
+            $percent =  $completed * 100 / $total;
+            $rounded_percent = (int) round($percent);
+
+        } else {
+            $rounded_percent = 0;
+        }
         $result = array(
             'sprint' => $sprint_data,
             'issues' => $issues_data,
             'html' => $html,
+            'total' => $total,
+            'completed' => $completed,
+            'percent' => 'Total Progress '. $rounded_percent .'%',
         );
+
         echo json_encode($result);
     }
     public function html_generating($status, $issue)
@@ -266,12 +287,12 @@ class Board extends CI_Controller
                                     </svg>
                                 </div>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="javascript:void(0)">Delete</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                    <a class="dropdown-item delete_issue" data-issue-id="' . $issue["id"] . '" href="javascript:void(0)">Delete</a>
+                                    <a class="dropdown-item" href="' . base_url('issues/edit/' . $issue["id"]) . '">Edit</a>
                                 </div>
                             </div>
                         </div>
-                        <h5 class="mb-0"><a href="javascript:void(0);" class="text-black">' . ($issue['title']) . '</a></h5>
+                        <h5 class="mb-0"><a href="javascript:void(0);" class="text-black btn-detail-model" data-id="' . $issue["id"] . '" data-bs-toggle="modal" data-bs-target="#issue-detail-modal">' . ($issue['title']) . '</a></h5>
                         <div class="section-title mt-3 mb-1">' . ($this->lang->line('priority') ? ($this->lang->line('priority')) : 'Priority') . '</div>
                         <span class="badge light badge-' . $issue["priority_class"] . '">' . ($issue['priority_title']) . '</span>
                         <div class="row justify-content-between align-items-center kanban-user">

@@ -44,11 +44,17 @@ class Backlog extends CI_Controller
                 $this->db->where('issue_id', $id);
                 $query5 = $this->db->get('issues_users');
                 $row5 = $query5->row();
-                $issue["issue_user"] = '10';
+
                 $this->db->select('*');
                 $this->db->where('issue_id', $id);
                 $query = $this->db->get('issues_sprint');
                 $row = $query->row();
+                
+                $this->db->select('*');
+                $this->db->where('id', $issue["project_id"]);
+                $proQuery = $this->db->get('projects');
+                $project = $proQuery->row();
+                $issue["project_title"] = $project->title;
                 if ($row) {
                     $issue["sprint_id"] = $row->sprint_id;
                     $this->db->select('*');

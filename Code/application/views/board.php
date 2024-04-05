@@ -76,6 +76,11 @@
         <div class="content-body default-height">
             <!-- row -->
             <div class="container-fluid">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-xl-2 col-sm-3 mt-2">
+                        <a href="<?= base_url('issues') ?>" class="btn btn-block btn-primary">Add Issue</a>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
                         <div class="card">
@@ -128,7 +133,7 @@
                                     </div>
                                     <div class="mt-xl-0 mt-3">
                                         <div class="d-flex align-items-center mb-xl-4 mb-0 pb-3 justify-content-end flex-wrap">
-                                            <h6 class="me-3 mb-0">Total Progress 60%</h6>
+                                            <h6 class="me-3 mb-0" id="percent"></h6>
                                             <div>
                                                 <div class="dropdown">
                                                     <div class="btn-link" data-bs-toggle="dropdown">
@@ -139,8 +144,9 @@
                                                         </svg>
                                                     </div>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="javascript:void(0)">Delete</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                        <a class="dropdown-item complete_sprint" href="javascript:void(0)">Complete Sprint</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)">Edit Sprint</a>
+                                                        <a class="dropdown-item delete_sprint" href="javascript:void(0)">Delete Sprint</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -162,7 +168,82 @@
         <!-- ************************************* *****
     Model forms
   ****************************************************-->
+        <div class="modal fade" id="issue-detail-modal">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Issue Detail</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-title">
+                            <h4 class="text-warning" id="issue_title"></h4>
+                        </div>
+                        <p id="issue_description"></p>
+                        <!-- Nav tabs -->
+                        <div class="default-tab">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#home"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
+                                </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#contact"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#profile"><i class="fa-solid fa-anchor me-2"></i> Additional Information</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel">
+                                    <div class="pt-2">
+                                        <h4 id="sprint_title"></h4>
+                                        <p id="sprint_goal"></p>
+                                        <div class="cm-content-body publish-content form excerpt" id="sprint_dates">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="profile">
+                                    <div class="cm-content-body publish-content form excerpt">
+                                        <ul class="list-style-1 block">
+                                            <li>
+                                                <div>
+                                                    <label class="form-label mb-0 me-2">
+                                                        <i class="fa-solid fa-key"></i>
+                                                        Issue Type:
+                                                    </label>
+                                                    <span class="font-w500" id="issue_type"></span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div>
+                                                    <label class="form-label mb-0 me-2">
+                                                        <i class="fa-solid fa-key"></i>
+                                                        Priority:
+                                                    </label>
+                                                    <span class="font-w500" id="issue_priority"></span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="contact">
+                                    <div class="pt-4">
+                                        <h4 id="project_title"></h4>
+                                        <p class="" id="project_description"></p>
+                                        <div class="cm-content-body publish-content form excerpt" id="project_dates">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--**********************************
 	Content body end
 ***********************************-->
@@ -203,6 +284,9 @@
                         initSorting();
                         initPopovers();
                         $('#sprint_name').html(response.sprint.title);
+                        $('.delete_sprint').attr('data-id', sprintId);
+                        $('.complete_sprint').attr('data-id', sprintId);
+                        $('#percent').html(response.percent)
                         const from_to = response.sprint.starting_date + ' - ' + response.sprint.starting_date;
                         $('#from-to').html(from_to);
                     },
@@ -305,6 +389,213 @@
                         console.error(error);
                     }
                 });
+            });
+        });
+        $(document).on('click', '.delete_issue', function(e) {
+            e.preventDefault();
+            var id = $(this).data("issue-id");
+            console.log(id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'issues/delete_issue/' + id,
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload();
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+        $(document).on('click', '.delete_sprint', function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            console.log(id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'backlog/delete_sprint/' + id,
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload();
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.complete_sprint', function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            console.log(id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to move tasks to the backlog before completing the sprint?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                var moveToBacklog = false;
+                if (result.isConfirmed) {
+                    moveToBacklog = true;
+                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to complete the sprint!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: base_url + 'backlog/complete_sprint/' + id,
+                            data: {
+                                id: id,
+                                moveToBacklog: moveToBacklog
+                            },
+                            dataType: "json",
+                            success: function(result) {
+                                if (result['error'] == false) {
+                                    location.reload();
+                                } else {
+                                    iziToast.error({
+                                        title: result['message'],
+                                        message: "",
+                                        position: 'topRight'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        $(document).on('click', '.btn-detail-model', function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "POST",
+                url: base_url + 'issues/get_issue_by_id/' + id,
+                data: "id=" + id,
+                dataType: "json",
+                success: function(result) {
+                    $("#issue_title").html(result.issue.title);
+                    $("#issue_description").html(result.issue.description);
+                    if (result.issue.issue_type == 0) {
+                        $("#issue_type").html('Task');
+                    } else if (result.issue.issue_type == 1) {
+                        $("#issue_type").html('Epic');
+                    } else {
+                        $("#issue_type").html('Story');
+                    }
+                    if (result.issue.priority == 1) {
+                        $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angle-up text-' + result.priority.class + '"></i>');
+                    } else if (result.issue.priority != 1) {
+                        $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angles-up text-' + result.priority.class + '"></i>');
+
+                    }
+                    if (result.sprint && result.sprint.title) {
+                        $("#sprint_title").html(result.sprint.title);
+                    } else {
+                        $("#sprint_title").html('Backlog');
+                    }
+                    if (result.sprint && result.sprint.goal !== null) {
+                        $("#sprint_goal").html(result.sprint.goal);
+                    } else {
+                        $("#sprint_goal").html('');
+                    }
+                    var html = '';
+                    if (result.sprint && result.sprint.starting_date !== null) {
+                        $("#sprint_goal").html(result.sprint.goal);
+                        html += '<ul class="list-style-1 block">';
+                        html += '<li class="border-bottom-0">';
+                        html += '<div>';
+                        html += '<label class="form-label mb-0 me-2">';
+                        html += '<i class="fa-solid fa-calendar-days"></i> ';
+                        html += 'Starting Datetime :';
+                        html += '</label>';
+                        html += '<span class="font-w500" id="starting_datetime">' + result.sprint.starting_date + ' ' + result.sprint.starting_time + '</span>';
+                        html += '</div>';
+                        html += '</li>';
+                        html += '<li class="border-bottom-0">';
+                        html += '<div>';
+                        html += '<label class="form-label mb-0 me-2">';
+                        html += '<i class="fa-solid fa-calendar-days"></i> ';
+                        html += 'Ending Datetime :';
+                        html += '</label>';
+                        html += '<span class="font-w500" id="ending_datetime">' + result.sprint.ending_date + ' ' + result.sprint.ending_time + '</span>';
+                        html += '</div>';
+                        html += '</li>';
+                        html += '</ul>';
+                    } else {
+                        $("#sprint_goal").html('');
+                        html += '';
+                    }
+                    $('#sprint_dates').html(html);
+                    if (result.project && result.project.title !== null) {
+                        $("#project_title").html(result.project.title);
+                        $("#project_description").html(result.project.description);
+                        var html2 = '<ul class="list-style-1 block">';
+                        html2 += '<li class="border-bottom-0">';
+                        html2 += '<div>';
+                        html2 += '<label class="form-label mb-0 me-2">';
+                        html2 += '<i class="fa-solid fa-calendar-days"></i> ';
+                        html2 += 'Created at:';
+                        html2 += '</label>';
+                        html2 += '<span class="font-w500">' + result.project.created + '</span>';
+                        html2 += '</div>';
+                        html2 += '</li>';
+                        html2 += '</ul>';
+                        $("#project_dates").html(html2);
+                    }
+                    console.log(result);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
             });
         });
     </script>

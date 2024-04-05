@@ -712,8 +712,8 @@
       }
       ?>
       
-      <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
-        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+      <?php if ($this->ion_auth->is_admin() || permissions('project_view_all')) { ?>
+        <!-- <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-bezier-curve"></i>
             <span class="nav-text"><?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?></span>
           </a>
@@ -731,7 +731,7 @@
             <?php } ?>
 
           </ul>
-        </li>
+        </li> -->
       <?php
       }
       ?>

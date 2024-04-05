@@ -91,30 +91,30 @@
                                         <div class="msg-bx d-flex justify-content-between align-items-center drag-item" data-issue-id="<?= $issue["id"] ?>">
                                             <div class="ms-3 w-100">
                                                 <a href="javascript:void(0);" class="d-flex btn-detail-model" data-id="<?= $issue["id"] ?>" data-bs-toggle="modal" data-bs-target="#issue-detail-modal">
-                                                    <?php if ($issue["issue_type"] == 'task') : ?>
+                                                    <?php if ($issue["issue_type"] == '0') : ?>
                                                         <svg style="margin-top: 2px;" width="20" height="20" viewBox="0 0 24 24" fill="#0055CC" xmlns="http://www.w3.org/2000/svg">
                                                             <rect width="24" height="24" fill="white" />
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.25007 2.38782C8.54878 2.0992 10.1243 2 12 2C13.8757 2 15.4512 2.0992 16.7499 2.38782C18.06 2.67897 19.1488 3.176 19.9864 4.01358C20.824 4.85116 21.321 5.94002 21.6122 7.25007C21.9008 8.54878 22 10.1243 22 12C22 13.8757 21.9008 15.4512 21.6122 16.7499C21.321 18.06 20.824 19.1488 19.9864 19.9864C19.1488 20.824 18.06 21.321 16.7499 21.6122C15.4512 21.9008 13.8757 22 12 22C10.1243 22 8.54878 21.9008 7.25007 21.6122C5.94002 21.321 4.85116 20.824 4.01358 19.9864C3.176 19.1488 2.67897 18.06 2.38782 16.7499C2.0992 15.4512 2 13.8757 2 12C2 10.1243 2.0992 8.54878 2.38782 7.25007C2.67897 5.94002 3.176 4.85116 4.01358 4.01358C4.85116 3.176 5.94002 2.67897 7.25007 2.38782Z" fill="#0055CC" />
                                                         </svg>
-                                                        <span class="ms-3" style="margin-top: 2px;">TASK-0<?= $issue["id"] ?></span>
-                                                    <?php elseif ($issue["issue_type"] == 'epic') : ?>
+                                                        <span class="ms-3" style="margin-top: 2px;"><?= getTitleAcronym($issue["project_title"]) ?>-0<?= $issue["id"] ?></span>
+                                                    <?php elseif ($issue["issue_type"] == '1') : ?>
                                                         <svg style="margin-top: 2px;" width="20" height="20" viewBox="0 0 24 24" fill="#9F8FEF" xmlns="http://www.w3.org/2000/svg">
                                                             <rect width="24" height="24" fill="white" />
                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.25007 2.38782C8.54878 2.0992 10.1243 2 12 2C13.8757 2 15.4512 2.0992 16.7499 2.38782C18.06 2.67897 19.1488 3.176 19.9864 4.01358C20.824 4.85116 21.321 5.94002 21.6122 7.25007C21.9008 8.54878 22 10.1243 22 12C22 13.8757 21.9008 15.4512 21.6122 16.7499C21.321 18.06 20.824 19.1488 19.9864 19.9864C19.1488 20.824 18.06 21.321 16.7499 21.6122C15.4512 21.9008 13.8757 22 12 22C10.1243 22 8.54878 21.9008 7.25007 21.6122C5.94002 21.321 4.85116 20.824 4.01358 19.9864C3.176 19.1488 2.67897 18.06 2.38782 16.7499C2.0992 15.4512 2 13.8757 2 12C2 10.1243 2.0992 8.54878 2.38782 7.25007C2.67897 5.94002 3.176 4.85116 4.01358 4.01358C4.85116 3.176 5.94002 2.67897 7.25007 2.38782Z" fill="#9F8FEF" />
                                                         </svg>
-                                                        <span class="ms-3" style="margin-top: 2px;">EPIC-0<?= $issue["id"] ?></span>
+                                                        <span class="ms-3" style="margin-top: 2px;"><?= getTitleAcronym($issue["project_title"]) ?>-0<?= $issue["id"] ?></span>
                                                     <?php else : ?>
                                                         <svg style="margin-top: 2px;" width="20" height="20" viewBox="0 0 24 24" fill="#216E4E" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M7.7649 9.89758C7.7503 9.64424 7.75 9.30433 7.75 8.8076V2.06874C8.9058 2 10.2996 2 12 2C13.7004 2 15.0942 2 16.25 2.06874V8.8076C16.25 9.30433 16.2497 9.64424 16.2351 9.89758C16.22 10.1601 16.1923 10.2408 16.1854 10.2563C16.0383 10.5876 15.6753 10.7662 15.323 10.6807C15.3066 10.6767 15.2257 10.6493 15.0085 10.5012C14.7989 10.3582 14.5294 10.151 14.1358 9.84799L14.0688 9.79636C13.6986 9.51094 13.4101 9.28851 13.0958 9.15196C12.3968 8.84828 11.6032 8.84828 10.9042 9.15196C10.5899 9.28851 10.3014 9.51094 9.9312 9.79636L9.86419 9.84799C9.47062 10.151 9.20112 10.3582 8.99148 10.5012C8.77428 10.6493 8.69342 10.6767 8.67695 10.6807C8.32471 10.7662 7.96171 10.5876 7.81457 10.2563C7.80769 10.2408 7.78003 10.1601 7.7649 9.89758Z" fill="#216E4E" />
                                                             <path d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.1485 2.78043 5.02727 2.4159 6.25 2.22164L6.25 8.831C6.25 9.29858 6.24999 9.6821 6.26739 9.98389C6.28454 10.2816 6.32145 10.5899 6.44371 10.8652C6.88513 11.859 7.97413 12.3949 9.03087 12.1383C9.32356 12.0673 9.59039 11.9084 9.83672 11.7404C10.0864 11.57 10.3903 11.336 10.7608 11.0508L10.7793 11.0365C11.2487 10.6751 11.3808 10.5804 11.5019 10.5277C11.8196 10.3897 12.1804 10.3897 12.4981 10.5277C12.6192 10.5804 12.7513 10.6751 13.2207 11.0365L13.2392 11.0508C13.6097 11.336 13.9136 11.57 14.1633 11.7404C14.4096 11.9084 14.6764 12.0673 14.9691 12.1383C16.0259 12.3949 17.1149 11.859 17.5563 10.8652C17.6786 10.5899 17.7155 10.2816 17.7326 9.98389C17.75 9.68211 17.75 9.29859 17.75 8.83102V2.22164C18.9727 2.4159 19.8515 2.78043 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z" fill="#216E4E" />
                                                         </svg>
-                                                        <span class="ms-3" style="margin-top: 2px;">AGILE-0<?= $issue["id"] ?></span>
+                                                        <span class="ms-3" style="margin-top: 2px;"><?= getTitleAcronym($issue["project_title"]) ?>-0<?= $issue["id"] ?></span>
                                                     <?php endif ?>
                                                     <h5 class="ms-2"><?= $issue["title"] ?></h5>
                                                 </a>
                                             </div>
 
-                                            <?php if ($issue["issue_type"] == 'story') : ?>
+                                            <?php if ($issue["issue_type"] == '2') : ?>
                                                 <div class="col-1 my-1">
                                                     <input type="number" min="0" class="form-control storypoint" name="story-point" value="<?= $issue["story_points"] ?>" placeholder="0" data-issue-id="<?= $issue["id"]; ?>">
                                                 </div>
@@ -149,7 +149,7 @@
                                                 </div>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
-                                                    <a class="dropdown-item" href="<?= base_url('issues/edit/'.$issue["id"]) ?>">Edit</a>
+                                                    <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -194,6 +194,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="card-body px-0 py-2 drag-drop" data-sprint-id="<?= $sprint["id"] ?>">
                                     <div class="drop-area" id="dropArea">
                                         <?php if ($sprint["status"] == 0) : ?>
@@ -209,31 +210,31 @@
                                             <div class="msg-bx d-flex justify-content-between align-items-center drag-item" data-issue-id="<?= $issue["id"] ?>">
                                                 <div class="ms-3 w-100">
                                                     <a href="javascript:void(0);" class="d-flex btn-detail-model" data-id="<?= $issue["id"] ?>" data-bs-toggle="modal" data-bs-target="#issue-detail-modal">
-                                                        <?php if ($issue["issue_type"] == 'task') : ?>
+                                                        <?php if ($issue["issue_type"] == '0') : ?>
                                                             <svg style="margin-top: 2px;" width="20" height="20" viewBox="0 0 24 24" fill="#0055CC" xmlns="http://www.w3.org/2000/svg">
                                                                 <rect width="24" height="24" fill="white" />
                                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.25007 2.38782C8.54878 2.0992 10.1243 2 12 2C13.8757 2 15.4512 2.0992 16.7499 2.38782C18.06 2.67897 19.1488 3.176 19.9864 4.01358C20.824 4.85116 21.321 5.94002 21.6122 7.25007C21.9008 8.54878 22 10.1243 22 12C22 13.8757 21.9008 15.4512 21.6122 16.7499C21.321 18.06 20.824 19.1488 19.9864 19.9864C19.1488 20.824 18.06 21.321 16.7499 21.6122C15.4512 21.9008 13.8757 22 12 22C10.1243 22 8.54878 21.9008 7.25007 21.6122C5.94002 21.321 4.85116 20.824 4.01358 19.9864C3.176 19.1488 2.67897 18.06 2.38782 16.7499C2.0992 15.4512 2 13.8757 2 12C2 10.1243 2.0992 8.54878 2.38782 7.25007C2.67897 5.94002 3.176 4.85116 4.01358 4.01358C4.85116 3.176 5.94002 2.67897 7.25007 2.38782Z" fill="#0055CC" />
                                                             </svg>
-                                                        <span class="ms-3" style="margin-top: 2px;">TASK-0<?= $issue["id"] ?></span>
-                                                        <?php elseif ($issue["issue_type"] == 'epic') : ?>
+                                                            <span class="ms-3" style="margin-top: 2px;"><?= getTitleAcronym($issue["project_title"]) ?>-0<?= $issue["id"] ?></span>
+                                                        <?php elseif ($issue["issue_type"] == '1') : ?>
                                                             <svg style="margin-top: 2px;" width="20" height="20" viewBox="0 0 24 24" fill="#9F8FEF" xmlns="http://www.w3.org/2000/svg">
                                                                 <rect width="24" height="24" fill="white" />
                                                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.25007 2.38782C8.54878 2.0992 10.1243 2 12 2C13.8757 2 15.4512 2.0992 16.7499 2.38782C18.06 2.67897 19.1488 3.176 19.9864 4.01358C20.824 4.85116 21.321 5.94002 21.6122 7.25007C21.9008 8.54878 22 10.1243 22 12C22 13.8757 21.9008 15.4512 21.6122 16.7499C21.321 18.06 20.824 19.1488 19.9864 19.9864C19.1488 20.824 18.06 21.321 16.7499 21.6122C15.4512 21.9008 13.8757 22 12 22C10.1243 22 8.54878 21.9008 7.25007 21.6122C5.94002 21.321 4.85116 20.824 4.01358 19.9864C3.176 19.1488 2.67897 18.06 2.38782 16.7499C2.0992 15.4512 2 13.8757 2 12C2 10.1243 2.0992 8.54878 2.38782 7.25007C2.67897 5.94002 3.176 4.85116 4.01358 4.01358C4.85116 3.176 5.94002 2.67897 7.25007 2.38782Z" fill="#9F8FEF" />
                                                             </svg>
-                                                        <span class="ms-3" style="margin-top: 2px;">EPIC-0<?= $issue["id"] ?></span>
+                                                            <span class="ms-3" style="margin-top: 2px;"><?= getTitleAcronym($issue["project_title"]) ?>-0<?= $issue["id"] ?></span>
 
                                                         <?php else : ?>
                                                             <svg style="margin-top: 2px;" width="20" height="20" viewBox="0 0 24 24" fill="#216E4E" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M7.7649 9.89758C7.7503 9.64424 7.75 9.30433 7.75 8.8076V2.06874C8.9058 2 10.2996 2 12 2C13.7004 2 15.0942 2 16.25 2.06874V8.8076C16.25 9.30433 16.2497 9.64424 16.2351 9.89758C16.22 10.1601 16.1923 10.2408 16.1854 10.2563C16.0383 10.5876 15.6753 10.7662 15.323 10.6807C15.3066 10.6767 15.2257 10.6493 15.0085 10.5012C14.7989 10.3582 14.5294 10.151 14.1358 9.84799L14.0688 9.79636C13.6986 9.51094 13.4101 9.28851 13.0958 9.15196C12.3968 8.84828 11.6032 8.84828 10.9042 9.15196C10.5899 9.28851 10.3014 9.51094 9.9312 9.79636L9.86419 9.84799C9.47062 10.151 9.20112 10.3582 8.99148 10.5012C8.77428 10.6493 8.69342 10.6767 8.67695 10.6807C8.32471 10.7662 7.96171 10.5876 7.81457 10.2563C7.80769 10.2408 7.78003 10.1601 7.7649 9.89758Z" fill="#216E4E" />
                                                                 <path d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.1485 2.78043 5.02727 2.4159 6.25 2.22164L6.25 8.831C6.25 9.29858 6.24999 9.6821 6.26739 9.98389C6.28454 10.2816 6.32145 10.5899 6.44371 10.8652C6.88513 11.859 7.97413 12.3949 9.03087 12.1383C9.32356 12.0673 9.59039 11.9084 9.83672 11.7404C10.0864 11.57 10.3903 11.336 10.7608 11.0508L10.7793 11.0365C11.2487 10.6751 11.3808 10.5804 11.5019 10.5277C11.8196 10.3897 12.1804 10.3897 12.4981 10.5277C12.6192 10.5804 12.7513 10.6751 13.2207 11.0365L13.2392 11.0508C13.6097 11.336 13.9136 11.57 14.1633 11.7404C14.4096 11.9084 14.6764 12.0673 14.9691 12.1383C16.0259 12.3949 17.1149 11.859 17.5563 10.8652C17.6786 10.5899 17.7155 10.2816 17.7326 9.98389C17.75 9.68211 17.75 9.29859 17.75 8.83102V2.22164C18.9727 2.4159 19.8515 2.78043 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z" fill="#216E4E" />
                                                             </svg>
-                                                        <span class="ms-3" style="margin-top: 2px;">AGILE-0<?= $issue["id"] ?></span>
+                                                            <span class="ms-3" style="margin-top: 2px;"><?= getTitleAcronym($issue["project_title"]) ?>-0<?= $issue["id"] ?></span>
 
                                                         <?php endif ?>
                                                         <h5 class="ms-2"><?= $issue["title"] ?></h5>
                                                     </a>
                                                 </div>
-                                                <?php if ($issue["issue_type"] == 'story') : ?>
+                                                <?php if ($issue["issue_type"] == '2') : ?>
                                                     <div class="col-1 my-1">
                                                         <input type="number" min="0" class="form-control storypoint" value="<?= $issue["story_points"] ?>" name="story-point" placeholder="0" data-issue-id="<?= $issue["id"]; ?>">
                                                     </div>
@@ -268,7 +269,7 @@
                                                     </div>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
-                                                        <a class="dropdown-item" href="<?= base_url('issues/edit/'.$issue["id"]) ?>">Edit</a>
+                                                        <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -752,35 +753,53 @@
             console.log(id);
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'You want to compelete the sprint!',
-                icon: 'warning',
+                text: 'Do you want to move tasks to the backlog before completing the sprint?',
+                icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'OK'
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
             }).then((result) => {
+                var moveToBacklog = false;
                 if (result.isConfirmed) {
-                    $.ajax({
-                        type: "POST",
-                        url: base_url + 'backlog/complete_sprint/' + id,
-                        data: "id=" + id,
-                        dataType: "json",
-                        success: function(result) {
-                            if (result['error'] == false) {
-                                location.reload();
-                            } else {
-                                iziToast.error({
-                                    title: result['message'],
-                                    message: "",
-                                    position: 'topRight'
-                                });
-                            }
-                        }
-                    });
+                    moveToBacklog = true;
                 }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You want to complete the sprint!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: base_url + 'backlog/complete_sprint/' + id,
+                            data: {
+                                id: id,
+                                moveToBacklog: moveToBacklog
+                            },
+                            dataType: "json",
+                            success: function(result) {
+                                if (result['error'] == false) {
+                                    location.reload();
+                                } else {
+                                    iziToast.error({
+                                        title: result['message'],
+                                        message: "",
+                                        position: 'topRight'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
             });
-
         });
+
         $(document).on('click', '.delete_sprint', function(e) {
             e.preventDefault();
             var id = $(this).data("id");
@@ -934,11 +953,17 @@
                 success: function(result) {
                     $("#issue_title").html(result.issue.title);
                     $("#issue_description").html(result.issue.description);
-                    $("#issue_type").html(result.issue.issue_type);
+                    if (result.issue.issue_type == 0) {
+                        $("#issue_type").html('Task');
+                    } else if (result.issue.issue_type == 1) {
+                        $("#issue_type").html('Epic');
+                    } else {
+                        $("#issue_type").html('Story');
+                    }
                     if (result.issue.priority == 1) {
-                        $("#issue_priority").html(result.priority.title+' <i class="fa-solid fa-angle-up text-'+result.priority.class+'"></i>');
-                    }else if(result.issue.priority != 1){
-                        $("#issue_priority").html(result.priority.title+' <i class="fa-solid fa-angles-up text-'+result.priority.class+'"></i>');
+                        $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angle-up text-' + result.priority.class + '"></i>');
+                    } else if (result.issue.priority != 1) {
+                        $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angles-up text-' + result.priority.class + '"></i>');
 
                     }
                     if (result.sprint && result.sprint.title) {
@@ -1004,6 +1029,27 @@
         });
     </script>
 
+    <?php
+    function getTitleAcronym($title)
+    {
+        $words = explode(" ", $title); // Split title into words
+
+        $acronym = "";
+        $num_words = count($words);
+        $limit = min($num_words, 3);
+
+        if ($num_words == 1) {
+            // If there's only one word, get the first three letters
+            $acronym = strtoupper(substr($words[0], 0, 3));
+        } else {
+            // If there are multiple words, get the first letter of each word
+            for ($i = 0; $i < $limit; $i++) {
+                $acronym .= strtoupper(substr($words[$i], 0, 1)); // Get the first letter of each word and convert it to uppercase
+            }
+        }
+        return $acronym;
+    }
+    ?>
 
 
 
