@@ -27,6 +27,16 @@ class Issues extends CI_Controller
             $query = $this->db->get();
             $this->data['sprints'] = $query->result_array();
 
+            $this->db->select('*');
+            $this->db->from('task_status');
+            $query = $this->db->get();
+            $this->data['statuses'] = $query->result_array();
+
+            $this->db->select('*');
+            $this->db->from('priorities');
+            $query = $this->db->get();
+            $this->data['priorities'] = $query->result_array();
+
 
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
@@ -56,6 +66,15 @@ class Issues extends CI_Controller
             $query = $this->db->get();
             $this->data['projects'] = $query->result_array();
 
+            $this->db->select('*');
+            $this->db->from('task_status');
+            $query = $this->db->get();
+            $this->data['statuses'] = $query->result_array();
+
+            $this->db->select('*');
+            $this->db->from('priorities');
+            $query = $this->db->get();
+            $this->data['priorities'] = $query->result_array();
 
             $this->db->select('*');
             $this->db->from('tasks');
@@ -103,6 +122,9 @@ class Issues extends CI_Controller
             $this->form_validation->set_rules('issue_type', 'Type', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('project_id', 'Project', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('title', 'Title', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('priority', 'Priority', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('description', 'description', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('user', 'Assignee', 'trim|required|strip_tags|xss_clean');
             if ($this->form_validation->run() == TRUE) {
 
                 $data = [
@@ -110,9 +132,10 @@ class Issues extends CI_Controller
                     'saas_id' => $this->session->userdata('saas_id'),
                     'project_id' => $this->input->post('project_id'),
                     'issue_type' => $this->input->post('issue_type'),
-                    'story_points' => $this->input->post('story_points'),
+                    'story_points' => $this->input->post('story_points') ? $this->input->post('story_points') : '',
                     'priority' => $this->input->post('priority'),
                     'created_by' => $this->session->userdata('user_id'),
+                    'status' => $this->input->post('status') ? $this->input->post('status') : '1',
                     'description' => $this->input->post('description') ? $this->input->post('description') : '',
                 ];
                 $id = $this->issues_model->create_issue($data);
@@ -123,6 +146,14 @@ class Issues extends CI_Controller
                             'sprint_id' => $this->input->post('sprint')
                         ];
                         $this->issues_model->create_issue_sprint($sprintIssue);
+                    }
+
+                    if ($this->input->post('user')) {
+                        $sprintIssue = [
+                            'task_id' => $id,
+                            'user_id' => $this->input->post('user')
+                        ];
+                        $this->issues_model->create_task_user($sprintIssue);
                     }
 
                     $this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
@@ -154,6 +185,9 @@ class Issues extends CI_Controller
             $this->form_validation->set_rules('issue_type', 'Type', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('project_id', 'Project', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('title', 'Title', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('user', 'Assignee', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('priority', 'Priority', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('description', 'description', 'trim|required|strip_tags|xss_clean');
             if ($this->form_validation->run() == TRUE) {
 
                 $data = [
@@ -162,6 +196,9 @@ class Issues extends CI_Controller
                     'project_id' => $this->input->post('project_id'),
                     'issue_type' => $this->input->post('issue_type'),
                     'description' => $this->input->post('description') ? $this->input->post('description') : '',
+                    'priority' => $this->input->post('priority') ? $this->input->post('priority') : '1',
+                    'status' => $this->input->post('status') ? $this->input->post('status') : '1',
+                    'story_points' => $this->input->post('story_points') ? $this->input->post('story_points') : '',
                 ];
                 if ($this->issues_model->edit_issue($this->input->post('update_id'), $data)) {
                     if ($this->input->post('sprint')) {
@@ -310,6 +347,19 @@ class Issues extends CI_Controller
             }
             $data = $this->issues_model->get_issue_by_id($id);
             echo json_encode($data);
+        } else {
+            $this->data['error'] = true;
+            $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
+            echo json_encode($this->data);
+        }
+    }
+    public function get_project_users()
+    {
+        if ($this->ion_auth->logged_in()) {
+            $project_id = $this->input->post('project_id');
+            $data = $this->issues_model->get_project_users($project_id);
+            $dash = $this->issues_model->get_project_dash($project_id);
+            echo json_encode(array('users'=>$data,'dash_type'=>$dash));
         } else {
             $this->data['error'] = true;
             $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";

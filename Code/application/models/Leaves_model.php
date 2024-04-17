@@ -95,11 +95,13 @@ class Leaves_model extends CI_Model
         } else {
             if (permissions('leaves_view_selected')) {
                 $selected = selected_users();
-                $selected[] = $this->session->userdata('user_id');
-
+                foreach ($selected as $value) {
+                    $selected[] = get_employee_id_from_user_id($value);
+                }
+                $selected[] = get_employee_id_from_user_id($this->session->userdata('user_id'));
                 if (!empty($selected)) {
                     $userIdsString = implode(',', $selected);
-                    $where = " AND l.user_id IN ($userIdsString)";
+                    $where .= " AND l.user_id IN ($userIdsString)";
                 }
             } else {
                 $id = get_employee_id_from_user_id($this->session->userdata('user_id'));

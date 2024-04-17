@@ -1380,22 +1380,36 @@ class Projects extends CI_Controller
 		if ($this->ion_auth->logged_in() && !$this->ion_auth->in_group(3) && ($this->ion_auth->is_admin() || permissions('project_view'))) {
 
 			$this->data['page_title'] = 'Projects Detail - ' . company_name();
+			$this->data['main_page'] = 'Projects Detail';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 
-			$this->data['system_users'] = $this->ion_auth->users(array(1, 2))->result();
-			$this->data['system_clients'] = $this->ion_auth->users(4)->result();
+			if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+				$system_users = $this->ion_auth->all_roles()->result();
+			} elseif (permissions('user_view_selected')) {
+				$selected = selected_users();
+				foreach ($selected as $user_id) {
+					$users[] = $this->ion_auth->user($user_id)->row();
+				}
+				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$system_users = $users;
+			}
+			foreach ($system_users as $system_user) {
+				if (!is_user_client($system_user->id)) {
+					$empl[] = $this->ion_auth->user($system_user->id)->row();
+				}
+			}
 
+			$this->data['system_users'] = $empl;
+			$this->data['system_clients'] = $this->ion_auth->client_users()->result();
 			$this->data['project_status'] = project_status();
 			$this->data['task_status'] = task_status();
 
 			$id = preg_replace('/^p_/', '', $this->uri->segment(3));
 
 			if ($id && is_numeric($id)) {
-
-				if ($this->ion_auth->in_group(4) && !is_my_project($id)) {
+				if (is_client() && !is_my_project($id)) {
 					redirect('projects', 'refresh');
 				}
-
 				$this->notifications_model->edit('', 'new_project', $id, '', '');
 				$this->notifications_model->edit('', 'project_status', $id, '', '');
 				$this->notifications_model->edit('', 'project_file', $id, '', '');
@@ -1668,13 +1682,10 @@ class Projects extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('project_edit'))) {
 			$this->form_validation->set_rules('title', 'Project Title', 'trim|required|strip_tags|xss_clean');
+			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('client', 'Client', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('update_id', 'Project ID', 'trim|required|strip_tags|xss_clean|is_numeric');
-			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
-			$this->form_validation->set_rules('starting_date', 'Starting Date', 'trim|required|strip_tags|xss_clean');
-			$this->form_validation->set_rules('ending_date', 'Ending Date', 'trim|required|strip_tags|xss_clean');
-			$this->form_validation->set_rules('budget', 'Budget', 'trim|strip_tags|xss_clean|is_numeric');
-			$this->form_validation->set_rules('status', 'Status', 'trim|required|strip_tags|xss_clean');
+			$this->form_validation->set_rules('board', 'Project Type', 'trim|required|strip_tags|xss_clean|is_numeric');
 
 			if ($this->form_validation->run() == TRUE) {
 				$project_id = $this->input->post('update_id');
@@ -1687,11 +1698,7 @@ class Projects extends CI_Controller
 						'created_by' => $this->session->userdata('user_id'),
 						'title' => $this->input->post('title'),
 						'description' => $this->input->post('description'),
-						'starting_date' => $starting_date,
-						'ending_date' => 0,
-						'present' => 1,
-						'budget' => $this->input->post('budget'),
-						'status' => $this->input->post('status'),
+						'dash_type' => $this->input->post('board') ? $this->input->post('board') : '0',
 					);
 				} else {
 					$ending_date = format_date($this->input->post('ending_date'), "Y-m-d");
@@ -1709,11 +1716,7 @@ class Projects extends CI_Controller
 						'created_by' => $this->session->userdata('user_id'),
 						'title' => $this->input->post('title'),
 						'description' => $this->input->post('description'),
-						'starting_date' => $starting_date,
-						'ending_date' => $ending_date,
-						'present' => 0,
-						'budget' => $this->input->post('budget'),
-						'status' => $this->input->post('status'),
+						'dash_type' => $this->input->post('board') ? $this->input->post('board') : '0',
 					);
 				}
 
@@ -1813,17 +1816,13 @@ class Projects extends CI_Controller
 				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
 				echo json_encode($this->data);
 			}
-
-			$this->form_validation->set_rules('title', 'Project Title', 'trim|required|strip_tags|xss_clean');
-			$this->form_validation->set_rules('client', 'Client', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('board', 'Board', 'trim|strip_tags|xss_clean');
 			
+			$this->form_validation->set_rules('title', 'Project Title', 'trim|required|strip_tags|xss_clean');
+			$this->form_validation->set_rules('client', 'Client', 'required|strip_tags|xss_clean');
+			$this->form_validation->set_rules('board', 'Board', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
 
 			if ($this->form_validation->run() == TRUE) {
-
-				$starting_date = format_date($this->input->post('starting_date'), "Y-m-d");
-
 				$data = array(
 					'client_id' => $this->input->post('client') ? $this->input->post('client') : NULL,
 					'saas_id' => $this->session->userdata('saas_id'),
@@ -1911,7 +1910,6 @@ class Projects extends CI_Controller
 								$template_data['BUDGET'] = $this->input->post('budget');
 								$template_data['PROJECT_URL'] = base_url('projects');
 								$email_template = render_email_template('new_project', $template_data);
-
 								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 							}
 						}
@@ -1938,13 +1936,34 @@ class Projects extends CI_Controller
 				echo json_encode($this->data);
 			}
 		} else {
-
 			$this->data['error'] = true;
 			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
 			echo json_encode($this->data);
 		}
 	}
 
+	public function get_project_by_id($project_id = '')
+	{
+		if ($this->ion_auth->logged_in()) {
+			$this->form_validation->set_rules('id', 'id', 'trim|required|strip_tags|xss_clean|is_numeric');
+			if ($this->form_validation->run() == TRUE) {
+				$data = $this->projects_model->get_project_by_id($this->input->post('id'));
+				$this->data['error'] = false;
+				$this->data['data'] = $data ? $data : '';
+				$this->data['message'] = "Success";
+				echo json_encode($this->data);
+			} else {
+				$this->data['error'] = true;
+				$this->data['message'] = validation_errors();
+				echo json_encode($this->data);
+			}
+		} else {
+			$this->data['error'] = true;
+
+			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
+			echo json_encode($this->data);
+		}
+	}
 	public function tasks()
 	{
 		if ($this->ion_auth->logged_in() && is_module_allowed('tasks') && !$this->ion_auth->in_group(3) && ($this->ion_auth->is_admin() || permissions('task_view'))) {

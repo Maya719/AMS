@@ -31,6 +31,15 @@ class Board_model extends CI_Model
         else
             return false;
     }
+
+    public function update_status($id, $data)
+    {
+        $this->db->where('id', $id);
+        if ($this->db->update('tasks', $data))
+            return true;
+        else
+            return false;
+    }
     public function delete_sprint($id)
     {
         $this->db->where('sprint_id', $id);

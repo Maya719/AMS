@@ -712,8 +712,8 @@
       }
       ?>
       
-      <?php if ($this->ion_auth->is_admin() || permissions('project_view_all')) { ?>
-        <!-- <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+      <!-- <?php if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_client() || permissions('project_view') || permissions('task_view')) { ?>
+        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-bezier-curve"></i>
             <span class="nav-text"><?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?></span>
           </a>
@@ -731,10 +731,10 @@
             <?php } ?>
 
           </ul>
-        </li> -->
+        </li>
       <?php
       }
-      ?>
+      ?> -->
 
       <?php if (is_saas_admin()) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">

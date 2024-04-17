@@ -78,17 +78,26 @@
                                                 <option value="task">Task</option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-3">
-                                            <label class="form-label">Priority </label>
-                                            <select class="form-control" name="priority">
-                                                <option value="low">Low</option>
-                                                <option value="medium">Medium</option>
-                                                <option value="high">High</option>
+                                        <div class="col-sm-4 mb-3">
+                                            <label class="form-label">Status </label>
+                                            <select class="form-control" name="status">
+                                                <?php foreach ($statuses as $status) : ?>
+                                                    <option value="<?=$status["id"]?>"><?=$status["title"]?></option>
+                                                <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-3">
+
+                                        <div class="col-sm-4 mb-3">
+                                            <label class="form-label">Priority </label>
+                                            <select class="form-control" name="priority">
+                                                <?php foreach ($priorities as $priority) : ?>
+                                                    <option value="<?=$priority["id"]?>"><?=$priority["title"]?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4 mb-3">
                                             <label class="form-label">Story Points</label>
-                                            <input type="text" class="form-control" name="story_points">
+                                            <input type="number" min="0" class="form-control" name="story_points" value="0">
                                         </div>
                                         <div class="col-sm-12 mb-3">
                                             <label class="form-label">Title <span class="text-danger">*</span></label>
@@ -109,7 +118,7 @@
                                                 } ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-3">
+                                        <div class="col-sm-6 mb-3" id="sprint_div">
                                             <label class="form-label">Sprint</label>
                                             <select class="form-control" name="sprint">
                                                 <option value="">Sprint</option>
@@ -161,7 +170,6 @@
             var form = $('#modal-add-issue-part');
             var formData = form.serialize();
             console.log(formData);
-
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
@@ -170,7 +178,7 @@
                 success: function(result) {
                     console.log(result);
                     if (result['error'] == false) {
-                        location.reload();
+                        window.location.href = base_url + 'backlog'; 
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
@@ -178,6 +186,40 @@
             });
 
             e.preventDefault();
+        });
+        $(document).ready(function() {
+            $('select[name="project_id"]').change(function() {
+                var projectId = $(this).val();
+                console.log(projectId);
+                if (projectId !== '') {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'issues/get_project_users', // Replace with your AJAX endpoint URL
+                        data: {
+                            project_id: projectId
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            console.log(response);
+                            var select = $('select[name="user"]');
+                            select.empty();
+                            select.append('<option value="">Member</option>');
+                            $.each(response['users'], function(index, user) {
+                                select.append('<option value="' + user.id + '">' + user.first_name + ' ' + user.last_name + '</option>');
+                                if (response['dash_type'] == 0) {
+                                    $("#sprint_div").addClass('hidden');
+                                }else{
+                                    $("#sprint_div").removeClass('hidden');
+                                }
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
         });
     </script>
 

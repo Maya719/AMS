@@ -97,7 +97,9 @@
                                             <select class="form-select" id="project_id">
                                                 <option value="" selected>Project</option>
                                                 <?php foreach ($projects as $project) : ?>
-                                                    <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
+                                                    <?php if ($project["dash_type"] == 1) : ?>
+                                                        <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
+                                                    <?php endif ?>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
@@ -129,12 +131,12 @@
                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                     <div>
                                         <h3 id="sprint_name"></h3>
-                                        <span id="from-to"></span>
+                                        <!-- <span id="from-to"></span> -->
                                     </div>
                                     <div class="mt-xl-0 mt-3">
                                         <div class="d-flex align-items-center mb-xl-4 mb-0 pb-3 justify-content-end flex-wrap">
                                             <h6 class="me-3 mb-0" id="percent"></h6>
-                                            <div>
+                                            <!-- <div>
                                                 <div class="dropdown">
                                                     <div class="btn-link" data-bs-toggle="dropdown">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -149,7 +151,7 @@
                                                         <a class="dropdown-item delete_sprint" href="javascript:void(0)">Delete Sprint</a>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -184,11 +186,11 @@
                         <div class="default-tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#home"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#contact" id="project_tab_anchor"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#contact"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
+                                <li class="nav-item" id="sprint_li">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#home" id="sprint_tab_anchor"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
                                 </li>
 
                                 <li class="nav-item">
@@ -196,7 +198,7 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel">
+                                <div class="tab-pane fade" id="home" role="tabpanel">
                                     <div class="pt-2">
                                         <h4 id="sprint_title"></h4>
                                         <p id="sprint_goal"></p>
@@ -229,7 +231,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="contact">
+                                <div class="tab-pane fade show active" id="contact">
                                     <div class="pt-4">
                                         <h4 id="project_title"></h4>
                                         <p class="" id="project_description"></p>
@@ -252,12 +254,10 @@
     <script src="<?= base_url('assets2/vendor/draggable/draggable.js') ?>"></script>
     <script>
         $(document).ready(function() {
-
             ajaxCall();
             $('#sprint_id, #user_id, #project_id').change(function() {
                 ajaxCall();
             });
-
             loading = true;
 
             function ajaxCall() {
@@ -265,6 +265,7 @@
                 const userId = $('#user_id').val();
                 const projectId = $('#project_id').val();
                 const board = $('#board_type').val();
+                console.log(board);
                 $.ajax({
                     url: 'board/filter_board',
                     type: 'POST',
@@ -279,7 +280,6 @@
                         showLoader();
                     },
                     success: function(response) {
-                        console.log('AJAX Success:', response);
                         $('#html').html(response.html);
                         initSorting();
                         initPopovers();
@@ -300,54 +300,55 @@
             }
 
             function initSorting() {
-                const zones = document.querySelectorAll(".draggable-zone");
+                const zones = document.querySelectorAll(".draggable-zone.dropzoneContainer");
                 if (zones.length === 0) return;
 
-                new Sortable.default(zones, {
+                const sortable = new Sortable.default(zones, {
                     draggable: ".draggable",
                     handle: ".draggable-handle",
                     mirror: {
                         appendTo: "body",
-                        constrainDimensions: true
+                        constrainDimensions: true,
                     },
-                }).on("drag:stop", (event) => {
-                    setTimeout(() => {
-                        jQuery(".dropzoneContainer").each(function() {
-                            const count = jQuery(this).find(".draggable-handle").length;
-                            jQuery(this).find(".totalCount").html(count);
-                        });
-                    }, 200);
+                });
+                sortable.on("drag:stop", (event) => {
+                    const draggedElement = event.data.source;
 
-                    console.log("Sortable event data:", event);
+                    if (draggedElement) {
+                        const dataID = draggedElement.getAttribute("data-id");
+                        console.log("Dragged card data-id:", dataID);
 
-                    const draggedCard = event.data.originalSource;
-
-                    if (!draggedCard) {
-                        console.error("Dragged card is undefined.");
-                        return;
+                        const closestDropZone = draggedElement.closest(".draggable-zone.dropzoneContainer");
+                        if (closestDropZone) {
+                            const statusID = closestDropZone.getAttribute("data-status-id");
+                            saveStatus(dataID, statusID);
+                            console.log("Closest drop zone data-status-id:", statusID);
+                        } else {
+                            console.log("Could not find a closest drop zone to the dragged element");
+                        }
+                    } else {
+                        console.log("Could not access the dragged element during drag:start event");
                     }
-
-                    // Get the closest drop zone (assuming .dropzoneContainer is the drop zone class)
-                    const dropZone = draggedCard.closest(".dropzoneContainer");
-                    if (!dropZone) {
-                        console.error("Drop zone not found.");
-                        return;
-                    }
-
-                    const statusId = dropZone.dataset.statusId;
-                    const issueId = draggedCard.dataset.issueId;
-
-                    if (!statusId || !issueId) {
-                        console.error("Missing status ID or issue ID on dragged card.");
-                        return;
-                    }
-
-                    console.log("Drop Zone:", dropZone);
-                    console.log("Dropped at Status ID:", statusId);
-                    console.log("Issue ID:", issueId);
                 });
             }
 
+            function saveStatus(task, status) {
+                $.ajax({
+                    url: 'board/saveStatus',
+                    type: 'POST',
+                    data: {
+                        task: task,
+                        status: status,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                    }
+                });
+            }
             function initPopovers() {
                 $('[data-bs-toggle="popover"]').popover({
                     trigger: 'hover focus',
@@ -360,9 +361,21 @@
                 if (boardType == '0') {
                     $('#sprintCol').hide();
                     $('#sprint_detail').hide();
+                    $('#sprint_li').hide();
+                    $('#home').removeClass('active');
+                    $('#contact').addClass('active');
+                    $('#home').removeClass('show');
+                    $('#contact').addClass('show');
+                    $('#project_tab_anchor').addClass('active');
+                    $('#sprint_tab_anchor').removeClass('active');
                 } else {
                     $('#sprintCol').show();
                     $('#sprint_detail').show();
+                    $('#sprint_li').show();
+                    $('#home').removeClass('active');
+                    $('#contact').addClass('active');
+                    $('#home').removeClass('show');
+                    $('#contact').addClass('show');
                 }
                 $.ajax({
                     url: 'board/get_project_by_board_type',

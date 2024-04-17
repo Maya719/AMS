@@ -163,11 +163,14 @@ class Board extends CI_Controller
         if ($board && trim($board) == '1') {
             $this->db->select('*');
             $this->db->from('sprints');
+
             if ($sprint_id && trim($sprint_id) !== '') {
                 $this->db->where('id', $sprint_id);
             }
+
             $sprint_query = $this->db->get();
             $sprint_data = $sprint_query->row_array();
+
             $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
             $this->db->from('tasks i');
             $this->db->join('issues_sprint is', 'is.issue_id = i.id', 'left');
@@ -175,16 +178,20 @@ class Board extends CI_Controller
             $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
             $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
             $this->db->join('users u', 'u.id = iu.user_id', 'left');
+
             if ($sprint_id && trim($sprint_id) !== '') {
                 $this->db->where('is.sprint_id', $sprint_id);
             }
+
             $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
             if ($user_id && trim($user_id) !== '') {
                 $this->db->where('iu.user_id', $user_id);
             }
+
             if ($project_id && trim($project_id) !== '') {
                 $this->db->where('p.id', $project_id);
             }
+
             $this->db->order_by('created', 'desc');
             $issues_query = $this->db->get();
             $issues_data = $issues_query->result_array();
@@ -195,6 +202,7 @@ class Board extends CI_Controller
             $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
             $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
             $this->db->join('users u', 'u.id = iu.user_id', 'left');
+            $this->db->where('p.dash_type', 0);
             $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
             if ($user_id && trim($user_id) !== '') {
                 $this->db->where('iu.user_id', $user_id);
@@ -222,8 +230,8 @@ class Board extends CI_Controller
                     </div>
                 ';
             foreach ($issues_data as $issue) {                  // issue cards
-                $html .= $this->html_generating($status, $issue);
                 if ($status["id"] == $issue["status"]) {
+                    $html .= $this->html_generating($status, $issue);
                     $total++;
                     if ($status["id"] == 4) {
                         $completed++;
@@ -238,7 +246,6 @@ class Board extends CI_Controller
         if ($completed != 0) {
             $percent =  $completed * 100 / $total;
             $rounded_percent = (int) round($percent);
-
         } else {
             $rounded_percent = 0;
         }
@@ -248,7 +255,7 @@ class Board extends CI_Controller
             'html' => $html,
             'total' => $total,
             'completed' => $completed,
-            'percent' => 'Total Progress '. $rounded_percent .'%',
+            'percent' => 'Total Progress ' . $rounded_percent . '%',
         );
 
         echo json_encode($result);
@@ -256,21 +263,20 @@ class Board extends CI_Controller
     public function html_generating($status, $issue)
     {
         $html = '';
-        if ($status["id"] == $issue["status"]) {
-            if (isset($issue["profile"]) && !empty($issue["profile"])) {
-                if (file_exists('assets/uploads/profiles/' . $issue["profile"])) {
-                    $file_upload_path = base_url('assets/uploads/profiles/' . $issue["profile"]);
-                } else {
-                    $file_upload_path = base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $issue["profile"]);
-                }
-                $item["profile"] = true;
-            }
-            if (permissions('task_status') || $this->ion_auth->is_admin()) {
-                $html .= '<div class="card draggable-handle draggable" data-issue-id="' . $issue["title"] . '">';
+        if (isset($issue["profile"]) && !empty($issue["profile"])) {
+            if (file_exists('assets/uploads/profiles/' . $issue["profile"])) {
+                $file_upload_path = base_url('assets/uploads/profiles/' . $issue["profile"]);
             } else {
-                $html .= '<div class="card draggable-handle">';
+                $file_upload_path = base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $issue["profile"]);
             }
-            $html .= '<div class="card-body">
+            $item["profile"] = true;
+        }
+        if (permissions('task_status') || $this->ion_auth->is_admin()) {
+            $html .= '<div class="card draggable-handle draggable" data-id="' . $issue["id"] . '">';
+        } else {
+            $html .= '<div class="card draggable-handle" data-id="' . $issue["id"] . '">';
+        }
+        $html .= '<div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-' . $issue["priority_class"] . '"> <!-- priority class -->
                                 <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -297,24 +303,23 @@ class Board extends CI_Controller
                         <span class="badge light badge-' . $issue["priority_class"] . '">' . ($issue['priority_title']) . '</span>
                         <div class="row justify-content-between align-items-center kanban-user">
                             <div class="section-title mt-3 mb-1">' . ($this->lang->line('team_members') ? ($this->lang->line('team_members')) : 'Team Members') . '</div>';
-            if (!empty($issue["profile"])) {
-                $html .= '<ul class="users col-6">
+        if (!empty($issue["profile"])) {
+            $html .= '<ul class="users col-6">
                                             <li style="cursor: pointer;">
                                             <img data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . ($issue["first_name"] . ' ' . $issue["last_name"]) . '" src="' . $file_upload_path . '" alt="' . $file_upload_path . '"></li>
                                         </ul>';
-            } else {
-                $html .= '<ul class="kanbanimg col-6">
+        } else {
+            $html .= '<ul class="kanbanimg col-6">
                                             <li><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . ($issue["first_name"] . ' ' . $issue["last_name"]) . '">' . (substr($issue["first_name"], 0, 1) . substr($issue["last_name"], 0, 1)) . '</span></li>
                                         </ul>';
-            }
-            $html .= '
+        }
+        $html .= '
             <!--<div class="col-6 d-flex justify-content-end">
                                     <span class="fs-14"><i class="far fa-clock me-2"></i>Due in 4 days</span>
                                 </div> -->
                             </div>
                         </div>
                     </div>';
-        }
         return $html;
     }
     public function get_project_by_board_type()
@@ -326,5 +331,23 @@ class Board extends CI_Controller
         $status_query = $this->db->get();
         $project = $status_query->result_array();
         echo json_encode($project);
+    }
+    public function saveStatus()
+    {
+        if ($this->ion_auth->logged_in()) {
+            $data["status"] = $this->input->post('status');
+            if ($this->board_model->update_status($this->input->post('task'), $data)) {
+                $this->data['data'] = $data;
+                $this->data['error'] = false;
+                $this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
+                echo json_encode($this->data);
+            } else {
+                $this->data['error'] = true;
+                $this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+                echo json_encode($this->data);
+            }
+        } else {
+            redirect('auth', 'refresh');
+        }
     }
 }

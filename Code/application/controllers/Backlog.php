@@ -31,15 +31,29 @@ class Backlog extends CI_Controller
             $this->db->from('task_status');
             $query7 = $this->db->get();
             $this->data['task_statuses'] = $query7->result_array();
-
             $this->data["sprints"] = $sprints;
-            $this->db->select('*');
+
+            $this->db->select('tasks.*'); 
             $this->db->from('tasks');
-            $this->db->where_in('saas_id', $this->session->userdata());
-            $query = $this->db->get();
-            $issues = $query->result_array();
+            $this->db->join('projects', 'tasks.project_id = projects.id'); 
+            $this->db->where('projects.dash_type', 1);
+            $query = $this->db->get(); 
+            $issues = $query->result_array(); 
+
             foreach ($issues as &$issue) {
+                $project_users = [];
                 $id = $issue["id"];
+                $project_id = $issue["project_id"];
+                $this->db->select('user_id');
+                $this->db->where('project_id', $project_id);
+                $query9 = $this->db->get('project_users');
+                $row9 = $query9->result_array();
+
+                foreach ($row9 as $value) {
+                    $project_users[] = $this->ion_auth->user($value["user_id"])->row();
+                }
+                $issue["project_users"] = $project_users;
+
                 $this->db->select('*');
                 $this->db->where('issue_id', $id);
                 $query5 = $this->db->get('issues_users');
@@ -49,7 +63,7 @@ class Backlog extends CI_Controller
                 $this->db->where('issue_id', $id);
                 $query = $this->db->get('issues_sprint');
                 $row = $query->row();
-                
+
                 $this->db->select('*');
                 $this->db->where('id', $issue["project_id"]);
                 $proQuery = $this->db->get('projects');
@@ -70,18 +84,19 @@ class Backlog extends CI_Controller
                     $issue["user"] = $row5->user_id;
                 }
             }
-            $tasks = [];
-            foreach ($issues as $issue) {
-                $project_id = $issue["project_id"];
-                $this->db->select('*');
-                $this->db->where('id', $project_id);
-                $query = $this->db->get('projects');
-                $row = $query->row();
-                if ($row->dash_type == 1) {
-                    $tasks[] = $issue;
-                }
-            }
-            $this->data['issues'] = $tasks;
+            // $tasks = [];
+            // foreach ($issues as $issue) {
+            //     $project_id = $issue["project_id"];
+            //     $this->db->select('*');
+            //     $this->db->where('id', $project_id);
+            //     $query = $this->db->get('projects');
+            //     $row = $query->row();
+            //     if ($row->dash_type == 1) {
+            //         $tasks[] = $issue;
+            //     }
+            // }
+
+            $this->data['issues'] = $issues;
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
             } elseif (permissions('project_view_selected')) {

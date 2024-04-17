@@ -15,6 +15,16 @@ class Issues_model extends CI_Model
             return false;
         }
     }
+
+    public function create_task_user($data)
+    {
+        if ($this->db->insert('task_users', $data)) {
+            return $this->db->insert_id();
+        } else {
+            return false;
+        }
+    }
+
     public function edit_issue($id, $data)
     {
         $this->db->where('id', $id);
@@ -23,6 +33,7 @@ class Issues_model extends CI_Model
         else
             return false;
     }
+
     public function create_issue_sprint($data)
     {
         if ($this->db->insert('issues_sprint', $data)) {
@@ -31,6 +42,7 @@ class Issues_model extends CI_Model
             return false;
         }
     }
+
     public function edit_issue_sprint($id, $data)
     {
         $this->db->where('issue_id', $id);
@@ -39,6 +51,7 @@ class Issues_model extends CI_Model
         else
             return false;
     }
+
     public function delete_issue($id)
     {
         $this->db->where('issue_id', $id);
@@ -126,5 +139,42 @@ class Issues_model extends CI_Model
             "sprint" => $sprint,
             "priority" => $priority,
         );
+    }
+    public function get_project_users($id)
+    {
+        $this->db->select('*');
+        $this->db->from('project_users');
+        $this->db->where('project_id', $id);
+        $query = $this->db->get();
+        $results = $query->result_array();
+        $users = [];
+        foreach ($results as $result) {
+            $user_id = $result["user_id"];
+            $users[] = $this->ion_auth->user($user_id)->row();
+        }
+        return $users;
+    }
+
+    public function get_project_dash($id)
+    {
+        $this->db->select('*');
+        $this->db->from('projects');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        $results = $query->row();
+        return $results->dash_type;
+    }
+    public function check_kanban_board($id)
+    {
+        $this->db->select('*');
+        $this->db->from('projects');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        $results = $query->row();
+        if ($results->dash_type == 0) {
+            return true;
+        }else{
+            return false; 
+        }
     }
 }

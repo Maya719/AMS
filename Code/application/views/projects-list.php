@@ -81,8 +81,7 @@
           <div class="card">
             <div class="card-body">
               <div id="tool" class="row">
-                <?php if (!$this->ion_auth->in_group(4)) { ?>
-                  <!-- <div class="form-group col-md-4">
+                <!-- <div class="form-group col-md-4">
                     <select class="form-control select2" id="project_filter">
                       <option value=""><?= $this->lang->line('select_project') ? $this->lang->line('select_project') : 'Select Project' ?></option>
                       <?php foreach ($projects_all as $project_all) { ?>
@@ -90,31 +89,28 @@
                       <?php } ?>
                     </select>
                   </div> -->
-
-                  <?php if ($this->ion_auth->is_admin() || permissions('project_view_all') || permissions('project_view_selected')) { ?>
-                    <div class="form-group col-md-4">
-                      <select class="form-control select2" id="project_filters_user">
-                        <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
-                        <?php foreach ($system_users as $system_user) {
-                          if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
-                            <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
-                        <?php }
-                        } ?>
-                      </select>
-                    </div>
-
-                    <div class="form-group col-md-4">
-                      <select class="form-control select2" id="project_filters_client">
-                        <option value=""><?= $this->lang->line('select_clients') ? $this->lang->line('select_clients') : 'Select Clients' ?></option>
-                        <?php foreach ($system_clients as $system_client) {
-                          if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
-                            <option value="<?= htmlspecialchars($system_client->id) ?>"><?= htmlspecialchars($system_client->first_name) ?> <?= htmlspecialchars($system_client->last_name) ?></option>
-                        <?php }
-                        } ?>
-                      </select>
-                    </div>
-                  <?php } ?>
+                <?php if ($this->ion_auth->is_admin() || permissions('project_view_all') || permissions('project_view_selected')) { ?>
+                  <div class="form-group col-md-4">
+                    <select class="form-control select2" id="project_filters_user">
+                      <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
+                      <?php foreach ($system_users as $system_user) {
+                        if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                          <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                      <?php }
+                      } ?>
+                    </select>
+                  </div>
                 <?php } ?>
+                <div class="form-group col-md-4">
+                  <select class="form-control select2" id="project_filters_client">
+                    <option value=""><?= $this->lang->line('select_clients') ? $this->lang->line('select_clients') : 'Select Clients' ?></option>
+                    <?php foreach ($system_clients as $system_client) {
+                      if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
+                        <option value="<?= htmlspecialchars($system_client->id) ?>"><?= htmlspecialchars($system_client->first_name) ?> <?= htmlspecialchars($system_client->last_name) ?></option>
+                    <?php }
+                    } ?>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -202,9 +198,10 @@
                   } ?>
                 </select>
               </div>
+
               <div class="form-group mt-3">
                 <label class="col-form-label"><?= $this->lang->line('project_client') ? $this->lang->line('project_client') : 'Project Client' ?></label>
-                <select name="client" class="form-control multiple" id="clients_create" multiple="multiple">
+                <select name="client" class="form-control" id="clients_create">
                   <?php foreach ($system_clients as $system_client) {
                     if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
                       <option value="<?= htmlspecialchars($system_client->id) ?>"><?= htmlspecialchars($system_client->first_name) ?> <?= htmlspecialchars($system_client->last_name) ?></option>
@@ -313,7 +310,7 @@
           userRow += '<td>' + row.title + '</td>';
           userRow += '<td>' + row.project_client.first_name + ' ' + row.project_client.last_name + '</td>';
           if (row.dash_type == 1) {
-            var type = 'Agile'; 
+            var type = 'Agile';
           } else {
             var type = 'Kanban';
           }

@@ -79,6 +79,27 @@
                                                 <option value="task" <?= ($issue->issue_type === 'task') ? 'selected' : ''; ?>>Task</option>
                                             </select>
                                         </div>
+                                        <div class="col-sm-4 mb-3">
+                                            <label class="form-label">Status </label>
+                                            <select class="form-control" name="status">
+                                                <?php foreach ($statuses as $status) : ?>
+                                                    <option value="<?= $status["id"] ?>" <?= ($issue->status === $status["id"]) ? 'selected' : ''; ?>><?= $status["title"] ?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-4 mb-3">
+                                            <label class="form-label">Priority </label>
+                                            <select class="form-control" name="priority">
+                                                <?php foreach ($priorities as $priority) : ?>
+                                                    <option value="<?= $priority["id"] ?>" <?= ($issue->priority === $priority["id"]) ? 'selected' : ''; ?>><?= $priority["title"] ?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4 mb-3">
+                                            <label class="form-label">Story Points</label>
+                                            <input type="number" class="form-control" name="story_points" min="0" value="<?=$issue->story_points?>">
+                                        </div>
                                         <div class="col-sm-12 mb-3">
                                             <label class="form-label">Title<span class="text-danger">*</span></label>
                                             <input type="text" value="<?= $issue->title ?>" class="form-control" name="title">
@@ -93,7 +114,7 @@
                                                 <option value="">Assignee</option>
                                                 <?php foreach ($system_users as $system_user) {
                                                     if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
-                                                        <option value="<?= htmlspecialchars($system_user->id) ?>" <?= ($system_user->id == $issues_users->user_id) ? 'selected':''?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                                                        <option value="<?= htmlspecialchars($system_user->id) ?>" <?= ($system_user->id == $issues_users->user_id) ? 'selected' : '' ?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                                 <?php }
                                                 } ?>
                                             </select>
@@ -103,7 +124,7 @@
                                             <select class="form-control" name="sprint">
                                                 <option value="">Sprint</option>
                                                 <?php foreach ($sprints as $sprint) : ?>
-                                                    <option value="<?= $sprint["id"] ?>" <?= ($sprint["id"] == $issues_sprint->sprint_id) ? 'selected':''?>><?= $sprint["title"] ?></option>
+                                                    <option value="<?= $sprint["id"] ?>" <?= ($sprint["id"] == $issues_sprint->sprint_id) ? 'selected' : '' ?>><?= $sprint["title"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
@@ -159,7 +180,7 @@
                 success: function(result) {
                     console.log(result);
                     if (result['error'] == false) {
-                        location.reload();
+                        window.location.href = base_url + 'backlog'
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
@@ -167,6 +188,35 @@
             });
 
             e.preventDefault();
+        });
+        $(document).ready(function() {
+            $('select[name="project_id"]').change(function() {
+                var projectId = $(this).val();
+                console.log(projectId);
+                if (projectId !== '') {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'issues/get_project_users', // Replace with your AJAX endpoint URL
+                        data: {
+                            project_id: projectId
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            console.log(response);
+                            var select = $('select[name="user"]');
+                            select.empty();
+                            select.append('<option value="">Member</option>');
+                            $.each(response, function(index, user) {
+                                select.append('<option value="' + user.id + '">' + user.first_name + ' ' + user.last_name + '</option>');
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
         });
     </script>
 

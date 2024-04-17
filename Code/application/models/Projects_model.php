@@ -690,15 +690,16 @@ class Projects_model extends CI_Model
         $this->db->from('projects');
         $this->db->join('project_status', 'projects.status = project_status.id');
 
+        
         if (!empty($get["client"])) {
             $this->db->where('projects.client_id', $get["client"]);
         }
-
 
         if (!empty($get["user_id"])) {
             $this->db->where('project_users.user_id', $get["user_id"]);
             $this->db->join('project_users', 'projects.id = project_users.project_id');
         }
+
         $this->db->order_by('projects.created', 'desc');
         $query = $this->db->get();
         $results = $query->result_array();
@@ -740,6 +741,28 @@ class Projects_model extends CI_Model
         echo json_encode($results);
     }
 
+
+    function get_project_by_id($project_id)
+    {
+        $this->db->select('*');
+        $this->db->from('projects');
+        $this->db->where('id', $project_id);
+        $query = $this->db->get();
+        $details = $query->row();
+
+        $this->db->select('*');
+        $this->db->from('project_users');
+        $this->db->where('project_id', $project_id);
+        $query2 = $this->db->get();
+        $results = $query2->result_array();
+        $users = [];
+
+        foreach ($results as $result) {
+            $user_id = $result["user_id"];
+            $users[] = $this->ion_auth->user($user_id)->row();
+        }
+        return array('details'=>$details,'users'=>$users);
+    }
     function get_projects($user_id = '', $project_id = '', $limit = '', $start = '', $filter_type = '', $filter = '')
     {
 

@@ -1635,6 +1635,24 @@ function users_permissions($permissions_type = '')
         }
     }
 } 
+
+function is_user_client($user_id){
+    $CI =& get_instance();
+    $saas_id = $CI->session->userdata('saas_id');
+    $query = $CI->db->select('groups.name AS group_name')
+    ->from('users_groups')
+    ->join('groups', 'users_groups.group_id = groups.id')
+    ->where('users_groups.user_id', $user_id)
+    ->where('groups.saas_id', $saas_id)
+    ->where('groups.name', 'client')
+    ->get();
+    if ($query->num_rows() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function is_client(){
     $CI =& get_instance();
     $saas_id = $CI->session->userdata('saas_id');

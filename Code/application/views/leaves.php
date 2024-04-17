@@ -34,7 +34,7 @@
 
         <div class="row d-flex justify-content-end">
           <div class="col-xl-2 col-sm-3 mt-2">
-            <a href="<?=base_url('leaves/create_leave')?>" class="btn btn-block btn-primary">+ ADD</a>
+            <a href="<?= base_url('leaves/create_leave') ?>" class="btn btn-block btn-primary">+ ADD</a>
           </div>
           <div class="col-lg-12 mt-3">
             <div class="card">

@@ -108,7 +108,6 @@
                             <?php } ?>
 
                             <?php if ($this->ion_auth->is_admin() || permissions('project_delete')){ ?>
-                              
                               <a href="#" class="text-danger delete_project dropdown-item " data-id="<?=htmlspecialchars($project['id'])?>"><?=$this->lang->line('trash')?$this->lang->line('trash'):'Trash'?></a>
                             <?php } ?>
                             
@@ -365,6 +364,47 @@
       $('#ending_date').show();
 		}
 	});
+  $(document).on('click', '.delete-project', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'projects/delete_project/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            beforeSend: function() {
+              showLoader();
+            },
+            success: function(result) {
+              if (result['error'] == false) {
+                location.reload();
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            },
+            error: function(error) {
+              console.error(error);
+            }
+          });
+        }
+      });
+
+    });
 </script>
 </body>
 </html>

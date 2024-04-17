@@ -74,9 +74,10 @@
                     <div class="col-xl-12 col-lg-12">
                         <div class="card">
                             <div class="card-header pb-0 border-0 mb-2">
+                                <!-- <p><?= var_dump(json_encode($issues[0])) ?></p> -->
                                 <div>
                                     <h4 class="card-title">BackLog</h4>
-                                    <p class="mb-0">8 Issues</p>
+                                    <!-- <p class="mb-0">8 Issues</p> -->
                                 </div>
                                 <div class="d-flex">
                                     <a href="javascript:void(0);" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#sprint-add-modal">+ Sprint</a>
@@ -123,7 +124,7 @@
                                             <div class="col-auto ms-2">
                                                 <select class="me-sm-2 form-control wide issue_user" id="inlineFormCustomSelect12" data-issue-id="<?= $issue["id"]; ?>">
                                                     <option value="">Member</option>
-                                                    <?php foreach ($system_users as $system_user) {
+                                                    <?php foreach ($issue["project_users"] as $system_user) {
                                                         if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                                                             <option value="<?= htmlspecialchars($system_user->id) ?>" <?= ($system_user->id ==  $issue["user"]) ? 'selected' : '' ?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                                     <?php }
@@ -243,7 +244,7 @@
                                                 <div class="col-auto ms-2">
                                                     <select class="me-sm-2 form-control wide issue_user" id="inlineForm CustomSelect12" data-issue-id="<?= $issue["id"]; ?>">
                                                         <option value="" selected>Member</option>
-                                                        <?php foreach ($system_users as $system_user) {
+                                                        <?php foreach ($issue["project_users"] as $system_user) {
                                                             if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                                                                 <option value="<?= htmlspecialchars($system_user->id) ?>" <?= ($system_user->id ==  $issue["user"]) ? 'selected' : '' ?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                                         <?php }
@@ -424,11 +425,11 @@
                         <div class="default-tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#home"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#contact"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#contact"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#home"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
                                 </li>
 
                                 <li class="nav-item">
@@ -436,15 +437,6 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel">
-                                    <div class="pt-2">
-                                        <h4 id="sprint_title"></h4>
-                                        <p id="sprint_goal"></p>
-                                        <div class="cm-content-body publish-content form excerpt" id="sprint_dates">
-
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="tab-pane fade" id="profile">
                                     <div class="cm-content-body publish-content form excerpt">
                                         <ul class="list-style-1 block">
@@ -469,7 +461,17 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="contact">
+                                <div class="tab-pane fade" id="home" role="tabpanel">
+                                    <div class="pt-2">
+                                        <h4 id="sprint_title"></h4>
+                                        <p id="sprint_goal"></p>
+                                        <div class="cm-content-body publish-content form excerpt" id="sprint_dates">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade show active" id="contact">
                                     <div class="pt-4">
                                         <h4 id="project_title"></h4>
                                         <p class="" id="project_description"></p>
@@ -951,59 +953,22 @@
                 data: "id=" + id,
                 dataType: "json",
                 success: function(result) {
+                    console.log(result);
                     $("#issue_title").html(result.issue.title);
                     $("#issue_description").html(result.issue.description);
-                    if (result.issue.issue_type == 0) {
+                    if (result.issue.issue_type == 'task') {
                         $("#issue_type").html('Task');
-                    } else if (result.issue.issue_type == 1) {
+                    } else if (result.issue.issue_type == 'epic') {
                         $("#issue_type").html('Epic');
                     } else {
                         $("#issue_type").html('Story');
                     }
+
                     if (result.issue.priority == 1) {
                         $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angle-up text-' + result.priority.class + '"></i>');
                     } else if (result.issue.priority != 1) {
                         $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angles-up text-' + result.priority.class + '"></i>');
-
                     }
-                    if (result.sprint && result.sprint.title) {
-                        $("#sprint_title").html(result.sprint.title);
-                    } else {
-                        $("#sprint_title").html('Backlog');
-                    }
-                    if (result.sprint && result.sprint.goal !== null) {
-                        $("#sprint_goal").html(result.sprint.goal);
-                    } else {
-                        $("#sprint_goal").html('');
-                    }
-                    var html = '';
-                    if (result.sprint && result.sprint.starting_date !== null) {
-                        $("#sprint_goal").html(result.sprint.goal);
-                        html += '<ul class="list-style-1 block">';
-                        html += '<li class="border-bottom-0">';
-                        html += '<div>';
-                        html += '<label class="form-label mb-0 me-2">';
-                        html += '<i class="fa-solid fa-calendar-days"></i> ';
-                        html += 'Starting Datetime :';
-                        html += '</label>';
-                        html += '<span class="font-w500" id="starting_datetime">' + result.sprint.starting_date + ' ' + result.sprint.starting_time + '</span>';
-                        html += '</div>';
-                        html += '</li>';
-                        html += '<li class="border-bottom-0">';
-                        html += '<div>';
-                        html += '<label class="form-label mb-0 me-2">';
-                        html += '<i class="fa-solid fa-calendar-days"></i> ';
-                        html += 'Ending Datetime :';
-                        html += '</label>';
-                        html += '<span class="font-w500" id="ending_datetime">' + result.sprint.ending_date + ' ' + result.sprint.ending_time + '</span>';
-                        html += '</div>';
-                        html += '</li>';
-                        html += '</ul>';
-                    } else {
-                        $("#sprint_goal").html('');
-                        html += '';
-                    }
-                    $('#sprint_dates').html(html);
                     if (result.project && result.project.title !== null) {
                         $("#project_title").html(result.project.title);
                         $("#project_description").html(result.project.description);
@@ -1020,7 +985,16 @@
                         html2 += '</ul>';
                         $("#project_dates").html(html2);
                     }
-                    console.log(result);
+                    if (result.sprint && result.sprint.title) {
+                        $("#sprint_title").html(result.sprint.title);
+                    } else {
+                        $("#sprint_title").html('Backlog');
+                    }
+                    if (result.sprint && result.sprint.goal !== null) {
+                        $("#sprint_goal").html(result.sprint.goal);
+                    } else {
+                        $("#sprint_goal").html('');
+                    }
                 },
                 error: function(error) {
                     console.error(error);

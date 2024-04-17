@@ -1,643 +1,430 @@
-<?php $this->load->view('includes/head'); ?>
+<?php $this->load->view('includes/header'); ?>
+<style>
+  /* 1.10 Dropzone */
+  .dropzone {
+    border: 2px dashed var(--theme-color);
+    min-height: 240px;
+    text-align: center;
+  }
+
+  .dropzone .dz-message {
+    font-size: 24px;
+    color: #34395e;
+    margin: 3.4em;
+  }
+
+  .dropzone .dz-preview .dz-details {
+    padding: 2.2em 1em;
+  }
+
+  .dropzone .dz-preview .dz-image {
+    border-radius: 3px;
+  }
+
+  @media (max-width: 575.98px) {
+    .dropzone .dz-message {
+      margin: 2em;
+    }
+  }
+
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .dropzone .dz-message {
+      margin: 2.75em;
+    }
+  }
+</style>
+<style>
+  .image-radio-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .image-radio-input {
+    display: none;
+  }
+
+  .image-radio-label svg {
+    width: 200px;
+    height: 200px;
+    fill: #000000;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+
+  .image-label-text {
+    font-size: 14px;
+  }
+
+  .image-radio-input:checked+.image-radio-label svg {
+    border-color: var(--theme-color);
+  }
+</style>
+<link rel="stylesheet" href="<?= base_url('assets/modules/multiselect/multselect.css') ?>">
 </head>
-<body class="sidebar-mini">
-  <div id="app">
-    <div class="main-wrapper">
-      <?php $this->load->view('includes/navbar'); ?>
-      <!-- Main Content -->
-      <div class="main-content">
-        <section class="section">
-          <div class="section-header">
-            <div class="section-header-back">
-              <a href="javascript:history.go(-1)" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
-            </div>
-            <h1>
-            <?=$this->lang->line('projects_detail')?$this->lang->line('projects_detail'):'Projects Detail'?>
-            </h1>
-            <div class="section-header-breadcrumb">
-              <div class="breadcrumb-item active"><a href="<?=base_url()?>"><?=$this->lang->line('dashboard')?$this->lang->line('dashboard'):'Dashboard'?></a></div>
-              <div class="breadcrumb-item active"><a href="<?=base_url('projects')?>"><?=$this->lang->line('projects')?$this->lang->line('projects'):'Projects'?></a></div>
-              <div class="breadcrumb-item"><?=$this->lang->line('detail')?$this->lang->line('detail'):'Detail'?></div>
-            </div>
-          </div>
-          <div class="section-body">
-            <?php 
-              if(isset($project[0]) && !empty($project[0])){
-                $project = $project[0];
-            ?>
 
-            
-            <?php if (($this->ion_auth->is_admin() || permissions('task_view')) && is_module_allowed('tasks')){ ?>
-              <a href="<?=base_url("projects/tasks/".htmlspecialchars($project['id']))?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-tasks"></i> <?=$this->lang->line('tasks')?$this->lang->line('tasks'):'Tasks'?></a>
-            <?php } ?>
-            
-            
-            <?php if (($this->ion_auth->is_admin() || permissions('calendar_view')) && is_module_allowed('calendar')){ ?>
-              <a href="<?=base_url("projects/calendar/".htmlspecialchars($project['id']))?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-calendar-alt"></i> <?=$this->lang->line('calendar')?$this->lang->line('calendar'):'Calendar'?></a>
-            <?php } ?>
+<body>
 
-            <?php if (($this->ion_auth->is_admin() || permissions('gantt_view')) && is_module_allowed('gantt')){ ?>
-              <a href="<?=base_url("projects/gantt/".htmlspecialchars($project['id']))?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-layer-group"></i> <?=$this->lang->line('gantt')?$this->lang->line('gantt'):'Gantt'?></a>
-            <?php } ?>
-            
-            <?php if(!$this->ion_auth->in_group(4) && is_module_allowed('timesheet')){ ?>  
-              <a href="<?=base_url("projects/timesheet/".htmlspecialchars($project['id']))?>" class="btn btn-icon icon-left btn-primary"><i class="far fa-clock"></i> <?=$this->lang->line('timesheet')?$this->lang->line('timesheet'):'Timesheet'?></a>
-            <?php } ?>
-
-            <?php if ($this->ion_auth->is_admin() || permissions('project_edit')){ ?>
-              <a href="#" data-edit="<?=htmlspecialchars($project['id'])?>" class="btn btn-icon icon-left btn-info modal-edit-project"><i class="fas fa-edit"></i> <?=$this->lang->line('edit')?$this->lang->line('edit'):'Edit'?></a>
-            <?php } ?>
-            
-            <?php if ($this->ion_auth->is_admin() || permissions('project_delete')){ ?>
-              <a href="#" class="btn btn-icon icon-left btn-danger delete_project" data-id="<?=htmlspecialchars($project['id'])?>"><i class="fas fa-times"></i> <?=$this->lang->line('delete')?$this->lang->line('delete'):'Delete'?></a>
-            <?php } ?>
-
-              <div class="row mt-3">
-              <div class="col-md-7">
-                <div class="card author-box card-<?=htmlspecialchars($project['project_class'])?>">
-                  <div class="card-body">
-                    <div class="author-box-name">
-                      <?php if($this->ion_auth->is_admin() || permissions('project_budget')){ ?>
-                        <div class="float-right">
-                          <?=get_currency('currency_symbol')?><?=htmlspecialchars($project['budget'])?>
-                        </div>
-                      <?php } ?>
-                      <a><?=htmlspecialchars($project['title'])?></a>
-                    </div>
-                    <div class="author-box-job text-<?=htmlspecialchars($project['project_class'])?>"><?=htmlspecialchars($project['project_status'])?></div>
-                    <div class="author-box-description">
-                      <p class="description-wrapper"><?=htmlspecialchars($project['description'])?></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <?php if(!empty($project['project_client'])){ ?>
-              
-              <div class="col-md-5">
-                <div class="card card-<?=htmlspecialchars($project['project_class'])?>">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('client_detail')?$this->lang->line('client_detail'):'Client Detail'?></h4>
-                  </div>
-                  <div class="card-body pb-0">
-                    <div class="profile-widget mt-0">
-                    <div class="profile-widget-header">
-                      <div class="profile-widget-items">
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['project_client']->first_name)?> <?=htmlspecialchars($project['project_client']->last_name)?></div>
-                        </div>
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('company_name')?$this->lang->line('company_name'):'Company Name'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['project_client']->company)?></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="profile-widget-header">
-                      <div class="profile-widget-items">
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['project_client']->email)?></div>
-                        </div>
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('mobile')?$this->lang->line('mobile'):'Mobile'?></div>
-                          <div class="profile-widget-item-value"><?=$project['project_client']->phone?htmlspecialchars($project['project_client']->phone):'No Number'?></div>
-                        </div>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <?php } ?>
-
-
-              <div class="col-md-<?=!empty($project['project_client'])?12:5?>">
-                <div class="card <?=!empty($project['project_client'])?'':'card-'.htmlspecialchars($project['project_class'])?>">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('task_overview')?$this->lang->line('task_overview'):'Task Overview'?></h4>
-                  </div>
-                  <div class="card-body pb-0">
-                    <div class="profile-widget mt-0">
-                    <div class="profile-widget-header">
-                      <div class="profile-widget-items">
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('days')?$this->lang->line('days'):'Days'?> <?=htmlspecialchars($project['days_status'])?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['days_count'])?></div>
-                        </div>
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['starting_date'])?></div>
-                        </div>
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('ending_date')?$this->lang->line('ending_date'):'Ending Date'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['ending_date'])?></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="profile-widget-header">
-                      <div class="profile-widget-items">
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('total_tasks')?$this->lang->line('total_tasks'):'Total Tasks'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['total_tasks'])?></div>
-                        </div>
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('completed_tasks')?$this->lang->line('completed_tasks'):'Completed Tasks'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['completed_tasks'])?></div>
-                        </div>
-                        <div class="profile-widget-item">
-                          <div class="profile-widget-item-label"><?=$this->lang->line('pending_tasks')?$this->lang->line('pending_tasks'):'Pending Tasks'?></div>
-                          <div class="profile-widget-item-value"><?=htmlspecialchars($project['total_tasks'])-htmlspecialchars($project['completed_tasks'])?></div>
-                        </div>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <!--  <div class="profile-widget-header">
-  <div class="profile-widget-items">
-    <div class="profile-widget-item">
-      <div class="profile-widget-item-label"><?=$this->lang->line('total_tasks') ? $this->lang->line('total_tasks') : 'Total Tasks'?></div>
-      <div class="profile-widget-item-value"><?=htmlspecialchars($project['total_tasks'])?></div>
-    </div>
-    <div class="profile-widget-item">
-      <div class="profile-widget-item-label"><?=$this->lang->line('completed_tasks') ? $this->lang->line('completed_tasks') : 'Completed Tasks'?></div>
-      <div class="profile-widget-item-value"><?=htmlspecialchars($project['completed_tasks'])?></div>
-    </div>
-    <div class="profile-widget-item">
-      <div class="profile-widget-item-label"><?=$this->lang->line('pending_tasks') ? $this->lang->line('pending_tasks') : 'Pending Tasks'?></div>
-      <div class="profile-widget-item-value"><?=htmlspecialchars($project['total_tasks'] - $project['completed_tasks'])?></div>
+  <!--*******************
+        Preloader start
+    ********************-->
+  <div id="preloader">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
     </div>
   </div>
-</div>
+  <!--*******************
+        Preloader end
+    ********************-->
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+  <div id="main-wrapper">
+    <?php $this->load->view('includes/sidebar'); ?>
+    <div class="content-body default-height">
 
-<div id="performance-section" class="col-md-6">
-  <div class="card card-primary">
-    <div class="card-header">
-      <h4><?=$this->lang->line('project') ? htmlspecialchars($this->lang->line('project')) : 'Project'?> <?=$this->lang->line('progress') ? htmlspecialchars($this->lang->line('progress')) : 'Progress'?></h4>
-    </div>
-    <div class="card-body">
       <?php
-        $total_tasks = intval($project['total_tasks']);
-        $completed_tasks = intval($project['completed_tasks']);
-        $progress = $total_tasks > 0 ? ($completed_tasks / $total_tasks) * 100 : 0;
+      if (isset($project[0]) && !empty($project[0])) {
+        $project = $project[0];
       ?>
-      <p>Total tasks: <?=$total_tasks?></p>
-      <p>Completed tasks: <?=$completed_tasks?></p>
-      <p>Project progress: <?=$progress?>%</p>
-      <canvas id="project_progress" height="auto"></canvas>
-    </div>
-  </div>
-</div>-->
-              
-        
-
-              
-              <!--<div id="performance-section" class="col-md-6">
-                <div class="card card-primary">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('project')?htmlspecialchars($this->lang->line('project')):'Project'?> <?=$this->lang->line('progress')?htmlspecialchars($this->lang->line('progress')):'Progress'?></h4>
-                  </div>
-                  <div class="card-body">
-                    <canvas id="project_progress" height="auto"></canvas>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="card card-primary">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('tasks_statistics')?htmlspecialchars($this->lang->line('tasks_statistics')):'Tasks Statistics'?></h4>
-                  </div>
-                  <div class="card-body">
-                    <canvas id="project_statistics" height="auto"></canvas>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="card card-primary">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('project_users')?$this->lang->line('project_users'):'Project Users'?></h4>
-                  </div>-->
-                 <div id="performance-section" class="col-md-6">
-    <div class="card card-primary">
-        <div class="card-header">
-            <h4><?=$this->lang->line('project')?htmlspecialchars($this->lang->line('project')):'Project'?> <?=$this->lang->line('progress')?htmlspecialchars($this->lang->line('progress')):'Progress'?></h4>
-        </div>
-        <div class="card-body">
-            <canvas id="project_progress" height="auto"></canvas>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-6">
-    <div class="card card-primary">
-        <div class="card-header">
-            <h4><?=$this->lang->line('tasks_statistics')?htmlspecialchars($this->lang->line('tasks_statistics')):'Tasks Statistics'?></h4>
-        </div>
-        <div class="card-body">
-            <canvas id="project_statistics" height="auto"></canvas>
-        </div>
-    </div>
-</div>
-
-<!--<div class="col-md-12">
-    <div class="card card-primary">
-        <div class="card-header">
-            <h4><?=$this->lang->line('project_users')?$this->lang->line('project_users'):'Project Users'?></h4>
-        </div>
-        <div class="card-body">
-            <div id="myPlot" style="width:100%;max-width:700px"></div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-    var xArray = [50,60,70,80,90,100,110,120,130,140,150];
-    var yArray = [7,8,8,9,9,9,10,11,14,14,15];
-
-    // Define Data
-    var data = [{
-        x: xArray,
-        y: yArray,
-        mode:"lines"
-    }];
-
-    // Define Layout
-    var layout = {
-        xaxis: {range: [40, 160], title: "Square Meters"},
-        yaxis: {range: [5, 16], title: "Completed Task"},  
-        title: "Pending Task & Completed Tasks"
-    };
-
-    // Display using Plotly
-    Plotly.newPlot("myPlot", data, layout);
-</script>-->
-<div class="col-md-12">
-    <div class="card card-primary">
-        <div class="card-header">
-            <h4><?=$this->lang->line('project_users')?$this->lang->line('project_users'):'Project Users'?></h4>
-        </div>
-        <div class="card-body">
-          <table class='table-striped' id='users_list'
-            data-toggle="table"
-            data-url="<?=base_url('projects/get_project_users2/'.$project['id'])?>"
-            data-click-to-select="true"
-            data-side-pagination="server"
-            data-pagination="false"
-            data-page-list="[5, 10, 20, 50, 100, 200]"
-            data-search="false" data-show-columns="false"
-            data-show-refresh="false" data-trim-on-search="false"
-            data-sort-name="full_name" data-sort-order="asc"
-            data-mobile-responsive="true"
-            data-toolbar="" data-show-export="false"
-            data-maintain-selected="true"
-            data-export-types='["txt","excel"]'
-            data-export-options='{
-              "fileName": "users-list",
-              "ignoreColumn": ["state"] 
-            }'
-            data-query-params="queryParams">
-            <thead>
-            <tr>
-                <th data-field="full_name" data-sortable="true"><?=$this->lang->line('name')?$this->lang->line('name'):'Name'?></th>
-                <th data-field="email" data-sortable="true"><?=$this->lang->line('email')?$this->lang->line('email'):'Email'?></th>
-                <th data-field="task_count" data-sortable="true"><?=$this->lang->line('completed')?$this->lang->line('completed'):'Completed Tasks'?> / <?=$this->lang->line('task_count')?$this->lang->line('task_count'):'Total Tasks'?></th>
-                <th data-field="performance" ><?=$this->lang->line('performance')?$this->lang->line('performance'):'Performance'?></th>
-                <th data-field="action" data-sortable="false"><?=$this->lang->line('action')?$this->lang->line('action'):'Action'?></th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-$(document).ready(function() {
-    $.ajax({
-        url: "your_backend_url",
-        type: "GET",
-        success: function(data) {
-            var xArray = [];
-            var yArray = [];
-
-            // Populate xArray and yArray with data
-            for (var i = 0; i < data.length; i++) {
-                xArray.push(data[i].square_meters);
-                yArray.push(data[i].completed_tasks);
-            }
-
-            // Define Data
-            var data = [{
-                x: xArray,
-                y: yArray,
-                mode: "lines"
-            }];
-
-            // Define Layout
-            var layout = {
-                xaxis: {range: [Math.min(...xArray)-10, Math.max(...xArray)+10], title: "Square Meters"},
-                yaxis: {range: [Math.min(...yArray)-1, Math.max(...yArray)+1], title: "Completed Task"},  
-                title: "Pending Task & Completed Tasks"
-            };
-
-            // Display using Plotly
-            Plotly.newPlot("myPlot", data, layout);
-        }
-    });
-});
-</script>
-
-</div>
-
-<script>
-function performanceFormatter(value, row, index) {
-    var total_tasks = parseInt(row.total_tasks);
-    var completed_tasks = parseInt(row.completed_tasks);
-    var pending_tasks = total_tasks - completed_tasks;
-    if (completed_tasks > 0) {
-        var performance = (completed_tasks / total_tasks) * 100;
-        return performance.toFixed(0) + '% (' + total_tasks + '/' + completed_tasks + '/' + pending_tasks + ')';
-    } else {
-        return '0% (' + total_tasks + '/' + completed_tasks + '/' + pending_tasks + ')';
-    }
-}
-
-
-
-
-
-
-window.actionsEvents = {
-    'click .view-performance-btn': function(e, value, row, index) {
-        // Open modal or new page with performance data for the selected user (row.id)
-        // You can use AJAX to retrieve the data from the server and populate the modal or page
-
-        // Redirect to the performance section
-        window.location.hash = '#performance-section';
-    }
-};
-
-function queryParams(params) {
-    params.completed_tasks = true; // set a flag to retrieve completed tasks for each user
-    return params;
-}
-</script>
-
-
-
-
-              <div class="col-md-6">
-                <div class="card card-primary">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('upload_project_files')?$this->lang->line('upload_project_files'):'Upload Project Files'?></h4>
-                  </div>
-                  <div class="card-body">
-                    <form action="<?=base_url('projects/upload-files/'.htmlspecialchars($project['id']))?>" class="dropzone" id="mydropzone">
-                      <div class="fallback">
-                        <input name="file" type="file" multiple />
-                      </div>
-                    </form>
-                    
-                    <?php
-                      if(!is_storage_limit_exceeded()){ ?>
-                        <div class="alert alert-danger mt-2">
-                          <?=$this->lang->line('storage_limit_exceeded')?$this->lang->line('storage_limit_exceeded'):'Storage Limit Exceeded'?>
-                        </div>
-				            <?php } ?>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="card card-primary">
-                  <div class="card-header">
-                    <h4><?=$this->lang->line('project_files')?$this->lang->line('project_files'):'Project Files'?></h4>
-                  </div>
-                  <div class="card-body"> 
-                    <table class='table-striped' id='file_list'
-                      data-toggle="table"
-                      data-url="<?=base_url('projects/get_project_files/'.htmlspecialchars($project['id']))?>"
-                      data-click-to-select="true"
-                      data-side-pagination="server"
-                      data-pagination="false"
-                      data-page-list="[5, 10, 20, 50, 100, 200]"
-                      data-search="false" data-show-columns="false"
-                      data-show-refresh="false" data-trim-on-search="false"
-                      data-sort-name="first_name" data-sort-order="asc"
-                      data-mobile-responsive="true"
-                      data-toolbar="" data-show-export="false"
-                      data-maintain-selected="true"
-                      data-export-types='["txt","excel"]'
-                      data-export-options='{
-                        "fileName": "users-list",
-                        "ignoreColumn": ["state"] 
-                      }'
-                      data-query-params="queryParams">
-                      <thead>
-                        <tr>
-                          <th data-field="file_name" data-sortable="true"><?=$this->lang->line('file')?$this->lang->line('file'):'File'?></th>
-                          <th data-field="file_type" data-sortable="true"><?=$this->lang->line('file_type')?$this->lang->line('file_type'):'File Type'?></th>
-                          <th data-field="file_size" data-sortable="true"><?=$this->lang->line('size')?$this->lang->line('size'):'Size'?></th>
-                          <th data-field="action" data-sortable="false"><?=$this->lang->line('action')?$this->lang->line('action'):'Action'?></th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              
-
-              
-								<div class="col-md-12">
-                  <div class="card card-primary" id="project-comment-card">
-                    <div class="card-header">
-                      <h4><?=$this->lang->line('comments')?$this->lang->line('comments'):'Comments'?></h4>
-                    </div>
-                    <div class="card-body"> 
-                      <?php
-                        if($project_comments){ 
-                          
-                        foreach($project_comments as $project_comment){ 
-                          $profile = '';
-                          $file_upload_path = '';
-                          if($project_comment['profile']){
-
-                            if(file_exists('assets/uploads/profiles/'.$project_comment['profile'])){
-                              $file_upload_path = base_url('assets/uploads/profiles/'.$project_comment['profile']);
-                            }else{
-                              $file_upload_path = base_url('assets/uploads/f'.($this->session->userdata('saas_id')).'/profiles/'.$project_comment['profile']);
-                            }
-
-                            $profile = '<figure class="avatar avatar-md mr-3">
-                            <img src="'.$file_upload_path.'" alt="'.$project_comment['first_name'].' '.$project_comment['last_name'].'">
-                            </figure>';
-                          }else{
-                            $profile = '<figure class="avatar avatar-md bg-primary text-white mr-3" data-initial="'.$project_comment['short_name'].'"></figure>';
-                          }
-                          $can_delete = '';
-                          if($project_comment['can_delete']){
-                            $can_delete = '<div class="float-right text-primary"><a href="#" class="btn btn-icon btn-sm btn-danger delete_comment" data-id="'.$project_comment['id'].'" data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i></a></div>';
-                          }
-
-                          ?>
-
-                          <ul class="list-unstyled list-unstyled-border mt-3">
-                            <li class="media"><?=$profile?>
-                              <div class="media-body">
-                              <div class="float-right text-primary"><?=$project_comment['created']?></div>
-                              <div class="media-title"><?=$project_comment['first_name']?> <?=$project_comment['last_name']?></div><?=$can_delete?>
-                              <span class="text-muted"><?=$project_comment['message']?></span>
-                              </div>
-                            </li>
-                          </ul>
-
-                      <?php } } ?>
-                      
-
-                      <form action="<?=base_url('projects/create-project-comment')?>" method="POST" id="project-comment-form">
-                        <div class="p-0 d-flex">
-                          <input type="hidden" name="comment_project_id" value="<?=$project['id']?>">
-                          <input type="text" name="message" id="message" class="form-control" placeholder="<?=$this->lang->line('type_your_message')?$this->lang->line('type_your_message'):'Type your message'?>">
-                          <button type="submit" class="btn btn-primary savebtn">
-                            <i class="far fa-paper-plane"></i>
-                          </button>
-                        </div>
-                        <div class="result mt-2"></div>
-                      </form>
-
-
-                    </div>
-                  </div>
-                </div>
-                
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <?php if (($this->ion_auth->is_admin() || permissions('task_view')) && is_module_allowed('tasks')) { ?>
+                <a href="<?= base_url("board") ?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-tasks"></i> <?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></a>
               <?php } ?>
-            </div>   
+
+
+              <?php if (($this->ion_auth->is_admin() || permissions('calendar_view')) && is_module_allowed('calendar')) { ?>
+                <a href="<?= base_url("projects/calendar/" . htmlspecialchars($project['id'])) ?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-calendar-alt"></i> <?= $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar' ?></a>
+              <?php } ?>
+
+              <?php if (($this->ion_auth->is_admin() || permissions('gantt_view')) && is_module_allowed('gantt')) { ?>
+                <a href="<?= base_url("projects/gantt/" . htmlspecialchars($project['id'])) ?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-layer-group"></i> <?= $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt' ?></a>
+              <?php } ?>
+
+              <?php if (!$this->ion_auth->in_group(4) && is_module_allowed('timesheet')) { ?>
+                <a href="<?= base_url("projects/timesheet/" . htmlspecialchars($project['id'])) ?>" class="btn btn-icon icon-left btn-primary"><i class="far fa-clock"></i> <?= $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet' ?></a>
+              <?php } ?>
+
+              <?php if ($this->ion_auth->is_admin() || permissions('project_edit')) { ?>
+                <a href="#" data-id="<?= htmlspecialchars($project['id']) ?>" class="btn btn-icon icon-left btn-info btn-edit-projecct" data-bs-toggle="modal" data-bs-target="#exampleModalToggle"><i class="fas fa-edit"></i> <?= $this->lang->line('edit') ? $this->lang->line('edit') : 'Edit' ?></a>
+              <?php } ?>
+
+              <?php if ($this->ion_auth->is_admin() || permissions('project_delete')) { ?>
+                <a href="#" class="btn btn-icon icon-left btn-danger delete-project" data-id="<?= htmlspecialchars($project['id']) ?>"><i class="fas fa-times"></i> <?= $this->lang->line('delete') ? $this->lang->line('delete') : 'Delete' ?></a>
+              <?php } ?>
+            </div>
+
           </div>
-        </section>
-      </div>
-    
+          <div class="row mt-3">
+            <div class="col-md-7">
+              <div class="card">
+                <div class="card-header">
+                  <h4>
+                    <a><?= htmlspecialchars($project['title']) ?></a>
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <div class="author-box-job text-<?= htmlspecialchars($project['project_class']) ?>"><?= htmlspecialchars($project['project_status']) ?></div>
+                  <div class="author-box-description">
+                    <p class="description-wrapper"><?= $project['description'] ?></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php if (!empty($project['project_client'])) { ?>
+              <div class="col-xl-5 col-lg-6 col-xxl-5 col-sm-6">
+                <div class="card text-white text-black">
+                  <div class="card-header">
+                    <h4><?= $this->lang->line('client_detail') ? $this->lang->line('client_detail') : 'Client Detail' ?></h4>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></span><strong><?= htmlspecialchars($project['project_client']->first_name) ?> <?= htmlspecialchars($project['project_client']->last_name) ?></strong></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('company_name') ? $this->lang->line('company_name') : 'Company Name' ?></span><strong><?= htmlspecialchars($project['project_client']->company) ?></strong></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></span><strong><?= htmlspecialchars($project['project_client']->email) ?></strong></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?></span><strong><?= $project['project_client']->phone ? htmlspecialchars($project['project_client']->phone) : 'No Number' ?></strong></li>
+                  </ul>
+                </div>
+              </div>
+            <?php } ?>
+            <div class="col-md-<?= !empty($project['project_client']) ? 12 : 5 ?>">
+              <div class="card <?= !empty($project['project_client']) ? '' : 'card-' . htmlspecialchars($project['project_class']) ?>">
+                <div class="card-header">
+                  <h4><?= $this->lang->line('task_overview') ? $this->lang->line('task_overview') : 'Task Overview' ?></h4>
+                </div>
+                <div class="card-body text-white text-black">
+                  <ul class="list-group list-group-flush">
+                    <!-- <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('days') ? $this->lang->line('days') : 'Days' ?> <?= htmlspecialchars($project['days_status']) ?></span><strong><?= htmlspecialchars($project['days_count']) ?></strong></li> -->
+                    <!-- <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?></span><strong><?= htmlspecialchars($project['starting_date']) ?></strong></li> -->
+                    <!-- <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?></span><strong><?= htmlspecialchars($project['ending_date']) ?></strong></li> -->
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('total_tasks') ? $this->lang->line('total_tasks') : 'Total Tasks' ?></span><strong><?= htmlspecialchars($project['total_tasks']) ?></strong></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('completed_tasks') ? $this->lang->line('completed_tasks') : 'Completed Tasks' ?></span><strong><?= htmlspecialchars($project['completed_tasks']) ?></strong></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('pending_tasks') ? $this->lang->line('pending_tasks') : 'Pending Tasks' ?></span><strong><?= htmlspecialchars($project['total_tasks']) - htmlspecialchars($project['completed_tasks']) ?></strong></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h4><?= $this->lang->line('upload_project_files') ? $this->lang->line('upload_project_files') : 'Upload Project Files' ?></h4>
+                </div>
+                <div class="card-body">
+                  <form action="<?= base_url('projects/upload-files/' . htmlspecialchars($project['id'])) ?>" class="dropzone" id="mydropzone">
+                    <div class="fallback">
+                      <input name="file" type="file" multiple />
+                    </div>
+                  </form>
+
+                  <?php
+                  if (!is_storage_limit_exceeded()) { ?>
+                    <div class="alert alert-danger mt-2">
+                      <?= $this->lang->line('storage_limit_exceeded') ? $this->lang->line('storage_limit_exceeded') : 'Storage Limit Exceeded' ?>
+                    </div>
+                  <?php } ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php
+      }
+      ?>
+    </div>
+    <!-- *******************************************
+  Footer -->
     <?php $this->load->view('includes/footer'); ?>
-    </div>
-  </div>
-
-<form action="<?=base_url('projects/edit-project')?>" method="POST"  class="modal-part" id="modal-edit-project-part" data-title="<?=$this->lang->line('edit_project')?$this->lang->line('edit_project'):'Edit Project'?>" data-btn="<?=$this->lang->line('update')?$this->lang->line('update'):'Update'?>">
-  <input type="hidden" name="update_id" id="update_id">
-  <div class="form-group">
-    <label class="col-form-label"><?=$this->lang->line('project_title')?$this->lang->line('project_title'):'Project Title'?><span class="text-danger">*</span></label>
-    <input type="text" name="title" id="title" class="form-control" required="">
-  </div>
-  <div class="form-group">
-    <label class="col-form-label"><?=$this->lang->line('description')?$this->lang->line('description'):'Description'?><span class="text-danger">*</span></label>
-    <textarea type="text" name="description" id="description" class="form-control"></textarea>
-  </div>
-
-  <span class="row">
-    <div class="form-group col-md-6">
-      <label class="col-form-label"><?=$this->lang->line('starting_date')?$this->lang->line('starting_date'):'Starting Date'?><span class="text-danger">*</span></label>
-      <input type="text" name="starting_date" id="starting_date" class="form-control datepicker">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="ending_date"><?=$this->lang->line('ending_date')?$this->lang->line('ending_date'):'Ending Date'?><span class="text-danger">*</span></label>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input"  type="checkbox" id="present_edit" name="present">
-        <label class="form-check-label text-danger" style="font-size: 12px  !important ;" for="present_edit"><?=$this->lang->line('present')?$this->lang->line('present'):'Present'?></label>
+    <!-- ************************************* *****
+    Model forms
+  ****************************************************-->
+    <form action="<?= base_url('projects/edit-project') ?>" method="post" id="form-project">
+      <input type="hidden" name="update_id" value="<?= htmlspecialchars($project['id']) ?>">
+      <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalToggleLabel">Project Type</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+              <input type="radio" id="radio1" name="board" value="0" class="image-radio-input">
+              <label for="radio1" class="image-radio-label me-4">
+                <svg fill="#000000" width="200" height="200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9,3 L9,21 L15,21 L15,3 L9,3 Z M8,3 L3.5,3 C2.67157288,3 2,3.67157288 2,4.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 L8,21 L8,3 Z M16,3 L16,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,4.5 C22,3.67157288 21.3284271,3 20.5,3 L16,3 Z M1,4.5 C1,3.11928813 2.11928813,2 3.5,2 L20.5,2 C21.8807119,2 23,3.11928813 23,4.5 L23,19.5 C23,20.8807119 21.8807119,22 20.5,22 L3.5,22 C2.11928813,22 1,20.8807119 1,19.5 L1,4.5 Z M4,6 L6,6 C6.55228475,6 7,6.44771525 7,7 L7,8 C7,8.55228475 6.55228475,9 6,9 L4,9 C3.44771525,9 3,8.55228475 3,8 L3,7 C3,6.44771525 3.44771525,6 4,6 Z M4,10 L6,10 C6.55228475,10 7,10.4477153 7,11 L7,12 C7,12.5522847 6.55228475,13 6,13 L4,13 C3.44771525,13 3,12.5522847 3,12 L3,11 C3,10.4477153 3.44771525,10 4,10 Z M11,6 L13,6 C13.5522847,6 14,6.44771525 14,7 L14,8 C14,8.55228475 13.5522847,9 13,9 L11,9 C10.4477153,9 10,8.55228475 10,8 L10,7 C10,6.44771525 10.4477153,6 11,6 Z M18,6 L20,6 C20.5522847,6 21,6.44771525 21,7 L21,8 C21,8.55228475 20.5522847,9 20,9 L18,9 C17.4477153,9 17,8.55228475 17,8 L17,7 C17,6.44771525 17.4477153,6 18,6 Z M18,10 L20,10 C20.5522847,10 21,10.4477153 21,11 L21,12 C21,12.5522847 20.5522847,13 20,13 L18,13 C17.4477153,13 17,12.5522847 17,12 L17,11 C17,10.4477153 17.4477153,10 18,10 Z M18,14 L20,14 C20.5522847,14 21,14.4477153 21,15 L21,16 C21,16.5522847 20.5522847,17 20,17 L18,17 C17.4477153,17 17,16.5522847 17,16 L17,15 C17,14.4477153 17.4477153,14 18,14 Z M4,7 L4,8 L6,8 L6,7 L4,7 Z M4,11 L4,12 L6,12 L6,11 L4,11 Z M11,7 L11,8 L13,8 L13,7 L11,7 Z M18,7 L18,8 L20,8 L20,7 L18,7 Z M18,11 L18,12 L20,12 L20,11 L18,11 Z M18,15 L18,16 L20,16 L20,15 L18,15 Z M3.5,5 C3.22385763,5 3,4.77614237 3,4.5 C3,4.22385763 3.22385763,4 3.5,4 L6.5,4 C6.77614237,4 7,4.22385763 7,4.5 C7,4.77614237 6.77614237,5 6.5,5 L3.5,5 Z M10.5,5 C10.2238576,5 10,4.77614237 10,4.5 C10,4.22385763 10.2238576,4 10.5,4 L13.5,4 C13.7761424,4 14,4.22385763 14,4.5 C14,4.77614237 13.7761424,5 13.5,5 L10.5,5 Z M17.5,5 C17.2238576,5 17,4.77614237 17,4.5 C17,4.22385763 17.2238576,4 17.5,4 L20.5,4 C20.7761424,4 21,4.22385763 21,4.5 C21,4.77614237 20.7761424,5 20.5,5 L17.5,5 Z" />
+                </svg>
+                <span class="image-label-text">Kanban</span>
+              </label>
+              <input type="radio" id="radio2" name="board" value="1" class="image-radio-input">
+              <label for="radio2" class="image-radio-label ms-4">
+                <svg fill="#000000" width="200" height="200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.3171203,20 L20.5,20 C20.7761424,20 21,20.2238576 21,20.5 C21,20.7761424 20.7761424,21 20.5,21 L3.5,21 C3.22385763,21 3,20.7761424 3,20.5 C3,20.2238576 3.22385763,20 3.5,20 L11.9975864,20 L11.9992783,19.9999948 C13.3169414,19.9980929 14.5879191,19.4831487 15.5355339,18.5355339 C17.4881554,16.5829124 17.4881554,13.4170876 15.5355339,11.4644661 C15.1550557,11.0839879 14.7285139,10.7776478 14.2738601,10.5454458 C14.254923,10.5373678 14.2363578,10.5280549 14.2182818,10.5174987 C12.5524962,9.69291702 10.5227538,9.8537508 8.99894709,11 L10.5,11 C10.7761424,11 11,11.2238576 11,11.5 C11,11.7761424 10.7761424,12 10.5,12 L7.5,12 C7.22385763,12 7,11.7761424 7,11.5 L7,8.5 C7,8.22385763 7.22385763,8 7.5,8 C7.77614237,8 8,8.22385763 8,8.5 L8,10.5276441 C9.46401314,9.21593206 11.4173682,8.74894646 13.2298049,9.12668728 C13.0840962,8.75531167 13,8.36566448 13,8 C13,6.34314575 14.3431458,5 16,5 L16.2928932,5 L16.1464466,4.85355339 C15.9511845,4.65829124 15.9511845,4.34170876 16.1464466,4.14644661 C16.3417088,3.95118446 16.6582912,3.95118446 16.8535534,4.14644661 L17.8535534,5.14644661 C18.0488155,5.34170876 18.0488155,5.65829124 17.8535534,5.85355339 L16.8535534,6.85355339 C16.6582912,7.04881554 16.3417088,7.04881554 16.1464466,6.85355339 C15.9511845,6.65829124 15.9511845,6.34170876 16.1464466,6.14644661 L16.2928932,6 L16,6 C14.8954305,6 14,6.8954305 14,8 C14,8.56129192 14.3301293,9.27278631 14.7516956,9.66637738 C15.2886433,9.94356402 15.792506,10.3072247 16.2426407,10.7573593 C18.5857864,13.1005051 18.5857864,16.8994949 16.2426407,19.2426407 C15.9569017,19.5283797 15.6466243,19.7813454 15.3171203,20 L15.3171203,20 Z" />
+                </svg>
+                <span class="image-label-text">Agile</span>
+              </label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+              <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" id="next-btn" data-bs-dismiss="modal" disabled>Next</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <input type="text" name="ending_date" id="ending_date" class="form-control datepicker">
-      <input type="text" name="present_edit_input" id="present_edit_input" class="form-control" style="display: none;" value="Present" readonly>
-    </div>
-  </span>
-  
-  <span class="row">
-    <div class="form-group col-md-6">
-      <label class="col-form-label"><?=$this->lang->line('budget')?$this->lang->line('budget'):'Budget'?> - <?=get_currency('currency_code')?></label>
-      <input type="number" pattern="[0-9]" name="budget" id="budget" class="form-control">
-    </div>
-    <div class="form-group col-md-6">
-      <label class="col-form-label"><?=$this->lang->line('status')?$this->lang->line('status'):'Status'?><span class="text-danger">*</span></label>
-      <select name="status" id="status" class="form-control select2">
-        <?php foreach($project_status as $status){ ?>
-        <option value="<?=htmlspecialchars($status['id'])?>"><?=htmlspecialchars($status['title'])?></option>
-        <?php } ?>
-      </select>
-    </div>
-  </span>
+      <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalToggleLabel2">Edit</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="col-form-label"><?= $this->lang->line('project_title') ? $this->lang->line('project_title') : 'Project Title' ?><span class="text-danger">*</span></label>
+                <input type="text" name="title" class="form-control" id="title" required="">
+              </div>
+              <div class="form-group mt-3">
+                <label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
+                <textarea name="description" id="description"></textarea>
+              </div>
 
-  <div class="form-group">
-    <label class="col-form-label"><?=$this->lang->line('project_users')?$this->lang->line('project_users'):'Project Users'?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?=$this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project')?$this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project'):"Add users who will work on this project. Only this users are able to see this project."?>"></i></label>
-    <select name="users[]" id="users" class="form-control select2" multiple="">
-      <?php foreach($system_users as $system_user){ if($system_user->saas_id == $this->session->userdata('saas_id')){ ?>
-      <option value="<?=htmlspecialchars($system_user->id)?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
-      <?php } } ?>
-    </select>
+              <div class="form-group mt-3">
+                <label class="col-form-label"><?= $this->lang->line('project_users') ? $this->lang->line('project_users') : 'Project Users' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project') ? $this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project') : "Add users who will work on this project. Only this users are able to see this project." ?>"></i></label>
+                <select name="users[]" class="form-control multiple" multiple="multiple" id="assignees">
+                  <?php foreach ($system_users as $system_user) {
+                    if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == 1) { ?>
+                      <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                  <?php }
+                  } ?>
+                </select>
+              </div>
+              <div class="form-group mt-3">
+                <label class="col-form-label"><?= $this->lang->line('project_client') ? $this->lang->line('project_client') : 'Project Client' ?></label>
+                <select name="client" class="form-control" id="clients_create">
+                  <option value="">Client</option>
+                  <?php foreach ($system_clients as $system_client) {
+                    if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
+                      <option value="<?= htmlspecialchars($system_client->id) ?>"><?= htmlspecialchars($system_client->first_name) ?> <?= htmlspecialchars($system_client->last_name) ?></option>
+                  <?php }
+                  } ?>
+                </select>
+              </div>
+
+              <div class="form-check form-check-inline mt-2">
+                <input class="form-check-input" type="checkbox" id="send_email_notification" name="send_email_notification">
+                <label class="form-check-label text-danger" for="send_email_notification"><?= $this->lang->line('send_email_notification') ? $this->lang->line('send_email_notification') : 'Send email notification' ?></label>
+              </div>
+              <div class="message"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+              <button type="button" class="btn btn-primary edit-project">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!--**********************************
+	Content body end
+***********************************-->
   </div>
+  <?php $this->load->view('includes/scripts'); ?>
+  <script>
+    project_id = "<?= htmlspecialchars($project['id']) ?>";
+    task_status = '<?= json_encode($tmpT) ?>';
+    task_status_values = '<?= json_encode($tmpTV) ?>';
+    progres_count = '<?= $progres_count ?>';
 
-  <div class="form-group">
-    <label class="col-form-label"><?=$this->lang->line('project_client')?$this->lang->line('project_client'):'Project Client'?></label>
-    <select name="client" id="client" class="form-control select2">
-      <option value=""><?=$this->lang->line('select_clients')?$this->lang->line('select_clients'):'Select Clients'?></option>
-      <?php foreach($system_clients as $system_client){ if($system_client->saas_id == $this->session->userdata('saas_id')){ ?>
-      <option value="<?=htmlspecialchars($system_client->id)?>"><?=htmlspecialchars($system_client->first_name)?> <?=htmlspecialchars($system_client->last_name)?></option>
-      <?php } } ?>
-    </select>
-  </div>
-</form>
-
-<div id="modal-edit-project"></div>
-
-<?php
-  foreach($task_status as $task_title){
-    $tmpT[] =  htmlspecialchars($task_title['title']);
-    if($this->ion_auth->is_admin()){
-      $tmpTV[] =  get_count('id','tasks','status='.htmlspecialchars($task_title['id']).' AND project_id='.htmlspecialchars($project['id']));
-    }elseif($this->ion_auth->in_group(4)){
-      $tmpTV[] =  get_count('t.id','tasks t LEFT JOIN projects p on t.project_id = p.id','p.client_id = '.htmlspecialchars($this->session->userdata('user_id')).' AND t.status = '.htmlspecialchars($task_title['id']).' AND t.project_id='.htmlspecialchars($project['id']));
-    }else{
-      $tmpTV[] =  get_count('t.id','tasks t LEFT JOIN task_users tu ON t.id=tu.task_id','status='.$task_title['id'].' AND tu.user_id='.htmlspecialchars($this->session->userdata('user_id')).' AND project_id='.htmlspecialchars($project['id']));
-    }
-  }
-
-  $progres_count = 0;
-  if($project['total_tasks'] > 0){
-    $progres_count = ($project['completed_tasks'] / $project['total_tasks']) * 100;
-  }
-  $progres_count = round($progres_count);
-
-?>
-
-<?php $this->load->view('includes/js'); ?>
-
-<script>
-  project_id = "<?=htmlspecialchars($project['id'])?>";
-  task_status = '<?=json_encode($tmpT)?>';
-  task_status_values = '<?=json_encode($tmpTV)?>';
-  progres_count = '<?=$progres_count?>';
-
-  var endingDateValue = '';
-  $(document).ready(function () {
-    $('#modal-edit-project').click(function () {
-      endingDateValue = $('#ending_date').val();
+    var endingDateValue = '';
+    $(document).ready(function() {
+      $('#modal-edit-project').click(function() {
+        endingDateValue = $('#ending_date').val();
+      });
     });
-  });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/tinymce.min.js"></script>
+  <script>
+    $('.image-radio-input').change(function() {
+      var anyChecked = $('.image-radio-input:checked').length > 0;
+      $('#next-btn').prop('disabled', !anyChecked);
+    });
+    $('.multiple').multiSelect();
+    $(document).on('click', '.btn-edit-projecct', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      $.ajax({
+        type: "POST",
+        url: base_url + 'projects/get_project_by_id',
+        data: "id=" + id,
+        dataType: "json",
+        beforeSend: function() {
+          $(".modal-body").append(ModelProgress);
+        },
+        success: function(result) {
+          console.log(result.data);
+          $('#title').val(result.data.details.title);
+          $('#clients_create').val(result.data.details.client_id);
+          // multi select
+          var userIDsToSelect = [];
+          console.log(result.data.users);
+          result.data.users.forEach(function(user) {
+            userIDsToSelect.push(user.id);
+          });
+          $('#description').html(result.data.details.description);
+          $('#assignees').val(userIDsToSelect);
+          $('#assignees').multiSelect('refresh');
 
-	const presentCheck = document.getElementById('present_edit');
-	const endingDate = document.getElementById('ending_date');
+          $('input:radio[name="board"][value="' + result.data.details.dash_type + '"]').prop('checked', true);
+          $('#next-btn').prop('disabled', false);
+          tinymce.init({
+            selector: 'textarea',
+            height: 240,
+            plugins: 'print preview importcss searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount textpattern noneditable help charmap emoticons code',
+            menubar: 'edit view insert format tools table tc help',
+            toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor permanentpen removeformat | pagebreak | charmap emoticons | fullscreen preview save print | insertfile image media template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment code',
+            setup: function(editor) {
+              editor.on('change keyup', function() {
+                tinyMCE.triggerSave();
+              });
+            },
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+          });
 
-	present_edit.addEventListener('change', function () {
-		if (presentCheck.checked) {
-			endingDate.value = 'Present';
-      $('#ending_date').hide();
-      $('#present_edit_input').show();
-		} else {
-			endingDate.value = endingDateValue;
-      $('#present_edit_input').hide();
-      $('#ending_date').show();
-		}
-	});
-</script>
-<script src="<?=base_url('assets/js/page/projects-details.js')?>"></script>
 
+        },
+        complete: function() {
+          $(".loader-progress").remove();
+        }
+      });
+    });
+    $(document).on('click', '.edit-project', function(e) {
+      var form = $('#form-project');
+      var formData = form.serialize();
+      console.log(formData);
+      $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: formData,
+        dataType: "json",
+        success: function(result) {
+          console.log(result);
+          if (result['error'] == false) {
+            location.reload();
+          } else {
+            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        },
+      });
+
+      e.preventDefault();
+    });
+    $(document).on('click', '.delete-project', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      console.log(id);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: base_url + 'projects/delete_project/' + id,
+            data: "id=" + id,
+            dataType: "json",
+            beforeSend: function() {
+              showLoader();
+            },
+            success: function(result) {
+              if (result['error'] == false) {
+                window.location.href=base_url+'projects';
+              } else {
+                iziToast.error({
+                  title: result['message'],
+                  message: "",
+                  position: 'topRight'
+                });
+              }
+            },
+            error: function(error) {
+              console.error(error);
+            }
+          });
+        }
+      });
+
+    });
+  </script>
+  <script src="<?= base_url('assets/modules/dropzonejs/min/dropzone.min.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/page/projects-details.js') ?>"></script>
 </body>
+
 </html>
