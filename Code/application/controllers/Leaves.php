@@ -725,12 +725,16 @@ class Leaves extends CI_Controller
 						$roler = $this->session->userdata('user_id');
 						$group = $this->ion_auth->get_users_groups($roler)->result();
 						$group_id = $group[0]->id;
+						$this->db->where('group_id', $group_id);
+						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
+						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
+						$Step = $heiCurrentGroupStepResult->step_no;
 						$log[] = [
 							'leave_id' => $leave_id,
 							'group_id' => $group_id,
 							'remarks' => $this->input->post('leave_reason'),
 							'status' => 0,
-							'level' => 1
+							'level' => $Step + 1
 						];
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);

@@ -40,7 +40,7 @@ class Leaves_model extends CI_Model
             $step = $stepResult["level"];
             $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
             $current_group_id = $group[0]->id;
-            $forword_result = $this->is_forworded($current_group_id, $step);
+            $forword_result = $this->is_forworded($current_group_id, $step, $value["user_id"]);
             if ($value["status"] == 1) {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
             } elseif ($value["status"] == 2) {
@@ -123,7 +123,7 @@ class Leaves_model extends CI_Model
             $leave['ending_time'] = date('h:i A', strtotime($leave['ending_time']));
             $upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
             if ($leave['document']) {
-                $leave['document'] = '<a class="btn btn-link btn-sm" href="'.base_url($upload_path.$leave['document']).'" download><i class="fas fa-download"></i> click</a>';
+                $leave['document'] = '<a class="btn btn-link btn-sm" href="' . base_url($upload_path . $leave['document']) . '" download><i class="fas fa-download"></i> click</a>';
             }
             if ($leave['paid'] == 0) {
                 $leave['paid'] = ($this->lang->line('paid') ? htmlspecialchars($this->lang->line('paid')) : 'Paid Leave');
@@ -135,17 +135,17 @@ class Leaves_model extends CI_Model
             $logs = $this->getStatusForword($leave['id']);
             $step = $logs["level"];
             $Logstatus = $logs["status"];
-            $forword_result = $this->is_forworded($current_group_id, $step);
+            $forword_result = $this->is_forworded($current_group_id, $step, $leave['user_id']);
             if ($leave['status'] == 0) {
                 if (($forword_result["is_forworded"]) && (permissions('leaves_status') || $this->ion_auth->is_admin())) {
-                        $leave['btn'] = false;
-                        if ($Logstatus == 1) {
-                            $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
-                        } elseif ($Logstatus == 2) {
-                            $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
-                        }else{
-                            $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to ' . $forword_result["forworded_to"]) . '</span>';
-                        }
+                    $leave['btn'] = false;
+                    if ($Logstatus == 1) {
+                        $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                    } elseif ($Logstatus == 2) {
+                        $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                    } else {
+                        $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                    }
                 } else {
                     $leave['btn'] = true;
                     $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
@@ -166,7 +166,12 @@ class Leaves_model extends CI_Model
         return $results;
     }
 
-    public function is_forworded($group_id, $step)
+    /*
+    *
+    *
+    * Forworded To 
+    */
+    public function is_forworded($group_id, $step, $user_id)
     {
         $saas_id = $this->session->userdata('saas_id');
         $this->db->where('saas_id', $saas_id);
@@ -180,17 +185,27 @@ class Leaves_model extends CI_Model
                 'forworded_to' => null,
             ];
         } else {
+
             $this->db->where('saas_id', $saas_id);
             $this->db->where('step_no', $step);
             $query = $this->db->get('leave_hierarchy');
-            if ($row = $query->row()) {
-                $step_group = $row->group_id;
-                if ($step_group != $group_id) {
-                    $group = $this->ion_auth->group($step_group)->row();
-                    $array = [
-                        'is_forworded' => true,
-                        'forworded_to' => $group->description,
-                    ];
+            if ($rows = $query->result()) {
+                foreach ($rows as $row) {
+                    $step_group = $row->group_id;
+                    if ($step_group != $group_id) {
+                        $group = $this->ion_auth->group($step_group)->row();
+                        $assigned_users = json_decode($group->assigned_users);
+                        foreach ($assigned_users as $assignee) {
+                            $emp_id = get_employee_id_from_user_id($assignee);
+                            if ($emp_id == $user_id) {
+                                $array = [
+                                    'is_forworded' => true,
+                                    // 'forworded_to' => $step_group,
+                                    'forworded_to' => $group->description,
+                                ];
+                            }
+                        }
+                    }
                 }
             }
         }
