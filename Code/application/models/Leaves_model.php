@@ -40,7 +40,8 @@ class Leaves_model extends CI_Model
             $step = $stepResult["level"];
             $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
             $current_group_id = $group[0]->id;
-            $forword_result = $this->is_forworded($current_group_id, $step, $value["user_id"]);
+            $emppp = get_employee_id_from_user_id($user->id);
+            $forword_result = $this->is_forworded($current_group_id, $step, $emppp);
             if ($value["status"] == 1) {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
             } elseif ($value["status"] == 2) {

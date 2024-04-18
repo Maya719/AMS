@@ -734,7 +734,7 @@ class Leaves extends CI_Controller
 							'group_id' => $group_id,
 							'remarks' => $this->input->post('leave_reason'),
 							'status' => 0,
-							'level' => $Step + 1
+							'level' => $Step+1
 						];
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);

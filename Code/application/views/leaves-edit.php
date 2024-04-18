@@ -163,7 +163,7 @@
                                         </div>
 
 
-                                        <?php if ($this->ion_auth->in_group(1) || permissions('leaves_status')) {
+                                        <?php if (permissions('leaves_status')) {
                                         ?>
                                             <div class="form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
