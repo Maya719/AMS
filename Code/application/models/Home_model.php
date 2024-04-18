@@ -30,7 +30,18 @@ class Home_model extends CI_Model
             $employee_id = $user->employee_id;
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
-            $where = " WHERE attendance.id IS NOT NULL ";
+            if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                $where = " WHERE attendance.id IS NOT NULL ";
+            } else {
+                $selected = selected_users();
+                if (!empty($selected)) {
+                    foreach ($selected as $assignee) {
+                        $sel[] = get_employee_id_from_user_id($assignee);
+                    }
+                    $userIdsString = implode(',', $sel);
+                    $where = " WHERE attendance.user_id IN ($userIdsString)";
+                }
+            }
         }
         if (isset($get['department']) && !empty($get['department'])) {
             $department = $get['department'];
@@ -88,7 +99,16 @@ class Home_model extends CI_Model
             $presentArray[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
         }
 
-        $system_users = $this->ion_auth->members_all()->result();
+        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            $system_users = $this->ion_auth->members()->result();
+        } else {
+            $selected = selected_users();
+            foreach ($selected as $user_id) {
+                $users[] = $this->ion_auth->user($user_id)->row();
+            }
+            $users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+            $system_users = $users;
+        }
         foreach ($system_users as $user) {
             if ($user->finger_config == '1' && $user->active == '1' && $user->join_date && strtotime($user->join_date) <= strtotime($from)) {
 
@@ -152,6 +172,16 @@ class Home_model extends CI_Model
         $present = 0;
         if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
             $where = " WHERE DATE(attendance.finger) = '" . $date . "' ";
+        } elseif (permissions('attendance_view_selected')) {
+            $selected = selected_users();
+            if (!empty($selected)) {
+                foreach ($selected as $assignee) {
+                    $sel[] = get_employee_id_from_user_id($assignee);
+                }
+                $sel[] = $this->session->userdata('user_id');
+                $userIdsString = implode(',', $sel);
+                $where = " WHERE DATE(attendance.finger) = '" . $date . "' AND attendance.user_id IN ($userIdsString)";
+            }
         }
 
         $leftjoin = " LEFT JOIN users ON attendance.user_id = users.employee_id";
@@ -159,7 +189,15 @@ class Home_model extends CI_Model
             FROM attendance " . $leftjoin . $where);
 
         $results = $query->result_array();
-        $system_users = $this->ion_auth->members_all()->result();
+        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            $system_users = $this->ion_auth->members()->result();
+        } elseif (permissions('attendance_view_selected')) {
+            $selected = selected_users();
+            foreach ($selected as $user_id) {
+                $users[] = $this->ion_auth->user($user_id)->row();
+            }
+            $system_users = $users;
+        }
 
         foreach ($system_users as $user) {
             $userPresent = false;
@@ -539,7 +577,7 @@ class Home_model extends CI_Model
                         'event' => 'Event',
                         'date' => date('j F', strtotime($start)) . '-' . date('j F', strtotime($end))
                     ];
-                }else{
+                } else {
                     $array[] = [
                         'user' => $title,
                         'profile' => '',

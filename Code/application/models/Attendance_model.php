@@ -71,7 +71,16 @@ class Attendance_model extends CI_Model
         if (isset($get['user_id']) && !empty($get['user_id'])) {
             $system_users = [$this->ion_auth->user($get['user_id'])->row()];
         } else {
-            $system_users2 = $this->ion_auth->members()->result();
+            if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                $system_users2 = $this->ion_auth->members()->result();
+            } else {
+                $selected = selected_users();
+                foreach ($selected as $user_id) {
+                    $users[] = $this->ion_auth->user($user_id)->row();
+                }
+                $users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+                $system_users2 = $users;
+            }
             if (isset($get['department']) && !empty($get['department']) && isset($get['shifts']) && !empty($get['shifts'])) {
                 foreach ($system_users2 as $user) {
                     if ($get['shifts'] == $user->shift_id && $get['department'] == $user->department) {
@@ -268,7 +277,18 @@ class Attendance_model extends CI_Model
             $employee_id = $user->employee_id;
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
-            $where = " WHERE attendance.id IS NOT NULL ";
+            if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                $where = " WHERE attendance.id IS NOT NULL ";
+            } else {
+                $selected = selected_users();
+                if (!empty($selected)) {
+                    foreach ($selected as $assignee) {
+                        $sel[] = get_employee_id_from_user_id($assignee);
+                    }
+                    $userIdsString = implode(',', $sel);
+                    $where = " WHERE attendance.user_id IN ($userIdsString)";
+                }
+            }
         }
         if (isset($get['department']) && !empty($get['department'])) {
             $department = $get['department'];
@@ -569,7 +589,7 @@ class Attendance_model extends CI_Model
         $user_id = get_user_id_from_employee_id($employee_id);
         $user = $this->ion_auth->user($user_id)->row();
         $shift_id = $user->shift_id;
-        $shift = $this->shift_model->get_shift_log_by_id($shift_id,$date);
+        $shift = $this->shift_model->get_shift_log_by_id($shift_id, $date);
         $shiftStartTime = $shift["starting_time"];
         $shiftEndTime = $shift["ending_time"];
 
