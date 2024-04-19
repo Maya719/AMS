@@ -16,6 +16,12 @@ class Backlog extends CI_Controller
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
             $query = $this->db->get('sprints');
             $sprints = $query->result_array();
+            if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+            } else if (permissions('project_view_selected')) {
+                $users = selected_users();
+            } else {
+                $users = [$this->session->userdata('user_id')];
+            }
             foreach ($sprints as &$sprint) {
                 if (!$sprint["starting_date"] && !$sprint["ending_date"] && $sprint["duration"]) {
                     $current = new DateTime($sprint["created"]);
@@ -36,7 +42,11 @@ class Backlog extends CI_Controller
             $this->db->select('tasks.*'); 
             $this->db->from('tasks');
             $this->db->join('projects', 'tasks.project_id = projects.id'); 
+            $this->db->join('task_users iu', 'iu.task_id = tasks.id', 'left');
             $this->db->where('projects.dash_type', 1);
+            if (!empty($users)) {
+                $this->db->where_in('iu.user_id', $users);
+            }
             $query = $this->db->get(); 
             $issues = $query->result_array(); 
 

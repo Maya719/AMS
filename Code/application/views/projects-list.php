@@ -72,11 +72,14 @@
     <div class="content-body default-height">
       <!-- row -->
       <div class="container-fluid">
-        <div class="row d-flex justify-content-end mb-2">
-          <div class="col-xl-2 col-sm-3 mt-2">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModalToggle" class="btn  btn-block btn-primary">+ ADD</a>
+        <?php if ($this->ion_auth->is_admin() || permissions('project_create')) : ?>
+          <div class="row d-flex justify-content-end mb-2">
+            <div class="col-xl-2 col-sm-3 mb-2">
+              <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModalToggle" class="btn  btn-block btn-primary">+ ADD</a>
+            </div>
           </div>
-        </div>
+        <?php endif ?>
+
         <div class="row">
           <div class="card">
             <div class="card-body">

@@ -19,7 +19,7 @@ $(document).on('click', '.btn-create-leave', function (e) {
         success: function (result) {
             if (result['error'] == false) {
                 // console.log(result);
-                location.href = base_url + "leaves"
+                window.location.href = base_url + 'leaves';
             } else {
                 toastr.error(result['message'], "Error", {
                     positionClass: "toast-top-right",
@@ -321,7 +321,7 @@ $(document).on('click', '.btn-delete-leave', function (e) {
                 dataType: "json",
                 success: function (result) {
                     if (result['error'] == false) {
-                        location.href = base_url + 'leaves';
+                        window.location.href = base_url + 'leaves';
                     } else {
                         iziToast.error({
                             title: result['message'],
@@ -335,29 +335,26 @@ $(document).on('click', '.btn-delete-leave', function (e) {
     });
 });
 $(document).on('click', '.btn-edit-leave', function (e) {
-    var form = $('#modal-edit-leaves-part')[0]; // Get the native DOM element
+    var form = $('#modal-edit-leaves-part')[0]; 
     if (!form || form.nodeName !== 'FORM') {
         console.error('Form element not found or not a form');
         return;
     }
-    var formData = new FormData(form); // Create FormData object
-
+    var formData = new FormData(form); 
     console.log(formData);
-
     $.ajax({
         type: 'POST',
-        url: $(form).attr('action'), // Use $(form) to get the jQuery object and then retrieve the action attribute
+        url: $(form).attr('action'), 
         data: formData,
-        processData: false, // Prevent jQuery from processing the data
-        contentType: false, // Prevent jQuery from setting contentType
+        processData: false, 
+        contentType: false,
         dataType: "json",
         beforeSend: function () {
             $(".btn-edit-leave").prop("disabled", true);
         },
         success: function (result) {
             if (result['error'] == false) {
-                location.reload();
-                // console.log(result);
+                window.location.href = base_url + 'leaves';
             } else {
                 toastr.error(result['message'], "Error", {
                     positionClass: "toast-top-right",

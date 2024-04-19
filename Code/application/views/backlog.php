@@ -79,9 +79,12 @@
                                     <h4 class="card-title">BackLog</h4>
                                     <!-- <p class="mb-0">8 Issues</p> -->
                                 </div>
-                                <div class="d-flex">
-                                    <a href="javascript:void(0);" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#sprint-add-modal">+ Sprint</a>
-                                </div>
+                                <?php if ($this->ion_auth->is_admin() || permissions('project_create')) : ?>
+                                    <div class="d-flex">
+                                        <a href="javascript:void(0);" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#sprint-add-modal">+ Sprint</a>
+                                    </div>
+                                <?php endif ?>
+
                             </div>
                             <div class="card-body px-0 py-2 drag-drop" data-sprint-id="0">
                                 <div class="drop-area" id="dropArea">
@@ -132,35 +135,47 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-auto my-1 ms-2">
-                                                <select class="me-sm-2 form-control wide issue_status" id="inlineFormCustomSelect4" data-issue-id="<?= $issue["id"]; ?>">
-                                                    <?php foreach ($task_statuses as $task_status) : ?>
-                                                        <option value="<?= $task_status["id"] ?>" <?= ($issue["status"] == $task_status["id"]) ? 'selected' : '' ?>><?= $task_status["title"] ?></option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="dropdown">
-                                                <div class="btn-link" data-bs-toggle="dropdown">
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5" />
-                                                        <circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5" />
-                                                        <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
-                                                    </svg>
+                                            <?php if ($this->ion_auth->is_admin() || permissions('task_status')) : ?>
+                                                <div class="col-auto my-1 ms-2">
+                                                    <select class="me-sm-2 form-control wide issue_status" id="inlineFormCustomSelect4" data-issue-id="<?= $issue["id"]; ?>">
+                                                        <?php foreach ($task_statuses as $task_status) : ?>
+                                                            <option value="<?= $task_status["id"] ?>" <?= ($issue["status"] == $task_status["id"]) ? 'selected' : '' ?>><?= $task_status["title"] ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
                                                 </div>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
-                                                    <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
+                                            <?php endif ?>
+                                            <?php if ($this->ion_auth->is_admin() || permissions('task_delete') || permissions('task_edit')) : ?>
+                                                <div class="dropdown">
+                                                    <div class="btn-link" data-bs-toggle="dropdown">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <?php if ($this->ion_auth->is_admin() || permissions('task_delete')) : ?>
+                                                                <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
+                                                            <?php endif ?>
+                                                            <?php if ($this->ion_auth->is_admin() || permissions('task_edit')) : ?>
+                                                                <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
+                                                            <?php endif ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            <?php endif ?>
                                         </div>
                                     <?php endif ?>
                                 <?php endforeach ?>
                             </div>
                             <div class="card-footer d-flex justify-content-end">
-                                <div class="col-1">
-                                    <a href="<?= base_url('issues') ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
-                                </div>
+                                <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
+                                    <div class="col-1">
+                                        <a href="<?= base_url('issues') ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
+                                    </div>
+                                <?php endif ?>
+
                             </div>
                         </div>
                     </div>
@@ -172,28 +187,39 @@
                                         <h4 class="card-title" id="editableField"><?= $sprint["title"] ?></h4>
                                         <p class="mb-0"><?= $sprint["starting_date"] ?> - <?= $sprint["ending_date"] ?></p>
                                     </div>
-                                    <div class="d-flex">
-                                        <?php if ($sprint["status"] == 0) : ?>
-                                            <a href="javascript:void(0);" data-id="<?= $sprint["id"] ?>" class="btn btn-primary btn-xs start_sprint">Start Sprint</a>
-                                        <?php elseif ($sprint["status"] == 1) : ?>
-                                            <a href="javascript:void(0);" data-id="<?= $sprint["id"] ?>" class="btn btn-primary btn-xs complete_sprint">Complete Sprint</a>
-                                        <?php else : ?>
-                                            <a href="javascript:void(0);" data-id="<?= $sprint["id"] ?>" class="btn btn-primary btn-xs" disabled>Completed</a>
-                                        <?php endif ?>
-                                        <div class="dropdown ms-2">
-                                            <div class="btn-link mt-2" data-bs-toggle="dropdown">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M7 12C7 13.1046 6.10457 14 5 14C3.89543 14 3 13.1046 3 12C3 10.8954 3.89543 10 5 10C6.10457 10 7 10.8954 7 12Z" fill="#A5A5A5" />
-                                                    <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="#A5A5A5" />
-                                                    <path d="M21 12C21 13.1046 20.1046 14 19 14C17.8954 14 17 13.1046 17 12C17 10.8954 17.8954 10 19 10C20.1046 10 21 10.8954 21 12Z" fill="#A5A5A5" />
-                                                </svg>
+                                    <?php if ($this->ion_auth->is_admin() || permissions('project_create') || permissions('task_create') || permissions('task_status') || permissions('task_edit') || permissions('task_delete')) : ?>
+                                        <div class="d-flex">
+                                            <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
+                                                <?php if ($sprint["status"] == 0) : ?>
+                                                    <a href="javascript:void(0);" data-id="<?= $sprint["id"] ?>" class="btn btn-primary btn-xs start_sprint">Start Sprint</a>
+                                                <?php elseif ($sprint["status"] == 1) : ?>
+                                                    <a href="javascript:void(0);" data-id="<?= $sprint["id"] ?>" class="btn btn-primary btn-xs complete_sprint">Complete Sprint</a>
+                                                <?php else : ?>
+                                                    <a href="javascript:void(0);" data-id="<?= $sprint["id"] ?>" class="btn btn-primary btn-xs" disabled>Completed</a>
+                                                <?php endif ?>
+                                            <?php endif ?>
+
+                                            <?php if ($this->ion_auth->is_admin() || permissions('task_delete') || permissions('task_edit')) : ?>
+                                            <div class="dropdown ms-2">
+                                                <div class="btn-link mt-2" data-bs-toggle="dropdown">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M7 12C7 13.1046 6.10457 14 5 14C3.89543 14 3 13.1046 3 12C3 10.8954 3.89543 10 5 10C6.10457 10 7 10.8954 7 12Z" fill="#A5A5A5" />
+                                                        <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="#A5A5A5" />
+                                                        <path d="M21 12C21 13.1046 20.1046 14 19 14C17.8954 14 17 13.1046 17 12C17 10.8954 17.8954 10 19 10C20.1046 10 21 10.8954 21 12Z" fill="#A5A5A5" />
+                                                    </svg>
+                                                </div>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <?php if ($this->ion_auth->is_admin() || permissions('task_delete')) : ?>
+                                                        <a class="dropdown-item delete_sprint" data-id="<?= $sprint["id"] ?>" href="javascript:void(0)">Delete Sprint</a>
+                                                    <?php endif ?>
+                                                    <?php if ($this->ion_auth->is_admin() || permissions('task_edit')) : ?>
+                                                        <a class="dropdown-item edit_sprint" href="javascript:void(0)" data-id="<?= $sprint["id"] ?>" data-bs-toggle="modal" data-bs-target="#sprint-edit-modal">Edit Sprint</a>
+                                                    <?php endif ?>
+                                                </div>
                                             </div>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item delete_sprint" data-id="<?= $sprint["id"] ?>" href="javascript:void(0)">Delete Sprint</a>
-                                                <a class="dropdown-item edit_sprint" href="javascript:void(0)" data-id="<?= $sprint["id"] ?>" data-bs-toggle="modal" data-bs-target="#sprint-edit-modal">Edit Sprint</a>
-                                            </div>
+                                            <?php endif ?>
                                         </div>
-                                    </div>
+                                    <?php endif ?>
                                 </div>
 
                                 <div class="card-body px-0 py-2 drag-drop" data-sprint-id="<?= $sprint["id"] ?>">
@@ -278,9 +304,11 @@
                                     <?php endforeach ?>
                                 </div>
                                 <div class="card-footer d-flex justify-content-end">
-                                    <div class="col-1">
-                                        <a href="<?= base_url('issues') ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
-                                    </div>
+                                    <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
+                                        <div class="col-1">
+                                            <a href="<?= base_url('issues') ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
+                                        </div>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         </div>

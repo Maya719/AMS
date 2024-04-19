@@ -74,13 +74,14 @@
     <div id="main-wrapper">
         <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
-            <!-- row -->
             <div class="container-fluid">
-                <div class="row d-flex justify-content-end">
-                    <div class="col-xl-2 col-sm-3 mt-2">
-                        <a href="<?= base_url('issues') ?>" class="btn btn-block btn-primary">Add Issue</a>
+                <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-xl-2 col-sm-3">
+                            <a href="<?= base_url('issues') ?>" class="btn btn-block btn-primary">Add Issue</a>
+                        </div>
                     </div>
-                </div>
+                <?php endif ?>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
                         <div class="card">
@@ -93,6 +94,7 @@
                                                 <option value="1"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></option>
                                             </select>
                                         </div>
+                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
                                         <div class="col-lg-3">
                                             <select class="form-select" id="project_id">
                                                 <option value="" selected>Project</option>
@@ -103,6 +105,7 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
+                                        <?php endif ?>
                                         <div class="col-lg-3" id="sprintCol" style="display: none;">
                                             <select class="form-select" id="sprint_id">
                                                 <?php foreach ($sprints as $sprint) : ?>
@@ -110,16 +113,19 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3">
-                                            <select class="form-select" id="user_id">
-                                                <option value="" selected>Member</option>
-                                                <?php foreach ($system_users as $system_user) : ?>
-                                                    <?php if ($system_user->active == '1') : ?>
-                                                        <option value="<?= $system_user->id ?>"><?= $system_user->first_name . ' ' . $system_user->last_name ?></option>
-                                                    <?php endif ?>
-                                                <?php endforeach ?>
-                                            </select>
-                                        </div>
+                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
+                                            <div class="col-lg-3">
+                                                <select class="form-select" id="user_id">
+                                                    <option value="" selected>Member</option>
+                                                    <?php foreach ($system_users as $system_user) : ?>
+                                                        <?php if ($system_user->active == '1') : ?>
+                                                            <option value="<?= $system_user->id ?>"><?= $system_user->first_name . ' ' . $system_user->last_name ?></option>
+                                                        <?php endif ?>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
+                                        <?php endif ?>
+
                                     </div>
                                 </div>
                             </div>

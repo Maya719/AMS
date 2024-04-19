@@ -300,8 +300,10 @@ class Board extends CI_Controller
         } else {
             $html .= '<div class="card draggable-handle" data-id="' . $issue["id"] . '">';
         }
-        $html .= '<div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
+        $html .= '<div class="card-body">';
+        if ($this->ion_auth->is_admin() || permissions('task_delete') || permissions('task_edit')) {
+
+            $html .= '<div class="d-flex justify-content-between mb-2">
                             <span class="text-' . $issue["priority_class"] . '"> <!-- priority class -->
                                 <svg class="me-2" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="5" cy="5" r="5" class="custom-circle-fill-' . $issue["priority_class"] . '" />
@@ -316,13 +318,20 @@ class Board extends CI_Controller
                                         <circle cx="19.5" cy="11.5" r="2.5" transform="rotate(-90 19.5 11.5)" fill="#717579" />
                                     </svg>
                                 </div>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item delete_issue" data-issue-id="' . $issue["id"] . '" href="javascript:void(0)">Delete</a>
-                                    <a class="dropdown-item" href="' . base_url('issues/edit/' . $issue["id"]) . '">Edit</a>
-                                </div>
+                                <div class="dropdown-menu dropdown-menu-right">';
+            if ($this->ion_auth->is_admin() || permissions('task_delete')) {
+                $html .= '<a class="dropdown-item delete_issue" data-issue-id="' . $issue["id"] . '" href="javascript:void(0)">Delete</a>';
+            }
+            if ($this->ion_auth->is_admin() || permissions('task_edit')) {
+
+                $html .= '<a class="dropdown-item" href="' . base_url('issues/edit/' . $issue["id"]) . '">Edit</a>';
+            }
+            $html .= '</div>
                             </div>
-                        </div>
-                        <h5 class="mb-0"><a href="javascript:void(0);" class="text-black btn-detail-model" data-id="' . $issue["id"] . '" data-bs-toggle="modal" data-bs-target="#issue-detail-modal">' . ($issue['title']) . '</a></h5>
+                        </div>';
+        }
+
+        $html .= '<h5 class="mb-0"><a href="javascript:void(0);" class="text-black btn-detail-model" data-id="' . $issue["id"] . '" data-bs-toggle="modal" data-bs-target="#issue-detail-modal">' . ($issue['title']) . '</a></h5>
                         <div class="section-title mt-3 mb-1">' . ($this->lang->line('priority') ? ($this->lang->line('priority')) : 'Priority') . '</div>
                         <span class="badge light badge-' . $issue["priority_class"] . '">' . ($issue['priority_title']) . '</span>
                         <div class="row justify-content-between align-items-center kanban-user">
