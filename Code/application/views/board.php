@@ -103,7 +103,7 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3" id="sprintCol">
+                                        <div class="col-lg-3" id="sprintCol" style="display: none;">
                                             <select class="form-select" id="sprint_id">
                                                 <?php foreach ($sprints as $sprint) : ?>
                                                     <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
