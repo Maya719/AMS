@@ -89,8 +89,8 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <select class="form-select" id="board_type">
-                                                <option value="1"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></option>
                                                 <option value="0"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></option>
+                                                <option value="1"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></option>
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
