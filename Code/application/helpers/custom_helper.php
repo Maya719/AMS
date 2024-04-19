@@ -1485,7 +1485,6 @@ function change_permissions($group_id)
     }
     else{
         $data = json_decode($permissions, true);
-
         if(empty($group_id)){
             return true;
         }else{

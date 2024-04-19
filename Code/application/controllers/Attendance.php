@@ -150,9 +150,9 @@ class Attendance extends CI_Controller
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 			$attendanceReport = $this->attendance_model->get_attendance();
 			$responseData = array(
-				'report' => $attendanceReport
+				'report' => $attendanceReport,
 			);
-			return $responseData;
+			return '';
 		} else {
 			return '';
 		}

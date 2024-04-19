@@ -443,9 +443,11 @@
                     var tableData = JSON.parse(response);
                     $('#shift_id').empty();
                     $('#department_id').empty();
+                    $('#shift_id').append('<option value="">Shift</option>');
                     tableData.shift.forEach(function(shift) {
                         $('#shift_id').append('<option value="' + shift.id + '">' + shift.name + '</option>');
                     });
+                    $('#department_id').append('<option value="">Department</option>');
                     tableData.department.forEach(function(department) {
                         $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
                     });

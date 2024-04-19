@@ -684,26 +684,33 @@ class Projects_model extends CI_Model
 
     function get_projects_list()
     {
-
         $get = $this->input->get();
-        $this->db->select('projects.*');
-        $this->db->from('projects');
-        $this->db->join('project_status', 'projects.status = project_status.id');
-
-        
-        if (!empty($get["client"])) {
-            $this->db->where('projects.client_id', $get["client"]);
-        }
-
         if (!empty($get["user_id"])) {
-            $this->db->where('project_users.user_id', $get["user_id"]);
-            $this->db->join('project_users', 'projects.id = project_users.project_id');
+            $where = " WHERE project_users.user_id = '" . $get["user_id"] . "' ";
+        } else {
+            if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                $where = " WHERE project_users.id IS NOT NULL ";
+            } elseif (permissions('project_view_selected')) {
+                $selected = selected_users();
+                if (!empty($selected)) {
+                    $userIdsString = implode(',', $selected);
+                    $where = " WHERE project_users.user_id IN ($userIdsString)";
+                }
+            } else {
+                $where = " WHERE project_users.user_id = '" . $this->session->userdata("user_id") . "' ";
+            }
         }
 
-        $this->db->order_by('projects.created', 'desc');
-        $query = $this->db->get();
-        $results = $query->result_array();
+        if (!empty($get["client"])) {
+            $where .= " AND projects.client_id = '" . $get["client"] . "' ";
+        }
 
+        $leftjoin = "LEFT JOIN project_users ON projects.id = project_users.project_id";
+
+        $query = $this->db->query("SELECT DISTINCT projects.* FROM projects " . $leftjoin . $where);
+
+        // Execute the query and retrieve the results as an array
+        $results = $query->result_array();
         foreach ($results as &$result) {
             if ($result['client_id']) {
                 $result['project_client'] = $this->ion_auth->user($result['client_id'])->row();
@@ -737,7 +744,6 @@ class Projects_model extends CI_Model
             $html .= '</ul>';
             $result["project_users4"] = $html;
         }
-
         echo json_encode($results);
     }
 
@@ -761,7 +767,7 @@ class Projects_model extends CI_Model
             $user_id = $result["user_id"];
             $users[] = $this->ion_auth->user($user_id)->row();
         }
-        return array('details'=>$details,'users'=>$users);
+        return array('details' => $details, 'users' => $users);
     }
     function get_projects($user_id = '', $project_id = '', $limit = '', $start = '', $filter_type = '', $filter = '')
     {

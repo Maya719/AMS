@@ -1562,7 +1562,7 @@ class Settings extends CI_Controller
 
 	public function roles()
 	{
-		if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin() && is_module_allowed('user_permissions')) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_module_allowed('user_permissions'))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
 			$this->data['main_page2'] = 'roles';
 			$this->data['main_page'] = 'Roles';

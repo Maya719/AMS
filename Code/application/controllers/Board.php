@@ -150,86 +150,117 @@ class Board extends CI_Controller
     }
     public function filter_board()
     {
+        // Validate inputs
         $sprint_id = $this->input->post('sprint_id');
         $user_id = $this->input->post('user_id');
         $project_id = $this->input->post('project_id');
         $board = $this->input->post('board');
 
+        // Determine the users based on input and permissions
+        if (!empty($user_id)) {
+            // Use the provided user_id
+            $users = [$user_id];
+        } else {
+            if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+            } else if (permissions('project_view_selected')) {
+                $users = selected_users();
+            } else {
+                $users = [$this->session->userdata('user_id')];
+            }
+        }
+        // Fetch statuses
+        $statuses = $this->get_statuses();
+
+        $issues_data = $this->get_issues($sprint_id, $project_id, $board, $users);
+
+        $html = '';
+        $completed = 0;
+        $total = 0;
+        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
+
+        // Calculate the progress percentage
+        $rounded_percent = $this->calculate_progress($completed, $total);
+
+        // Prepare the result
+        $result = [
+            'sprint' => $sprint_data ?? [],
+            'issues' => $issues_data,
+            'html' => $html,
+            'total' => $total,
+            'completed' => $completed,
+            'user_id' => $user_id,
+            'percent' => 'Total Progress ' . $rounded_percent . '%',
+        ];
+
+        // Return JSON-encoded result
+        echo json_encode($result);
+    }
+
+    private function get_statuses()
+    {
+        // Fetch task statuses from the database
         $this->db->select('*');
         $this->db->from('task_status');
         $status_query = $this->db->get();
-        $statuses = $status_query->result_array();
+        return $status_query->result_array();
+    }
 
+    private function get_issues($sprint_id, $project_id, $board, $users)
+    {
+        // Fetch issues based on the input filters
+        $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
+        $this->db->from('tasks i');
+        $this->db->join('projects p', 'p.id = i.project_id', 'left');
+        $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
+        $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
+        $this->db->join('users u', 'u.id = iu.user_id', 'left');
+
+        // Add filters based on input parameters
         if ($board && trim($board) == '1') {
-            $this->db->select('*');
-            $this->db->from('sprints');
-
-            if ($sprint_id && trim($sprint_id) !== '') {
-                $this->db->where('id', $sprint_id);
-            }
-
-            $sprint_query = $this->db->get();
-            $sprint_data = $sprint_query->row_array();
-
-            $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
-            $this->db->from('tasks i');
+            // Handle sprint board
             $this->db->join('issues_sprint is', 'is.issue_id = i.id', 'left');
-            $this->db->join('projects p', 'p.id = i.project_id', 'left');
-            $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
-            $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
-            $this->db->join('users u', 'u.id = iu.user_id', 'left');
-
             if ($sprint_id && trim($sprint_id) !== '') {
                 $this->db->where('is.sprint_id', $sprint_id);
             }
-
-            $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
-            if ($user_id && trim($user_id) !== '') {
-                $this->db->where('iu.user_id', $user_id);
-            }
-
-            if ($project_id && trim($project_id) !== '') {
-                $this->db->where('p.id', $project_id);
-            }
-
-            $this->db->order_by('created', 'desc');
-            $issues_query = $this->db->get();
-            $issues_data = $issues_query->result_array();
         } else {
-            $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
-            $this->db->from('tasks i');
-            $this->db->join('projects p', 'p.id = i.project_id', 'left');
-            $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
-            $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
-            $this->db->join('users u', 'u.id = iu.user_id', 'left');
+            // Handle other boards
             $this->db->where('p.dash_type', 0);
-            $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
-            if ($user_id && trim($user_id) !== '') {
-                $this->db->where('iu.user_id', $user_id);
-            }
-            if ($project_id && trim($project_id) !== '') {
-                $this->db->where('p.id', $project_id);
-            }
-
-            $this->db->order_by('created', 'desc');
-            $issues_query = $this->db->get();
-            $issues_data = $issues_query->result_array();
         }
 
-        $total = 0;
+        // Additional filters
+        $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
+        if (!empty($users)) {
+            $this->db->where_in('iu.user_id', $users);
+        }
+        if ($project_id && trim($project_id) !== '') {
+            $this->db->where('p.id', $project_id);
+        }
+
+        // Execute the query and return results
+        $this->db->order_by('created', 'desc');
+        $issues_query = $this->db->get();
+        return $issues_query->result_array();
+    }
+
+    private function generate_html_and_metrics($statuses, $issues_data)
+    {
         $html = '';
         $completed = 0;
+        $total = 0;
+
+        // Generate HTML and calculate completion metrics
         foreach ($statuses as $status) {
-            $html .= '<div class="col-xl-3 col-md-6 px-0">
-            <div class="kanbanPreview-bx">
-                <div class="draggable-zone dropzoneContainer" data-status-id="' . $status["id"] . '">
-                    <div class="sub-card align-items-center d-flex justify-content-between mb-4">
-                        <div>
-                            <h4 class="mb-0">' . $status["title"] . '</h4>
-                        </div>
-                    </div>
-                ';
-            foreach ($issues_data as $issue) {                  // issue cards
+            $html .= '<div class="col-xl-3 col-md-6 px-0">';
+            $html .= '<div class="kanbanPreview-bx">';
+            $html .= '<div class="draggable-zone dropzoneContainer" data-status-id="' . $status["id"] . '">';
+            $html .= '<div class="sub-card align-items-center d-flex justify-content-between mb-4">';
+            $html .= '<div>';
+            $html .= '<h4 class="mb-0">' . $status["title"] . '</h4>';
+            $html .= '</div>';
+            $html .= '</div>';
+
+            // Add issue cards based on status
+            foreach ($issues_data as $issue) {
                 if ($status["id"] == $issue["status"]) {
                     $html .= $this->html_generating($status, $issue);
                     $total++;
@@ -238,28 +269,21 @@ class Board extends CI_Controller
                     }
                 }
             }
-            $html .= '</div>
-                </div>
-            </div>';
+
+            $html .= '</div></div></div>';
         }
 
-        if ($completed != 0) {
-            $percent =  $completed * 100 / $total;
-            $rounded_percent = (int) round($percent);
-        } else {
-            $rounded_percent = 0;
-        }
-        $result = array(
-            'sprint' => $sprint_data,
-            'issues' => $issues_data,
-            'html' => $html,
-            'total' => $total,
-            'completed' => $completed,
-            'percent' => 'Total Progress ' . $rounded_percent . '%',
-        );
-
-        echo json_encode($result);
+        return [$html, $completed, $total];
     }
+
+    private function calculate_progress($completed, $total)
+    {
+        if ($completed == 0 || $total == 0) {
+            return 0;
+        }
+        return (int) round($completed * 100 / $total);
+    }
+
     public function html_generating($status, $issue)
     {
         $html = '';

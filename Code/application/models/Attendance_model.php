@@ -68,7 +68,7 @@ class Attendance_model extends CI_Model
         $too = $get["too"];
         $fromDate = new DateTime($from);
         $toDate = new DateTime($too);
-        if (isset($get['user_id']) && !empty($get['user_id'])) {
+        if (!empty($get['user_id'])) {
             $system_users = [$this->ion_auth->user($get['user_id'])->row()];
         } else {
             if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
@@ -190,7 +190,9 @@ class Attendance_model extends CI_Model
 
         $output = [
             'data' => array_values($formattedData),
-            'range' => $monthCounts
+            'range' => $monthCounts,
+            'attendance' => $attendance,
+            'get'=>$get,
         ];
         return $output;
     }
@@ -272,14 +274,13 @@ class Attendance_model extends CI_Model
     }
     public function get_attendance_for_admin($get)
     {
-        if (isset($get['user_id']) && !empty($get['user_id'])) {
-            $user = $this->ion_auth->user($get['user_id'])->row();
-            $employee_id = $user->employee_id;
+        if (!empty($get['user_id'])) {
+            $employee_id = get_employee_id_from_user_id($get['user_id']);
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
             if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
                 $where = " WHERE attendance.id IS NOT NULL ";
-            } else {
+            } elseif('attendance_view_selected') {
                 $selected = selected_users();
                 if (!empty($selected)) {
                     foreach ($selected as $assignee) {
