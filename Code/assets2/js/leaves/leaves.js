@@ -353,28 +353,8 @@ $(document).on('click', '.btn-edit-leave', function (e) {
             $(".btn-edit-leave").prop("disabled", true);
         },
         success: function (result) {
-            if (result['error'] == false) {
-                window.location.href = base_url + 'leaves';
-            } else {
-                toastr.error(result['message'], "Error", {
-                    positionClass: "toast-top-right",
-                    timeOut: 5e3,
-                    closeButton: !0,
-                    debug: !1,
-                    newestOnTop: !0,
-                    progressBar: !0,
-                    preventDuplicates: !0,
-                    onclick: null,
-                    showDuration: "300",
-                    hideDuration: "1000",
-                    extendedTimeOut: "1000",
-                    showEasing: "swing",
-                    hideEasing: "linear",
-                    showMethod: "fadeIn",
-                    hideMethod: "fadeOut",
-                    tapToDismiss: !1
-                });
-            }
+            console.log(result);
+            window.location.href = base_url + 'leaves';
         },
         complete: function () {
             $(".btn-edit-leave").prop("disabled", false);

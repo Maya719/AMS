@@ -134,9 +134,14 @@ class Leaves_model extends CI_Model
             $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
             $current_group_id = $group[0]->id;
             $logs = $this->getStatusForword($leave['id']);
+            $leave['logs'] = $logs;
+            $leave['step'] = $logs["level"];
             $step = $logs["level"];
             $Logstatus = $logs["status"];
             $forword_result = $this->is_forworded($current_group_id, $step, $leave['user_id']);
+
+            $leave['current_group_id'] = $current_group_id;
+            $leave['forword_result'] = $forword_result;
             if ($leave['status'] == 0) {
                 if (($forword_result["is_forworded"]) && (permissions('leaves_status') || $this->ion_auth->is_admin())) {
                     $leave['btn'] = false;
@@ -186,27 +191,39 @@ class Leaves_model extends CI_Model
                 'forworded_to' => null,
             ];
         } else {
-
             $this->db->where('saas_id', $saas_id);
             $this->db->where('step_no', $step);
             $query = $this->db->get('leave_hierarchy');
             if ($rows = $query->result()) {
+                
                 foreach ($rows as $row) {
                     $step_group = $row->group_id;
                     if ($step_group != $group_id) {
                         $group = $this->ion_auth->group($step_group)->row();
                         $assigned_users = json_decode($group->assigned_users);
-                        foreach ($assigned_users as $assignee) {
-                            $emp_id = get_employee_id_from_user_id($assignee);
-                            if ($emp_id == $user_id) {
-                                $array = [
-                                    'is_forworded' => true,
-                                    // 'forworded_to' => $step_group,
-                                    'forworded_to' => $group->description,
-                                ];
+                        if ($assigned_users) {
+                            foreach ($assigned_users as $assignee) {
+                                $emp_id = get_employee_id_from_user_id($assignee);
+                                if ($emp_id == $user_id) {
+                                    $array = [
+                                        'is_forworded' => true,
+                                        // 'forworded_to' => $step_group,
+                                        'forworded_to' => $group->description,
+                                    ];
+                                }
                             }
+                        }else{
+                            $not_found = true;
                         }
                     }
+                }
+                if ($not_found) {
+                    $step_group = $rows[0]->group_id;
+                    $group = $this->ion_auth->group($step_group)->row();
+                    $array = [
+                        'is_forworded' => true,
+                        'forworded_to' => $group->description,
+                    ];
                 }
             }
         }
@@ -368,5 +385,12 @@ class Leaves_model extends CI_Model
         }
 
         return $days;
+    }
+    public function leaveStep($current_user_step,$user_id)
+    {
+        $user_id = get_user_id_from_employee_id($user_id);
+        
+        
+        return ($current_user_step ? $current_user_step : 0) + 1;
     }
 }

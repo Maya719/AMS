@@ -328,14 +328,14 @@ class Leaves extends CI_Controller
 							$getCurrentGroupStep = $this->db->get('leave_hierarchy');
 							$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
 							$Step = $heiCurrentGroupStepResult->step_no;
-
 							$log = [
 								'leave_id' => $this->input->post('update_id'),
 								'group_id' => $group_id,
 								'remarks' => $this->input->post('remarks'),
 								'status' => $this->input->post('status'),
-								'level' => $Step + 1
+								'level' => $Step + 1,
 							];
+							$this->data['log'] = $log;
 							$this->leaves_model->createLog($log);
 							$to_user = $this->ion_auth->user($this->input->post('user_id'))->row();
 							$template_data = array();
@@ -343,20 +343,20 @@ class Leaves extends CI_Controller
 
 							$type = $this->input->post('type');
 							$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
-								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
-								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
-								$template_data['LEAVE_TYPE'] = '';
-								$querys = $this->db->query("SELECT * FROM leaves_type");
-								$leaves = $querys->result_array();
-								if (!empty($leaves)) {
-									foreach ($leaves as $leave) {
-										if ($type == $leave['id']) {
-											$template_data['LEAVE_TYPE'] = $leave['name'];
-										}
+							$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+							$template_data['LEAVE_TYPE'] = '';
+							$querys = $this->db->query("SELECT * FROM leaves_type");
+							$leaves = $querys->result_array();
+							if (!empty($leaves)) {
+								foreach ($leaves as $leave) {
+									if ($type == $leave['id']) {
+										$template_data['LEAVE_TYPE'] = $leave['name'];
 									}
 								}
+							}
 							if ($this->input->post('status') == 1) {
-								$template_data['REASON'] = $this->input->post('remarks').'<br> Approved: '.$group[0]->description;;
+								$template_data['REASON'] = $this->input->post('remarks') . '<br> Approved: ' . $group[0]->description;;
 								$email_template = render_email_template('leave_accept', $template_data);
 								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 								$notification_data = array(
@@ -728,13 +728,14 @@ class Leaves extends CI_Controller
 						$this->db->where('group_id', $group_id);
 						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
 						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
-						$Step = $heiCurrentGroupStepResult->step_no;
+						$heiCurrentGroupStep_number = $heiCurrentGroupStepResult->step_no;
+						$step_no = $this->leaves_model->leaveStep($heiCurrentGroupStep_number,$data["user_id"]);
 						$log[] = [
 							'leave_id' => $leave_id,
 							'group_id' => $group_id,
 							'remarks' => $this->input->post('leave_reason'),
 							'status' => 0,
-							'level' => $Step+1
+							'level' => $step_no
 						];
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);
