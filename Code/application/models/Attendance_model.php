@@ -192,7 +192,7 @@ class Attendance_model extends CI_Model
             'data' => array_values($formattedData),
             'range' => $monthCounts,
             'attendance' => $attendance,
-            'get'=>$get,
+            'get' => $get,
         ];
         return $output;
     }
@@ -280,7 +280,7 @@ class Attendance_model extends CI_Model
         } else {
             if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
                 $where = " WHERE attendance.id IS NOT NULL ";
-            } elseif('attendance_view_selected') {
+            } elseif ('attendance_view_selected') {
                 $selected = selected_users();
                 if (!empty($selected)) {
                     foreach ($selected as $assignee) {
@@ -634,6 +634,10 @@ class Attendance_model extends CI_Model
                     }
                 }
             }
+        }elseif ($date == date('Y-m-d')) {
+            # code...
+        }else{
+            $halfDay = true;
         }
 
         return [
