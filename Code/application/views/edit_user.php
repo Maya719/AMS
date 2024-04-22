@@ -488,7 +488,7 @@
                 success: function(result) {
                     if (result['error'] == false) {
                         console.log(result);
-                        location.reload();
+                        window.location.href=base_url+'users';
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }

@@ -616,6 +616,15 @@
               <?php } ?>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
+              <?php if ($this->ion_auth->is_admin()) : ?>
+                <?php $my_plan = get_current_plan(); ?>
+                <a href="<?= base_url('plans') ?>" class="dropdown-item ai-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-danger" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8.5V8.35417C18 6.50171 16.4983 5 14.6458 5H9.5C7.567 5 6 6.567 6 8.5C6 10.433 7.567 12 9.5 12H14.5C16.433 12 18 13.567 18 15.5C18 17.433 16.433 19 14.5 19H9.42708C7.53436 19 6 17.4656 6 15.5729V15.5M12 3V21"/>
+                  </svg>
+                  <span class="ms-2 text-danger"><?= $my_plan['title'] ?> </span>
+                </a>
+              <?php endif ?>
               <?php if (!is_saas_admin()) : ?>
                 <a href="<?= base_url('users/profile') ?>" class="dropdown-item ai-icon">
                   <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -711,7 +720,7 @@
       <?php
       }
       ?>
-      
+
       <?php if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_client() || permissions('project_view') || permissions('task_view')) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-bezier-curve"></i>

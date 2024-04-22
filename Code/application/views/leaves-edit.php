@@ -161,9 +161,7 @@
                                             <label class="col-form-label"><?= $this->lang->line('leave_reason') ? $this->lang->line('leave_reason') : 'Leave Reason' ?><span class="text-danger">*</span></label>
                                             <textarea type="text" name="leave_reason" id="leave_reason" class="form-control" required=""><?= $leave[0]["leave_reason"] ?></textarea>
                                         </div>
-
-
-                                        <?php if (permissions('leaves_status')) {
+                                        <?php if (permissions('leaves_status') || $this->ion_auth->is_admin()) {
                                         ?>
                                             <div class="form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
@@ -280,11 +278,11 @@
                     var html = '';
                     response.leave_types.forEach((value, index) => {
                         html += '<tr>';
-                        html += '<td>'+ value +'</td>';
-                        html += '<td>'+ response.total_leaves[index] +'</td>';
-                        html += '<td>'+ response.consumed_leaves[index] +'</td>';
-                        html += '<td>'+ response.paidArray[index] +'</td>';
-                        html += '<td>'+ response.unpaidArray[index] +'</td>';
+                        html += '<td>' + value + '</td>';
+                        html += '<td>' + response.total_leaves[index] + '</td>';
+                        html += '<td>' + response.consumed_leaves[index] + '</td>';
+                        html += '<td>' + response.paidArray[index] + '</td>';
+                        html += '<td>' + response.unpaidArray[index] + '</td>';
                         html += '</tr>';
                     });
                     console.log(html);

@@ -1,7 +1,7 @@
 <?php $this->load->view('includes/header'); ?>
 <link rel="stylesheet" href="<?= base_url('assets/modules/multiselect/multselect.css') ?>">
 <style>
-  /* Style for the label containing the SVG image and text */
+   
   .image-radio-label {
     display: flex;
     flex-direction: column;
@@ -118,6 +118,7 @@
             </div>
           </div>
         </div>
+        
         <div class="row">
           <div class="col-lg-12">
             <div class="card">
@@ -310,7 +311,7 @@
         data.forEach(row => {
           var userRow = '<tr>';
           userRow += '<td>' + count + '</td>';
-          userRow += '<td>' + row.title + '</td>';
+          userRow += '<td><a href="' + base_url+'projects/detail/'+row.id+ '" style="font-weight: bold;font-size: 12px;">' + row.title + '</a></td>';
           userRow += '<td>' + row.project_client.first_name + ' ' + row.project_client.last_name + '</td>';
           if (row.dash_type == 1) {
             var type = 'Agile';

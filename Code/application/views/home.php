@@ -8,14 +8,18 @@
   #attendance_list tbody td {
     padding: 5px 10px;
   }
-  #upcoming-events-column{
+
+  #upcoming-events-column {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Ensure the column takes up full height */
+    height: 100%;
+    /* Ensure the column takes up full height */
   }
+
   .widget-media {
-    flex-grow: 1; /* Allow the content to grow to fill the available space */
-}
+    flex-grow: 1;
+    /* Allow the content to grow to fill the available space */
+  }
 </style>
 </head>
 
@@ -57,8 +61,8 @@
         <div class="row justify-content-between">
           <div class="col-xl-4 col-sm-12">
             <nav class="nav nav-pills flex-column flex-sm-row">
-              <a class="flex-sm-fill fs-6 text-sm-center nav-link active" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false"><strong>AMS</strong></a>
-              <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
+              <a class="flex-sm-fill fs-6 text-sm-center nav-link <?= (is_client()) ? '' : 'active'; ?>" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false" <?= (is_client()) ? 'disabled' : ''; ?>><strong>AMS</strong></a>
+              <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4 <?= (is_client()) ? 'active' : ''; ?>" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
             </nav>
           </div>
           <div class="col-xl-2 col-sm-12">
@@ -69,7 +73,7 @@
             </div>
           </div>
           <div class="tab-content">
-            <div id="navpills2-1" class="tab-pane active">
+            <div id="navpills2-1" class="tab-pane <?= (is_client()) ? '' : 'active'; ?>">
               <div class="row">
                 <div class="col-xl-12">
                   <div class="card">
@@ -264,7 +268,7 @@
                   </div>
                 </div>
               </div>
-              <div id="navpills2-2" class="tab-pane">
+              <div id="navpills2-2" class="tab-pane <?= (is_client()) ? 'active' : ''; ?>">
                 <div class="row">
                   <div class="col-xl-6 col-sm-12">
                     <div class="card">
@@ -539,7 +543,7 @@
           var count = 1;
           data.forEach(user => {
             var userRow = '<tr>';
-            userRow += '<td style="font-size:12px;"><a href="'+base_url+'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
+            userRow += '<td style="font-size:12px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '">' + count + '</a></td>';
             userRow += '<td style="font-size:12px;">' + user.user + '</td>';
             userRow += '<td style="font-size:12px;">' + user.name + '</td>';
 

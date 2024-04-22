@@ -332,10 +332,12 @@ class Issues extends CI_Controller
         $data = ['story_points' => $story_points];
 
         $this->db->where('id', $issue);
-        $this->db->update('issues', $data);
+        $this->db->update('tasks', $data);
 
         $response = [
             'success' => true,
+            'issue' => $issue,
+            'story_points' => $story_points,
         ];
         echo json_encode($response);
     }

@@ -1425,6 +1425,7 @@ class Projects extends CI_Controller
 			} else {
 				redirect('projects', 'refresh');
 			}
+			// echo json_encode($this->data);
 			$this->load->view('projects-detail', $this->data);
 		} else {
 			redirect('auth', 'refresh');

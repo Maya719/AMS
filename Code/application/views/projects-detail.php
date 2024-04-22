@@ -124,10 +124,26 @@
           <div class="row mt-3">
             <div class="col-md-7">
               <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                   <h4>
                     <a><?= htmlspecialchars($project['title']) ?></a>
                   </h4>
+                  <h5>
+                    <?php
+                    if ($project['dash_type'] == 0) {
+                    ?><svg fill="#000000" width="30" height="30" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9,3 L9,21 L15,21 L15,3 L9,3 Z M8,3 L3.5,3 C2.67157288,3 2,3.67157288 2,4.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 L8,21 L8,3 Z M16,3 L16,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,4.5 C22,3.67157288 21.3284271,3 20.5,3 L16,3 Z M1,4.5 C1,3.11928813 2.11928813,2 3.5,2 L20.5,2 C21.8807119,2 23,3.11928813 23,4.5 L23,19.5 C23,20.8807119 21.8807119,22 20.5,22 L3.5,22 C2.11928813,22 1,20.8807119 1,19.5 L1,4.5 Z M4,6 L6,6 C6.55228475,6 7,6.44771525 7,7 L7,8 C7,8.55228475 6.55228475,9 6,9 L4,9 C3.44771525,9 3,8.55228475 3,8 L3,7 C3,6.44771525 3.44771525,6 4,6 Z M4,10 L6,10 C6.55228475,10 7,10.4477153 7,11 L7,12 C7,12.5522847 6.55228475,13 6,13 L4,13 C3.44771525,13 3,12.5522847 3,12 L3,11 C3,10.4477153 3.44771525,10 4,10 Z M11,6 L13,6 C13.5522847,6 14,6.44771525 14,7 L14,8 C14,8.55228475 13.5522847,9 13,9 L11,9 C10.4477153,9 10,8.55228475 10,8 L10,7 C10,6.44771525 10.4477153,6 11,6 Z M18,6 L20,6 C20.5522847,6 21,6.44771525 21,7 L21,8 C21,8.55228475 20.5522847,9 20,9 L18,9 C17.4477153,9 17,8.55228475 17,8 L17,7 C17,6.44771525 17.4477153,6 18,6 Z M18,10 L20,10 C20.5522847,10 21,10.4477153 21,11 L21,12 C21,12.5522847 20.5522847,13 20,13 L18,13 C17.4477153,13 17,12.5522847 17,12 L17,11 C17,10.4477153 17.4477153,10 18,10 Z M18,14 L20,14 C20.5522847,14 21,14.4477153 21,15 L21,16 C21,16.5522847 20.5522847,17 20,17 L18,17 C17.4477153,17 17,16.5522847 17,16 L17,15 C17,14.4477153 17.4477153,14 18,14 Z M4,7 L4,8 L6,8 L6,7 L4,7 Z M4,11 L4,12 L6,12 L6,11 L4,11 Z M11,7 L11,8 L13,8 L13,7 L11,7 Z M18,7 L18,8 L20,8 L20,7 L18,7 Z M18,11 L18,12 L20,12 L20,11 L18,11 Z M18,15 L18,16 L20,16 L20,15 L18,15 Z M3.5,5 C3.22385763,5 3,4.77614237 3,4.5 C3,4.22385763 3.22385763,4 3.5,4 L6.5,4 C6.77614237,4 7,4.22385763 7,4.5 C7,4.77614237 6.77614237,5 6.5,5 L3.5,5 Z M10.5,5 C10.2238576,5 10,4.77614237 10,4.5 C10,4.22385763 10.2238576,4 10.5,4 L13.5,4 C13.7761424,4 14,4.22385763 14,4.5 C14,4.77614237 13.7761424,5 13.5,5 L10.5,5 Z M17.5,5 C17.2238576,5 17,4.77614237 17,4.5 C17,4.22385763 17.2238576,4 17.5,4 L20.5,4 C20.7761424,4 21,4.22385763 21,4.5 C21,4.77614237 20.7761424,5 20.5,5 L17.5,5 Z" />
+                      </svg>
+                    <?php
+                    } else {
+                    ?>
+                      <svg fill="#000000" width="30" height="30" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.3171203,20 L20.5,20 C20.7761424,20 21,20.2238576 21,20.5 C21,20.7761424 20.7761424,21 20.5,21 L3.5,21 C3.22385763,21 3,20.7761424 3,20.5 C3,20.2238576 3.22385763,20 3.5,20 L11.9975864,20 L11.9992783,19.9999948 C13.3169414,19.9980929 14.5879191,19.4831487 15.5355339,18.5355339 C17.4881554,16.5829124 17.4881554,13.4170876 15.5355339,11.4644661 C15.1550557,11.0839879 14.7285139,10.7776478 14.2738601,10.5454458 C14.254923,10.5373678 14.2363578,10.5280549 14.2182818,10.5174987 C12.5524962,9.69291702 10.5227538,9.8537508 8.99894709,11 L10.5,11 C10.7761424,11 11,11.2238576 11,11.5 C11,11.7761424 10.7761424,12 10.5,12 L7.5,12 C7.22385763,12 7,11.7761424 7,11.5 L7,8.5 C7,8.22385763 7.22385763,8 7.5,8 C7.77614237,8 8,8.22385763 8,8.5 L8,10.5276441 C9.46401314,9.21593206 11.4173682,8.74894646 13.2298049,9.12668728 C13.0840962,8.75531167 13,8.36566448 13,8 C13,6.34314575 14.3431458,5 16,5 L16.2928932,5 L16.1464466,4.85355339 C15.9511845,4.65829124 15.9511845,4.34170876 16.1464466,4.14644661 C16.3417088,3.95118446 16.6582912,3.95118446 16.8535534,4.14644661 L17.8535534,5.14644661 C18.0488155,5.34170876 18.0488155,5.65829124 17.8535534,5.85355339 L16.8535534,6.85355339 C16.6582912,7.04881554 16.3417088,7.04881554 16.1464466,6.85355339 C15.9511845,6.65829124 15.9511845,6.34170876 16.1464466,6.14644661 L16.2928932,6 L16,6 C14.8954305,6 14,6.8954305 14,8 C14,8.56129192 14.3301293,9.27278631 14.7516956,9.66637738 C15.2886433,9.94356402 15.792506,10.3072247 16.2426407,10.7573593 C18.5857864,13.1005051 18.5857864,16.8994949 16.2426407,19.2426407 C15.9569017,19.5283797 15.6466243,19.7813454 15.3171203,20 L15.3171203,20 Z" />
+                      </svg>
+                    <?php
+                    }
+                    ?>
+                  </h5>
                 </div>
                 <div class="card-body">
                   <div class="author-box-job text-<?= htmlspecialchars($project['project_class']) ?>"><?= htmlspecialchars($project['project_status']) ?></div>
@@ -166,6 +182,37 @@
                     <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('completed_tasks') ? $this->lang->line('completed_tasks') : 'Completed Tasks' ?></span><strong><?= htmlspecialchars($project['completed_tasks']) ?></strong></li>
                     <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('pending_tasks') ? $this->lang->line('pending_tasks') : 'Pending Tasks' ?></span><strong><?= htmlspecialchars($project['total_tasks']) - htmlspecialchars($project['completed_tasks']) ?></strong></li>
                   </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4><?= $this->lang->line('performance_overview') ? $this->lang->line('performance_overview') : 'Performance Overview' ?></h4>
+                </div>
+                <div class="card-body p-1">
+                  <div class="table-responsive">
+                    <table id="project_performance_list" class="table table-sm mb-0">
+                      <thead>
+                        <tr>
+                          <th><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></th>
+                          <th><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></th>
+                          <th><?= $this->lang->line('completed') ? $this->lang->line('completed') : 'Completed Tasks' ?> / <?= $this->lang->line('task_count') ? $this->lang->line('task_count') : 'Total Tasks' ?></th>
+                          <th><?= $this->lang->line('performance') ? $this->lang->line('performance') : 'Performance' ?></th>
+                        </tr>
+                      </thead>
+                      <tbody id="customers">
+                        <?php foreach ($project["get_project_users_performance"] as $user) : ?>
+                          <tr>
+                            <td><?= $user["first_name"] . ' ' . $user["last_name"] ?></td>
+                            <td><?= $user["email"] ?></td>
+                            <td><?= $user["task_count"] ?></td>
+                            <td><?= $user["performance"] ?></td>
+                          </tr>
+                        <?php endforeach ?>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -405,7 +452,7 @@
             },
             success: function(result) {
               if (result['error'] == false) {
-                window.location.href=base_url+'projects';
+                window.location.href = base_url + 'projects';
               } else {
                 iziToast.error({
                   title: result['message'],
@@ -421,6 +468,23 @@
         }
       });
 
+    });
+
+    var table3 = $('#project_performance_list').DataTable({
+      "paging": true,
+      "searching": true,
+      "language": {
+        "paginate": {
+          "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+          "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+        }
+      },
+      "info": false,
+      "lengthChange": true,
+      "lengthMenu": [10, 20, 50, 500],
+      "order": false,
+      "pageLength": 10,
+      "dom": '<"top"f>rt<"bottom"lp><"clear">',
     });
   </script>
   <script src="<?= base_url('assets/modules/dropzonejs/min/dropzone.min.js'); ?>"></script>

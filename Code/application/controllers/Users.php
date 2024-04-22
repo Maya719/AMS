@@ -303,7 +303,7 @@ class Users extends CI_Controller
 
 	public function saas()
 	{
-		
+
 		if ($this->ion_auth->logged_in() && is_saas_admin()) {
 			set_expire_all_expired_plans();
 			$this->notifications_model->edit('', 'new_user', '', '', '');
@@ -642,6 +642,7 @@ class Users extends CI_Controller
 				$tempRow['gender'] = $system_user->gender;
 				$tempRow['joining_date'] = $system_user->join_date;
 				$tempRow['s_no'] = $serial_no;
+				$tempRow['desgnation'] = $system_user->desgnation;
 				$tempRow['action'] = '<span class="badge light badge-primary"><a href="' . base_url('users/edit_user/' . $tempRow['id'] . '') . '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>';
 				$tempRow['company'] = company_details('company_name', $system_user->user_id);
 				$tempRow['mobile'] = $system_user->phone != 0 ? $system_user->phone : '';

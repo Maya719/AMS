@@ -38,7 +38,7 @@ if($my_current_lang){
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  
+  <meta name="google-adsense-account" content="ca-pub-8742754912115618">
   <?php
   if(!isset($page_title) && empty($page_title)){ 
     $page_title = company_name();

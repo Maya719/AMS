@@ -118,11 +118,9 @@
                                                 </a>
                                             </div>
 
-                                            <?php if ($issue["issue_type"] == '2') : ?>
-                                                <div class="col-1 my-1">
-                                                    <input type="number" min="0" class="form-control storypoint" name="story-point" value="<?= $issue["story_points"] ?>" placeholder="0" data-issue-id="<?= $issue["id"]; ?>">
-                                                </div>
-                                            <?php endif ?>
+                                            <div class="col-1 my-1">
+                                                <input type="number" min="0" class="form-control storypoint" name="story-point" value="<?= $issue["story_points"] ?>" placeholder="0" data-issue-id="<?= $issue["id"]; ?>">
+                                            </div>
 
                                             <div class="col-auto ms-2">
                                                 <select class="me-sm-2 form-control wide issue_user" id="inlineFormCustomSelect12" data-issue-id="<?= $issue["id"]; ?>">
@@ -153,15 +151,13 @@
                                                             <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
                                                         </svg>
                                                     </div>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <?php if ($this->ion_auth->is_admin() || permissions('task_delete')) : ?>
-                                                                <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
-                                                            <?php endif ?>
-                                                            <?php if ($this->ion_auth->is_admin() || permissions('task_edit')) : ?>
-                                                                <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
-                                                            <?php endif ?>
-                                                        </div>
+                                                    <div class="dropdown-menu">
+                                                        <?php if ($this->ion_auth->is_admin() || permissions('task_delete')) : ?>
+                                                            <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
+                                                        <?php endif ?>
+                                                        <?php if ($this->ion_auth->is_admin() || permissions('task_edit')) : ?>
+                                                            <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
+                                                        <?php endif ?>
                                                     </div>
                                                 </div>
                                             <?php endif ?>
@@ -200,23 +196,23 @@
                                             <?php endif ?>
 
                                             <?php if ($this->ion_auth->is_admin() || permissions('task_delete') || permissions('task_edit')) : ?>
-                                            <div class="dropdown ms-2">
-                                                <div class="btn-link mt-2" data-bs-toggle="dropdown">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M7 12C7 13.1046 6.10457 14 5 14C3.89543 14 3 13.1046 3 12C3 10.8954 3.89543 10 5 10C6.10457 10 7 10.8954 7 12Z" fill="#A5A5A5" />
-                                                        <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="#A5A5A5" />
-                                                        <path d="M21 12C21 13.1046 20.1046 14 19 14C17.8954 14 17 13.1046 17 12C17 10.8954 17.8954 10 19 10C20.1046 10 21 10.8954 21 12Z" fill="#A5A5A5" />
-                                                    </svg>
+                                                <div class="dropdown ms-2">
+                                                    <div class="btn-link mt-2" data-bs-toggle="dropdown">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M7 12C7 13.1046 6.10457 14 5 14C3.89543 14 3 13.1046 3 12C3 10.8954 3.89543 10 5 10C6.10457 10 7 10.8954 7 12Z" fill="#A5A5A5" />
+                                                            <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="#A5A5A5" />
+                                                            <path d="M21 12C21 13.1046 20.1046 14 19 14C17.8954 14 17 13.1046 17 12C17 10.8954 17.8954 10 19 10C20.1046 10 21 10.8954 21 12Z" fill="#A5A5A5" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu">
+                                                        <?php if ($this->ion_auth->is_admin() || permissions('task_delete')) : ?>
+                                                            <a class="dropdown-item delete_sprint" data-id="<?= $sprint["id"] ?>" href="javascript:void(0)">Delete Sprint</a>
+                                                        <?php endif ?>
+                                                        <?php if ($this->ion_auth->is_admin() || permissions('task_edit')) : ?>
+                                                            <a class="dropdown-item edit_sprint" href="javascript:void(0)" data-id="<?= $sprint["id"] ?>" data-bs-toggle="modal" data-bs-target="#sprint-edit-modal">Edit Sprint</a>
+                                                        <?php endif ?>
+                                                    </div>
                                                 </div>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <?php if ($this->ion_auth->is_admin() || permissions('task_delete')) : ?>
-                                                        <a class="dropdown-item delete_sprint" data-id="<?= $sprint["id"] ?>" href="javascript:void(0)">Delete Sprint</a>
-                                                    <?php endif ?>
-                                                    <?php if ($this->ion_auth->is_admin() || permissions('task_edit')) : ?>
-                                                        <a class="dropdown-item edit_sprint" href="javascript:void(0)" data-id="<?= $sprint["id"] ?>" data-bs-toggle="modal" data-bs-target="#sprint-edit-modal">Edit Sprint</a>
-                                                    <?php endif ?>
-                                                </div>
-                                            </div>
                                             <?php endif ?>
                                         </div>
                                     <?php endif ?>
@@ -261,11 +257,9 @@
                                                         <h5 class="ms-2"><?= $issue["title"] ?></h5>
                                                     </a>
                                                 </div>
-                                                <?php if ($issue["issue_type"] == '2') : ?>
-                                                    <div class="col-1 my-1">
-                                                        <input type="number" min="0" class="form-control storypoint" value="<?= $issue["story_points"] ?>" name="story-point" placeholder="0" data-issue-id="<?= $issue["id"]; ?>">
-                                                    </div>
-                                                <?php endif ?>
+                                                <div class="col-1 my-1">
+                                                    <input type="number" min="0" class="form-control storypoint" value="<?= $issue["story_points"] ?>" name="story-point" placeholder="0" data-issue-id="<?= $issue["id"]; ?>">
+                                                </div>
 
                                                 <div class="col-auto ms-2">
                                                     <select class="me-sm-2 form-control wide issue_user" id="inlineForm CustomSelect12" data-issue-id="<?= $issue["id"]; ?>">
@@ -294,7 +288,7 @@
                                                             <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
                                                         </svg>
                                                     </div>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu">
                                                         <a class="dropdown-item delete_issue" data-issue-id="<?= $issue["id"]; ?>" href="javascript:void(0)">Delete</a>
                                                         <a class="dropdown-item" href="<?= base_url('issues/edit/' . $issue["id"]) ?>">Edit</a>
                                                     </div>
@@ -721,7 +715,7 @@
                 }
             });
         });
-        $(document).on('change', '.storypoint', function(e) {
+        $(document).on('keyup', '.storypoint', function(e) {
             var issue = $(this).data('issue-id');
             var story_points = $(this).val();
             console.log(issue);

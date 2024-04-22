@@ -625,6 +625,37 @@ class Projects_model extends CI_Model
             return false;
         }
     }
+    function get_project_users_performance($project_id = '')
+    {
+
+        $where = " WHERE u.saas_id = " . $this->session->userdata('saas_id');
+        $where .= (!empty($project_id) && is_numeric($project_id)) ? " AND pu.project_id=$project_id " : " ";
+        $left_join = "LEFT JOIN users u ON pu.user_id=u.id";
+        $query = $this->db->query("SELECT u.id,u.email,u.first_name,u.last_name,u.profile FROM project_users pu $left_join $where GROUP BY pu.user_id");
+        $data = $query->result_array();
+        if ($data) {
+            foreach ($data as &$user) {
+                $id = $user["id"];
+                $query2 = $this->db->query("SELECT
+                COUNT(tu.task_id) AS task_count,
+                SUM(CASE WHEN t.status = 4 THEN 1 ELSE 0 END) AS completed
+                FROM task_users tu
+                JOIN tasks t ON tu.task_id = t.id
+                WHERE tu.user_id = $id AND t.project_id = $project_id");
+                $data2 = $query2->row_array();
+                if ($data2["task_count"] && $data2["task_count"] > 0) {
+                    $user["performance"] = $data2["completed"] / $data2["task_count"] * 100 . '%';
+                    $user["task_count"] = $data2["completed"] . ' / ' . $data2["task_count"];
+                } else {
+                    $user["performance"] = '0%';
+                    $user["task_count"] = '0 / 0';
+                }
+            }
+            return $data;
+        } else {
+            return false;
+        }
+    }
     function get_project_users2($project_id = '')
     {
 
@@ -858,6 +889,7 @@ class Projects_model extends CI_Model
             } else {
                 $temp[$key]['project_client'] = null;
             }
+            $temp[$key]['get_project_users_performance'] =  $this->get_project_users_performance($project['id']);
             $temp[$key]['project_users'] = $project_users = $this->get_project_users($project['id']);
             $temp[$key]['project_users_ids'] = '';
             if (!empty($project_users)) {
