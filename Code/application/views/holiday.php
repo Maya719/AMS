@@ -24,7 +24,7 @@
         Main wrapper start
     ***********************************-->
   <div id="main-wrapper">
-  <?php $this->load->view('includes/sidebar'); ?>
+    <?php $this->load->view('includes/sidebar'); ?>
     <div class="content-body default-height">
       <div class="container-fluid">
 
@@ -230,21 +230,21 @@
   <?php $this->load->view('includes/scripts'); ?>
   <script>
     var table3 = $('#holiday_list').DataTable({
-          "paging": true,
-          "searching": true,
-          "language": {
-            "paginate": {
-              "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-              "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
-            }
-          },
-          "info": false,
-          "lengthChange": true,
-          "lengthMenu": [10, 20, 50, 500],
-          "order": false,
-          "pageLength": 10,
-          "dom": '<"top"f>rt<"bottom"lp><"clear">'
-        });
+      "paging": true,
+      "searching": true,
+      "language": {
+        "paginate": {
+          "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+          "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+        }
+      },
+      "info": false,
+      "lengthChange": true,
+      "lengthMenu": [10, 20, 50, 500],
+      "order": false,
+      "pageLength": 10,
+      "dom": '<"top"f>rt<"bottom"lp><"clear">'
+    });
     $(document).ready(function() {
       $('#apply2').change(function() {
         var selectedValue = $(this).val();
@@ -291,7 +291,7 @@
 
       e.preventDefault();
     });
-    
+
     $("#holiday-edit-modal").on('click', '.btn-edit-holiday', function(e) {
       var modal = $('#holiday-edit-modal');
       var form = $('#modal-edit-holiday-part');
@@ -448,6 +448,24 @@
         }
       });
     });
+    $(document).ready(function() {
+      setStartTime();
+      $('#starting_date_create').change(function() {
+        setStartTime();
+      });
+    });
+
+    function setStartTime() {
+      start_time = $('#starting_date_create').val();
+      $('#ending_date_create').daterangepicker({
+        locale: {
+          format: date_format_js
+        },
+        singleDatePicker: true,
+        startDate: start_time,
+        minDate: moment(start_time, date_format_js).startOf('day')
+      });
+    }
   </script>
 </body>
 

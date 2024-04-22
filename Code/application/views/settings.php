@@ -864,13 +864,13 @@
               var permissionsArray2 = JSON.parse(result['data'].assigned_users);
 
               if (permissionsArray2 !== null) {
-                $('#users').multiSelect('deselect_all');
+                $('#assigned_users').multiSelect('deselect_all');
 
                 permissionsArray2.forEach(function(value) {
-                  $('#users').multiSelect('select', value);
+                  $('#assigned_users').multiSelect('select', value);
                 });
 
-                $('#users').multiSelect('refresh');
+                $('#assigned_users').multiSelect('refresh');
               }
             }
             var newArray = [];
