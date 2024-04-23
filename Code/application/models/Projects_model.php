@@ -738,7 +738,7 @@ class Projects_model extends CI_Model
 
         $leftjoin = "LEFT JOIN project_users ON projects.id = project_users.project_id";
 
-        $query = $this->db->query("SELECT DISTINCT projects.* FROM projects " . $leftjoin . $where);
+        $query = $this->db->query("SELECT DISTINCT projects.* FROM projects " . $leftjoin . $where . " ORDER BY projects.created DESC");
 
         // Execute the query and retrieve the results as an array
         $results = $query->result_array();
@@ -813,7 +813,7 @@ class Projects_model extends CI_Model
         }
 
         $where = "";
-        $order = " ORDER BY p.created DESC ";
+        $order = " ORDER BY p.created ASC ";
 
         if (!empty($filter_type) && !empty($filter) && is_numeric($filter) && $filter_type == 'status') {
             $where = "WHERE ps.id = $filter";
@@ -821,14 +821,6 @@ class Projects_model extends CI_Model
             $where = "WHERE pu.user_id = $filter";
         } elseif (!empty($filter_type) && !empty($filter) && is_numeric($filter) && $filter_type == 'client') {
             $where = "WHERE p.client_id = $filter";
-        } elseif (!empty($filter_type) && !empty($filter) && $filter_type == 'sortby') {
-            if ($filter == 'old') {
-                $order = " ORDER BY p.created ASC ";
-            } elseif ($filter == 'name') {
-                $order = " ORDER BY p.title ASC ";
-            } else {
-                $order = " ORDER BY p.created DESC ";
-            }
         }
 
         $where .= (!empty($project_id) && is_numeric($project_id) && empty($where)) ? "WHERE pu.project_id=$project_id" : "";
@@ -890,7 +882,8 @@ class Projects_model extends CI_Model
                 $temp[$key]['project_client'] = null;
             }
             $temp[$key]['get_project_users_performance'] =  $this->get_project_users_performance($project['id']);
-            $temp[$key]['project_users'] = $project_users = $this->get_project_users($project['id']);
+            $temp[$key]['project_users'] = $this->get_project_users($project['id']);
+            $temp[$key]['project_sprints'] = $this->get_project_sprints($project['id']);
             $temp[$key]['project_users_ids'] = '';
             if (!empty($project_users)) {
                 foreach ($project_users as  $pkey => $project_user) {
@@ -907,6 +900,28 @@ class Projects_model extends CI_Model
             return false;
         }
     }
+
+    function get_project_sprints($id)
+    {
+        $this->db->select('sprints.*, COUNT(tasks.id) AS task_count, SUM(tasks.story_points) AS total_story_points');
+        $this->db->from('tasks');
+        $this->db->join('issues_sprint', 'tasks.id = issues_sprint.issue_id');
+        $this->db->join('sprints', 'issues_sprint.sprint_id = sprints.id');
+        $this->db->where('tasks.project_id', $id);
+        $this->db->group_by('sprints.id'); 
+        $query = $this->db->get();
+        $sprints = $query->result();
+        
+        // Modify duration in each sprint
+        foreach ($sprints as &$sprint) {
+            if ($sprint->duration) {
+                $sprint->duration = $sprint->duration . ' Week'; 
+            }
+        }
+        
+        return $sprints;
+    }
+    
 
     function get_tasks($user_id = '', $task_id = '', $project_id = '', $search = '', $sort = 'created', $priority = '', $upcoming = '')
     {

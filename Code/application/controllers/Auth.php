@@ -807,13 +807,13 @@ class Auth extends CI_Controller
 
 			if ($this->input->post('finger_config')) {
 				$finger_config = '1';
-				$devices = $this->input->post('device') ? $this->input->post('device') : ''; // ANCHOR  Fill this array with device IDs
+				$devices = $this->input->post('device') ? $this->input->post('device') : ''; 
 				$device_ids_str = '["' . $devices . '"]';
 			} else {
 				$device_ids_str = '[]';
 				$finger_config = '';
 			}
-			if ($this->input->post('probation_period') && $this->input->post('join_date')) {
+			if ($this->input->post('probation_period') && $this->input->post('probation_period') == '' && $this->input->post('join_date')) {
 				$probition_period = $this->input->post('probation_period');
 				$joinDate = date("Y-m-d", strtotime($this->input->post('join_date')));
 				if ($probition_period >= 1 && $probition_period <= 3) {

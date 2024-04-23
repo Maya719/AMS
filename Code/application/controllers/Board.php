@@ -172,11 +172,12 @@ class Board extends CI_Controller
         $statuses = $this->get_statuses();
 
         $issues_data = $this->get_issues($sprint_id, $project_id, $board, $users);
+        $sprint_data = $this->get_sprint($sprint_id);
 
         $html = '';
         $completed = 0;
         $total = 0;
-        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
+            list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
 
         // Calculate the progress percentage
         $rounded_percent = $this->calculate_progress($completed, $total);
@@ -196,9 +197,16 @@ class Board extends CI_Controller
         echo json_encode($result);
     }
 
+    private function get_sprint($sprint_id)
+    {
+        $this->db->select('*');
+        $this->db->from('sprints');
+        $this->db->where('id', $sprint_id);
+        $status_query = $this->db->get();
+        return $status_query->row();
+    }
     private function get_statuses()
     {
-        // Fetch task statuses from the database
         $this->db->select('*');
         $this->db->from('task_status');
         $status_query = $this->db->get();

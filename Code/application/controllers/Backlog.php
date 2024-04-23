@@ -132,6 +132,9 @@ class Backlog extends CI_Controller
                 'status' => 1
             ];
             if (!empty($id) && is_numeric($id) && $this->board_model->status_change_sprint($id, $data)) {
+
+                $this->session->set_flashdata('message', $this->lang->line('sprint_started') ? $this->lang->line('sprint_started') : "Sprint Started.");
+                $this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;
                 $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Started successfully.";
                 echo json_encode($this->data);
@@ -156,8 +159,10 @@ class Backlog extends CI_Controller
                 'status' => 2
             ];
             if (!empty($id) && is_numeric($id) && $this->board_model->status_change_sprint($id, $data)) {
+                $this->session->set_flashdata('message', $this->lang->line('sprint_completed') ? $this->lang->line('sprint_completed') : "Sprint Completed.");
+                $this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;
-                $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Started successfully.";
+                $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Status Change Successfully.";
                 echo json_encode($this->data);
             } else {
                 $this->data['error'] = true;
@@ -177,8 +182,10 @@ class Backlog extends CI_Controller
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
             }
             if (!empty($id) && is_numeric($id) && $this->board_model->delete_sprint($id)) {
+                $this->session->set_flashdata('message', $this->lang->line('sprint_deleted') ? $this->lang->line('sprint_deleted') : "Sprint Deleted.");
+                $this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;
-                $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Started successfully.";
+                $this->data['message'] = $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.";
                 echo json_encode($this->data);
             } else {
                 $this->data['error'] = true;

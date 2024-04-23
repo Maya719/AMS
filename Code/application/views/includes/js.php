@@ -88,6 +88,7 @@ convert_estimate_to_invoice = "<?=$this->lang->line('convert_estimate_to_invoice
 <script src="<?=base_url('assets/modules/dropzonejs/min/dropzone.min.js');?>"></script>
 <script src="<?=base_url('assets/modules/codemirror/lib/codemirror.js');?>"></script>
 
+
 <!-- Template JS File -->
 <script src="<?=base_url('assets/js/scripts.js')?>"></script>
 <script src="<?=base_url('assets/js/custom.js')?>"></script>

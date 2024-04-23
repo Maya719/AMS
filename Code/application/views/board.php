@@ -125,24 +125,23 @@
                                                 </select>
                                             </div>
                                         <?php endif ?>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-12 px-3" id="sprint_detail">
+                    <div class="col-xl-12 px-3" id="sprint_detail" style="display: none;">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                     <div>
                                         <h3 id="sprint_name"></h3>
-                                        <!-- <span id="from-to"></span> -->
+                                        <span id="from-to"></span>
                                     </div>
                                     <div class="mt-xl-0 mt-3">
                                         <div class="d-flex align-items-center mb-xl-4 mb-0 pb-3 justify-content-end flex-wrap">
                                             <h6 class="me-3 mb-0" id="percent"></h6>
-                                            <!-- <div>
+                                            <div>
                                                 <div class="dropdown">
                                                     <div class="btn-link" data-bs-toggle="dropdown">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +156,7 @@
                                                         <a class="dropdown-item delete_sprint" href="javascript:void(0)">Delete Sprint</a>
                                                     </div>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -259,6 +258,7 @@
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/vendor/draggable/draggable.js') ?>"></script>
     <script>
+
         $(document).ready(function() {
             ajaxCall();
             $('#sprint_id, #user_id, #project_id').change(function() {
@@ -292,8 +292,8 @@
                         initPopovers();
                         if (board == 1) {
                             $('#sprint_name').html(response.sprint.title);
-                            const from_to = response.sprint.starting_date + ' - ' + response.sprint.starting_date;
-                            $('#from-to').html(from_to);
+                            // const from_to = response.sprint.starting_date + ' - ' + response.sprint.starting_date;
+                            $('#from-to').html(response.sprint.goal);
                         }
                         $('.delete_sprint').attr('data-id', sprintId);
                         $('.complete_sprint').attr('data-id', sprintId);
@@ -483,7 +483,6 @@
                 }
             });
         });
-
         $(document).on('click', '.complete_sprint', function(e) {
             e.preventDefault();
             var id = $(this).data("id");
@@ -622,6 +621,18 @@
             });
         });
     </script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var sprintSelect = document.getElementById('sprint_id');
+        var agileOption = document.querySelector('#board_type option[value="1"]');
+
+        if (sprintSelect && sprintSelect.childElementCount === 0) {
+            agileOption.style.display = 'none';
+        } else {
+            agileOption.style.display = 'block';
+        }
+    });
+</script>
 </body>
 
 </html>
