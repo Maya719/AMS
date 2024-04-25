@@ -729,13 +729,13 @@ class Leaves extends CI_Controller
 						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
 						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
 						$heiCurrentGroupStep_number = $heiCurrentGroupStepResult->step_no;
-						$step_no = $this->leaves_model->leaveStep($heiCurrentGroupStep_number,$data["user_id"]);
+						$step = $this->leaves_model->leaveStep($heiCurrentGroupStep_number,$data["user_id"]);
 						$log[] = [
 							'leave_id' => $leave_id,
 							'group_id' => $group_id,
 							'remarks' => $this->input->post('leave_reason'),
 							'status' => 0,
-							'level' => $step_no
+							'level' => $step
 						];
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);
@@ -824,6 +824,7 @@ class Leaves extends CI_Controller
 				}
 			}
 			$this->data['leaves_logs'] = $leaves_logs;
+			// echo json_encode($this->data);
 			$this->load->view('leaves-edit', $this->data);
 		} else {
 			redirect('auth', 'refresh');

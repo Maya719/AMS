@@ -42,6 +42,8 @@ class Leaves_model extends CI_Model
             $current_group_id = $group[0]->id;
             $emppp = get_employee_id_from_user_id($user->id);
             $forword_result = $this->is_forworded($current_group_id, $step, $emppp);
+            $value["current_group_id"] = $current_group_id;
+            $value["step"] = $step;
             if ($value["status"] == 1) {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
             } elseif ($value["status"] == 2) {
@@ -59,6 +61,50 @@ class Leaves_model extends CI_Model
         return $results;
     }
 
+    /*
+    *
+    *
+    * Forworded To 
+    */
+    public function is_forworded($group_id, $step, $employee_id)
+    {
+        $step_groupArray = [];
+        $user_id = get_user_id_from_employee_id($employee_id);
+        $saas_id = $this->session->userdata('saas_id');
+        $this->db->where('saas_id', $saas_id);
+        $this->db->where('step_no', $step);
+        $query = $this->db->get('leave_hierarchy');
+        $rows = $query->result();
+        foreach ($rows as &$row) {
+            $step_group = $row->group_id;
+            $step_groupArray[] = $row->group_id;
+            $group = $this->ion_auth->group($step_group)->row();
+            $assigned_users = json_decode($group->assigned_users);
+            if ($step_group == $group_id) {
+                $array = [
+                    'is_forworded' => false,
+                    'forworded_to' => null,
+                ];
+                break;
+            } else {
+                if ($assigned_users) {
+                    if (in_array($user_id, $assigned_users)) {
+                        $array = [
+                            'is_forworded' => true,
+                            'forworded_to' => $group->description,
+                        ];
+                        break;
+                    }
+                } else {
+                    $array = [
+                        'is_forworded' => true,
+                        'forworded_to' => $group->description,
+                    ];
+                }
+            }
+        }
+        return $array;
+    }
     function getStatusForword($id)
     {
         $saas_id = $this->session->userdata('saas_id');
@@ -172,64 +218,7 @@ class Leaves_model extends CI_Model
         return $results;
     }
 
-    /*
-    *
-    *
-    * Forworded To 
-    */
-    public function is_forworded($group_id, $step, $user_id)
-    {
-        $saas_id = $this->session->userdata('saas_id');
-        $this->db->where('saas_id', $saas_id);
-        $this->db->where('step_no', $step);
-        $this->db->where('group_id', $group_id);
-        $query = $this->db->get('leave_hierarchy');
-        $array = [];
-        if ($row = $query->row()) {
-            $array = [
-                'is_forworded' => false,
-                'forworded_to' => null,
-            ];
-        } else {
-            $this->db->where('saas_id', $saas_id);
-            $this->db->where('step_no', $step);
-            $query = $this->db->get('leave_hierarchy');
-            if ($rows = $query->result()) {
-                
-                foreach ($rows as $row) {
-                    $step_group = $row->group_id;
-                    if ($step_group != $group_id) {
-                        $group = $this->ion_auth->group($step_group)->row();
-                        $assigned_users = json_decode($group->assigned_users);
-                        if ($assigned_users) {
-                            foreach ($assigned_users as $assignee) {
-                                $emp_id = get_employee_id_from_user_id($assignee);
-                                if ($emp_id == $user_id) {
-                                    $array = [
-                                        'is_forworded' => true,
-                                        // 'forworded_to' => $step_group,
-                                        'forworded_to' => $group->description,
-                                    ];
-                                }
-                            }
-                        }else{
-                            $not_found = true;
-                        }
-                    }
-                }
-                if ($not_found) {
-                    $step_group = $rows[0]->group_id;
-                    $group = $this->ion_auth->group($step_group)->row();
-                    $array = [
-                        'is_forworded' => true,
-                        'forworded_to' => $group->description,
-                    ];
-                }
-            }
-        }
 
-        return $array;
-    }
 
 
     function create($data)
@@ -386,11 +375,37 @@ class Leaves_model extends CI_Model
 
         return $days;
     }
-    public function leaveStep($current_user_step,$user_id)
+    public function leaveStep($current_user_step, $user_id)
     {
+        $saas_id = $this->session->userdata('saas_id');
         $user_id = get_user_id_from_employee_id($user_id);
-        
-        
-        return ($current_user_step ? $current_user_step : 0) + 1;
+        $step = ($current_user_step ? $current_user_step : 0) + 1;
+
+        // Get the highest step number from leave_hierarchy
+        $this->db->where('saas_id', $saas_id);
+        $this->db->select_max('step_no');
+        $query = $this->db->get('leave_hierarchy');
+        $row = $query->row_array();
+        $highest_step = $row['step_no'];
+
+        for ($i = $step; $i <= $highest_step; $i++) {
+            $this->db->where('saas_id', $saas_id);
+            $this->db->where('step_no', $i);
+            $query = $this->db->get('leave_hierarchy');
+            $rows = $query->result();
+            foreach ($rows as $row) {
+                $step_group = $row->group_id;
+                $group = $this->ion_auth->group($step_group)->row();
+                $assigned_users = json_decode($group->assigned_users);
+                if ($assigned_users) {
+                    if (in_array($user_id, $assigned_users)) {
+                        return $i;
+                    }
+                } else {
+                    return $i;
+                }
+            }
+        }
+        return $step;
     }
 }
