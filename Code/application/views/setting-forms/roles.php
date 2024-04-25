@@ -166,7 +166,7 @@
                         </div>
                     </div>
                     <div class="form-group mt-3" id="users_roles_div">
-                        <label class="col-form-label"><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?></label>
                         <input type="checkbox" id="selectAllUsers4"> Select All
                         <select name="users[]" id="assigned_users" class="form-control" multiple="">
                             <?php foreach ($system_users as $system_user) {
@@ -177,7 +177,7 @@
                         </select>
                     </div>
                     <div class="form-group mt-3">
-                        <label class="col-form-label"><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?><span class="text-danger">*</span></label>
+                        <label class="col-form-label"><?= $this->lang->line('change_permissions_of') ? $this->lang->line('change_permissions_of') : 'Change Permissions Of' ?></label>
                         <select name="change_permissions_of[]" id="change_permissions_of" class="form-control select2" multiple="">
                             <?php foreach ($groups as $group) { ?>
                                 <option value="<?= $group->id ?>"><?= $group->description ?></option>

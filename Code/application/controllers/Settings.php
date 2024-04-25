@@ -320,7 +320,7 @@ class Settings extends CI_Controller
 			$this->db->where('saas_id', $this->session->userdata('saas_id'));
 			$query = $this->db->get('shift');
 			$shift_types = $query->result_array();
-			
+
 			foreach ($shift_types as &$shift_type) {
 				$shift_type["starting_time"] =  date("h:i A", strtotime($shift_type["starting_time"]));
 				$shift_type["ending_time"] =  date("h:i A", strtotime($shift_type["ending_time"]));
@@ -1585,10 +1585,11 @@ class Settings extends CI_Controller
 			redirect('auth', 'refresh');
 		}
 	}
-	public function get_user_by_shift_and_department(){
+	public function get_user_by_shift_and_department()
+	{
 		$shifts = $this->input->post('shifts');
 		$departments = $this->input->post('departments');
-		
+
 		// Start building the query
 		$this->db->select('*');
 		$this->db->from('users'); // Replace 'your_users_table' with your actual table name
@@ -1748,15 +1749,15 @@ class Settings extends CI_Controller
 
 	public function roles_edit()
 	{
-		if ($this->ion_auth->logged_in() && !$this->ion_auth->in_group(3) && !$this->ion_auth->in_group(4)) {
+		if ($this->ion_auth->logged_in()) {
+			$this->form_validation->set_rules('update_id', 'Id', 'trim|required');
 			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('descriptive_name', 'Description', 'trim|strip_tags|xss_clean');
 
 			$permissions = $this->input->post('permissions');
 			$permissions = json_encode($permissions);
-			$users = $this->input->post('users');
-			$users = json_encode($users);
-			$change_permissions_of = $this->input->post('change_permissions_of') ? $this->input->post('change_permissions_of') : 0;
+			$users = $this->input->post('users') ? json_encode($this->input->post('users')) : '';
+			$change_permissions_of = $this->input->post('change_permissions_of') ? $this->input->post('change_permissions_of') : '';
 			$change_permissions_of = json_encode($change_permissions_of);
 
 			if ($this->form_validation->run() == TRUE) {

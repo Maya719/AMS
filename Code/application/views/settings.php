@@ -814,7 +814,8 @@
         dataType: "json",
         success: function(result) {
           if (result['error'] == false) {
-            location.reload();
+            console.log(result);
+            // location.reload();
           } else {
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
@@ -834,25 +835,32 @@
         dataType: "json",
         success: function(result) {
           if (result['error'] == false) {
+            console.log(result["data"]);
 
             $("#update_id").val(result['data'].id);
-
-            $("#name").val(result['data'].name);
-            $("#name").trigger("change");
 
             $("#description").val(result['data'].description);
             $("#description").trigger("change");
 
             $("#descriptive_name").val(result['data'].descriptive_name);
             $("#descriptive_name").trigger("change");
+            if (result['data'] != '' && result['data'].change_permissions_of != null) {
+              var inputString = result['data'].change_permissions_of.replace(/[\[\]"]+/g, '');
+              newArray = inputString.split(',');
+              console.log(newArray);
+
+              $("#change_permissions_of").val(newArray);
+              $("#change_permissions_of").trigger("change");
+            }
 
             if (result['data'].permissions != null) {
-              var permissionsArray = JSON.parse(result['data'].permissions);
+              var inputString = result['data'].permissions.replace(/[\[\]"]+/g, '');
+              permissions = inputString.split(',');
 
-              if (permissionsArray !== null) {
+              if (permissions !== null) {
                 $('#permissions').multiSelect('deselect_all');
 
-                permissionsArray.forEach(function(value) {
+                permissions.forEach(function(value) {
                   $('#permissions').multiSelect('select', value);
                 });
 
@@ -861,26 +869,19 @@
             }
 
             if (result['data'].assigned_users != null) {
-              var permissionsArray2 = JSON.parse(result['data'].assigned_users);
+              var inputString = result['data'].assigned_users.replace(/[\[\]"]+/g, '');
+              assigned_users = inputString.split(',');
 
-              if (permissionsArray2 !== null) {
+              if (assigned_users !== null) {
                 $('#assigned_users').multiSelect('deselect_all');
 
-                permissionsArray2.forEach(function(value) {
+                assigned_users.forEach(function(value) {
                   $('#assigned_users').multiSelect('select', value);
                 });
 
                 $('#assigned_users').multiSelect('refresh');
               }
             }
-            var newArray = [];
-            if (result['data'].change_permissions_of != '' && result['data'].change_permissions_of != null) {
-              var inputString = result['data'].change_permissions_of.replace(/[\[\]"]+/g, ''); 
-              newArray = inputString.split(',');
-            }
-
-            $("#change_permissions_of").val(newArray);
-            $("#change_permissions_of").trigger("change");
 
             $("#modal-edit-roles").trigger("click");
           } else {
@@ -961,8 +962,8 @@
       var targetBox = ev.target.closest(".box");
 
       if (targetBox) {
-        var match = targetBox.id.match(/\d+/); 
-        var newStep = match ? parseInt(match[0]) : 0; 
+        var match = targetBox.id.match(/\d+/);
+        var newStep = match ? parseInt(match[0]) : 0;
         draggedItem.setAttribute("data-step", newStep);
         targetBox.appendChild(draggedItem.cloneNode(true));
         draggedItem.parentNode.removeChild(draggedItem);
