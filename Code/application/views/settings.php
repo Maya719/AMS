@@ -814,8 +814,8 @@
         dataType: "json",
         success: function(result) {
           if (result['error'] == false) {
-            console.log(result);
-            // location.reload();
+            // console.log(result);
+            location.reload();
           } else {
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
