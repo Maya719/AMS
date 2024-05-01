@@ -285,6 +285,7 @@ class Users extends CI_Controller
 			if (is_saas_admin()) {
 				$this->load->view('saas-admins', $this->data);
 			} else {
+				// echo json_encode($this->data);
 				$this->load->view('users', $this->data);
 			}
 		} else {
@@ -694,11 +695,7 @@ class Users extends CI_Controller
 
 	public function get_employee_id()
 	{
-		if ($this->ion_auth->logged_in()) {
-			$report =  $this->users_model->get_employee_id();
-			echo json_encode($report);
-		} else {
-			return '';
-		}
+		$report =  $this->users_model->get_employee_id();
+		echo json_encode($report);
 	}
 }

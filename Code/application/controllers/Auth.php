@@ -651,6 +651,7 @@ class Auth extends CI_Controller
 					'saas_id' => $this->session->userdata('saas_id'),
 				];
 			} else {
+
 				$update_saas_id_data = [
 					'saas_id' => $new_user_id,
 				];
@@ -733,6 +734,7 @@ class Auth extends CI_Controller
 				if ($this->ion_auth->logged_in()) {
 					$msg = $this->lang->line('make_sure_to_activate_the_account_or_ask_the_user_to_confirm_the_email_address') ? $this->lang->line('make_sure_to_activate_the_account_or_ask_the_user_to_confirm_the_email_address') : "Make sure to activate the account or ask the user to confirm the email address.";
 				} else {
+
 					$msg = $this->lang->line('please_check_your_inbox_and_confirm_your_eamil_address_to_activate_your_account') ? $this->lang->line('please_check_your_inbox_and_confirm_your_eamil_address_to_activate_your_account') : "Please check your inbox and confirm your email address to activate your account.";
 				}
 			} else {
@@ -807,7 +809,7 @@ class Auth extends CI_Controller
 
 			if ($this->input->post('finger_config')) {
 				$finger_config = '1';
-				$devices = $this->input->post('device') ? $this->input->post('device') : ''; 
+				$devices = $this->input->post('device') ? $this->input->post('device') : '';
 				$device_ids_str = '["' . $devices . '"]';
 			} else {
 				$device_ids_str = '[]';
@@ -861,6 +863,7 @@ class Auth extends CI_Controller
 				}
 			}
 
+			
 			$additional_data = [
 				'first_name' => $this->input->post('first_name'),
 				'last_name' => $this->input->post('last_name'),
@@ -890,57 +893,86 @@ class Auth extends CI_Controller
 		}
 
 		$recaptcha_secret_key = get_google_recaptcha_secret_key();
-		if ($recaptcha_secret_key && $this->input->post('new_register')) {
-			$token = $this->input->post('token');
-			$action = $this->input->post('action');
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => $recaptcha_secret_key, 'response' => $token)));
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($ch);
-			curl_close($ch);
-			$arrResponse = json_decode($response, true);
+		// if ($recaptcha_secret_key && $this->input->post('new_register')) {
+		// 	$token = $this->input->post('token');
+		// 	$action = $this->input->post('action');
+		// 	$ch = curl_init();
+		// 	curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+		// 	curl_setopt($ch, CURLOPT_POST, 1);
+		// 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => $recaptcha_secret_key, 'response' => $token)));
+		// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// 	$response = curl_exec($ch);
+		// 	curl_close($ch);
+		// 	$arrResponse = json_decode($response, true);
 
-			if ($arrResponse["success"] != '1' || $arrResponse["action"] != $action || $arrResponse["score"] <= 0.6) {
-				$this->data['error'] = true;
-				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-				echo json_encode($this->data);
-				return false;
-			}
-		}
+		// 	if ($arrResponse["success"] != '1' || $arrResponse["action"] != $action || $arrResponse["score"] <= 0.6) {
+		// 		$this->data['error'] = true;
+		// 		$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+		// 		echo json_encode($this->data);
+		// 		return false;
+		// 	}
+
+		// }
 
 		if ($this->form_validation->run() === TRUE && $new_user_id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group)) {
 			$userLeaveData = [];
 
-			foreach ($this->input->post('leavecount') as $leaveTypeId => $leaveCount) {
-				$leaveTypeId = intval($leaveTypeId);
-				$leaveCount = intval($leaveCount);
 
-				$leaveData = [
-					'leave_type_id' => $leaveTypeId,
-					'leave_count' => $leaveCount,
-				];
-
-				$userLeaveData[] = $leaveData;
-			}
-			$sindwitchRule = $this->input->post('sindwitch') == 'on' ? 1 : 0;
-			$applied_data = [
-				'sindwitch' => $sindwitchRule,
-				'leave_data' => $userLeaveData,
-			];
-			$userData = [
-				'user_id' => $new_user_id,
-				'applied_rules' => json_encode($applied_data),
-			];
-
-			$this->leaves_model->user_leave_policy($userData);
 
 			if ($this->ion_auth->is_admin()  || permissions('user_create') || permissions('client_create') || $this->input->post('create_saas_admin')) {
 				$update_saas_id_data = [
 					'saas_id' => $this->session->userdata('saas_id'),
 				];
 			} else {
+				if ($recaptcha_secret_key && $this->input->post('new_register')) {
+					// Create department data
+					$departmentData = array(
+						array('saas_id' => $new_user_id, 'company_name' => 'ABC', 'department_name' => 'Administration'),
+						array('saas_id' => $new_user_id, 'company_name' => 'ABC', 'department_name' => 'HR Manager')
+					);
+
+					// Insert department data
+					foreach ($departmentData as $data) {
+						$this->department_model->create($data);
+					}
+
+					// Create role data
+					$roleData = array(
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('employee')),
+							'description' => 'Employee',
+							'descriptive_name' => 'Employee',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						),
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('HR Manager')),
+							'description' => 'HR Manager',
+							'descriptive_name' => 'HR Manager',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						),
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('CEO')),
+							'description' => 'CEO',
+							'descriptive_name' => 'CEO',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						)
+					);
+
+					// Insert role data
+					foreach ($roleData as $data) {
+						$this->settings_model->roles_create($data);
+					}
+				}
+
 				$update_saas_id_data = [
 					'saas_id' => $new_user_id,
 				];
@@ -974,7 +1006,6 @@ class Auth extends CI_Controller
 				);
 				$this->plans_model->create_users_plans($users_plans_data);
 
-				// ANCHOR  notification to the saas admins
 				$saas_admins = $this->ion_auth->users(array(3))->result();
 				foreach ($saas_admins as $saas_admin) {
 					$data = array(
@@ -1174,7 +1205,6 @@ class Auth extends CI_Controller
 							if ($this->upload->do_upload($field_name)) {
 								$uploaded_data = $this->upload->data('file_name');
 								$document_paths[] = $uploaded_data;
-								
 							}
 						}
 					}

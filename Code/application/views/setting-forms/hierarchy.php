@@ -192,13 +192,13 @@ foreach ($data as $item) {
                     </div>
                     <div class="box2">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="level ` + newLevel + `" value="approver" checked>
+                            <input class="form-check-input" type="radio" name="level` + newLevel + `" value="approver" checked>
                             <label class="form-check-label">
                                 Approver
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="level ` + newLevel + `" value="recommender">
+                            <input class="form-check-input" type="radio" name="level` + newLevel + `" value="recommender">
                             <label class="form-check-label">
                                 Recommender
                             </label>

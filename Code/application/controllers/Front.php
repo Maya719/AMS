@@ -286,6 +286,8 @@ class Front extends CI_Controller
 
 		if ($this->uri->segment(3) == 'three') {
 			$this->load->view('front/three/front', $this->data);
+		} elseif ($this->uri->segment(3) == 'four') {
+			$this->load->view('front/four/front', $this->data);
 		} elseif ($this->uri->segment(3) == 'two') {
 			$this->load->view('front/two/front', $this->data);
 		} else {

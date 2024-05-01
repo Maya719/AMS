@@ -991,6 +991,7 @@
           var groupId = $(this).data('id');
           var stepNo = $(this).data('step');
           var selectedValue = $('input[name=level' + stepNo + ']:checked').val();
+          console.log(stepNo);
           if (stepNo != 0 && !isNaN(stepNo)) {
             data.push({
               group_id: groupId,
@@ -1007,6 +1008,7 @@
           dataType: "json",
           success: function(result) {
             if (result['error'] == false) {
+              console.log(result);
               $('.message').append('<div class="alert alert-success">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
             } else {
               $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();

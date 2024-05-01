@@ -174,21 +174,21 @@ if ($google_client_id) { ?>
 
   <script>
     $(document).ready(function() {
-      function getEmployeeId() {
+      getEmployeeId();
 
+      function getEmployeeId() {
         $.ajax({
           url: '<?= base_url('users/get_employee_id') ?>',
           method: 'POST',
           dataType: 'json',
           success: function(response) {
+            console.log(response);
             var employee_id = response.max_employee_id;
             employee_id++;
-
             $('#employee_id').val(employee_id);
           },
         });
       }
-      getEmployeeId();
     });
   </script>
 </body>

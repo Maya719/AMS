@@ -219,7 +219,9 @@
                                                             <select class="form-select" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
                                                                 <option selected>Role</option>
                                                                 <?php foreach ($user_groups as $user_group) : ?>
-                                                                    <option value="<?= $user_group->id ?>"><?= $user_group->description ?></option>
+                                                                    <?php if ($user_group->id !== '3' && $user_group->id !== '4') : ?>
+                                                                        <option value="<?= $user_group->id ?>"><?= $user_group->description ?></option>
+                                                                    <?php endif ?>
                                                                 <?php endforeach ?>
                                                             </select>
                                                         </div>

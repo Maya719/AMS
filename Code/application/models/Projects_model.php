@@ -738,7 +738,7 @@ class Projects_model extends CI_Model
 
         $leftjoin = "LEFT JOIN project_users ON projects.id = project_users.project_id";
 
-        $query = $this->db->query("SELECT DISTINCT projects.* FROM projects " . $leftjoin . $where . " ORDER BY projects.created DESC");
+        $query = $this->db->query("SELECT DISTINCT projects.* FROM projects " . $leftjoin . $where . " AND projects.saas_id =" . $this->session->userdata('saas_id') . " ORDER BY projects.created DESC");
 
         // Execute the query and retrieve the results as an array
         $results = $query->result_array();
@@ -908,20 +908,20 @@ class Projects_model extends CI_Model
         $this->db->join('issues_sprint', 'tasks.id = issues_sprint.issue_id');
         $this->db->join('sprints', 'issues_sprint.sprint_id = sprints.id');
         $this->db->where('tasks.project_id', $id);
-        $this->db->group_by('sprints.id'); 
+        $this->db->group_by('sprints.id');
         $query = $this->db->get();
         $sprints = $query->result();
-        
+
         // Modify duration in each sprint
         foreach ($sprints as &$sprint) {
             if ($sprint->duration) {
-                $sprint->duration = $sprint->duration . ' Week'; 
+                $sprint->duration = $sprint->duration . ' Week';
             }
         }
-        
+
         return $sprints;
     }
-    
+
 
     function get_tasks($user_id = '', $task_id = '', $project_id = '', $search = '', $sort = 'created', $priority = '', $upcoming = '')
     {

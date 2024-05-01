@@ -1507,7 +1507,7 @@ class Projects extends CI_Controller
 				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
 				$this->data['system_users'] = $users;
 			}
-			$this->data['system_clients'] = $this->ion_auth->client_users()->result();
+			$this->data['system_clients'] = $this->ion_auth->users(array(4))->result();;
 
 			$this->data['project_status'] = project_status();
 
@@ -1517,6 +1517,7 @@ class Projects extends CI_Controller
 				$this->data['projects_all'] = $this->projects_model->get_projects($this->session->userdata('user_id'));
 			}
 
+			// echo json_encode($this->data);
 			$this->load->view('projects-list', $this->data);
 		} else {
 			redirect('auth', 'refresh');

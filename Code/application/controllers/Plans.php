@@ -67,8 +67,10 @@ class Plans extends CI_Controller
 				$this->notifications_model->edit('', 'offline_request', '', '', '');
 			}
 			$this->data['page_title'] = 'Subscription Plans - ' . company_name();
+			$this->data['main_page'] = 'Subscription Plans';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['plans'] = $this->plans_model->get_plans();
+			// echo json_encode($this->data['plans']);
 			$this->load->view('plans', $this->data);
 		} else {
 			redirect('auth', 'refresh');
@@ -222,6 +224,7 @@ class Plans extends CI_Controller
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->notifications_model->edit('', 'new_plan', '', '', '');
 			$this->data['page_title'] = 'Subscription Orders - ' . company_name();
+			$this->data['main_page'] = 'Subscription Orders';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$orders = $this->plans_model->get_orders();
 			if ($orders) {
@@ -265,6 +268,7 @@ class Plans extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->data['page_title'] = 'Transactions - ' . company_name();
+			$this->data['main_page'] = 'Transactions';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('transactions', $this->data);
 		} else {
@@ -458,6 +462,7 @@ class Plans extends CI_Controller
 		if ($this->ion_auth->logged_in() && is_saas_admin()) {
 			$this->notifications_model->edit('', 'offline_request', '', '', '');
 			$this->data['page_title'] = 'Offline Requests - ' . company_name();
+			$this->data['main_page'] = 'Offline Requests';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['offline_requests'] = $this->get_offline_requests2();
 			$this->load->view('offline_requests', $this->data);
@@ -923,31 +928,30 @@ class Plans extends CI_Controller
 
 				$modules['select_all'] = $this->input->post('select_all') ? 1 : 0;
 				$modules['projects'] = $this->input->post('projects_module') ? 1 : 0;
+				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
+				$modules['agile'] = $this->input->post('agile') ? 1 : 0;
+				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
-				$modules['gantt'] = $this->input->post('gantt') ? 1 : 0;
-				$modules['timesheet'] = $this->input->post('timesheet') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
+				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 0;
+				$modules['departments'] = $this->input->post('departments') ? 1 : 0;
 				$modules['clients'] = $this->input->post('clients') ? 1 : 0;
-				$modules['invoices'] = $this->input->post('invoices') ? 1 : 0;
-				$modules['payments'] = $this->input->post('payments') ? 1 : 0;
-				$modules['expenses'] = $this->input->post('expenses') ? 1 : 0;
 				$modules['calendar'] = $this->input->post('calendar') ? 1 : 0;
 				$modules['leaves'] = $this->input->post('leaves') ? 1 : 0;
+				$modules['leaves_types'] = $this->input->post('leaves_types') ? 1 : 0;
+				$modules['leave_hierarchy'] = $this->input->post('leave_hierarchy') ? 1 : 0;
 				$modules['biometric_missing'] = $this->input->post('biometric_missing') ? 1 : 0;
+				$modules['biometric_machine'] = $this->input->post('biometric_machine') ? 1 : 0;
+				$modules['holidays'] = $this->input->post('holidays') ? 1 : 0;
 				$modules['todo'] = $this->input->post('todo') ? 1 : 0;
+				$modules['notice_board'] = $this->input->post('notice_board') ? 1 : 0;
+				$modules['shifts'] = $this->input->post('shifts') ? 1 : 0;
 				$modules['notes'] = $this->input->post('notes') ? 1 : 0;
 				$modules['chat'] = $this->input->post('chat') ? 1 : 0;
-				$modules['leads'] = $this->input->post('leads') ? 1 : 0;
-				$modules['payment_gateway'] = $this->input->post('payment_gateway') ? 1 : 0;
-				$modules['taxes'] = $this->input->post('taxes') ? 1 : 0;
-				$modules['custom_currency'] = $this->input->post('custom_currency') ? 1 : 0;
 				$modules['user_permissions'] = $this->input->post('user_permissions') ? 1 : 0;
 				$modules['notifications'] = $this->input->post('notifications') ? 1 : 0;
 				$modules['languages'] = $this->input->post('languages') ? 1 : 0;
-				$modules['meetings'] = $this->input->post('meetings') ? 1 : 0;
-				$modules['estimates'] = $this->input->post('estimates') ? 1 : 0;
 				$modules['reports'] = $this->input->post('reports') ? 1 : 0;
-				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
 				$modules['support'] = $this->input->post('support') ? 1 : 0;
 
 				$data = array(
@@ -1000,29 +1004,29 @@ class Plans extends CI_Controller
 
 				$modules['select_all'] = $this->input->post('select_all') ? 1 : 0;
 				$modules['projects'] = $this->input->post('projects_module') ? 1 : 0;
+				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
+				$modules['agile'] = $this->input->post('agile') ? 1 : 0;
+				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
-				$modules['gantt'] = $this->input->post('gantt') ? 1 : 0;
-				$modules['timesheet'] = $this->input->post('timesheet') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
+				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 0;
+				$modules['departments'] = $this->input->post('departments') ? 1 : 0;
 				$modules['clients'] = $this->input->post('clients') ? 1 : 0;
-				$modules['invoices'] = $this->input->post('invoices') ? 1 : 0;
-				$modules['payments'] = $this->input->post('payments') ? 1 : 0;
-				$modules['expenses'] = $this->input->post('expenses') ? 1 : 0;
 				$modules['calendar'] = $this->input->post('calendar') ? 1 : 0;
 				$modules['leaves'] = $this->input->post('leaves') ? 1 : 0;
+				$modules['leaves_types'] = $this->input->post('leaves_types') ? 1 : 0;
+				$modules['leave_hierarchy'] = $this->input->post('leave_hierarchy') ? 1 : 0;
 				$modules['biometric_missing'] = $this->input->post('biometric_missing') ? 1 : 0;
+				$modules['biometric_machine'] = $this->input->post('biometric_machine') ? 1 : 0;
+				$modules['holidays'] = $this->input->post('holidays') ? 1 : 0;
 				$modules['todo'] = $this->input->post('todo') ? 1 : 0;
+				$modules['notice_board'] = $this->input->post('notice_board') ? 1 : 0;
+				$modules['shifts'] = $this->input->post('shifts') ? 1 : 0;
 				$modules['notes'] = $this->input->post('notes') ? 1 : 0;
 				$modules['chat'] = $this->input->post('chat') ? 1 : 0;
-				$modules['leads'] = $this->input->post('leads') ? 1 : 0;
-				$modules['payment_gateway'] = $this->input->post('payment_gateway') ? 1 : 0;
-				$modules['taxes'] = $this->input->post('taxes') ? 1 : 0;
-				$modules['custom_currency'] = $this->input->post('custom_currency') ? 1 : 0;
 				$modules['user_permissions'] = $this->input->post('user_permissions') ? 1 : 0;
 				$modules['notifications'] = $this->input->post('notifications') ? 1 : 0;
 				$modules['languages'] = $this->input->post('languages') ? 1 : 0;
-				$modules['meetings'] = $this->input->post('meetings') ? 1 : 0;
-				$modules['estimates'] = $this->input->post('estimates') ? 1 : 0;
 				$modules['reports'] = $this->input->post('reports') ? 1 : 0;
 				$modules['support'] = $this->input->post('support') ? 1 : 0;
 

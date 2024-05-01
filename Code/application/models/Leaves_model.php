@@ -235,21 +235,6 @@ class Leaves_model extends CI_Model
         else
             return $this->db->last_query();;
     }
-    function user_leave_policy($data)
-    {
-        if ($this->db->insert('applied_policies', $data))
-            return $this->db->insert_id();
-        else
-            return $this->db->last_query();;
-    }
-    function update_user_leave_policy($id, $data)
-    {
-        $this->db->where('user_id', $id);
-        if ($this->db->update('applied_policies', $data))
-            return true;
-        else
-            return false;
-    }
     function create_status($data)
     {
         if ($this->db->insert('leave_level', $data))

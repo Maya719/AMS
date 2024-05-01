@@ -8,34 +8,23 @@
     align-items: center;
     cursor: pointer;
     margin-right: 10px;
-    /* Adjust margin as needed */
   }
 
-  /* Style for hiding the actual radio input */
   .image-radio-input {
     display: none;
   }
 
-  /* Style for the SVG image inside the label */
   .image-radio-label svg {
     width: 200px;
-    /* Adjust image width as needed */
     height: 200px;
-    /* Adjust image height as needed */
     fill: #000000;
-    /* SVG fill color */
     border: 2px solid transparent;
-    /* Add border for visual effect */
     border-radius: 5px;
-    /* Add border radius for rounded corners */
     margin-bottom: 5px;
-    /* Space between image and label text */
   }
 
-  /* Style for the label text */
   .image-label-text {
     font-size: 14px;
-    /* Adjust font size as needed */
   }
 
   .image-radio-input:checked+.image-radio-label svg {

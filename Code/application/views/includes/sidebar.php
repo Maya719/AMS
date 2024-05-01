@@ -620,7 +620,7 @@
                 <?php $my_plan = get_current_plan(); ?>
                 <a href="<?= base_url('plans') ?>" class="dropdown-item ai-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-danger" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 8.5V8.35417C18 6.50171 16.4983 5 14.6458 5H9.5C7.567 5 6 6.567 6 8.5C6 10.433 7.567 12 9.5 12H14.5C16.433 12 18 13.567 18 15.5C18 17.433 16.433 19 14.5 19H9.42708C7.53436 19 6 17.4656 6 15.5729V15.5M12 3V21"/>
+                    <path d="M18 8.5V8.35417C18 6.50171 16.4983 5 14.6458 5H9.5C7.567 5 6 6.567 6 8.5C6 10.433 7.567 12 9.5 12H14.5C16.433 12 18 13.567 18 15.5C18 17.433 16.433 19 14.5 19H9.42708C7.53436 19 6 17.4656 6 15.5729V15.5M12 3V21" />
                   </svg>
                   <span class="ms-2 text-danger"><?= $my_plan['title'] ?> </span>
                 </a>
@@ -690,7 +690,7 @@
         </li>
       <?php } ?>
 
-      <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
+      <!-- <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-list"></i>
             <span class="nav-text"><?= $this->lang->line('pms') ? $this->lang->line('pms') : 'PMS' ?></span>
@@ -718,13 +718,13 @@
           </ul>
         </li>
       <?php
-      }
-      ?>
+            }
+      ?> -->
 
-      <?php if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_client() || permissions('project_view') || permissions('task_view')) { ?>
+      <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects'))) { ?>
         <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
             <i class="fas fa-bezier-curve"></i>
-            <span class="nav-text"><?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?></span>
+            <span class="nav-text"><?= $this->lang->line('pms') ? $this->lang->line('pms') : 'PMS' ?></span>
           </a>
           <ul aria-expanded="false">
             <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('project_view'))) { ?>
@@ -786,15 +786,16 @@
           </a>
         </li>
 
-        <li><a href="<?= base_url('users/client') ?>" aria-expanded="false">
-            <i class="fas fa-handshake"></i>
-            <span class="nav-text">Clients</span>
-          </a>
-        </li>
-
+        <?php if (is_module_allowed('projects')) { ?>
+          <li><a href="<?= base_url('users/client') ?>" aria-expanded="false">
+              <i class="fas fa-handshake"></i>
+              <span class="nav-text">Clients</span>
+            </a>
+          </li>
+        <?php } ?>
         <li><a href="<?= base_url('events') ?>" aria-expanded="false">
             <i class="fas fa-calendar"></i>
-            <span class="nav-text"><?= $this->lang->line('events') ? $this->lang->line('events') : 'Events' ?></span>
+            <span class="nav-text"><?= $this->lang->line('events') ? $this->lang->line('events') : 'Notice Board' ?></span>
           </a>
         </li>
       <?php } ?>
@@ -865,30 +866,30 @@
                 <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
               <?php } ?>
 
-              <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('leave_type_view')) && is_module_allowed('leaves_types')) { ?>
                 <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>
               <?php } ?>
 
-              <?php if ($this->ion_auth->is_admin() || permissions('leave_type_view')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('leave_type_view')) && is_module_allowed('leave_hierarchy')) { ?>
                 <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave Approval Hierarchy' ?></a></li>
               <?php } ?>
 
-              <?php if ($this->ion_auth->is_admin() || permissions('shift_view')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('shift_view')) && is_module_allowed('shifts')) { ?>
                 <li><a href="<?= base_url('settings/shift') ?>">Shifts</a></li>
               <?php } ?>
 
-              <?php if ($this->ion_auth->is_admin() || permissions('device_view')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('device_view')) && is_module_allowed('biometric_machine')) { ?>
                 <li><a href="<?= base_url('settings/device_config') ?>"><?= $this->lang->line('device_config') ? $this->lang->line('device_config') : 'Device Configuration' ?></a></li>
               <?php } ?>
 
-              <?php if ($this->ion_auth->is_admin() || permissions('departments_view')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('departments_view')) && is_module_allowed('departments')) { ?>
                 <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
               <?php } ?>
-              <?php if ($this->ion_auth->is_admin()) { ?>
+              <?php if ($this->ion_auth->is_admin() && is_module_allowed('')) { ?>
                 <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
+              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
                 <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
               <?php } ?>
 

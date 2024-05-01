@@ -61,8 +61,10 @@
         <div class="row justify-content-between">
           <div class="col-xl-4 col-sm-12">
             <nav class="nav nav-pills flex-column flex-sm-row">
+              <?php if ((is_module_allowed('projects'))) : ?>
               <a class="flex-sm-fill fs-6 text-sm-center nav-link <?= (is_client()) ? '' : 'active'; ?>" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false" <?= (is_client()) ? 'disabled' : ''; ?>><strong>AMS</strong></a>
-              <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4 <?= (is_client()) ? 'active' : ''; ?>" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
+                <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4 <?= (is_client()) ? 'active' : ''; ?>" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
+              <?php endif ?>
             </nav>
           </div>
           <div class="col-xl-2 col-sm-12">

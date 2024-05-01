@@ -899,14 +899,16 @@ class Settings extends CI_Controller
 			$this->data['permissions'] = permissions();
 			$this->data['clients_permissions'] = clients_permissions();
 			$groups_array = $this->ion_auth->get_all_groups();
-
+			$groups_array = array_filter($groups_array, function ($group) {
+				return !in_array($group->name, ['admin', 'saas_admin', 'client']);
+			});
 
 			$this->data['groups'] = $groups_array;
+			$saas_id = $this->session->userdata('saas_id');
+			$this->db->where('saas_id', $saas_id);
 			$query = $this->db->get('leave_hierarchy');
 			$stepResult = $query->result();
-
 			$this->data['data'] = $stepResult;
-
 			// echo json_encode($this->data);
 			$this->load->view('settings', $this->data);
 		} else {
@@ -1575,7 +1577,7 @@ class Settings extends CI_Controller
 			$query = $this->db->get('permissions_list');
 			$groups = $this->ion_auth->get_all_groups();
 			$groups = array_filter($groups, function ($group) {
-				return !in_array($group->name, ['admin', 'saas_admin']);
+				return !in_array($group->name, ['admin', 'saas_admin', 'clients']);
 			});
 			$this->data['groups'] = $groups;
 			$this->data['permissions_list'] = $query->result_array();

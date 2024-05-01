@@ -34,6 +34,7 @@ class Board extends CI_Controller
             $this->db->select('*');
             $this->db->from('sprints');
             $this->db->where('status', 1);
+            $this->db->where('saas_id', $this->session->userdata('saas_id'));
             $query2 = $this->db->get();
             $this->data['sprints'] = $query2->result_array();
 

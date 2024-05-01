@@ -176,72 +176,104 @@
                           if ($plan["modules"] != '') {
                             foreach (json_decode($plan["modules"]) as $mod_key => $mod) {
                               $mod_name = '';
-                              if ($mod_key == 'projects') {
-                                $mod_name = $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects';
-                              } elseif ($mod_key == 'tasks') {
-                                $mod_name = $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks';
-                              } elseif ($mod_key == 'gantt') {
-                                $mod_name = $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt';
-                              } elseif ($mod_key == 'timesheet') {
-                                $mod_name = $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet';
-                              } elseif ($mod_key == 'team_members') {
-                                $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
-                              } elseif ($mod_key == 'clients') {
-                                $mod_name = $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients';
-                              } elseif ($mod_key == 'invoices') {
-                                $mod_name = $this->lang->line('invoices') ? $this->lang->line('invoices') : 'Invoices';
-                              } elseif ($mod_key == 'payments') {
-                                $mod_name = $this->lang->line('payments') ? $this->lang->line('payments') : 'Payments';
-                              } elseif ($mod_key == 'expenses') {
-                                $mod_name = $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses';
-                              } elseif ($mod_key == 'calendar') {
-                                $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
-                              } elseif ($mod_key == 'leaves') {
-                                $mod_name = $this->lang->line('leaves') ? $this->lang->line('leaves') : 'Leaves';
-                              } elseif ($mod_key == 'biometric_missing') {
-                                $mod_name = $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'Biometric Missing';
-                              } elseif ($mod_key == 'todo') {
-                                $mod_name = $this->lang->line('todo') ? $this->lang->line('todo') : 'Todo';
-                              } elseif ($mod_key == 'notes') {
-                                $mod_name = $this->lang->line('notes') ? $this->lang->line('notes') : 'Notes';
-                              } elseif ($mod_key == 'chat') {
-                                $mod_name = $this->lang->line('chat') ? $this->lang->line('chat') : 'Chat';
-                              } elseif ($mod_key == 'leads') {
-                                $mod_name = $this->lang->line('leads') ? $this->lang->line('leads') : 'Leads';
-                              } elseif ($mod_key == 'payment_gateway') {
-                                $mod_name = $this->lang->line('payment_gateway') ? $this->lang->line('payment_gateway') : 'Payment Gateway';
-                              } elseif ($mod_key == 'taxes') {
-                                $mod_name = $this->lang->line('taxes') ? $this->lang->line('taxes') : 'Taxes';
-                              } elseif ($mod_key == 'custom_currency') {
-                                $mod_name = $this->lang->line('custom_currency') ? $this->lang->line('custom_currency') : 'Custom Currency';
-                              } elseif ($mod_key == 'user_permissions') {
-                                $mod_name = $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'User Permissions';
-                              } elseif ($mod_key == 'notifications') {
-                                $mod_name = $this->lang->line('notifications') ? $this->lang->line('notifications') : 'Notifications';
-                              } elseif ($mod_key == 'languages') {
-                                $mod_name = $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages';
-                              } elseif ($mod_key == 'meetings') {
-                                $mod_name = $this->lang->line('video_meetings') ? $this->lang->line('video_meetings') : 'Video Meetings';
-                              } elseif ($mod_key == 'estimates') {
-                                $mod_name = $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates';
-                              } elseif ($mod_key == 'reports') {
-                                $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
-                              } elseif ($mod_key == 'attendance') {
-                                $mod_name = $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance';
-                              } elseif ($mod_key == 'support') {
-                                $mod_name = $this->lang->line('support') ? htmlspecialchars($this->lang->line('support')) : 'Support';
+                              switch ($mod_key) {
+                                case 'projects':
+                                  $mod_name = $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects';
+                                  break;
+                                case 'kanban':
+                                  $mod_name = $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban';
+                                  break;
+                                case 'agile':
+                                  $mod_name = $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile';
+                                  break;
+                                case 'tasks':
+                                  $mod_name = $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks';
+                                  break;
+                                case 'team_members':
+                                  $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
+                                  break;
+                                case 'user_permissions':
+                                  $mod_name = $this->lang->line('employee_permissions') ? $this->lang->line('employee_permissions') : 'Employees Permissions';
+                                  break;
+                                case 'user_roles':
+                                  $mod_name = $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employees Roles';
+                                  break;
+                                case 'clients':
+                                  $mod_name = $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients';
+                                  break;
+                                case 'calendar':
+                                  $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
+                                  break;
+                                case 'leaves':
+                                  $mod_name = $this->lang->line('leaves') ? $this->lang->line('leaves') : 'Leaves';
+                                  break;
+                                case 'leaves_types':
+                                  $mod_name = $this->lang->line('leaves_types') ? $this->lang->line('leaves_types') : 'Leaves Types';
+                                  break;
+                                case 'leave_hierarchy':
+                                  $mod_name = $this->lang->line('leave_hierarchy') ? $this->lang->line('leave_hierarchy') : 'Leaves Hierarchy';
+                                  break;
+                                case 'biometric_missing':
+                                  $mod_name = $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'biometric Missing';
+                                  break;
+                                case 'biometric_machine':
+                                  $mod_name = $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines';
+                                  break;
+                                case 'departments':
+                                  $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
+                                  break;
+                                case 'holidays':
+                                  $mod_name = $this->lang->line('holidays') ? $this->lang->line('holidays') : 'Holidays';
+                                  break;
+                                case 'todo':
+                                  $mod_name = $this->lang->line('todo') ? $this->lang->line('todo') : 'Todo';
+                                  break;
+                                case 'shifts':
+                                  $mod_name = $this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts';
+                                  break;
+                                case 'notice_board':
+                                  $mod_name = $this->lang->line('notice_board') ? $this->lang->line('notice_board') : 'Notice Board';
+                                  break;
+                                case 'calendar':
+                                  $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
+                                  break;
+                                case 'notes':
+                                  $mod_name = $this->lang->line('notes') ? $this->lang->line('notes') : 'Notes';
+                                  break;
+                                case 'chat':
+                                  $mod_name = $this->lang->line('chat') ? $this->lang->line('chat') : 'Chat';
+                                  break;
+                                case 'attendance':
+                                  $mod_name = $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance';
+                                  break;
+                                case 'support':
+                                  $mod_name = $this->lang->line('support') ? htmlspecialchars($this->lang->line('support')) : 'Support';
+                                  break;
+                                case 'notifications':
+                                  $mod_name = $this->lang->line('notifications') ? $this->lang->line('notifications') : 'Notifications';
+                                  break;
+                                case 'languages':
+                                  $mod_name = $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages';
+                                  break;
+                                case 'reports':
+                                  $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
+                                  break;
+                                default:
+                                  break;
                               }
 
-                              if ($mod_name && $mod == 1) {
-                                $modules .= '<div class="pricing-item d-inline-flex mb-1 ms-2">
-                                        <div class="pricing-item-icon ms-1"><i class="fas fa-check"></i></div>
-                                        <div class="pricing-item-label">' . $mod_name . '</div>
-                                      </div>';
-                              } elseif ($mod_name) {
-                                $modules .= '<div class="pricing-item d-inline-flex mb-1 ms-2">
-                                        <div class="pricing-item-icon bg-danger text-white ms-1"><i class="fas fa-times"></i></div>
-                                        <div class="pricing-item-label">' . $mod_name . '</div>
-                                      </div>';
+                              if ($mod_name) {
+                                if ($mod == 1) {
+                                  $modules .= '<div class="pricing-item d-inline-flex mb-1 ms-2">
+                                                      <div class="pricing-item-icon ms-1"><i class="fas fa-check"></i></div>
+                                                      <div class="pricing-item-label">' . $mod_name . '</div>
+                                                  </div>';
+                                } else {
+                                  $modules .= '<div class="pricing-item d-inline-flex mb-1 ms-2">
+                                                      <div class="pricing-item-icon bg-danger text-white ms-1"><i class="fas fa-times"></i></div>
+                                                      <div class="pricing-item-label">' . $mod_name . '</div>
+                                                  </div>';
+                                }
                               }
                             }
                           }
@@ -256,7 +288,7 @@
                             <strong>' . ($this->lang->line('tasks') ? $this->lang->line('tasks') : "Tasks") . ': </strong>' . (($plan["tasks"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["tasks"]) . '<br>
                             <strong>' . ($this->lang->line('users') ? $this->lang->line('users') : "Users") . ': </strong>' . (($plan["users"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["users"]);
 
-                            $tempAction = '<div class="d-flex">
+                          $tempAction = '<div class="d-flex">
 					<span class="badge light badge-primary"><a href="#" data-id="' . $plan["id"] . '" class="text-primary btn-success modal-edit-plan mr-1" data-placement="top" title="' . ($this->lang->line('edit') ? htmlspecialchars($this->lang->line('edit')) : 'Edit') . '" data-bs-toggle="modal" data-bs-target="#plan-edit-modal"><i class="fas fa-pen"></i></a></span>
 					<span class="badge light badge-danger ms-2">
           <a href="#" class="text-danger delete_plan" data-id="' . $plan["id"] . '" data-bs-toggle="tooltip"  data-placement="top" title="' . ($this->lang->line('delete') ? htmlspecialchars($this->lang->line('delete')) : 'Delete') . '"><i class="fas fa-trash"></i></a></span>
@@ -387,34 +419,38 @@
                               $mod_name = $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects';
                             } elseif ($mod_key == 'tasks') {
                               $mod_name = $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks';
-                            } elseif ($mod_key == 'gantt') {
-                              $mod_name = $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt';
-                            } elseif ($mod_key == 'timesheet') {
-                              $mod_name = $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet';
+                            } elseif ($mod_key == 'kanban') {
+                              $mod_name = $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban';
+                            } elseif ($mod_key == 'agile') {
+                              $mod_name = $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile';
                             } elseif ($mod_key == 'team_members') {
                               $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
                             } elseif ($mod_key == 'clients') {
                               $mod_name = $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients';
-                            } elseif ($mod_key == 'invoices') {
-                              $mod_name = $this->lang->line('invoices') ? $this->lang->line('invoices') : 'Invoices';
-                            } elseif ($mod_key == 'payments') {
-                              $mod_name = $this->lang->line('payments') ? $this->lang->line('payments') : 'Payments';
+                            } elseif ($mod_key == 'user_roles') {
+                              $mod_name = $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employee Roles';
+                            } elseif ($mod_key == 'departments') {
+                              $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
                             } elseif ($mod_key == 'expenses') {
                               $mod_name = $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses';
                             } elseif ($mod_key == 'calendar') {
                               $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
                             } elseif ($mod_key == 'leaves') {
                               $mod_name = $this->lang->line('leaves') ? $this->lang->line('leaves') : 'Leaves';
-                            } elseif ($mod_key == 'biomteric_missing') {
-                              $mod_name = $this->lang->line('biomteric_missing') ? $this->lang->line('biomteric_missing') : 'Biomteric Missing';
+                            } elseif ($mod_key == 'leave_hierarchy') {
+                              $mod_name = $this->lang->line('leave_hierarchy') ? $this->lang->line('leave_hierarchy') : 'Leave Hierarchy';
+                            } elseif ($mod_key == 'leaves_types') {
+                              $mod_name = $this->lang->line('leaves_types') ? $this->lang->line('leaves_types') : 'Leaves Types';
+                            } elseif ($mod_key == 'biometric_missing') {
+                              $mod_name = $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'Biometric Missing';
                             } elseif ($mod_key == 'todo') {
                               $mod_name = $this->lang->line('todo') ? $this->lang->line('todo') : 'Todo';
                             } elseif ($mod_key == 'notes') {
                               $mod_name = $this->lang->line('notes') ? $this->lang->line('notes') : 'Notes';
                             } elseif ($mod_key == 'chat') {
                               $mod_name = $this->lang->line('chat') ? $this->lang->line('chat') : 'Chat';
-                            } elseif ($mod_key == 'leads') {
-                              $mod_name = $this->lang->line('leads') ? $this->lang->line('leads') : 'Leads';
+                            } elseif ($mod_key == 'biometric_machine') {
+                              $mod_name = $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines';
                             } elseif ($mod_key == 'payment_gateway') {
                               $mod_name = $this->lang->line('payment_gateway') ? $this->lang->line('payment_gateway') : 'Payment Gateway';
                             } elseif ($mod_key == 'taxes') {
@@ -454,8 +490,6 @@
                         }
                         echo $modules;
                         ?>
-
-
                       </div>
                     </div>
                     <div class="pricing-cta">
@@ -563,7 +597,7 @@
                   <input type="number" name="tasks" class="form-control">
                 </div>
                 <div class="form-group col-md-6 mb-3">
-                  <label class="col-form-label"><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?><span class="text-danger">*</span></label>
+                  <label class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?><span class="text-danger">*</span></label>
                   <input type="number" name="users" class="form-control">
                 </div>
                 <div class="form-group col-md-12 mb-3">
@@ -588,26 +622,68 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="kanban" name="kanban">
+                    <label class="form-check-label" for="kanban"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="agile" name="agile">
+                    <label class="form-check-label" for="agile"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="tasks_module" name="tasks_module">
                     <label class="form-check-label" for="tasks_module"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="gantt" name="gantt">
                     <label class="form-check-label" for="gantt"><?= $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="timesheet" name="timesheet">
                     <label class="form-check-label" for="timesheet"><?= $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet' ?></label>
                   </div>
+                </div> -->
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="attendance" name="attendance">
+                    <label class="form-check-label" for="attendance"><?= $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance' ?></label>
+                  </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="team_members" name="team_members">
-                    <label class="form-check-label" for="team_members"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members' ?></label>
+                    <input class="form-check-input" type="checkbox" id="employees" name="team_members">
+                    <label class="form-check-label" for="employees"><?= $this->lang->line('employees') ? $this->lang->line('employees') : 'Employees' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="user_roles" name="user_roles">
+                    <label class="form-check-label" for="user_roles"><?= $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employees Roles' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="user_permissions" name="user_permissions">
+                    <label class="form-check-label" for="user_permissions"><?= $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'Employees Permissions' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="departments" name="departments">
+                    <label class="form-check-label" for="departments"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="shifts" name="shifts">
+                    <label class="form-check-label" for="shifts"><?= $this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -616,24 +692,24 @@
                     <label class="form-check-label" for="clients"><?= $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="invoices" name="invoices">
                     <label class="form-check-label" for="invoices"><?= $this->lang->line('invoices') ? $this->lang->line('invoices') : 'Invoices' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="payments" name="payments">
                     <label class="form-check-label" for="payments"><?= $this->lang->line('payments') ? $this->lang->line('payments') : 'Payments' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="expenses" name="expenses">
                     <label class="form-check-label" for="expenses"><?= $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="calendar" name="calendar">
@@ -648,8 +724,32 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="biomteric_missing" name="biomteric_missing">
-                    <label class="form-check-label" for="biomteric_missing"><?= $this->lang->line('biomteric_missing') ? $this->lang->line('biomteric_missing') : 'Biomteric Missing' ?></label>
+                    <input class="form-check-input" type="checkbox" id="leaves_types" name="leaves_types">
+                    <label class="form-check-label" for="leaves_types"><?= $this->lang->line('leaves_types') ? $this->lang->line('leaves_types') : 'Leaves Types' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="leave_hierarchy" name="leave_hierarchy">
+                    <label class="form-check-label" for="leave_hierarchy"><?= $this->lang->line('leave_hierarchy') ? $this->lang->line('leave_hierarchy') : 'Leave Hierarchy' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="biometric_missing" name="biometric_missing">
+                    <label class="form-check-label" for="biometric_missing"><?= $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'biometric Missing' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="biometric_machine" name="biometric_machine">
+                    <label class="form-check-label" for="biometric_machine"><?= $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="holidays" name="holidays">
+                    <label class="form-check-label" for="holidays"><?= $this->lang->line('holidays') ? $this->lang->line('holidays') : 'Holidays' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -666,74 +766,70 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="notice_board" name="notice_board">
+                    <label class="form-check-label" for="notice_board"><?= $this->lang->line('notice_board') ? $this->lang->line('notice_board') : 'Notice Board' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="chat" name="chat">
                     <label class="form-check-label" for="chat"><?= $this->lang->line('chat') ? $this->lang->line('chat') : 'Chat' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="leads" name="leads">
                     <label class="form-check-label" for="leads"><?= $this->lang->line('leads') ? $this->lang->line('leads') : 'Leads' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="payment_gateway" name="payment_gateway">
                     <label class="form-check-label" for="payment_gateway"><?= $this->lang->line('payment_gateway') ? $this->lang->line('payment_gateway') : 'Payment Gateway' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="taxes" name="taxes">
                     <label class="form-check-label" for="taxes"><?= $this->lang->line('taxes') ? $this->lang->line('taxes') : 'Taxes' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="custom_currency" name="custom_currency">
                     <label class="form-check-label" for="custom_currency"><?= $this->lang->line('custom_currency') ? $this->lang->line('custom_currency') : 'Custom Currency' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="user_permissions" name="user_permissions">
-                    <label class="form-check-label" for="user_permissions"><?= $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'User Permissions' ?></label>
-                  </div>
-                </div>
+                </div> -->
+
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="notifications" name="notifications">
                     <label class="form-check-label" for="notifications"><?= $this->lang->line('notifications') ? $this->lang->line('notifications') : 'Notifications' ?></label>
                   </div>
                 </div>
+
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="languages" name="languages">
                     <label class="form-check-label" for="languages"><?= $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="meetings" name="meetings">
                     <label class="form-check-label" for="meetings"><?= $this->lang->line('video_meetings') ? $this->lang->line('video_meetings') : 'Video Meetings' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="estimates" name="estimates">
                     <label class="form-check-label" for="estimates"><?= $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="reports" name="reports">
                     <label class="form-check-label" for="reports"><?= $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports' ?></label>
-                  </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="attendance" name="attendance">
-                    <label class="form-check-label" for="attendance"><?= $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -826,26 +922,68 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="kanban_update" name="kanban">
+                    <label class="form-check-label" for="kanban_update"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="agile_update" name="agile">
+                    <label class="form-check-label" for="agile_update"><?= $this->lang->line('Agile') ? $this->lang->line('Agile') : 'Agile' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="tasks_module_update" name="tasks_module">
                     <label class="form-check-label" for="tasks_module_update"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="gantt_update" name="gantt">
                     <label class="form-check-label" for="gantt_update"><?= $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="timesheet_update" name="timesheet">
                     <label class="form-check-label" for="timesheet_update"><?= $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet' ?></label>
+                  </div>
+                </div> -->
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="attendance_update" name="attendance">
+                    <label class="form-check-label" for="attendance_update"><?= $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="team_members_update" name="team_members">
-                    <label class="form-check-label" for="team_members_update"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members' ?></label>
+                    <label class="form-check-label" for="team_members_update"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Employees' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="user_roles_update" name="user_roles">
+                    <label class="form-check-label" for="user_roles_update"><?= $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employee Roles' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="user_permissions_update" name="user_permissions">
+                    <label class="form-check-label" for="user_permissions_update"><?= $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'Employee Permissions' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="departments_update" name="departments">
+                    <label class="form-check-label" for="departments_update"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="shifts_update" name="shifts">
+                    <label class="form-check-label" for="shifts_update"><?= $this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -854,24 +992,24 @@
                     <label class="form-check-label" for="clients_update"><?= $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4  mb-3">
+                <!-- <div class="form-group col-md-4  mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="invoices_update" name="invoices">
                     <label class="form-check-label" for="invoices_update"><?= $this->lang->line('invoices') ? $this->lang->line('invoices') : 'Invoices' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="payments_update" name="payments">
                     <label class="form-check-label" for="payments_update"><?= $this->lang->line('payments') ? $this->lang->line('payments') : 'Payments' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="expenses_update" name="expenses">
                     <label class="form-check-label" for="expenses_update"><?= $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="calendar_update" name="calendar">
@@ -886,8 +1024,32 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="leaves_types_update" name="leaves_types">
+                    <label class="form-check-label" for="leaves_types_update"><?= $this->lang->line('leaves_type') ? $this->lang->line('leaves_types') : 'Leaves Type' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="leave_hierarchy_update" name="leave_hierarchy">
+                    <label class="form-check-label" for="leave_hierarchy_update"><?= $this->lang->line('leave_hierarchy') ? $this->lang->line('leave_hierarchy') : 'Leave Hierarchy' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="biometric_missing_update" name="biometric_missing">
                     <label class="form-check-label" for="biometric_missing_update"><?= $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'Biometric Missing' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="biometric_machine_update" name="biometric_machine">
+                    <label class="form-check-label" for="biometric_machine_update"><?= $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'Biometric Machine' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="holidays_update" name="holidays">
+                    <label class="form-check-label" for="holidays_update"><?= $this->lang->line('holidays') ? $this->lang->line('holidays') : 'Holidays' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -904,40 +1066,41 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="notice_board_update" name="notice_board">
+                    <label class="form-check-label" for="notice_board_update"><?= $this->lang->line('notice_board') ? htmlspecialchars($this->lang->line('notice_board')) : 'Notice Board' ?></label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="chat_update" name="chat">
                     <label class="form-check-label" for="chat_update"><?= $this->lang->line('chat') ? $this->lang->line('chat') : 'Chat' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="leads_update" name="leads">
                     <label class="form-check-label" for="leads_update"><?= $this->lang->line('leads') ? $this->lang->line('leads') : 'Leads' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="payment_gateway_update" name="payment_gateway">
                     <label class="form-check-label" for="payment_gateway_update"><?= $this->lang->line('payment_gateway') ? $this->lang->line('payment_gateway') : 'Payment Gateway' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="taxes_update" name="taxes">
                     <label class="form-check-label" for="taxes_update"><?= $this->lang->line('taxes') ? $this->lang->line('taxes') : 'Taxes' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="custom_currency_update" name="custom_currency">
                     <label class="form-check-label" for="custom_currency_update"><?= $this->lang->line('custom_currency') ? $this->lang->line('custom_currency') : 'Custom Currency' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="user_permissions_update" name="user_permissions">
-                    <label class="form-check-label" for="user_permissions_update"><?= $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'User Permissions' ?></label>
-                  </div>
-                </div>
+                </div> -->
+
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="notifications_update" name="notifications">
@@ -950,36 +1113,32 @@
                     <label class="form-check-label" for="languages_update"><?= $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="meetings_update" name="meetings">
                     <label class="form-check-label" for="meetings_update"><?= $this->lang->line('video_meetings') ? $this->lang->line('video_meetings') : 'Video Meetings' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="estimates_update" name="estimates">
                     <label class="form-check-label" for="estimates_update"><?= $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="reports_update" name="reports">
                     <label class="form-check-label" for="reports_update"><?= $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="attendance_update" name="attendance">
-                    <label class="form-check-label" for="attendance_update"><?= $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance' ?></label>
-                  </div>
-                </div>
+
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="support_update" name="support">
                     <label class="form-check-label" for="support_update"><?= $this->lang->line('support') ? htmlspecialchars($this->lang->line('support')) : 'Support' ?></label>
                   </div>
                 </div>
+
 
               </div>
             </div>
@@ -998,7 +1157,7 @@
 ***********************************-->
   </div>
   <?php $this->load->view('includes/scripts'); ?>
-   <script>
+  <script>
     paypal_client_id = "<?= get_payment_paypal() ?>";
     get_stripe_publishable_key = "<?= get_stripe_publishable_key() ?>";
     razorpay_key_id = "<?= get_razorpay_key_id() ?>";
