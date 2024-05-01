@@ -893,25 +893,25 @@ class Auth extends CI_Controller
 		}
 
 		$recaptcha_secret_key = get_google_recaptcha_secret_key();
-		if ($recaptcha_secret_key && $this->input->post('new_register')) {
-			$token = $this->input->post('token');
-			$action = $this->input->post('action');
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => $recaptcha_secret_key, 'response' => $token)));
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($ch);
-			curl_close($ch);
-			$arrResponse = json_decode($response, true);
+		// if ($recaptcha_secret_key && $this->input->post('new_register')) {
+		// 	$token = $this->input->post('token');
+		// 	$action = $this->input->post('action');
+		// 	$ch = curl_init();
+		// 	curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+		// 	curl_setopt($ch, CURLOPT_POST, 1);
+		// 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => $recaptcha_secret_key, 'response' => $token)));
+		// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// 	$response = curl_exec($ch);
+		// 	curl_close($ch);
+		// 	$arrResponse = json_decode($response, true);
 
-			if ($arrResponse["success"] != '1' || $arrResponse["action"] != $action || $arrResponse["score"] <= 0.6) {
-				$this->data['error'] = true;
-				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-				echo json_encode($this->data);
-				return false;
-			}
-		}
+		// 	if ($arrResponse["success"] != '1' || $arrResponse["action"] != $action || $arrResponse["score"] <= 0.6) {
+		// 		$this->data['error'] = true;
+		// 		$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+		// 		echo json_encode($this->data);
+		// 		return false;
+		// 	}
+		// }
 
 		if ($this->form_validation->run() === TRUE && $new_user_id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group)) {
 			$userLeaveData = [];
@@ -969,10 +969,8 @@ class Auth extends CI_Controller
 
 					// Insert role data
 					foreach ($roleData as $data) {
-						$setting = array(
-							'type' => $data["name"] . '_permissions_' . $new_user_id,
-							'value' => '{"attendance_view":0,"attendance_view_all":0,"leaves_view":0,"leaves_create":0,"leaves_edit":0,"leaves_delete":0,"leaves_status":0,"leaves_view_all":0,"biometric_request_view":0,"biometric_request_create":0,"biometric_request_edit":0,"biometric_request_delete":0,"biometric_request_status":0,"biometric_request_view_all":0,"biometric_request_view_selected":0,"project_view":1,"project_create":1,"project_edit":1,"project_delete":0,"project_view_all":0,"task_view":1,"task_create":1,"task_edit":1,"task_delete":0,"task_status":0,"task_view_all":0,"device_view":1,"device_create":0,"device_edit":0,"device_delete":0,"departments_view":0,"departments_create":0,"departments_edit":0,"departments_delete":0,"shift_view":0,"shift_create":0,"shift_edit":0,"shift_delete":0,"plan_holiday_view":0,"plan_holiday_create":0,"plan_holiday_edit":0,"plan_holiday_delete":0,"time_schedule_view":0,"time_schedule_edit":0,"user_view":1,"user_edit":0,"client_view":0,"setting_view":0,"setting_update":0,"todo_view":1,"notes_view":1,"chat_view":1,"chat_delete":0,"project_budget":0,"gantt_view":0,"gantt_edit":0,"calendar_view":0,"meetings_view":0,"meetings_create":0,"meetings_edit":0,"meetings_delete":0,"lead_view":0,"lead_create":0,"lead_edit":0,"lead_delete":0,"attendance_view_selected":0,"leaves_view_selected":0,"project_view_selected":0,"task_view_selected":0,"reports_view":0,"client_create":0,"client_edit":0,"client_delete":0,"user_create":0,"user_view_selected":0,"user_delete":0,"user_view_all":0,"leave_type_view":0,"leave_type_create":0,"leave_type_edit":0,"leave_type_delete":0,"general_view":0,"company_view":0,"support_view":0,"notification_view_all":0,"notification_view_pms":0,"team_members_and_client_can_chat":0,"general_edit":0,"company_edit":0}'
-						);
+						$setting["type"] = $data["name"] . '_permissions_' . $new_user_id;
+						$setting['value'] ='{"attendance_view":0,"attendance_view_all":0,"leaves_view":0,"leaves_create":0,"leaves_edit":0,"leaves_delete":0,"leaves_status":0,"leaves_view_all":0,"biometric_request_view":0,"biometric_request_create":0,"biometric_request_edit":0,"biometric_request_delete":0,"biometric_request_status":0,"biometric_request_view_all":0,"biometric_request_view_selected":0,"project_view":1,"project_create":1,"project_edit":1,"project_delete":0,"project_view_all":0,"task_view":1,"task_create":1,"task_edit":1,"task_delete":0,"task_status":0,"task_view_all":0,"device_view":1,"device_create":0,"device_edit":0,"device_delete":0,"departments_view":0,"departments_create":0,"departments_edit":0,"departments_delete":0,"shift_view":0,"shift_create":0,"shift_edit":0,"shift_delete":0,"plan_holiday_view":0,"plan_holiday_create":0,"plan_holiday_edit":0,"plan_holiday_delete":0,"time_schedule_view":0,"time_schedule_edit":0,"user_view":1,"user_edit":0,"client_view":0,"setting_view":0,"setting_update":0,"todo_view":1,"notes_view":1,"chat_view":1,"chat_delete":0,"project_budget":0,"gantt_view":0,"gantt_edit":0,"calendar_view":0,"meetings_view":0,"meetings_create":0,"meetings_edit":0,"meetings_delete":0,"lead_view":0,"lead_create":0,"lead_edit":0,"lead_delete":0,"attendance_view_selected":0,"leaves_view_selected":0,"project_view_selected":0,"task_view_selected":0,"reports_view":0,"client_create":0,"client_edit":0,"client_delete":0,"user_create":0,"user_view_selected":0,"user_delete":0,"user_view_all":0,"leave_type_view":0,"leave_type_create":0,"leave_type_edit":0,"leave_type_delete":0,"general_view":0,"company_view":0,"support_view":0,"notification_view_all":0,"notification_view_pms":0,"team_members_and_client_can_chat":0,"general_edit":0,"company_edit":0}';
 						$this->db->insert('settings', $setting);
 						$this->settings_model->roles_create($data);
 					}
