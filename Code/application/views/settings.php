@@ -735,40 +735,32 @@
     $('#users').multiSelect();
     $("#selectAllUsers").change(function() {
       if ($(this).prop("checked")) {
-        // Select all options in the multi-select
         $('#users').multiSelect('select_all');
       } else {
-        // Deselect all options in the multi-select
         $('#users').multiSelect('deselect_all');
       }
     });
     $('#users_create').multiSelect();
     $("#selectAllUsers_create").change(function() {
       if ($(this).prop("checked")) {
-        // Select all options in the multi-select
         $('#users_create').multiSelect('select_all');
       } else {
-        // Deselect all options in the multi-select
         $('#users_create').multiSelect('deselect_all');
       }
     });
     $('#assigned_users').multiSelect();
     $("#selectAllUsers4").change(function() {
       if ($(this).prop("checked")) {
-        // Select all options in the multi-select
         $('#assigned_users').multiSelect('select_all');
       } else {
-        // Deselect all options in the multi-select
         $('#assigned_users').multiSelect('deselect_all');
       }
     });
     $('#permissions').multiSelect();
     $("#selectAllPermissions").change(function() {
       if ($(this).prop("checked")) {
-        // Select all options in the multi-select
         $('#permissions').multiSelect('select_all');
       } else {
-        // Deselect all options in the multi-select
         $('#permissions').multiSelect('deselect_all');
       }
     });

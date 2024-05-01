@@ -902,15 +902,14 @@ class Settings extends CI_Controller
 			$groups_array = array_filter($groups_array, function ($group) {
 				return !in_array($group->name, ['admin', 'saas_admin', 'client']);
 			});
-
 			$this->data['groups'] = $groups_array;
 			$saas_id = $this->session->userdata('saas_id');
 			$this->db->where('saas_id', $saas_id);
 			$query = $this->db->get('leave_hierarchy');
 			$stepResult = $query->result();
 			$this->data['data'] = $stepResult;
-			// echo json_encode($this->data);
-			$this->load->view('settings', $this->data);
+			echo json_encode($this->data);
+			// $this->load->view('settings', $this->data);
 		} else {
 			redirect('auth', 'refresh');
 		}
@@ -1608,6 +1607,7 @@ class Settings extends CI_Controller
 
 	public function roles_permissions()
 	{
+		
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
 			$this->data['main_page2'] = 'roles_permissions';
