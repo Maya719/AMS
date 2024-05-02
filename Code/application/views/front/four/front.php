@@ -677,7 +677,7 @@
                         </div>
                         <div class="tp-contact-from p-relative" data-background="assets/img/brand/home-2/form-input.png">
                             <div class="tp-brands-from-overlay"></div>
-                            <form id="contact-form" method="POST" action="<?= base_url('front/send-mail') ?>">
+                            <form id="contact-form2" method="POST" action="<?= base_url('front/send-mail') ?>">
                                 <div class="row tp-gx-20">
                                     <div class="col-12 col-sm-6">
                                         <div class="tp-brands-from-input contact-mb">
@@ -699,7 +699,6 @@
                                 <div class="tp-contact-submit text-center mt-20">
                                     <button class="tp-btn" type="submit">Send Message <i class="fa-regular fa-arrow-right-long"></i></button>
                                 </div>
-                                <div class="w-full px-4 py-2 mt-1 text-left font-semibold text-white bg-red-500 rounded shadow-sm hidden result2"></div>
                             </form>
                         </div>
                     </div>
