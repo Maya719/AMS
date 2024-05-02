@@ -256,13 +256,13 @@
                                 <span class="tp-section__title-pre">CONTACT US</span>
                                 <h3 class="tp-brands-title">GET A FREE QUOTE</h3>
                                 <div class="tp-brands-from-input">
-                                    <input type="text" placeholder="Full Name:">
+                                    <input type="text" name="name" placeholder="Full Name:">
                                 </div>
                                 <div class="tp-brands-from-input">
-                                    <input type="email" placeholder="Email Address:">
+                                    <input type="email" name="email" placeholder="Email Address:">
                                 </div>
                                 <div class="tp-brands-from-input">
-                                    <textarea name="message" placeholder="Write Message..."></textarea>
+                                    <textarea name="msg" name="message" placeholder="Write Message..."></textarea>
                                 </div>
                                 <button class="tp-btn">Submit Now <i class="fa-regular fa-arrow-right-long"></i></button>
                                 <div class="w-full px-4 py-2 mt-1 text-left font-semibold text-white bg-red-500 rounded shadow-sm hidden result"></div>
