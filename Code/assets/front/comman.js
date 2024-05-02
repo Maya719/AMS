@@ -115,7 +115,7 @@ $("#contact-form2").submit(function (e) {
                     },
                     error: function (result) {
                         output_status.show();
-                        output_status.prepend('Something went wrong. Try Again');
+                        output_status.prepend('Something went wrong. Try Again2');
                         output_status.delay(4000).fadeOut();
                         save_button.removeClass('disabled opacity-50 cursor-not-allowed').prop('disabled', false);
                     }
