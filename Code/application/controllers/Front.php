@@ -284,12 +284,13 @@ class Front extends CI_Controller
 		$this->data['features'] = $tmp;
 		$this->data['home'] = get_home();
 
+
 		if ($this->uri->segment(3) == 'three') {
 			$this->load->view('front/three/front', $this->data);
+		} elseif ($this->uri->segment(3) == 'two') {
+			$this->load->view('front/two/front', $this->data);	
 		} elseif ($this->uri->segment(3) == 'four') {
 			$this->load->view('front/four/front', $this->data);
-		} elseif ($this->uri->segment(3) == 'two') {
-			$this->load->view('front/two/front', $this->data);
 		} else {
 			$this->load->view('front/one/front', $this->data);
 		}
@@ -335,7 +336,9 @@ class Front extends CI_Controller
 			$this->data['features'] = $tmp;
 			$this->data['home'] = get_home();
 			$theme_name = frontend_permissions('theme_name');
-			if ($theme_name == 'theme_three') {
+			if ($theme_name == 'theme_four') {
+				$this->load->view('front/four/front', $this->data);
+			}elseif ($theme_name == 'theme_three') {
 				$this->load->view('front/three/front', $this->data);
 			} elseif ($theme_name == 'theme_two') {
 				$this->load->view('front/two/front', $this->data);
@@ -349,6 +352,7 @@ class Front extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && is_saas_admin()) {
 			$this->data['page_title'] = 'Frontend - ' . company_name();
+			$this->data['main_page'] = 'Frontend';
 			$this->data['lang'] = $this->languages_model->get_languages('', '', 1);
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['features'] = $this->front_model->get_feature($this->uri->segment(3));

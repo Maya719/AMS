@@ -89,7 +89,7 @@
 
 
                     <div class="row gutters-sm justify-content-center <?= (isset($frontend_permissions->landing_page) && !empty($frontend_permissions->landing_page) && $frontend_permissions->landing_page == 1) ? 'd-flex' : 'd-none' ?>" id="landing_page_theme_div">
-                      <div class="col-md-4 text-center">
+                      <div class="col-md-3 text-center">
                         <label class="imagecheck">
                           <input name="theme_name" type="radio" value="theme_one" class="imagecheck-input" <?= (isset($frontend_permissions->theme_name) && ($frontend_permissions->theme_name == 'theme_one' || $frontend_permissions->theme_name == '')) ? 'checked' : '' ?> />
                           <figure class="imagecheck-figure">
@@ -98,7 +98,7 @@
                         </label>
                         <a href="<?= base_url('front/theme/one') ?>" target="_blank" class="btn btn-sm btn-icon icon-left btn-primary mt-1 mb-1"><i class="fas fa-eye"></i> <?= $this->lang->line('preview') ? htmlspecialchars($this->lang->line('preview')) : 'Preview' ?></a>
                       </div>
-                      <div class="col-md-4 text-center">
+                      <div class="col-md-3 text-center">
                         <label class="imagecheck">
                           <input name="theme_name" type="radio" value="theme_two" class="imagecheck-input" <?= (isset($frontend_permissions->theme_name) && $frontend_permissions->theme_name == 'theme_two') ? 'checked' : '' ?> />
                           <figure class="imagecheck-figure">
@@ -107,7 +107,7 @@
                         </label>
                         <a href="<?= base_url('front/theme/two') ?>" target="_blank" class="btn btn-sm btn-icon icon-left btn-primary mt-1 mb-1"><i class="fas fa-eye"></i> <?= $this->lang->line('preview') ? htmlspecialchars($this->lang->line('preview')) : 'Preview' ?></a>
                       </div>
-                      <div class="col-md-4 text-center">
+                      <div class="col-md-3 text-center">
                         <label class="imagecheck">
                           <input name="theme_name" type="radio" value="theme_three" class="imagecheck-input" <?= (isset($frontend_permissions->theme_name) && $frontend_permissions->theme_name == 'theme_three') ? 'checked' : '' ?> />
                           <figure class="imagecheck-figure">
@@ -116,19 +116,23 @@
                         </label>
                         <a href="<?= base_url('front/theme/three') ?>" target="_blank" class="btn btn-sm btn-icon icon-left btn-primary mt-1 mb-1"><i class="fas fa-eye"></i> <?= $this->lang->line('preview') ? htmlspecialchars($this->lang->line('preview')) : 'Preview' ?></a>
                       </div>
+                      <div class="col-md-3 text-center">
+                        <label class="imagecheck">
+                          <input name="theme_name" type="radio" value="theme_four" class="imagecheck-input" <?= (isset($frontend_permissions->theme_name) && $frontend_permissions->theme_name == 'theme_four') ? 'checked' : '' ?> />
+                          <figure class="imagecheck-figure">
+                            <img src="<?= base_url("assets/front/four/img/theme-preview.png") ?>" alt="<?= $this->lang->line('theme_four') ? htmlspecialchars($this->lang->line('theme_four')) : 'Theme Four' ?>" class="imagecheck-image">
+                          </figure>
+                        </label>
+                        <a href="<?= base_url('front/theme/four') ?>" target="_blank" class="btn btn-sm btn-icon icon-left btn-primary mt-1 mb-1"><i class="fas fa-eye"></i> <?= $this->lang->line('preview') ? htmlspecialchars($this->lang->line('preview')) : 'Preview' ?></a>
+                      </div>
                     </div>
-
                   </div>
-
                 </div>
                 <div class="card-footer bg-whitesmoke text-end">
                   <button type="button" class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
                 </div>
                 <div class="result"></div>
               </form>
-
-
-
             </div>
           </div>
         </div>
