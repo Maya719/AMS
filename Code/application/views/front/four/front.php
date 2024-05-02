@@ -247,7 +247,7 @@
         <!-- hero area end -->
 
         <!-- brands area start -->
-        <section class="tp-brands-2-area pt-75 pb-90 p-relative" id="contact">
+        <section class="tp-brands-2-area pt-75 pb-90 p-relative">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5">
@@ -263,7 +263,7 @@
                                     <input type="email" name="email" placeholder="Email Address:">
                                 </div>
                                 <div class="tp-brands-from-input">
-                                    <textarea name="msg" name="message" placeholder="Write Message..."></textarea>
+                                    <textarea name="msg" placeholder="Write Message..."></textarea>
                                 </div>
                                 <button class="tp-btn">Submit Now <i class="fa-regular fa-arrow-right-long"></i></button>
                                 <div class="w-full px-4 py-2 mt-1 text-left font-semibold text-white bg-red-500 rounded shadow-sm hidden result"></div>
@@ -531,17 +531,17 @@
                         <div class="row tp-gx-20 ">
                             <div class="tp-about-thumb-wrapper wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
                                 <div class="tp-about-thumb">
-                                    <img src="<?=base_url('assets/front/four/img/about/img-1.jpg')?>" alt="">
+                                    <img src="<?= base_url('assets/front/four/img/about/img-1.jpg') ?>" alt="">
                                 </div>
                                 <div class="tp-about-thumb p-relative">
-                                    <img class="mb-20" src="<?=base_url('assets/front/four/img/about/img-2.jpg')?>" alt="">
+                                    <img class="mb-20" src="<?= base_url('assets/front/four/img/about/img-2.jpg') ?>" alt="">
                                     <div class="skill__progress-circle mr-30">
                                         <div class="progress-circular">
                                             <input type="text" class="knob" value="0" data-rel="100" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#ffc700" data-thickness=".15" data-readonly="true" disabled>
                                         </div>
                                         <h4>Project Success</h4>
                                     </div>
-                                    <img src="<?=base_url('assets/front/four/img/about/img-3.jpg')?>" alt="">
+                                    <img src="<?= base_url('assets/front/four/img/about/img-3.jpg') ?>" alt="">
                                 </div>
                             </div>
                         </div>
@@ -600,6 +600,154 @@
             </div>
         </section>
         <!-- about area end -->
+        <!-- team area start -->
+        <section class="tp-team-area pt-120 pb-80 p-relative">
+            <div class="tp-team-bg" data-background="assets/img/team/team-bg.jpg"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="tp-team-section-title-wrapper text-center mb-70">
+                            <span class="tp-section__title-pre">
+                                Our Team
+                            </span>
+                            <h3 class="tp-section__title">Qualified Team Member</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                        <div class="tp-team-wrapper p-relative wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".4s">
+                            <div class="tp-team-thumb">
+                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-1.png') ?>" alt=""></a>
+                            </div>
+                            <div class="tp-team-content text-center mt-30">
+                                <h4 class="tp-team-title-1"><a href="#">Muhammad Aman</a></h4>
+                                <p>Project Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                        <div class="tp-team-wrapper p-relative wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
+                            <div class="tp-team-thumb">
+                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-2.png') ?>" alt=""></a>
+                            </div>
+                            <div class="tp-team-content text-center mt-30">
+                                <h4 class="tp-team-title-1"><a href="#">Mohsin Ali</a></h4>
+                                <p>Graphic Designer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                        <div class="tp-team-wrapper p-relative wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
+                            <div class="tp-team-thumb">
+                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-3.png') ?>" alt=""></a>
+                            </div>
+                            <div class="tp-team-content text-center mt-30">
+                                <h4 class="tp-team-title-1"><a href="#">Hurira Abbasi</a></h4>
+                                <p>SQA Engineer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                        <div class="tp-team-wrapper p-relative wow fadeInRight" data-wow-duration="1s" data-wow-delay=".4s">
+                            <div class="tp-team-thumb">
+                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-4.png') ?>" alt=""></a>
+                            </div>
+                            <div class="tp-team-content text-center mt-30">
+                                <h4 class="tp-team-title-1"><a href="#">Muhammad Shoaib</a></h4>
+                                <p>Web Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- team area end -->
+
+        <!-- contact input area start -->
+        <section class="tp-contact-input pt-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="tp-portfolio-2-section-title-wrapper text-center">
+                            <span class="tp-section__title-pre-2">
+                                CONTACT US
+                            </span>
+                            <h3 class="tp-section__title">GET IN TOUCH</h3>
+                        </div>
+                        <div class="tp-contact-from p-relative" data-background="assets/img/brand/home-2/form-input.png">
+                            <div class="tp-brands-from-overlay"></div>
+                            <form id="contact-form" method="POST" action="<?= base_url('front/send-mail') ?>">
+                                <div class="row tp-gx-20">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="tp-brands-from-input contact-mb">
+                                            <input name="name" type="text" placeholder="Full Name:">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <div class="tp-brands-from-input contact-mb">
+                                            <input name="email" type="email" placeholder="Email Address:">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="tp-brands-from-input contact-textarea">
+                                            <textarea name="msg" placeholder="Write Message..."></textarea>
+                                        </div>
+                                    </div>
+                                    <p class="ajax-response"></p>
+                                </div>
+                                <div class="tp-contact-submit text-center mt-20">
+                                    <button class="tp-btn" type="submit">Send Message <i class="fa-regular fa-arrow-right-long"></i></button>
+                                </div>
+                                <div class="w-full px-4 py-2 mt-1 text-left font-semibold text-white bg-red-500 rounded shadow-sm hidden result2"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- contact input area end -->
+        <!-- contact area start -->
+        <div class="tp-contact-area pt-120 pb-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="tp-contact-phone d-sm-flex justify-content-xl-end">
+                            <div class="tp-contact-icon">
+                                <a href="tel:008757845682"><i class="flaticon-telephone-call"></i></a>
+                            </div>
+                            <div class="contact-inner">
+                                <p>Phone:</p>
+                                <a href="tel:008757845682">(00) 875 784 568</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="tp-contact-mail d-sm-flex justify-content-xl-center">
+                            <div class="tp-contact-icon">
+                                <a href="mail:info@gmail.com"><i class="flaticon-mail"></i></a>
+                            </div>
+                            <div class="contact-inner">
+                                <p>E-mail:</p>
+                                <a href="mail:info@gmail.com">info@mail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="tp-contact-location d-sm-flex justify-content-xl-start">
+                            <div class="tp-contact-icon">
+                                <a href="https://www.google.com/maps/@23.8297487,90.3766346,19z"><i class="flaticon-location"></i></a>
+                            </div>
+                            <div class="contact-inner">
+                                <p>Address:</p>
+                                <a target="_blank" href="https://www.google.com/maps/@23.8297487,90.3766346,19z">568, Napatanka, USA.</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- contact area end -->
     </main>
 
     <!-- footer area start -->
@@ -725,15 +873,15 @@
     if ($recaptcha_site_key) { ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars($recaptcha_site_key) ?>"></script>
     <?php } ?>
-    <script src="<?= base_url('assets/front/comman.js') ?>"></script>
     <div id="cookie-bar">
         <div class="cookie-bar-body">
             <p><?= $this->lang->line('frontend_cookie_message') ? htmlspecialchars($this->lang->line('frontend_cookie_message')) : 'We use cookies to ensure that we give you the best experience on our website.' ?></p>
-            <div class="cookie-bar-action">
-                <button type="button" class="text-uppercase btn btn-primary text-white cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
+            <div class="cookie-bar-action tp-hero-2-btn">
+                <button type="button" class="tp-btn cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
             </div>
         </div>
     </div>
+    <script src="<?= base_url('assets/front/comman.js') ?>"></script>
     <script>
         function showDropdownOptions() {
             document.getElementById("options").classList.toggle("hidden");
