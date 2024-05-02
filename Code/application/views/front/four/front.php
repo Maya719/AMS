@@ -665,7 +665,7 @@
         <!-- team area end -->
 
         <!-- contact input area start -->
-        <section class="tp-contact-input pt-100">
+        <section class="tp-contact-input pt-100" id="contact">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
@@ -697,7 +697,7 @@
                                     <p class="ajax-response"></p>
                                 </div>
                                 <div class="tp-contact-submit text-center mt-20">
-                                    <button class="tp-btn" type="submit">Send Message <i class="fa-regular fa-arrow-right-long"></i></button>
+                                    <button class="tp-btn savebtn" type="submit">Send Message <i class="fa-regular fa-arrow-right-long"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -717,7 +717,7 @@
                             </div>
                             <div class="contact-inner">
                                 <p>Phone:</p>
-                                <a href="tel:008757845682">(00) 875 784 568</a>
+                                <a href="tel:008757845682">051-6102534</a>
                             </div>
                         </div>
                     </div>
@@ -728,7 +728,7 @@
                             </div>
                             <div class="contact-inner">
                                 <p>E-mail:</p>
-                                <a href="mail:info@gmail.com">info@mail.com</a>
+                                <a href="mail:info@gmail.com">info@mobipixels.com</a>
                             </div>
                         </div>
                     </div>
@@ -739,7 +739,7 @@
                             </div>
                             <div class="contact-inner">
                                 <p>Address:</p>
-                                <a target="_blank" href="https://www.google.com/maps/@23.8297487,90.3766346,19z">568, Napatanka, USA.</a>
+                                <a target="_blank" href="https://www.google.com/maps/place/MobiPixels/@33.5215515,73.0893157,17z/data=!4m16!1m9!3m8!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!2sMobiPixels!8m2!3d33.5215471!4d73.0918906!9m1!1b1!16s%2Fg%2F11kz3p6gj3!3m5!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!8m2!3d33.5215471!4d73.0918906!16s%2Fg%2F11kz3p6gj3?entry=ttu">Sector F DHA, Islamabad</a>
                             </div>
                         </div>
                     </div>
@@ -863,7 +863,6 @@
     <script src='<?= base_url("assets/front/four/js/jquery.knob.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/circularProgressBar.min.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/purecounter.js") ?>'></script>
-    <script src='<?= base_url("assets/front/four/js/ajax-form.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/main.js") ?>'></script>
     <script>
         site_key = '<?php echo get_google_recaptcha_site_key(); ?>';

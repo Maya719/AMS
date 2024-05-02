@@ -104,6 +104,7 @@ $("#contact-form2").submit(function (e) {
                     processData: false,
                     dataType: "json",
                     success: function (result) {
+                        console.log(result);
                         output_status.show();
                         if (result['error'] == false) {
                             output_status.prepend(result);
@@ -133,6 +134,7 @@ $("#contact-form2").submit(function (e) {
             processData: false,
             dataType: "json",
             success: function (result) {
+                console.log(result);
                 output_status.show();
                 if (result['error'] == false) {
                     output_status.prepend('<div class="alert alert-success">' + result['message'] + '</div>');
