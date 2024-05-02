@@ -572,14 +572,18 @@
                                     <span class="mb-30 ">Quick Links</span>
                                     <ul class="tp-footer-list-float">
                                         <li><a href="<?=base_url()?>">Home</a></li>
-                                        <li><a href="#">About</a></li>
+                                        <?php if(frontend_permissions('about')){ ?>
+                                        <li><a href="<?=base_url('front/about-us')?>">About</a></li>
+                                        <?php } ?>
                                         <li><a href="#featureItem">Pricing</a></li>
                                         <li><a href="#contact">Contact</a></li>
                                         <li><a href="#">Team Members</a></li>
-                                        <li><a href="#">Support</a></li>
-                                        <li><a href="#">Cookie & Policy</a></li>
-                                        <li><a href="#">Privacy & Policy</a></li>
-                                        <li><a href="#">Terms & Condition</a></li>
+                                        <?php if(frontend_permissions('privacy')){ ?>
+                                        <li><a href="<?=base_url('front/privacy-policy')?>">Privacy & Policy</a></li>
+                                        <?php } ?>
+                                        <?php if(frontend_permissions('terms')){ ?>
+                                        <li><a href="<?=base_url('front/terms-and-conditions')?>">Terms & Condition</a></li>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div>
