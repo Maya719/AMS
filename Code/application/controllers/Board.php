@@ -17,6 +17,8 @@ class Board extends CI_Controller
     {
 
         if ($this->ion_auth->logged_in()) {
+            $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
+
             $this->data['page_title'] = 'Board - ' . company_name();
             $this->data['main_page'] = 'Board';
             $this->data['current_user'] = $this->ion_auth->user()->row();
@@ -178,7 +180,7 @@ class Board extends CI_Controller
         $html = '';
         $completed = 0;
         $total = 0;
-            list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
+        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
 
         // Calculate the progress percentage
         $rounded_percent = $this->calculate_progress($completed, $total);

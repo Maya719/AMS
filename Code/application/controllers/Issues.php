@@ -38,6 +38,8 @@ class Issues extends CI_Controller
             $this->data['priorities'] = $query->result_array();
 
 
+            $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("tasks");
+
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
             } elseif (permissions('project_view_selected')) {
@@ -310,7 +312,7 @@ class Issues extends CI_Controller
             }
             if (!empty($id) && is_numeric($id) && $this->issues_model->delete_issue($id)) {
                 $this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
-				$this->session->set_flashdata('message_type', 'success');
+                $this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;
                 $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Started successfully.";
                 echo json_encode($this->data);
@@ -361,7 +363,7 @@ class Issues extends CI_Controller
             $project_id = $this->input->post('project_id');
             $data = $this->issues_model->get_project_users($project_id);
             $dash = $this->issues_model->get_project_dash($project_id);
-            echo json_encode(array('users'=>$data,'dash_type'=>$dash));
+            echo json_encode(array('users' => $data, 'dash_type' => $dash));
         } else {
             $this->data['error'] = true;
             $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";

@@ -1,13 +1,14 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 use PHPMailer\PHPMailer\PHPMailer;
+
 require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require 'vendor/phpmailer/phpmailer/src/SMTP.php';
 require 'vendor/phpmailer/phpmailer/src/Exception.php';
 
 function get_notifications_live()
 {
-    
+
     $CI =& get_instance();
     $new_noti = true;
     $show_beep_for_msg = false;
@@ -15,104 +16,106 @@ function get_notifications_live()
     $notifications = get_notifications();
     $unread_msg_count = get_unread_msg_count();
     $unread_support_msg_count = get_unread_support_msg_count();
-    $chat_message_count = get_unread_msg_count_numeric(); 
+    $chat_message_count = get_unread_msg_count_numeric();
 
-    if(($CI->ion_auth->is_admin() || permissions('chat_view') || permissions('notification_view_all') || permissions('notification_view_pms') || $CI->ion_auth->in_group(3)) && ($unread_msg_count || $unread_support_msg_count) && is_module_allowed('chat')){
-        if($unread_msg_count){
+    if (($CI->ion_auth->is_admin() || permissions('chat_view') || permissions('notification_view_all') || permissions('notification_view_pms') || $CI->ion_auth->in_group(3)) && ($unread_msg_count || $unread_support_msg_count) && is_module_allowed('chat')) {
+        if ($unread_msg_count) {
             $show_beep_for_msg = true;
         }
-        if($unread_support_msg_count){
+        if ($unread_support_msg_count) {
             $show_beep_for_support_msg = true;
         }
     }
 
     $new_support_message_received = '';
-    if($show_beep_for_support_msg){ 
+    if ($show_beep_for_support_msg) {
         $new_noti = false;
-        $new_support_message_received = '<a href="'.(base_url('support')).'" class="dropdown-item dropdown-item-unread">
+        $new_support_message_received = '<a href="' . (base_url('support')) . '" class="dropdown-item dropdown-item-unread">
         <figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-question-circle"></figure>
         <h6 class="dropdown-item-desc m-2">
-        '.($CI->lang->line('new_support_message_received')?htmlspecialchars($CI->lang->line('new_support_message_received')):'New support message received').'
+        ' . ($CI->lang->line('new_support_message_received') ? htmlspecialchars($CI->lang->line('new_support_message_received')) : 'New support message received') . '
         </h6>
         </a>';
     }
 
     $new_message = '';
-    if($show_beep_for_msg){ 
+    if ($show_beep_for_msg) {
         $new_noti = false;
 
-        $new_message = '<a href="'.(base_url('chat')).'" class="dropdown-item dropdown-item-unread">
+        $new_message = '<a href="' . (base_url('chat')) . '" class="dropdown-item dropdown-item-unread">
         <figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-comment-alt"></figure>
         <h6 class="dropdown-item-desc m-2">
-        '.($CI->lang->line('new_message')?$CI->lang->line('new_message'):'New Message').'
+        ' . ($CI->lang->line('new_message') ? $CI->lang->line('new_message') : 'New Message') . '
         </h6>
         </a>';
     }
 
-    $count=0;
+    $count = 0;
 
-    if($notifications){ 
+    if ($notifications) {
         $new_noti = false;
         $whole_noti = '';
 
-        foreach($notifications as $notification){
+        foreach ($notifications as $notification) {
             $profile = '';
 
-            if(isset($notification['profile']) && !empty($notification['profile'])){ 
-                if(file_exists('assets/uploads/profiles/'.$notification['profile'])){
-                    $file_upload_path = 'assets/uploads/profiles/'.$notification['profile'];
-                }else{
-                    $file_upload_path = 'assets/uploads/f'.$CI->session->userdata('saas_id').'/profiles/'.$notification['profile'];
-                } 
+            if (isset($notification['profile']) && !empty($notification['profile'])) {
+                if (file_exists('assets/uploads/profiles/' . $notification['profile'])) {
+                    $file_upload_path = 'assets/uploads/profiles/' . $notification['profile'];
+                } else {
+                    $file_upload_path = 'assets/uploads/f' . $CI->session->userdata('saas_id') . '/profiles/' . $notification['profile'];
+                }
                 $profile = '<figure class="dropdown-item-icon avatar avatar-m bg-transparent">
-                <img src="'.(base_url($file_upload_path)).'" alt="'.(htmlspecialchars($notification['first_name']).' '.htmlspecialchars($notification['last_name'])).'" data-toggle="tooltip" data-placement="top" title="'.(htmlspecialchars($notification['first_name']).' '.htmlspecialchars($notification['last_name'])).'" data-original-title="">
+                <img src="' . (base_url($file_upload_path)) . '" alt="' . (htmlspecialchars($notification['first_name']) . ' ' . htmlspecialchars($notification['last_name'])) . '" data-toggle="tooltip" data-placement="top" title="' . (htmlspecialchars($notification['first_name']) . ' ' . htmlspecialchars($notification['last_name'])) . '" data-original-title="">
                 </figure>';
-            }else{
-                $profile = '<figure class="dropdown-item-icon avatar avatar-m bg-primary text-white" data-initial="" data-toggle="tooltip" data-placement="top" title="'.(mb_substr(htmlspecialchars($notification['first_name']), 0, 1, "utf-8").''.mb_substr(htmlspecialchars($notification['last_name']), 0, 1, "utf-8")).'" data-original-title="'.(htmlspecialchars($notification['first_name']).' '.htmlspecialchars($notification['last_name'])).'">
+            } else {
+                $profile = '<figure class="dropdown-item-icon avatar avatar-m bg-primary text-white" data-initial="" data-toggle="tooltip" data-placement="top" title="' . (mb_substr(htmlspecialchars($notification['first_name']), 0, 1, "utf-8") . '' . mb_substr(htmlspecialchars($notification['last_name']), 0, 1, "utf-8")) . '" data-original-title="' . (htmlspecialchars($notification['first_name']) . ' ' . htmlspecialchars($notification['last_name'])) . '">
                 </figure>';
             }
 
-            $whole_noti .= '<a href="'.($notification['notification_url']).'" class="dropdown-item dropdown-item-unread">
+            $whole_noti .= '<a href="' . ($notification['notification_url']) . '" class="dropdown-item dropdown-item-unread">
                 
-                '.($profile).'
+                ' . ($profile) . '
                 
                 <div class="dropdown-item-desc  ml-2">
-                '.($notification['notification']).'
-                <div class="time text-primary">'.(time_elapsed_string($notification['created'])).'</div>
+                ' . ($notification['notification']) . '
+                <div class="time text-primary">' . (time_elapsed_string($notification['created'])) . '</div>
                 </div>
             </a>';
             $count++;
 
         }
-    }else{ if($new_noti){
-        $whole_noti = '<a class="dropdown-item dropdown-item-unread">
+    } else {
+        if ($new_noti) {
+            $whole_noti = '<a class="dropdown-item dropdown-item-unread">
         <div class="dropdown-item-desc  ml-2">
-            '.($CI->lang->line('no_new_notifications')?$CI->lang->line('no_new_notifications'):'No new notifications.').'
+            ' . ($CI->lang->line('no_new_notifications') ? $CI->lang->line('no_new_notifications') : 'No new notifications.') . '
         </div>
         </a>';
-    } }
-    
-    if($chat_message_count != 0){
-        $count ++;
+        }
     }
 
-    return '<li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg '.($notifications || $show_beep_for_msg || $show_beep_for_support_msg?'beep':'').'"><i class="far fa-bell"></i>
+    if ($chat_message_count != 0) {
+        $count++;
+    }
+
+    return '<li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg ' . ($notifications || $show_beep_for_msg || $show_beep_for_support_msg ? 'beep' : '') . '"><i class="far fa-bell"></i>
     
     </a>
     <div class="dropdown-menu dropdown-list dropdown-menu-right">
         <div class="dropdown-header">
-        '.($CI->lang->line('notifications')?$CI->lang->line('notifications'):'Notifications').'
+        ' . ($CI->lang->line('notifications') ? $CI->lang->line('notifications') : 'Notifications') . '
         
         </div>
         <div class="dropdown-list-content dropdown-list-icons" id="new_live_notifications">
 
-        '.($new_support_message_received).'
-        '.($new_message).'
-        '.($whole_noti).'
+        ' . ($new_support_message_received) . '
+        ' . ($new_message) . '
+        ' . ($whole_noti) . '
 
         </div>
         <div class="dropdown-footer text-center">
-        <a href="'.(base_url('notifications')).'">'.($CI->lang->line('view_all')?$CI->lang->line('view_all'):'View All').' <i class="fas fa-chevron-right"></i></a>
+        <a href="' . (base_url('notifications')) . '">' . ($CI->lang->line('view_all') ? $CI->lang->line('view_all') : 'View All') . ' <i class="fas fa-chevron-right"></i></a>
         </div>
     </div>
     </li>';
@@ -210,14 +213,14 @@ function get_notifications_live2()
 
     return '<li class="nav-item dropdown notification_dropdown">
     <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-      <i class="fa-regular fa-bell '.($notifications || $show_beep_for_msg || $show_beep_for_support_msg?'beep':'').' text-primary" ></i>
+      <i class="fa-regular fa-bell ' . ($notifications || $show_beep_for_msg || $show_beep_for_support_msg ? 'beep' : '') . ' text-primary" ></i>
     </a>
     <div class="dropdown-menu dropdown-menu-end">
       <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">
         <ul class="timeline" id="new_live_notifications">
-         '.($new_support_message_received).'
-         '.($new_message).'
-         '.($whole_noti).'
+         ' . ($new_support_message_received) . '
+         ' . ($new_message) . '
+         ' . ($whole_noti) . '
         </ul>
       </div>
       <a class="all-notification" href="' . (base_url('notifications')) . '">See all notifications <i class="ti-arrow-end"></i></a>
@@ -229,16 +232,16 @@ function get_google_client_id()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'logins']);
+    $CI->db->where(['type' => 'logins']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return '';
     }
     $data = json_decode($data[0]['value']);
-    if(!empty($data->google_client_id)){
+    if (!empty($data->google_client_id)) {
         return $data->google_client_id;
-    }else{
+    } else {
         return '';
     }
 }
@@ -247,16 +250,16 @@ function get_google_client_secret()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'logins']);
+    $CI->db->where(['type' => 'logins']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return '';
     }
     $data = json_decode($data[0]['value']);
-    if(!empty($data->google_client_secret)){
+    if (!empty($data->google_client_secret)) {
         return $data->google_client_secret;
-    }else{
+    } else {
         return '';
     }
 }
@@ -264,28 +267,28 @@ function get_google_client_secret()
 function get_mata_data($type = '')
 {
     $CI =& get_instance();
-    
+
     $where_type = 'seo';
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if($type == ''){
+    if ($type == '') {
         return $data;
     }
 
-    if(!empty($data->{$type})){
+    if (!empty($data->{$type})) {
         return $data->{$type};
-    }else{
+    } else {
         return false;
     }
 }
@@ -293,7 +296,7 @@ function get_mata_data($type = '')
 function get_unread_msg_count()
 {
     $CI =& get_instance();
-    return $CI->chat_model->get_unread_msg_count($CI->session->userdata('user_id'));				
+    return $CI->chat_model->get_unread_msg_count($CI->session->userdata('user_id'));
 }
 
 function get_chat_message_count()
@@ -322,95 +325,97 @@ function get_chat_message_count()
 function get_unread_msg_count_numeric()
 {
     $CI =& get_instance();
-    return $CI->chat_model->get_unread_msg_count_numeric($CI->session->userdata('user_id'));				
+    return $CI->chat_model->get_unread_msg_count_numeric($CI->session->userdata('user_id'));
 }
 
 function get_unread_support_msg_count()
 {
     $CI =& get_instance();
-    return $CI->support_model->get_unread_support_msg_count($CI->session->userdata('user_id'));				
+    return $CI->support_model->get_unread_support_msg_count($CI->session->userdata('user_id'));
 }
 
 function from_email()
 {
     $CI =& get_instance();
     $CI->load->library('session');
-    
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
-    
+    $CI->db->where(['type' => $where_type]);
+
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return 'admin@high.com';
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->from_email)){
+    if (!empty($data->from_email)) {
         return $data->from_email;
-    }else{
+    } else {
         return 'admin@high.com';
     }
 }
 
-function set_expire_all_expired_plans(){
+function set_expire_all_expired_plans()
+{
     $CI =& get_instance();
-    if($CI->db->query("UPDATE users_plans SET expired=0 WHERE expired=1 AND end_date < CURDATE() ")){
+    if ($CI->db->query("UPDATE users_plans SET expired=0 WHERE expired=1 AND end_date < CURDATE() ")) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-function render_email_template($template_name, $template_data){
+function render_email_template($template_name, $template_data)
+{
     $CI = get_instance();
 
-    if(!$template_name && !$template_data){
+    if (!$template_name && !$template_data) {
         return false;
     }
-    
+
     $pre_template_data = array();
     $pre_template_data['COMPANY_NAME'] = company_name();
     $pre_template_data['DASHBOARD_URL'] = base_url();
     $pre_template_data['LOGO_URL'] = full_logo();
-    
-    $template_data = array_merge($pre_template_data,$template_data);
+
+    $template_data = array_merge($pre_template_data, $template_data);
 
     $template_code = $CI->settings_model->get_email_templates($template_name);
-    if($template_code){
-        if(isset($template_code[0]['message']) && $template_code[0]['message'] != ''){
+    if ($template_code) {
+        if (isset($template_code[0]['message']) && $template_code[0]['message'] != '') {
             $template = $template_code[0]['message'];
-            foreach($template_data as $key => $value)
-            {
-                $template = str_replace('{'.$key.'}', $value, $template);
+            foreach ($template_data as $key => $value) {
+                $template = str_replace('{' . $key . '}', $value, $template);
             }
             $template_code[0]['message'] = $template;
             return $template_code;
-        }else{
+        } else {
             return false;
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function send_mail($to, $subject, $message) {
+function send_mail($to, $subject, $message)
+{
     $CI = get_instance();
-    
+
     $email_library = get_email_library();
 
-    if($email_library == 'codeigniter'){
-        $email_config = Array();
+    if ($email_library == 'codeigniter') {
+        $email_config = array();
         $email_config["protocol"] = "smtp";
         $email_config["charset"] = "utf-8";
         $email_config["mailtype"] = "html";
@@ -419,7 +424,7 @@ function send_mail($to, $subject, $message) {
         $email_config["smtp_user"] = smtp_email();
         $email_config["smtp_pass"] = smtp_password();
         $email_config["smtp_crypto"] = smtp_encryption();
-        if($email_config["smtp_crypto"] == 'none'){
+        if ($email_config["smtp_crypto"] == 'none') {
             $email_config["smtp_crypto"] = "";
         }
         $CI->load->library('email', $email_config);
@@ -430,16 +435,16 @@ function send_mail($to, $subject, $message) {
         $CI->email->to($to);
         $CI->email->subject($subject);
         $CI->email->message($message);
-        if($CI->email->send()){
+        if ($CI->email->send()) {
             return true;
-        }else{
+        } else {
             return false;
         }
-    }else{
-        $CI = new PHPMailer(); 
+    } else {
+        $CI = new PHPMailer();
         $CI->CharSet = 'UTF-8';
-        $CI->IsSMTP(); 
-        $CI->SMTPDebug = 1; 
+        $CI->IsSMTP();
+        $CI->SMTPDebug = 1;
         $CI->SMTPAuth = true;
         $CI->SMTPSecure = smtp_encryption();
         $CI->Host = smtp_host();
@@ -451,9 +456,9 @@ function send_mail($to, $subject, $message) {
         $CI->Subject = $subject;
         $CI->Body = $message;
         $CI->AddAddress($to);
-        if($CI->Send()){
+        if ($CI->Send()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -463,188 +468,194 @@ function get_google_recaptcha_site_key()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'recaptcha']);
+    $CI->db->where(['type' => 'recaptcha']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return false;
     }
     $data = json_decode($data[0]['value']);
-    if(!empty($data->site_key)){
+    if (!empty($data->site_key)) {
         return $data->site_key;
-    }else{
+    } else {
         return '';
     }
-} 
+}
 function get_google_recaptcha_secret_key()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'recaptcha']);
+    $CI->db->where(['type' => 'recaptcha']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return false;
     }
     $data = json_decode($data[0]['value']);
-    if(!empty($data->secret_key)){
+    if (!empty($data->secret_key)) {
         return $data->secret_key;
-    }else{
+    } else {
         return '';
     }
-} 
+}
 function get_header_code()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'custom_code']);
+    $CI->db->where(['type' => 'custom_code']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return false;
     }
     $data = json_decode($data[0]['value']);
-    if(!empty($data->header_code)){
+    if (!empty($data->header_code)) {
         return $data->header_code;
-    }else{
+    } else {
         return '';
     }
-} 
+}
 
 function get_footer_code()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'custom_code']);
+    $CI->db->where(['type' => 'custom_code']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return false;
     }
     $data = json_decode($data[0]['value']);
-    if(!empty($data->footer_code)){
+    if (!empty($data->footer_code)) {
         return $data->footer_code;
-    }else{
+    } else {
         return '';
     }
-} 
+}
 
-function turn_off_new_user_registration(){    
-    
+function turn_off_new_user_registration()
+{
+
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return 0;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(isset($data->turn_off_new_user_registration) && !empty($data->turn_off_new_user_registration)){
+    if (isset($data->turn_off_new_user_registration) && !empty($data->turn_off_new_user_registration)) {
         return $data->turn_off_new_user_registration;
-    }else{
+    } else {
         return 0;
     }
 
 }
 
-function theme_color(){    
-    
+function theme_color()
+{
+
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(isset($data->theme_color) && !empty($data->theme_color)){
+    if (isset($data->theme_color) && !empty($data->theme_color)) {
         return $data->theme_color;
-    }else{
+    } else {
         return '#e52165';
     }
 
 }
 
-function email_activation(){    
-    
+function email_activation()
+{
+
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(isset($data->email_activation) && !empty($data->email_activation)){
+    if (isset($data->email_activation) && !empty($data->email_activation)) {
         return $data->email_activation;
-    }else{
+    } else {
         return false;
     }
 
 }
 
-function is_storage_limit_exceeded($user_id = ''){
+function is_storage_limit_exceeded($user_id = '')
+{
     $CI =& get_instance();
-    if(empty($user_id)){
+    if (empty($user_id)) {
         $user_id = $CI->session->userdata('saas_id');
     }
-    $current_storage = check_my_storage('assets/uploads/f'.$user_id);
+    $current_storage = check_my_storage('assets/uploads/f' . $user_id);
     $current_plan = get_current_plan($user_id);
-    if($current_plan['storage'] < 0){
+    if ($current_plan['storage'] < 0) {
         return true;
     }
     $current_plan_storage = tobytes($current_plan['storage']);
-    if($current_storage >= $current_plan_storage){
+    if ($current_storage >= $current_plan_storage) {
         return false;
-    }else{
+    } else {
         return true;
     }
 }
 
 function check_my_storage($dir = '', $user_id = '')
-{   
+{
     $CI =& get_instance();
 
-    if(empty($user_id)){
+    if (empty($user_id)) {
         $user_id = $CI->session->userdata('saas_id');
     }
 
-    if(empty($dir)){
-        $dir = 'assets/uploads/f'.$user_id;
+    if (empty($dir)) {
+        $dir = 'assets/uploads/f' . $user_id;
     }
 
     $size = 0;
-    foreach (glob(rtrim($dir, '/').'/*', GLOB_NOSORT) as $each) {
+    foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
         $size += is_file($each) ? filesize($each) : check_my_storage($each);
     }
     return $size;
 }
 
-function tobytes($size, $type = "GB"){
-    $types = array("B", "KB", "MB", "GB", "TB", "PB"); 
-    if($key = array_search($type, $types))
+function tobytes($size, $type = "GB")
+{
+    $types = array("B", "KB", "MB", "GB", "TB", "PB");
+    if ($key = array_search($type, $types))
         return $size * pow(1024, $key);
-    else 
+    else
         return "invalid type";
 }
 
-function formatBytes($kb, $type = 'kb') { 
+function formatBytes($kb, $type = 'kb')
+{
 
-    if($type == 'kb'){
-        $bytes = $kb*1024;
-    }else{
+    if ($type == 'kb') {
+        $bytes = $kb * 1024;
+    } else {
         $bytes = $kb;
     }
 
@@ -669,27 +680,28 @@ function formatBytes($kb, $type = 'kb') {
     } else {
         return bcdiv($bytes, 1, 2) . ' B';
     }
-} 
+}
 
-function check_my_timer($task_id = '', $user_id = ''){
+function check_my_timer($task_id = '', $user_id = '')
+{
     $CI =& get_instance();
     $where = '';
-    if($task_id){
+    if ($task_id) {
         $where .= " AND task_id=$task_id ";
     }
-    if($user_id){
+    if ($user_id) {
         $where .= " AND user_id=$user_id ";
-    }else{
-        $where .= " AND user_id=".$CI->session->userdata('user_id');
+    } else {
+        $where .= " AND user_id=" . $CI->session->userdata('user_id');
     }
 
-    $where .= " AND saas_id=".$CI->session->userdata('saas_id');
+    $where .= " AND saas_id=" . $CI->session->userdata('saas_id');
 
     $query = $CI->db->query("SELECT id FROM timesheet WHERE starting_time IS NOT NULL and ending_time IS NULL $where");
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         return $data;
-    }else{
+    } else {
         return false;
     }
 }
@@ -698,524 +710,528 @@ function default_language()
 {
     $CI =& get_instance();
 
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->default_language)){
+    if (!empty($data->default_language)) {
         return $data->default_language;
-    }else{
+    } else {
         return 'english';
     }
 }
 
 
-function get_my_invoices_details(){
+function get_my_invoices_details()
+{
     $CI =& get_instance();
     $invoices = $CI->invoices_model->get_invoices();
-    if($invoices){
+    if ($invoices) {
 
         $amount_final = 0;
         $amount_due_final = 0;
 
-        foreach($invoices as $key => $invoice){
+        foreach ($invoices as $key => $invoice) {
 
             $amount = 0;
             $amount_due = 0;
 
-            if($invoice['status'] == 1){
+            if ($invoice['status'] == 1) {
                 $amount = $invoice['amount'];
-                if($invoice['tax'] && $invoice['tax'] != ''){
+                if ($invoice['tax'] && $invoice['tax'] != '') {
                     $total_tax_per = 0;
-                    if(is_numeric($invoice['tax'])){
+                    if (is_numeric($invoice['tax'])) {
                         $taxes = get_tax($invoice['tax']);
-                        if($taxes){
-                            $total_tax_per = $total_tax_per+$taxes[0]['tax'];
+                        if ($taxes) {
+                            $total_tax_per = $total_tax_per + $taxes[0]['tax'];
                         }
-                    }else{
-                        foreach(explode(',', $invoice['tax']) as $tax_id){
+                    } else {
+                        foreach (explode(',', $invoice['tax']) as $tax_id) {
                             $taxes = get_tax($tax_id);
-                            if($taxes){
-                                $total_tax_per = $total_tax_per+$taxes[0]['tax'];
+                            if ($taxes) {
+                                $total_tax_per = $total_tax_per + $taxes[0]['tax'];
                             }
                         }
                     }
-                    if($total_tax_per != 0){
-                        $total_tax = $amount*$total_tax_per/100;
-                    }else{
+                    if ($total_tax_per != 0) {
+                        $total_tax = $amount * $total_tax_per / 100;
+                    } else {
                         $total_tax = 0;
                     }
-                    $amount = $amount+$total_tax;
+                    $amount = $amount + $total_tax;
                 }
-            }else{
+            } else {
                 $amount_due = $invoice['amount'];
-                if($invoice['tax'] && $invoice['tax'] != ''){
+                if ($invoice['tax'] && $invoice['tax'] != '') {
                     $total_tax_per_due = 0;
-                    if(is_numeric($invoice['tax'])){
+                    if (is_numeric($invoice['tax'])) {
                         $taxes = get_tax($invoice['tax']);
-                        if($taxes){
-                            $total_tax_per_due = $total_tax_per_due+$taxes[0]['tax'];
+                        if ($taxes) {
+                            $total_tax_per_due = $total_tax_per_due + $taxes[0]['tax'];
                         }
-                    }else{
-                        foreach(explode(',', $invoice['tax']) as $tax_id){
+                    } else {
+                        foreach (explode(',', $invoice['tax']) as $tax_id) {
                             $taxes = get_tax($tax_id);
-                            if($taxes){
-                                $total_tax_per_due = $total_tax_per_due+$taxes[0]['tax'];
+                            if ($taxes) {
+                                $total_tax_per_due = $total_tax_per_due + $taxes[0]['tax'];
                             }
                         }
                     }
-                    if($total_tax_per_due != 0){
-                        $total_tax_due = $amount_due*$total_tax_per_due/100;
-                    }else{
+                    if ($total_tax_per_due != 0) {
+                        $total_tax_due = $amount_due * $total_tax_per_due / 100;
+                    } else {
                         $total_tax_due = 0;
                     }
-                    $amount_due = $amount_due+$total_tax_due;
+                    $amount_due = $amount_due + $total_tax_due;
                 }
-            }     
-            if($amount != 0){
-                $amount_final = $amount_final+$amount;
-            }else{
+            }
+            if ($amount != 0) {
+                $amount_final = $amount_final + $amount;
+            } else {
                 $amount_final = $amount_final;
             }
-            if($amount_due != 0){
-                $amount_due_final = $amount_due_final+$amount_due;
-            }else{
+            if ($amount_due != 0) {
+                $amount_due_final = $amount_due_final + $amount_due;
+            } else {
                 $amount_due_final = $amount_due_final;
             }
         }
-        $data['paid'] = isset($amount_final)?$amount_final:0;
-        $data['due'] = isset($amount_due_final)?$amount_due_final:0;
+        $data['paid'] = isset($amount_final) ? $amount_final : 0;
+        $data['due'] = isset($amount_due_final) ? $amount_due_final : 0;
         $data['total'] = $data['paid'] + $data['due'];
-    }else{
+    } else {
         $data['paid'] = 0;
         $data['due'] = 0;
         $data['total'] = 0;
     }
-return $data;
+    return $data;
 }
 
 function company_details($type = '', $user_id = '')
 {
     $CI =& get_instance();
-    if(empty($user_id)){
-        if($CI->ion_auth->in_group(4)){
-            $where_type = 'company_'.$CI->session->userdata('user_id');
-        }else{
-            $where_type = 'company_'.$CI->session->userdata('saas_id');
+    if (empty($user_id)) {
+        if ($CI->ion_auth->in_group(4)) {
+            $where_type = 'company_' . $CI->session->userdata('user_id');
+        } else {
+            $where_type = 'company_' . $CI->session->userdata('saas_id');
         }
-    }else{
-        $where_type = 'company_'.$user_id;
+    } else {
+        $where_type = 'company_' . $user_id;
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return '';
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if($type == ''){
+    if ($type == '') {
         return $data;
     }
 
-    if(!empty($data->{$type})){
+    if (!empty($data->{$type})) {
         return $data->{$type};
-    }else{
+    } else {
         return '';
     }
-} 
+}
 
 function get_tax($tax_id = '')
 {
     $CI =& get_instance();
     $CI->db->from('taxes');
-    $CI->db->where(['saas_id'=>$CI->session->userdata('saas_id')]);
-    if($tax_id){
-        $CI->db->where(['id'=>$tax_id]);
+    $CI->db->where(['saas_id' => $CI->session->userdata('saas_id')]);
+    if ($tax_id) {
+        $CI->db->where(['id' => $tax_id]);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         return $data;
-    }else{
+    } else {
         return array();
     }
-} 
+}
 
 function get_currency($type)
 {
     $CI =& get_instance();
 
-    $where_type = 'general_'.$CI->session->userdata('saas_id');
+    $where_type = 'general_' . $CI->session->userdata('saas_id');
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
-        if($type == 'currency_code'){
+    if (!$data) {
+        if ($type == 'currency_code') {
             return 'USD';
-        }else{
+        } else {
             return '$';
         }
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->{$type})){
+    if (!empty($data->{$type})) {
         return $data->{$type};
-    }else{
-        if($type == 'currency_code'){
+    } else {
+        if ($type == 'currency_code') {
             return 'USD';
-        }else{
+        } else {
             return '$';
         }
     }
-} 
+}
 
 function get_saas_currency($type)
 {
     $CI =& get_instance();
-    
+
     $where_type = 'general';
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
-        if($type == 'currency_code'){
+    if (!$data) {
+        if ($type == 'currency_code') {
             return 'USD';
-        }else{
+        } else {
             return '$';
         }
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->{$type})){
+    if (!empty($data->{$type})) {
         return $data->{$type};
-    }else{
-        if($type == 'currency_code'){
+    } else {
+        if ($type == 'currency_code') {
             return 'USD';
-        }else{
+        } else {
             return '$';
         }
     }
-} 
+}
 
 function get_home($lang = '')
 {
     $CI =& get_instance();
-    $CI->db->where(['type'=>'home']);
+    $CI->db->where(['type' => 'home']);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
-    if(!$data){
+    if (!$data) {
         return false;
     }
     $data = json_decode($data[0]['value']);
-    if(empty($lang)){
+    if (empty($lang)) {
         return $data;
-    }else{
-        if(isset($data->$lang)){
+    } else {
+        if (isset($data->$lang)) {
             return $data->$lang;
-        }else{
+        } else {
             return true;
         }
     }
 }
 
-function get_languages($language_id = '', $language_name = '', $status = ''){
+function get_languages($language_id = '', $language_name = '', $status = '')
+{
     $CI =& get_instance();
     $languages = $CI->languages_model->get_languages($language_id, $language_name, $status);
-    if(empty($languages)){
+    if (empty($languages)) {
         return false;
-    }else{
+    } else {
         return $languages;
     }
 }
 
-function get_notifications($user_id = ''){  
+function get_notifications($user_id = '')
+{
 
     $CI =& get_instance();
     $left_join = " LEFT JOIN users u ON n.from_id=u.id ";
-    $query = $CI->db->query("SELECT n.*,u.first_name,u.last_name,u.profile FROM notifications n $left_join WHERE is_read=0 AND to_id=".$CI->session->userdata('user_id')." ORDER BY n.created DESC LIMIT 10");
+    $query = $CI->db->query("SELECT n.*,u.first_name,u.last_name,u.profile FROM notifications n $left_join WHERE is_read=0 AND to_id=" . $CI->session->userdata('user_id') . " ORDER BY n.created DESC LIMIT 10");
     $notifications = $query->result_array();
-    if($notifications){
-        foreach($notifications as $key => $notification){
+    if ($notifications) {
+        foreach ($notifications as $key => $notification) {
             $temp[$key] = $notification;
 
             $extra = '';
             $notification_url = base_url('notifications');
             $notification_txt = $notification['notification'];
-            if($notification['type'] == 'offline_request' && $CI->ion_auth->in_group(3)){
-                $notification_txt = $CI->lang->line('offline_bank_transfer_request_created_for_subscription_plan')?$CI->lang->line('offline_bank_transfer_request_created_for_subscription_plan')." ".$notification['notification']:"Offline / Bank Transfer request created for subscription plan ".$notification['notification'];
+            if ($notification['type'] == 'offline_request' && $CI->ion_auth->in_group(3)) {
+                $notification_txt = $CI->lang->line('offline_bank_transfer_request_created_for_subscription_plan') ? $CI->lang->line('offline_bank_transfer_request_created_for_subscription_plan') . " " . $notification['notification'] : "Offline / Bank Transfer request created for subscription plan " . $notification['notification'];
                 $notification_url = base_url('plans/offline-requests');
                 $plan = $CI->plans_model->get_plans($notification['type_id']);
-                if($plan){
+                if ($plan) {
                     $extra = '<div class="text-small">
-                        '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-primary">'.$plan[0]['title'].'</span> 
-                    </div>'; 
+                        ' . ($CI->lang->line('plan') ? $CI->lang->line('plan') : 'Plan') . ': <span class="text-primary">' . $plan[0]['title'] . '</span> 
+                    </div>';
                 }
-            }elseif($notification['type'] == 'new_plan' && $CI->ion_auth->in_group(3)){
-                $notification_txt = $CI->lang->line('ordered_subscription_plan')?$CI->lang->line('ordered_subscription_plan')." ".$notification['notification']:"Ordered subscription plan ".$notification['notification'];
+            } elseif ($notification['type'] == 'new_plan' && $CI->ion_auth->in_group(3)) {
+                $notification_txt = $CI->lang->line('ordered_subscription_plan') ? $CI->lang->line('ordered_subscription_plan') . " " . $notification['notification'] : "Ordered subscription plan " . $notification['notification'];
                 $notification_url = base_url('plans/orders');
                 $plan = $CI->plans_model->get_plans($notification['type_id']);
-                if($plan){
+                if ($plan) {
                     $user = $CI->ion_auth->user($notification['from_id'])->row();
-                    if($user){
-                        $ADD = 'User: <span class="text-primary">'.$user->first_name.' '.$user->last_name.'</span>';
-                    }else{
+                    if ($user) {
+                        $ADD = 'User: <span class="text-primary">' . $user->first_name . ' ' . $user->last_name . '</span>';
+                    } else {
                         $ADD = '';
                     }
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-primary">'.$plan[0]['title'].'</span> 
-                        '.($CI->lang->line('transaction')?$CI->lang->line('transaction'):'Transaction').': <span class="text-primary">'.$plan[0]['price'].'</span> 
-                        '.$ADD.'
+                    ' . ($CI->lang->line('plan') ? $CI->lang->line('plan') : 'Plan') . ': <span class="text-primary">' . $plan[0]['title'] . '</span> 
+                        ' . ($CI->lang->line('transaction') ? $CI->lang->line('transaction') : 'Transaction') . ': <span class="text-primary">' . $plan[0]['price'] . '</span> 
+                        ' . $ADD . '
                     </div>';
                 }
-            }elseif($notification['type'] == 'new_user' && $CI->ion_auth->in_group(3)){
-                $notification_txt = $CI->lang->line('new_user_registered')?$CI->lang->line('new_user_registered'):"New user registered.";
+            } elseif ($notification['type'] == 'new_user' && $CI->ion_auth->in_group(3)) {
+                $notification_txt = $CI->lang->line('new_user_registered') ? $CI->lang->line('new_user_registered') : "New user registered.";
                 $notification_url = base_url('users/saas');
                 $user = $CI->ion_auth->user($notification['type_id'])->row();
-                if($user){
+                if ($user) {
                     $extra = '<div class="text-small">
-                        '.($CI->lang->line('user')?$CI->lang->line('user'):'User').': <span class="text-primary">'.$user->first_name.' '.$user->last_name.'</span> 
+                        ' . ($CI->lang->line('user') ? $CI->lang->line('user') : 'User') . ': <span class="text-primary">' . $user->first_name . ' ' . $user->last_name . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'offline_request' && $CI->ion_auth->is_admin()){
-                
-                $notification_txt = $CI->lang->line('your_offline_bank_transfer_request_accepted_for_subscription_plan')?$CI->lang->line('your_offline_bank_transfer_request_accepted_for_subscription_plan')." ".$notification['notification']:"Your Offline / Bank Transfer request accepted for subscription plan ".$notification['notification'];
+            } elseif ($notification['type'] == 'offline_request' && $CI->ion_auth->is_admin()) {
+
+                $notification_txt = $CI->lang->line('your_offline_bank_transfer_request_accepted_for_subscription_plan') ? $CI->lang->line('your_offline_bank_transfer_request_accepted_for_subscription_plan') . " " . $notification['notification'] : "Your Offline / Bank Transfer request accepted for subscription plan " . $notification['notification'];
                 $notification_url = base_url('plans');
                 $plan = $CI->plans_model->get_plans($notification['type_id']);
-                if($plan){
+                if ($plan) {
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('plan')?$CI->lang->line('plan'):'Plan').': <span class="text-primary">'.$plan[0]['title'].'</span> 
+                    ' . ($CI->lang->line('plan') ? $CI->lang->line('plan') : 'Plan') . ': <span class="text-primary">' . $plan[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'new_project'){
-                $notification_txt = $CI->lang->line('new_project_created')?$notification['notification']." ".$CI->lang->line('new_project_created'):$notification['notification']." new project created.";
-                $notification_url = base_url('projects/detail/'.$notification['type_id']);
-                $project = $CI->projects_model->get_projects('',$notification['type_id']);
-                if($project){
+            } elseif ($notification['type'] == 'new_project') {
+                $notification_txt = $CI->lang->line('new_project_created') ? $notification['notification'] . " " . $CI->lang->line('new_project_created') : $notification['notification'] . " new project created.";
+                $notification_url = base_url('projects/detail/' . $notification['type_id']);
+                $project = $CI->projects_model->get_projects('', $notification['type_id']);
+                if ($project) {
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $project[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'project_status'){
-                $old_status = project_status('',$notification['notification']);
-                $project = $CI->projects_model->get_projects('',$notification['type_id']);
+            } elseif ($notification['type'] == 'project_status') {
+                $old_status = project_status('', $notification['notification']);
+                $project = $CI->projects_model->get_projects('', $notification['type_id']);
 
-                if($old_status && $project){
-                    $notification_txt = $CI->lang->line('project_status_changed')?$CI->lang->line('project_status_changed').' <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-primary">'.$project[0]['project_status'].'</span>':'Project status changed. <span class="text-info text-strike">'.$old_status[0]['title'].'</span> = <span class="text-primary">'.$project[0]['project_status'].'</span>';
+                if ($old_status && $project) {
+                    $notification_txt = $CI->lang->line('project_status_changed') ? $CI->lang->line('project_status_changed') . ' <span class="text-info text-strike">' . $old_status[0]['title'] . '</span> = <span class="text-primary">' . $project[0]['project_status'] . '</span>' : 'Project status changed. <span class="text-info text-strike">' . $old_status[0]['title'] . '</span> = <span class="text-primary">' . $project[0]['project_status'] . '</span>';
                 }
 
-                $notification_url = base_url('projects/detail/'.$notification['type_id']);
-                
-                if($project){
+                $notification_url = base_url('projects/detail/' . $notification['type_id']);
+
+                if ($project) {
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $project[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'project_file'){
-                $notification_txt = $CI->lang->line('project_file_uploaded')?$notification['notification']." ".$CI->lang->line('project_file_uploaded'):$notification['notification']." project file uploaded.";
-                $notification_url = base_url('projects/detail/'.$notification['type_id']);
-                $project = $CI->projects_model->get_projects('',$notification['type_id']);
-                if($project){
+            } elseif ($notification['type'] == 'project_file') {
+                $notification_txt = $CI->lang->line('project_file_uploaded') ? $notification['notification'] . " " . $CI->lang->line('project_file_uploaded') : $notification['notification'] . " project file uploaded.";
+                $notification_url = base_url('projects/detail/' . $notification['type_id']);
+                $project = $CI->projects_model->get_projects('', $notification['type_id']);
+                if ($project) {
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $project[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'new_task'){
-                $notification_txt = $CI->lang->line('task_assigned_you')?$notification['notification']." ".$CI->lang->line('task_assigned_you'):$notification['notification']." task assigned you.";
-                $task = $CI->projects_model->get_tasks('',$notification['type_id']);
-                if($task){
-                    $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'new_task') {
+                $notification_txt = $CI->lang->line('task_assigned_you') ? $notification['notification'] . " " . $CI->lang->line('task_assigned_you') : $notification['notification'] . " task assigned you.";
+                $task = $CI->projects_model->get_tasks('', $notification['type_id']);
+                if ($task) {
+                    $notification_url = base_url('projects/tasks/' . $task[0]['project_id'] . '/' . $notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $task[0]['project_title'] . '</span> 
+                    ' . ($CI->lang->line('task') ? $CI->lang->line('task') : 'Task') . ': <span class="text-primary">' . $task[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'task_status'){
+            } elseif ($notification['type'] == 'task_status') {
                 $task_status_old = task_status($notification['notification']);
-                $task = $CI->projects_model->get_tasks('',$notification['type_id']);
+                $task = $CI->projects_model->get_tasks('', $notification['type_id']);
 
-                if($task_status_old && $task){
-                    $notification_txt = $CI->lang->line('task_status_changed')?($CI->lang->line('task_status_changed').' <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-primary">'.$task[0]['task_status'].'</span>'):('Task status changed. <span class="text-info text-strike">'.$task_status_old[0]['title'].'</span> = <span class="text-primary">'.$task[0]['task_status'].'</span>');
+                if ($task_status_old && $task) {
+                    $notification_txt = $CI->lang->line('task_status_changed') ? ($CI->lang->line('task_status_changed') . ' <span class="text-info text-strike">' . $task_status_old[0]['title'] . '</span> = <span class="text-primary">' . $task[0]['task_status'] . '</span>') : ('Task status changed. <span class="text-info text-strike">' . $task_status_old[0]['title'] . '</span> = <span class="text-primary">' . $task[0]['task_status'] . '</span>');
                 }
-                
-                if($task){
-                    $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
+
+                if ($task) {
+                    $notification_url = base_url('projects/tasks/' . $task[0]['project_id'] . '/' . $notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $task[0]['project_title'] . '</span> 
+                    ' . ($CI->lang->line('task') ? $CI->lang->line('task') : 'Task') . ': <span class="text-primary">' . $task[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'task_file'){
-                $notification_txt = $CI->lang->line('task_file_uploaded')?$notification['notification']." ".$CI->lang->line('task_file_uploaded'):$notification['notification']." task file uploaded.";
-                $task = $CI->projects_model->get_tasks('',$notification['type_id']);
-                if($task){
-                    $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'task_file') {
+                $notification_txt = $CI->lang->line('task_file_uploaded') ? $notification['notification'] . " " . $CI->lang->line('task_file_uploaded') : $notification['notification'] . " task file uploaded.";
+                $task = $CI->projects_model->get_tasks('', $notification['type_id']);
+                if ($task) {
+                    $notification_url = base_url('projects/tasks/' . $task[0]['project_id'] . '/' . $notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $task[0]['project_title'] . '</span> 
+                    ' . ($CI->lang->line('task') ? $CI->lang->line('task') : 'Task') . ': <span class="text-primary">' . $task[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'task_comment'){
-                $notification_txt = $CI->lang->line('new_task_comment')?$CI->lang->line('new_task_comment')." ".$notification['notification']:"New task comment ".$notification['notification'];
-                $task = $CI->projects_model->get_tasks('',$notification['type_id']);
-                if($task){
-                    $notification_url = base_url('projects/tasks/'.$task[0]['project_id'].'/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'task_comment') {
+                $notification_txt = $CI->lang->line('new_task_comment') ? $CI->lang->line('new_task_comment') . " " . $notification['notification'] : "New task comment " . $notification['notification'];
+                $task = $CI->projects_model->get_tasks('', $notification['type_id']);
+                if ($task) {
+                    $notification_url = base_url('projects/tasks/' . $task[0]['project_id'] . '/' . $notification['type_id']);
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$task[0]['project_title'].'</span> 
-                    '.($CI->lang->line('task')?$CI->lang->line('task'):'Task').': <span class="text-primary">'.$task[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $task[0]['project_title'] . '</span> 
+                    ' . ($CI->lang->line('task') ? $CI->lang->line('task') : 'Task') . ': <span class="text-primary">' . $task[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'project_comment'){
-                $notification_txt = $CI->lang->line('new_project_comment')?$CI->lang->line('new_project_comment')." ".$notification['notification']:"New project comment ".$notification['notification'];
-                $notification_url = base_url('projects/detail/'.$notification['type_id']);
-                $project = $CI->projects_model->get_projects('',$notification['type_id']);
-                if($project){
+            } elseif ($notification['type'] == 'project_comment') {
+                $notification_txt = $CI->lang->line('new_project_comment') ? $CI->lang->line('new_project_comment') . " " . $notification['notification'] : "New project comment " . $notification['notification'];
+                $notification_url = base_url('projects/detail/' . $notification['type_id']);
+                $project = $CI->projects_model->get_projects('', $notification['type_id']);
+                if ($project) {
                     $extra = '<div class="text-small">
-                    '.($CI->lang->line('project')?$CI->lang->line('project'):'Project').': <span class="text-primary">'.$project[0]['title'].'</span> 
+                    ' . ($CI->lang->line('project') ? $CI->lang->line('project') : 'Project') . ': <span class="text-primary">' . $project[0]['title'] . '</span> 
                     </div>';
                 }
-            }elseif($notification['type'] == 'new_invoice'){
+            } elseif ($notification['type'] == 'new_invoice') {
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
-                if($invoice){
-                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
-                    $notification_txt = $CI->lang->line('new_invoice_received')?$invoice_id." ".$CI->lang->line('new_invoice_received'):$invoice_id." new invoice received.";
-                    $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
+                if ($invoice) {
+                    $invoice_id = '<span class="text-primary">' . $invoice[0]['invoice_id'] . '</span>';
+                    $notification_txt = $CI->lang->line('new_invoice_received') ? $invoice_id . " " . $CI->lang->line('new_invoice_received') : $invoice_id . " new invoice received.";
+                    $notification_url = base_url('invoices/view/' . $invoice[0]['id']);
                 }
-            }elseif($notification['type'] == 'bank_transfer'){
+            } elseif ($notification['type'] == 'bank_transfer') {
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
-                if($invoice){
-                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
-                    $notification_txt = $CI->lang->line('bank_transfer_request_received_for_the_invoice')?$CI->lang->line('bank_transfer_request_received_for_the_invoice')." ".$invoice_id:"Bank transfer request received for the invoice ".$invoice_id;
-                    $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
+                if ($invoice) {
+                    $invoice_id = '<span class="text-primary">' . $invoice[0]['invoice_id'] . '</span>';
+                    $notification_txt = $CI->lang->line('bank_transfer_request_received_for_the_invoice') ? $CI->lang->line('bank_transfer_request_received_for_the_invoice') . " " . $invoice_id : "Bank transfer request received for the invoice " . $invoice_id;
+                    $notification_url = base_url('invoices/view/' . $invoice[0]['id']);
                 }
-            }elseif($notification['type'] == 'bank_transfer_accept'){
+            } elseif ($notification['type'] == 'bank_transfer_accept') {
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
-                if($invoice){
-                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
-                    $notification_txt = $CI->lang->line('bank_transfer_request_accepted_for_the_invoice')?$CI->lang->line('bank_transfer_request_accepted_for_the_invoice')." ".$invoice_id:"Bank transfer request accepted for the invoice ".$invoice_id;
-                    $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
+                if ($invoice) {
+                    $invoice_id = '<span class="text-primary">' . $invoice[0]['invoice_id'] . '</span>';
+                    $notification_txt = $CI->lang->line('bank_transfer_request_accepted_for_the_invoice') ? $CI->lang->line('bank_transfer_request_accepted_for_the_invoice') . " " . $invoice_id : "Bank transfer request accepted for the invoice " . $invoice_id;
+                    $notification_url = base_url('invoices/view/' . $invoice[0]['id']);
                 }
-            }elseif($notification['type'] == 'bank_transfer_reject'){
+            } elseif ($notification['type'] == 'bank_transfer_reject') {
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
-                if($invoice){
-                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
-                    $notification_txt = $CI->lang->line('bank_transfer_request_rejected_for_the_invoice')?$CI->lang->line('bank_transfer_request_rejected_for_the_invoice')." ".$invoice_id:"Bank transfer request rejected for the invoice ".$invoice_id;
-                    $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
+                if ($invoice) {
+                    $invoice_id = '<span class="text-primary">' . $invoice[0]['invoice_id'] . '</span>';
+                    $notification_txt = $CI->lang->line('bank_transfer_request_rejected_for_the_invoice') ? $CI->lang->line('bank_transfer_request_rejected_for_the_invoice') . " " . $invoice_id : "Bank transfer request rejected for the invoice " . $invoice_id;
+                    $notification_url = base_url('invoices/view/' . $invoice[0]['id']);
                 }
-            }elseif($notification['type'] == 'payment_received'){
+            } elseif ($notification['type'] == 'payment_received') {
                 $invoice = $CI->invoices_model->get_invoices($notification['type_id']);
-                if($invoice){
-                    $invoice_id = '<span class="text-primary">'.$invoice[0]['invoice_id'].'</span>';
-                    $notification_txt = $CI->lang->line('payment_received_for_the_invoice')?$CI->lang->line('payment_received_for_the_invoice')." ".$invoice_id:"Payment received for the invoice ".$invoice_id;
-                    $notification_url = base_url('invoices/view/'.$invoice[0]['id']);
+                if ($invoice) {
+                    $invoice_id = '<span class="text-primary">' . $invoice[0]['invoice_id'] . '</span>';
+                    $notification_txt = $CI->lang->line('payment_received_for_the_invoice') ? $CI->lang->line('payment_received_for_the_invoice') . " " . $invoice_id : "Payment received for the invoice " . $invoice_id;
+                    $notification_url = base_url('invoices/view/' . $invoice[0]['id']);
                 }
-            }elseif($notification['type'] == 'new_estimate'){
-                $estimates = $CI->estimates_model->get_estimates($notification['type_id']); 
-                if($estimates){
-                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
-                    $notification_txt = $CI->lang->line('new_estimate_received')?$title." ".$CI->lang->line('new_estimate_received'):$title." new estimate received.";
-                    $notification_url = base_url('estimates/view/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'new_estimate') {
+                $estimates = $CI->estimates_model->get_estimates($notification['type_id']);
+                if ($estimates) {
+                    $title = '<span class="text-primary">' . $notification['notification'] . '</span>';
+                    $notification_txt = $CI->lang->line('new_estimate_received') ? $title . " " . $CI->lang->line('new_estimate_received') : $title . " new estimate received.";
+                    $notification_url = base_url('estimates/view/' . $notification['type_id']);
                 }
-            }elseif($notification['type'] == 'estimate_reject'){
-                $estimates = $CI->estimates_model->get_estimates($notification['type_id']); 
-                if($estimates){
-                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
-                    $notification_txt = $CI->lang->line('estimate_rejected')?$title." ".$CI->lang->line('estimate_rejected'):$title." estimate rejected.";
-                    $notification_url = base_url('estimates/view/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'estimate_reject') {
+                $estimates = $CI->estimates_model->get_estimates($notification['type_id']);
+                if ($estimates) {
+                    $title = '<span class="text-primary">' . $notification['notification'] . '</span>';
+                    $notification_txt = $CI->lang->line('estimate_rejected') ? $title . " " . $CI->lang->line('estimate_rejected') : $title . " estimate rejected.";
+                    $notification_url = base_url('estimates/view/' . $notification['type_id']);
                 }
-            }elseif($notification['type'] == 'estimate_accept'){
-                $estimates = $CI->estimates_model->get_estimates($notification['type_id']); 
-                if($estimates){
-                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
-                    $notification_txt = $CI->lang->line('estimate_accepted')?$title." ".$CI->lang->line('estimate_accepted'):$title." estimate accepted.";
-                    $notification_url = base_url('estimates/view/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'estimate_accept') {
+                $estimates = $CI->estimates_model->get_estimates($notification['type_id']);
+                if ($estimates) {
+                    $title = '<span class="text-primary">' . $notification['notification'] . '</span>';
+                    $notification_txt = $CI->lang->line('estimate_accepted') ? $title . " " . $CI->lang->line('estimate_accepted') : $title . " estimate accepted.";
+                    $notification_url = base_url('estimates/view/' . $notification['type_id']);
                 }
-            }elseif($notification['type'] == 'new_meeting'){
-                $meetings = $CI->meetings_model->get_meetings($notification['type_id']); 
-                if($meetings){
-                    $title = '<span class="text-primary">'.$notification['notification'].'</span>';
-                    $notification_txt = $CI->lang->line('new_meeting_created')?$title." ".$CI->lang->line('new_meeting_created'):$title." new meeting scheduled.";
-                    $notification_url = base_url('meetings/view/'.$notification['type_id']);
+            } elseif ($notification['type'] == 'new_meeting') {
+                $meetings = $CI->meetings_model->get_meetings($notification['type_id']);
+                if ($meetings) {
+                    $title = '<span class="text-primary">' . $notification['notification'] . '</span>';
+                    $notification_txt = $CI->lang->line('new_meeting_created') ? $title . " " . $CI->lang->line('new_meeting_created') : $title . " new meeting scheduled.";
+                    $notification_url = base_url('meetings/view/' . $notification['type_id']);
                 }
-            }elseif($notification['type'] == 'leave_request'){
+            } elseif ($notification['type'] == 'leave_request') {
                 $leave = $CI->leaves_model->get_leaves_by_id($notification['type_id']);
-                if($leave){
-                    $notification_txt = $CI->lang->line('leave_request_received')?htmlspecialchars($CI->lang->line('leave_request_received')):'Leave request received';
+                if ($leave) {
+                    $notification_txt = $CI->lang->line('leave_request_received') ? htmlspecialchars($CI->lang->line('leave_request_received')) : 'Leave request received';
                     $notification_url = base_url('leaves');
                 }
-            }elseif($notification['type'] == 'leave_request_accepted'){
+            } elseif ($notification['type'] == 'leave_request_accepted') {
                 $leave = $CI->leaves_model->get_leaves_by_id($notification['type_id']);
-                if($leave){
-                    $notification_txt = $CI->lang->line('leave_request_accepted')?htmlspecialchars($CI->lang->line('leave_request_accepted')):'Leave request accepted';
+                if ($leave) {
+                    $notification_txt = $CI->lang->line('leave_request_accepted') ? htmlspecialchars($CI->lang->line('leave_request_accepted')) : 'Leave request accepted';
                     $notification_url = base_url('leaves');
                 }
-            }elseif($notification['type'] == 'leave_request_rejected'){
+            } elseif ($notification['type'] == 'leave_request_rejected') {
                 $leave = $CI->leaves_model->get_leaves_by_id($notification['type_id']);
-                if($leave){
-                    $notification_txt = $CI->lang->line('leave_request_rejected')?htmlspecialchars($CI->lang->line('leave_request_rejected')):'Leave request rejected';
+                if ($leave) {
+                    $notification_txt = $CI->lang->line('leave_request_rejected') ? htmlspecialchars($CI->lang->line('leave_request_rejected')) : 'Leave request rejected';
                     $notification_url = base_url('leaves');
                 }
-            }elseif($notification['type'] == 'new_lead'){
+            } elseif ($notification['type'] == 'new_lead') {
                 $leads = $CI->leads_model->get_leads_by_id($notification['type_id']);
-                if($leads){
-                $title = '<span class="text-primary">'.$notification['notification'].'</span>';
-                $notification_txt = $CI->lang->line('new_lead_assigned_to_you')?$title." ".$CI->lang->line('new_lead_assigned_to_you'):$title." New lead assigned to you.";
-                $notification_url = base_url('leads');
+                if ($leads) {
+                    $title = '<span class="text-primary">' . $notification['notification'] . '</span>';
+                    $notification_txt = $CI->lang->line('new_lead_assigned_to_you') ? $title . " " . $CI->lang->line('new_lead_assigned_to_you') : $title . " New lead assigned to you.";
+                    $notification_url = base_url('leads');
                 }
             }
 
             $temp[$key]['notification_url'] = $notification_url;
 
-            $temp[$key]['notification'] = $notification_txt.' '.$extra;
-            
+            $temp[$key]['notification'] = $notification_txt . ' ' . $extra;
+
             $temp[$key]['first_name'] = $notification['first_name'];
             $temp[$key]['last_name'] = $notification['last_name'];
             $temp[$key]['profile'] = $notification['profile'];
 
         }
-    }else{
+    } else {
         $temp = array();
     }
 
-    if(!empty($temp)){
+    if (!empty($temp)) {
         return $temp;
-    }else{
+    } else {
         return false;
     }
 }
 
-function time_elapsed_string($datetime, $full = false) {
+function time_elapsed_string($datetime, $full = false)
+{
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
@@ -1240,22 +1256,23 @@ function time_elapsed_string($datetime, $full = false) {
         }
     }
 
-    if (!$full) $string = array_slice($string, 0, 1);
+    if (!$full)
+        $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
-function recurse_copy($src,$dst) {
+function recurse_copy($src, $dst)
+{
     $dir = opendir($src);
-    if(!is_dir($dst)){
-        mkdir($dst,0775,true);
+    if (!is_dir($dst)) {
+        mkdir($dst, 0775, true);
     }
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
-            if ( is_dir($src . '/' . $file) ) {
-                recurse_copy($src . '/' . $file,$dst . '/' . $file);
-            }
-            else {
-                copy($src . '/' . $file,$dst . '/' . $file);
+    while (false !== ($file = readdir($dir))) {
+        if (($file != '.') && ($file != '..')) {
+            if (is_dir($src . '/' . $file)) {
+                recurse_copy($src . '/' . $file, $dst . '/' . $file);
+            } else {
+                copy($src . '/' . $file, $dst . '/' . $file);
             }
         }
     }
@@ -1265,22 +1282,22 @@ function recurse_copy($src,$dst) {
 function get_features($feature_type = '')
 {
     $CI =& get_instance();
-    $CI->db->where(['type'=>'features']);
+    $CI->db->where(['type' => 'features']);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(empty($feature_type)){
+    if (empty($feature_type)) {
         return $data;
-    }else{
-        if(isset($data->$feature_type)){
+    } else {
+        if (isset($data->$feature_type)) {
             return $data->$feature_type;
-        }else{
+        } else {
             return true;
         }
     }
@@ -1290,94 +1307,95 @@ function frontend_permissions($permissions_type = '')
 {
     $CI =& get_instance();
 
-    $CI->db->where(['type'=>'frontend']);
+    $CI->db->where(['type' => 'frontend']);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(empty($permissions_type)){
+    if (empty($permissions_type)) {
         return $data;
-    }else{
-        if(isset($data->$permissions_type)){
+    } else {
+        if (isset($data->$permissions_type)) {
             return $data->$permissions_type;
-        }else{
+        } else {
             return true;
         }
     }
-} 
+}
 
 function is_module_allowed($module_type = '')
 {
     $CI =& get_instance();
 
-    if($CI->session->userdata('saas_id') == ''){
+    if ($CI->session->userdata('saas_id') == '') {
         return true;
     }
-    if($CI->ion_auth->in_group(3)){
+    if ($CI->ion_auth->in_group(3)) {
         return true;
     }
-    $count_query = $CI->db->query("SELECT * FROM users_plans WHERE saas_id=".$CI->session->userdata('saas_id')." AND expired=1 AND (end_date >= CURDATE() || end_date IS NULL)");
+    $count_query = $CI->db->query("SELECT * FROM users_plans WHERE saas_id=" . $CI->session->userdata('saas_id') . " AND expired=1 AND (end_date >= CURDATE() || end_date IS NULL)");
     $count = $count_query->row_array();
 
-    if($count){
-            $current_plan = get_current_plan();
-    }else{
+    if ($count) {
+        $current_plan = get_current_plan();
+    } else {
         return false;
     }
 
-    if($current_plan['modules'] != ''){
+    if ($current_plan['modules'] != '') {
         $data = json_decode($current_plan['modules']);
-        if(isset($data->{$module_type}) && $data->{$module_type} == 1){
+        if (isset($data->{$module_type}) && $data->{$module_type} == 1) {
             return true;
-        }else{
+        } else {
             return false;
-        } 
-    }else{
+        }
+    } else {
         return true;
     }
-} 
+}
 
 function my_plan_features($feature_type = '')
 {
     $CI =& get_instance();
 
-    if($CI->session->userdata('saas_id') == ''){
+    if ($CI->session->userdata('saas_id') == '') {
         return true;
     }
-    $count_query = $CI->db->query("SELECT * FROM users_plans WHERE saas_id=".$CI->session->userdata('saas_id')." AND (end_date >= CURDATE() || end_date IS NULL)");
+    $count_query = $CI->db->query("SELECT * FROM users_plans WHERE saas_id=" . $CI->session->userdata('saas_id') . " AND (end_date >= CURDATE() || end_date IS NULL)");
     $count = $count_query->row_array();
-    if($count){
+    if ($count) {
         $current_plan = get_current_plan();
-    }else{
+    } else {
         return false;
     }
 
-    if($current_plan[$feature_type] < 0){
+    if ($current_plan[$feature_type] < 0) {
         return true;
-    }elseif($current_plan[$feature_type] == get_count('id',$feature_type,'saas_id='.$CI->session->userdata('saas_id'))){
+    } elseif ($current_plan[$feature_type] == get_count('id', $feature_type, 'saas_id=' . $CI->session->userdata('saas_id'))) {
         return false;
-    }else{
-        if($current_plan[$feature_type] < get_count('id',$feature_type,'saas_id='.$CI->session->userdata('saas_id'))){
+    } else {
+        if ($current_plan[$feature_type] < get_count('id', $feature_type, 'saas_id=' . $CI->session->userdata('saas_id'))) {
             return false;
         }
         return true;
     }
-    
-} 
 
-function get_current_plan($saas_id = ''){
+}
+
+function get_current_plan($saas_id = '')
+{
     $CI =& get_instance();
 
-    if(empty($saas_id)){
+    if (empty($saas_id)) {
         $saas_id = $CI->session->userdata('saas_id');
     }
 
-    if(empty($saas_id)){
+    if (empty($saas_id)) {
         return false;
     }
 
@@ -1386,9 +1404,9 @@ function get_current_plan($saas_id = ''){
     $query = $CI->db->query("SELECT up.*,p.title,p.price,p.billing_type,p.projects,p.tasks,p.users,p.storage,p.modules FROM users_plans up $left_join WHERE up.saas_id=$saas_id ORDER BY up.created DESC LIMIT 1");
     $data = $query->row_array();
 
-    if(!empty($data) && $saas_id){
+    if (!empty($data) && $saas_id) {
         return $data;
-    }else{
+    } else {
         return false;
     }
 }
@@ -1424,7 +1442,7 @@ function get_current_plan($saas_id = ''){
 //     if(!$data){
 //         return false;
 //     }
-    
+
 //     $data = json_decode($data[0]['value']);
 
 //     if(empty($permissions_type)){
@@ -1444,35 +1462,35 @@ function permissions($permissions_type = '')
 
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
     $role = $group[0]->name;
-    $CI->db->where('type', $role.'_permissions_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', $role . '_permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
 
-    if($count->num_rows() > 0){
-        $where_type = $role.'_permissions_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = $role . '_permissions_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'permissions';
     }
 
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(empty($permissions_type)){
+    if (empty($permissions_type)) {
         return $data;
-    }else{
-        if(isset($data->$permissions_type)){
+    } else {
+        if (isset($data->$permissions_type)) {
             return $data->$permissions_type;
-        }else{
+        } else {
             return false;
         }
     }
-} 
+}
 
 function change_permissions($group_id)
 {
@@ -1482,15 +1500,14 @@ function change_permissions($group_id)
     $permissions = $group[0]->change_permissions_of;
     if (empty($permissions) || is_null($permissions)) {
         return false;
-    }
-    else{
+    } else {
         $data = json_decode($permissions, true);
-        if(empty($group_id)){
+        if (empty($group_id)) {
             return true;
-        }else{
+        } else {
             if (in_array($group_id, $data)) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -1502,31 +1519,31 @@ function get_notifications_group_id()
     $CI =& get_instance();
 
     $groups = $CI->ion_auth->get_all_groups();
-    $matchingGroupIds = []; 
-    $matchingGroupIds[] = 1; 
+    $matchingGroupIds = [];
+    $matchingGroupIds[] = 1;
 
     foreach ($groups as $group) {
 
-        $CI->db->where('type', $group->name.'_permissions_'.$CI->session->userdata('saas_id'));
+        $CI->db->where('type', $group->name . '_permissions_' . $CI->session->userdata('saas_id'));
         $count = $CI->db->get('settings');
 
         if ($count->num_rows() > 0) {
-            $where_type = $group->name.'_permissions_'.$CI->session->userdata('saas_id');
+            $where_type = $group->name . '_permissions_' . $CI->session->userdata('saas_id');
         } else {
             $where_type = 'permissions';
         }
 
-        $CI->db->where(['type'=>$where_type]);
+        $CI->db->where(['type' => $where_type]);
         $query = $CI->db->get('settings');
         $data = $query->result_array();
 
         if (!$data) {
             continue;
         }
-        
+
         $data = json_decode($data[0]['value']);
         if (isset($data->notification_view_all) && $data->notification_view_all == 1) {
-            $matchingGroupIds[] = $group->id; 
+            $matchingGroupIds[] = $group->id;
         }
     }
 
@@ -1542,33 +1559,34 @@ function get_pms_notifications_group_id()
     $CI =& get_instance();
 
     $groups = $CI->ion_auth->get_all_groups();
-    $matchingGroupIds = []; 
-    $matchingGroupIds[] = 1; 
+    $matchingGroupIds = [];
+    $matchingGroupIds[] = 1;
 
     foreach ($groups as $group) {
 
-        $CI->db->where('type', $group->name.'_permissions_'.$CI->session->userdata('saas_id'));
+        $CI->db->where('type', $group->name . '_permissions_' . $CI->session->userdata('saas_id'));
         $count = $CI->db->get('settings');
 
         if ($count->num_rows() > 0) {
-            $where_type = $group->name.'_permissions_'.$CI->session->userdata('saas_id');
+            $where_type = $group->name . '_permissions_' . $CI->session->userdata('saas_id');
         } else {
             $where_type = 'permissions';
         }
 
-        $CI->db->where(['type'=>$where_type]);
+        $CI->db->where(['type' => $where_type]);
         $query = $CI->db->get('settings');
         $data = $query->result_array();
 
         if (!$data) {
             continue;
         }
-        
+
         $data = json_decode($data[0]['value']);
         if (isset($data->notification_view_all) && $data->notification_view_all == 1) {
-            $matchingGroupIds[] = $group->id; 
-        }if(isset($data->notification_view_pms) && $data->notification_view_pms == 1){
-            $matchingGroupIds[] = $group->id; 
+            $matchingGroupIds[] = $group->id;
+        }
+        if (isset($data->notification_view_pms) && $data->notification_view_pms == 1) {
+            $matchingGroupIds[] = $group->id;
         }
     }
 
@@ -1583,68 +1601,69 @@ function get_permissions($permissions_type = '')
 {
     $CI =& get_instance();
 
-    $CI->db->where('type', $permissions_type.'_permissions_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', $permissions_type . '_permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
 
-    if($count->num_rows() > 0){
-        $where_type = $permissions_type.'_permissions_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = $permissions_type . '_permissions_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'permissions';
     }
 
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
-    
+
     $data = json_decode($data[0]['value']);
     return $data;
-} 
+}
 
 function users_permissions($permissions_type = '')
 {
     $CI =& get_instance();
 
-    $CI->db->where('type', 'permissions_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', 'permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
 
-    if($count->num_rows() > 0){
-        $where_type = 'permissions_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'permissions_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'permissions';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(empty($permissions_type)){
+    if (empty($permissions_type)) {
         return $data;
-    }else{
-        if(isset($data->$permissions_type)){
+    } else {
+        if (isset($data->$permissions_type)) {
             return $data->$permissions_type;
-        }else{
+        } else {
             return false;
         }
     }
-} 
+}
 
-function is_user_client($user_id){
+function is_user_client($user_id)
+{
     $CI =& get_instance();
     $saas_id = $CI->session->userdata('saas_id');
     $query = $CI->db->select('groups.name AS group_name')
-    ->from('users_groups')
-    ->join('groups', 'users_groups.group_id = groups.id')
-    ->where('users_groups.user_id', $user_id)
-    ->where('groups.saas_id', $saas_id)
-    ->where('groups.name', 'client')
-    ->get();
+        ->from('users_groups')
+        ->join('groups', 'users_groups.group_id = groups.id')
+        ->where('users_groups.user_id', $user_id)
+        ->where('groups.saas_id', $saas_id)
+        ->where('groups.name', 'client')
+        ->get();
     if ($query->num_rows() > 0) {
         return true;
     } else {
@@ -1652,36 +1671,39 @@ function is_user_client($user_id){
     }
 }
 
-function is_client(){
+function is_client()
+{
     $CI =& get_instance();
     $saas_id = $CI->session->userdata('saas_id');
     $user_id = $CI->session->userdata('user_id');
 
     $query = $CI->db->select('groups.name AS group_name')
-    ->from('users_groups')
-    ->join('groups', 'users_groups.group_id = groups.id')
-    ->where('users_groups.user_id', $user_id)
-    ->where('groups.saas_id', $saas_id)
-    ->where('groups.name', 'client')
-    ->get();
+        ->from('users_groups')
+        ->join('groups', 'users_groups.group_id = groups.id')
+        ->where('users_groups.user_id', $user_id)
+        ->where('groups.saas_id', $saas_id)
+        ->where('groups.name', 'client')
+        ->get();
     if ($query->num_rows() > 0) {
         return true;
     } else {
         return false;
     }
 }
-function is_saas_admin(){
+function is_saas_admin()
+{
     $CI =& get_instance();
     $user_id = $CI->session->userdata('user_id');
     $group = $CI->ion_auth->get_users_groups($user_id)->result();
-    $role= $group[0]->name;
+    $role = $group[0]->name;
     if ($role == 'saas_admin') {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
-function selected_users() {
+function selected_users()
+{
     $CI =& get_instance();
     $saas_id = $CI->session->userdata('saas_id');
     $user_id = $CI->session->userdata('user_id');
@@ -1696,7 +1718,7 @@ function selected_users() {
         $group_id = $row->group_id;
         $row = $query->row();
         $group_id = $row->group_id;
-         // Use the retrieved group_id to fetch assigned users from the groups table
+        // Use the retrieved group_id to fetch assigned users from the groups table
         $CI->db->select('assigned_users');
         $CI->db->where('id', $group_id);
         $CI->db->where('saas_id', $saas_id);
@@ -1713,428 +1735,445 @@ function clients_permissions($permissions_type = '')
 {
     $CI =& get_instance();
 
-    $CI->db->where('type', 'clients_permissions_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', 'clients_permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
 
-    if($count->num_rows() > 0){
-        $where_type = 'clients_permissions_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'clients_permissions_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'clients_permissions';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(empty($permissions_type)){
+    if (empty($permissions_type)) {
         return $data;
-    }else{
-        if(isset($data->$permissions_type)){
+    } else {
+        if (isset($data->$permissions_type)) {
             return $data->$permissions_type;
-        }else{
+        } else {
             return false;
         }
     }
-} 
+}
 
-function project_status($field = '', $status_id = ''){
+function project_status($field = '', $status_id = '')
+{
     $CI =& get_instance();
-    if(!empty($field)){
+    if (!empty($field)) {
         $CI->db->select($field);
     }
     $CI->db->from('project_status');
-    if(!empty($status_id)){
-        $CI->db->where(['id'=>$status_id]);
+    if (!empty($status_id)) {
+        $CI->db->where(['id' => $status_id]);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
-        foreach($data as $key => $project_title){
+    if (!empty($data)) {
+        foreach ($data as $key => $project_title) {
             $tmp[$key] = $project_title;
-            if($project_title['title'] == 'Not Started'){
-            $tmp[$key]['title'] = $CI->lang->line('not_started')?$CI->lang->line('not_started'):'Not Started';
-            }elseif($project_title['title'] == 'On Going'){
-            $tmp[$key]['title'] = $CI->lang->line('on_going')?$CI->lang->line('on_going'):'On Going';
-            }elseif($project_title['title'] == 'Finished'){
-            $tmp[$key]['title'] = $CI->lang->line('finished')?$CI->lang->line('finished'):'Finished';
+            if ($project_title['title'] == 'Not Started') {
+                $tmp[$key]['title'] = $CI->lang->line('not_started') ? $CI->lang->line('not_started') : 'Not Started';
+            } elseif ($project_title['title'] == 'On Going') {
+                $tmp[$key]['title'] = $CI->lang->line('on_going') ? $CI->lang->line('on_going') : 'On Going';
+            } elseif ($project_title['title'] == 'Finished') {
+                $tmp[$key]['title'] = $CI->lang->line('finished') ? $CI->lang->line('finished') : 'Finished';
             }
         }
         return $tmp;
-    }else{
+    } else {
         return false;
     }
 }
 
-function priorities(){
+function priorities()
+{
     $CI =& get_instance();
     $CI->db->from('priorities');
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
-        foreach($data as $key => $priority){
+    if (!empty($data)) {
+        foreach ($data as $key => $priority) {
             $tmp[$key] = $priority;
-            if($priority['title'] == 'Low'){
-            $tmp[$key]['title'] = $CI->lang->line('low')?$CI->lang->line('low'):'Low';
-            }elseif($priority['title'] == 'Medium'){
-            $tmp[$key]['title'] = $CI->lang->line('medium')?$CI->lang->line('medium'):'Medium';
-            }elseif($priority['title'] == 'High'){
-            $tmp[$key]['title'] = $CI->lang->line('high')?$CI->lang->line('high'):'High';
+            if ($priority['title'] == 'Low') {
+                $tmp[$key]['title'] = $CI->lang->line('low') ? $CI->lang->line('low') : 'Low';
+            } elseif ($priority['title'] == 'Medium') {
+                $tmp[$key]['title'] = $CI->lang->line('medium') ? $CI->lang->line('medium') : 'Medium';
+            } elseif ($priority['title'] == 'High') {
+                $tmp[$key]['title'] = $CI->lang->line('high') ? $CI->lang->line('high') : 'High';
             }
         }
         return $tmp;
-    }else{
+    } else {
         return false;
     }
 }
 
-function task_status($id = ''){
+function task_status($id = '')
+{
     $CI =& get_instance();
     $CI->db->from('task_status');
-    if(!empty($id)){
-        $CI->db->where(['id'=>$id]);
+    if (!empty($id)) {
+        $CI->db->where(['id' => $id]);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
-        foreach($data as $key => $task_title){
+    if (!empty($data)) {
+        foreach ($data as $key => $task_title) {
             $tmp[$key] = $task_title;
-            if($task_title['title'] == 'Todo'){
-            $tmp[$key]['title'] = $CI->lang->line('todo')?$CI->lang->line('todo'):'Todo';
-            }elseif($task_title['title'] == 'In Progress'){
-            $tmp[$key]['title'] = $CI->lang->line('in_progress')?$CI->lang->line('in_progress'):'In Progress';
-            }elseif($task_title['title'] == 'In Review'){
-            $tmp[$key]['title'] = $CI->lang->line('in_review')?$CI->lang->line('in_review'):'In Review';
-            }elseif($task_title['title'] == 'Completed'){
-            $tmp[$key]['title'] = $CI->lang->line('completed')?$CI->lang->line('completed'):'Completed';
+            if ($task_title['title'] == 'Todo') {
+                $tmp[$key]['title'] = $CI->lang->line('todo') ? $CI->lang->line('todo') : 'Todo';
+            } elseif ($task_title['title'] == 'In Progress') {
+                $tmp[$key]['title'] = $CI->lang->line('in_progress') ? $CI->lang->line('in_progress') : 'In Progress';
+            } elseif ($task_title['title'] == 'In Review') {
+                $tmp[$key]['title'] = $CI->lang->line('in_review') ? $CI->lang->line('in_review') : 'In Review';
+            } elseif ($task_title['title'] == 'Completed') {
+                $tmp[$key]['title'] = $CI->lang->line('completed') ? $CI->lang->line('completed') : 'Completed';
             }
         }
         return $tmp;
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_razorpay_key_id($is_non_saas = false){
+function get_razorpay_key_id($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->razorpay_key_id)){
+        if (isset($data->razorpay_key_id)) {
             return $data->razorpay_key_id;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_paystack_public_key($is_non_saas = false){
+function get_paystack_public_key($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->paystack_public_key)){
+        if (isset($data->paystack_public_key)) {
             return $data->paystack_public_key;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_bank_details($is_non_saas = false){
+function get_bank_details($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->bank_details)){
+        if (isset($data->bank_details)) {
             return $data->bank_details;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_offline_bank_transfer($is_non_saas = false){
+function get_offline_bank_transfer($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->offline_bank_transfer)){
+        if (isset($data->offline_bank_transfer)) {
             return $data->offline_bank_transfer;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_stripe_publishable_key($is_non_saas = false){
+function get_stripe_publishable_key($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->stripe_publishable_key)){
+        if (isset($data->stripe_publishable_key)) {
             return $data->stripe_publishable_key;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
-function get_stripe_secret_key($is_non_saas = false){
+function get_stripe_secret_key($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->stripe_secret_key)){
+        if (isset($data->stripe_secret_key)) {
             return $data->stripe_secret_key;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_paystack_secret_key($is_non_saas = false){
+function get_paystack_secret_key($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->paystack_secret_key)){
+        if (isset($data->paystack_secret_key)) {
             return $data->paystack_secret_key;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_razorpay_key_secret($is_non_saas = false){
+function get_razorpay_key_secret($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->razorpay_key_secret)){
+        if (isset($data->razorpay_key_secret)) {
             return $data->razorpay_key_secret;
-        }else{
+        } else {
             return '';
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_paypal_secret($is_non_saas = false){
+function get_paypal_secret($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->paypal_secret)){
+        if (isset($data->paypal_secret)) {
             return $data->paypal_secret;
-        }else{
+        } else {
             return true;
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_payment_paypal($is_non_saas = false){
+function get_payment_paypal($is_non_saas = false)
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    if($is_non_saas){
-        $CI->db->where(['type'=>'payment_'.$CI->session->userdata('saas_id')]);
-    }else{
-        $CI->db->where(['type'=>'payment']);
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
     }
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if(isset($data->paypal_client_id)){
+        if (isset($data->paypal_client_id)) {
             return $data->paypal_client_id;
-        }else{
+        } else {
             return true;
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-function get_system_version(){
+function get_system_version()
+{
     $CI =& get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'system_version']);
+    $CI->db->where(['type' => 'system_version']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         return $data[0]['value'];
-    }else{
+    } else {
         return false;
     }
 }
 
-function is_my_project($id){
+function is_my_project($id)
+{
     $CI =& get_instance();
-    if($CI->ion_auth->in_group(4)){
-    $query = $CI->db->query("SELECT id FROM projects WHERE id=$id AND client_id=".$CI->session->userdata('user_id'));
-    }else{
-        $query = $CI->db->query("SELECT id FROM projects WHERE id=$id AND saas_id=".$CI->session->userdata('saas_id'));
+    if ($CI->ion_auth->in_group(4)) {
+        $query = $CI->db->query("SELECT id FROM projects WHERE id=$id AND client_id=" . $CI->session->userdata('user_id'));
+    } else {
+        $query = $CI->db->query("SELECT id FROM projects WHERE id=$id AND saas_id=" . $CI->session->userdata('saas_id'));
     }
-        
+
     $res = $query->result_array();
-    if(!empty($res)){
+    if (!empty($res)) {
         return true;
-    }else{
+    } else {
         return false;
-    } 
+    }
 }
 
-function get_earnings(){ 
-    
+function get_earnings()
+{
+
     $CI =& get_instance();
     $query = $CI->db->query("SELECT sum(amount) AS amount FROM transactions WHERE status=1");
     $res = $query->result_array();
-    if(!empty($res)){
-        return $res[0]['amount']?$res[0]['amount']:0;
-    }else{
+    if (!empty($res)) {
+        return $res[0]['amount'] ? $res[0]['amount'] : 0;
+    } else {
         return false;
     }
-    
+
 }
 
-function get_count($field,$table,$where = ''){ 
-    if(!empty($where))
-        $where = "where ".$where;
-        
+function get_count($field, $table, $where = '')
+{
+    if (!empty($where))
+        $where = "where " . $where;
+
     $CI =& get_instance();
-    $query = $CI->db->query("SELECT $field FROM ".$table." ".$where." ");
+    $query = $CI->db->query("SELECT $field FROM " . $table . " " . $where . " ");
     $res = $query->result_array();
-    if(!empty($res)){
+    if (!empty($res)) {
         return count($res);
-    }else{
+    } else {
         return 0;
     }
-    
+
 }
 
 function get_email_library()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
 
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->email_library)){
+    if (!empty($data->email_library)) {
         return $data->email_library;
-    }else{
+    } else {
         return "codeigniter";
     }
 }
@@ -2142,93 +2181,93 @@ function get_email_library()
 function smtp_host()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
 
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->smtp_host)){
+    if (!empty($data->smtp_host)) {
         return $data->smtp_host;
-    }else{
+    } else {
         return false;
     }
-} 
+}
 
 function smtp_port()
 {
     $CI =& get_instance();
 
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
-    
+    $CI->db->where(['type' => $where_type]);
+
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->smtp_port)){
+    if (!empty($data->smtp_port)) {
         return $data->smtp_port;
-    }else{
+    } else {
         return false;
     }
-} 
+}
 
 function smtp_email()
 {
     $CI =& get_instance();
     $CI->load->library('session');
-    
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
-    
+    $CI->db->where(['type' => $where_type]);
+
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->smtp_username)){
+    if (!empty($data->smtp_username)) {
         return $data->smtp_username;
-    }else{
+    } else {
         return false;
     }
 }
@@ -2236,30 +2275,30 @@ function smtp_email()
 function smtp_password()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
-    
+    $CI->db->where(['type' => $where_type]);
+
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->smtp_password)){
+    if (!empty($data->smtp_password)) {
         return $data->smtp_password;
-    }else{
+    } else {
         return false;
     }
 }
@@ -2267,30 +2306,30 @@ function smtp_password()
 function smtp_encryption()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'email_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'email_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'email_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'email';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
-    
+    $CI->db->where(['type' => $where_type]);
+
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->smtp_encryption)){
+    if (!empty($data->smtp_encryption)) {
         return $data->smtp_encryption;
-    }else{
+    } else {
         return false;
     }
 }
@@ -2299,364 +2338,366 @@ function company_name()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->company_name)){
+    if (!empty($data->company_name)) {
         return $data->company_name;
-    }else{
+    } else {
         return 'Your Company';
     }
-} 
+}
 
 function company_email()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->company_email)){
+    if (!empty($data->company_email)) {
         return $data->company_email;
-    }else{
+    } else {
         return 'admin@admin.com';
     }
-} 
+}
 
 function footer_text()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->footer_text)){
+    if (!empty($data->footer_text)) {
         return $data->footer_text;
-    }else{
-        return company_name().' '.date('Y').' All Rights Reserved';
+    } else {
+        return company_name() . ' ' . date('Y') . ' All Rights Reserved';
     }
-} 
+}
 
 function google_analytics()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->google_analytics)){
+    if (!empty($data->google_analytics)) {
         return $data->google_analytics;
-    }else{
+    } else {
         return false;
     }
-} 
+}
 
 function mysql_timezone()
 {
     $CI =& get_instance();
 
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->mysql_timezone)){
+    if (!empty($data->mysql_timezone)) {
         return $data->mysql_timezone;
-    }else{
+    } else {
         return '-11:00';
     }
-} 
+}
 
 function alert_days()
 {
     $CI =& get_instance();
-    
+
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(isset($data->alert_days) && !empty($data->alert_days)){
+    if (isset($data->alert_days) && !empty($data->alert_days)) {
         return $data->alert_days;
-    }else{
+    } else {
         return 1;
     }
-} 
+}
 
 function php_timezone()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->php_timezone)){
+    if (!empty($data->php_timezone)) {
         return $data->php_timezone;
-    }else{
+    } else {
         return 'Pacific/Midway';
     }
-} 
+}
 
 function system_date_format_js()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->date_format_js)){
+    if (!empty($data->date_format_js)) {
         return $data->date_format_js;
-    }else{
+    } else {
         return 'd-m-yyyy';
     }
-} 
+}
 
 function system_time_format_js()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->time_format_js)){
+    if (!empty($data->time_format_js)) {
         return $data->time_format_js;
-    }else{
+    } else {
         return 'hh:MM A';
     }
-} 
+}
 
-function count_days_btw_two_dates($today , $sec_date){
+function count_days_btw_two_dates($today, $sec_date)
+{
     $CI =& get_instance();
-    $today=date_create($today);
-    $sec_date=date_create($sec_date);
-    $diff=date_diff($today,$sec_date);
+    $today = date_create($today);
+    $sec_date = date_create($sec_date);
+    $diff = date_diff($today, $sec_date);
     $data['days'] = $diff->format("%a");
-    if($today < $sec_date || $today == $sec_date){
-        $data['days_status'] = $CI->lang->line('left')?$CI->lang->line('left'):'Left';
-    }else{
-        $data['days_status'] = $CI->lang->line('overdue')?$CI->lang->line('overdue'):'Overdue';
+    if ($today < $sec_date || $today == $sec_date) {
+        $data['days_status'] = $CI->lang->line('left') ? $CI->lang->line('left') : 'Left';
+    } else {
+        $data['days_status'] = $CI->lang->line('overdue') ? $CI->lang->line('overdue') : 'Overdue';
     }
     return $data;
 }
 
-function format_date($date, $date_format){
-    $date = str_replace('/', '-', $date);  
+function format_date($date, $date_format)
+{
+    $date = str_replace('/', '-', $date);
     $date = date_create($date);
-    return date_format($date,$date_format);
+    return date_format($date, $date_format);
 }
 
 function system_date_format()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->date_format)){
+    if (!empty($data->date_format)) {
         return $data->date_format;
-    }else{
+    } else {
         return 'd-m-Y';
     }
-} 
+}
 
 function system_time_format()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->time_format)){
+    if (!empty($data->time_format)) {
         return $data->time_format;
-    }else{
+    } else {
         return 'h:i A';
     }
-} 
+}
 
 function full_logo()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->full_logo)){
+    if (!empty($data->full_logo)) {
         return $data->full_logo;
-    }else{
+    } else {
         return 'logo.png';
     }
-} 
+}
 
 function file_upload_format()
 {
     $CI =& get_instance();
-    
-    $CI->db->where('type', 'general_'.$CI->session->userdata('saas_id'));
+
+    $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
-    if($count->num_rows() > 0){
-        $where_type = 'general_'.$CI->session->userdata('saas_id');
-    }else{
+    if ($count->num_rows() > 0) {
+        $where_type = 'general_' . $CI->session->userdata('saas_id');
+    } else {
         $where_type = 'general';
     }
 
     $CI->db->from('settings');
-    $CI->db->where(['type'=>$where_type]);
+    $CI->db->where(['type' => $where_type]);
 
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->file_upload_format)){
+    if (!empty($data->file_upload_format)) {
         return $data->file_upload_format;
-    }else{
+    } else {
         return 'jpg|png';
     }
 }
@@ -2665,131 +2706,162 @@ function half_logo()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
 
-    if(!$data){
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->half_logo)){
+    if (!empty($data->half_logo)) {
         return $data->half_logo;
-    }else{
+    } else {
         return 'logo-half.png';
     }
-} 
+}
 
 function favicon()
 {
     $CI =& get_instance();
     $CI->db->from('settings');
-    $CI->db->where(['type'=>'general']);
+    $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
     $data = $query->result_array();
-    
-    if(!$data){
+
+    if (!$data) {
         return false;
     }
-    
+
     $data = json_decode($data[0]['value']);
 
-    if(!empty($data->favicon)){
+    if (!empty($data->favicon)) {
         return $data->favicon;
-    }else{
+    } else {
         return 'favicon.png';
     }
-} 
+}
 
 
-function time_formats(){
+function time_formats()
+{
     $CI =& get_instance();
     $CI->db->from('time_formats');
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         return $data;
-    }else{
+    } else {
         return false;
     }
 }
 
-function date_formats(){
+function date_formats()
+{
     $CI =& get_instance();
     $CI->db->from('date_formats');
     $query = $CI->db->get();
     $data = $query->result_array();
-    if(!empty($data)){
+    if (!empty($data)) {
         return $data;
-    }else{
+    } else {
         return false;
     }
 }
 
-function timezones(){
+function timezones()
+{
     $list = DateTimeZone::listAbbreviations();
     $idents = DateTimeZone::listIdentifiers();
-    
-        $data = $offset = $added = array();
-        foreach ($list as $abbr => $info) {
-            foreach ($info as $zone) {
-                if ( ! empty($zone['timezone_id'])
-                    AND
-                    ! in_array($zone['timezone_id'], $added)
-                    AND 
-                      in_array($zone['timezone_id'], $idents)) {
-                    $z = new DateTimeZone($zone['timezone_id']);
-                    $c = new DateTime(null, $z);
-                    $zone['time'] = $c->format('H:i a');
-                    $offset[] = $zone['offset'] = $z->getOffset($c);
-                    $data[] = $zone;
-                    $added[] = $zone['timezone_id'];
-                }
+
+    $data = $offset = $added = array();
+    foreach ($list as $abbr => $info) {
+        foreach ($info as $zone) {
+            if (
+                !empty($zone['timezone_id'])
+                and
+                !in_array($zone['timezone_id'], $added)
+                and
+                in_array($zone['timezone_id'], $idents)
+            ) {
+                $z = new DateTimeZone($zone['timezone_id']);
+                $c = new DateTime(null, $z);
+                $zone['time'] = $c->format('H:i a');
+                $offset[] = $zone['offset'] = $z->getOffset($c);
+                $data[] = $zone;
+                $added[] = $zone['timezone_id'];
             }
         }
-    
-        array_multisort($offset, SORT_ASC, $data);
-        
-        $i = 0;$temp = array();
-        foreach ($data as $key => $row) {
-            $temp[0] = $row['time'];
-            $temp[1] = formatOffset($row['offset']);
-            $temp[2] = $row['timezone_id'];
-            $options[$i++] = $temp;
-        }
-        
-        if(!empty($options)){
-            return $options;
-        }
+    }
+
+    array_multisort($offset, SORT_ASC, $data);
+
+    $i = 0;
+    $temp = array();
+    foreach ($data as $key => $row) {
+        $temp[0] = $row['time'];
+        $temp[1] = formatOffset($row['offset']);
+        $temp[2] = $row['timezone_id'];
+        $options[$i++] = $temp;
+    }
+
+    if (!empty($options)) {
+        return $options;
+    }
 }
 
-function formatOffset($offset) {
+function formatOffset($offset)
+{
     $hours = $offset / 3600;
     $remainder = $offset % 3600;
     $sign = $hours > 0 ? '+' : '-';
     $hour = (int) abs($hours);
     $minutes = (int) abs($remainder / 60);
 
-    if ($hour == 0 AND $minutes == 0) {
+    if ($hour == 0 and $minutes == 0) {
         $sign = ' ';
     }
-    return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT).':'. str_pad($minutes,2, '0');
+    return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($minutes, 2, '0');
 }
 // new pms
-function get_user_id_from_employee_id($employee_id){
+function get_user_id_from_employee_id($employee_id)
+{
     $CI =& get_instance();
-    $employeeIdQuery =  $CI->db->select('id')->get_where('users', array('employee_id' => $employee_id));
-        $employeeIdRow = $employeeIdQuery->row();
-        $employeeId = $employeeIdRow->id;
-       return $employeeId;
+    $employeeIdQuery = $CI->db->select('id')->get_where('users', array('employee_id' => $employee_id));
+    $employeeIdRow = $employeeIdQuery->row();
+    $employeeId = $employeeIdRow->id;
+    return $employeeId;
 }
-function get_employee_id_from_user_id($id){
+function get_employee_id_from_user_id($id)
+{
     $CI =& get_instance();
-    $employeeIdQuery =  $CI->db->select('employee_id')->get_where('users', array('id' => $id));
-        $employeeIdRow = $employeeIdQuery->row();
-        $employeeId = $employeeIdRow->employee_id;
-       return $employeeId;
+    $employeeIdQuery = $CI->db->select('employee_id')->get_where('users', array('id' => $id));
+    $employeeIdRow = $employeeIdQuery->row();
+    $employeeId = $employeeIdRow->employee_id;
+    return $employeeId;
 }
+
+
+function if_allowd_to_create_new($checking_for)
+{
+    $CI =& get_instance();
+    $total_number_allowed_of_what_you_are_looking_for = (int) get_current_plan()[$checking_for];
+
+    if ($total_number_allowed_of_what_you_are_looking_for == -1)
+        return true;
+
+    $user_id = $CI->session->userdata('saas_id');
+    $query = $CI->db->query("SELECT COUNT(*) AS 'total' from `$checking_for` where `saas_id` = $user_id");
+
+    $data = $query->result_array();
+    $current_number = (int) $data[0]['total'];
+
+    if ($current_number < $total_number_allowed_of_what_you_are_looking_for)
+        return true;
+    return false;
+}
+
+
 ?>

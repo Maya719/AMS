@@ -1,4 +1,8 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+use function PHPSTORM_META\type;
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Projects extends CI_Controller
 {
@@ -741,12 +745,12 @@ class Projects extends CI_Controller
 						mkdir($upload_path, 0775, true);
 					}
 
-					$config['upload_path']          = $upload_path;
-					$config['allowed_types']        = file_upload_format();
-					$config['overwrite']             = false;
-					$config['max_size']             = 0;
-					$config['max_width']            = 0;
-					$config['max_height']           = 0;
+					$config['upload_path'] = $upload_path;
+					$config['allowed_types'] = file_upload_format();
+					$config['overwrite'] = false;
+					$config['max_size'] = 0;
+					$config['max_width'] = 0;
+					$config['max_height'] = 0;
 					$this->load->library('upload', $config);
 					$full_logo = '';
 					if ($this->upload->do_upload('attachment')) {
@@ -1183,12 +1187,12 @@ class Projects extends CI_Controller
 				mkdir($upload_path, 0775, true);
 			}
 
-			$config['upload_path']          = $upload_path;
-			$config['allowed_types']        = file_upload_format();
-			$config['overwrite']             = false;
-			$config['max_size']             = 0;
-			$config['max_width']            = 0;
-			$config['max_height']           = 0;
+			$config['upload_path'] = $upload_path;
+			$config['allowed_types'] = file_upload_format();
+			$config['overwrite'] = false;
+			$config['max_size'] = 0;
+			$config['max_width'] = 0;
+			$config['max_height'] = 0;
 			$this->load->library('upload', $config);
 			if (!empty($_FILES['file']['name'])) {
 
@@ -1493,6 +1497,13 @@ class Projects extends CI_Controller
 
 	public function index()
 	{
+
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// error_reporting(E_ALL);
+
+		$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
+
 		if ($this->ion_auth->logged_in() && is_module_allowed('projects') && !$this->ion_auth->in_group(3) && ($this->ion_auth->is_admin() || permissions('project_view'))) {
 			$this->data['page_title'] = 'Projects - ' . company_name();
 			$this->data['main_page'] = 'Projects';
@@ -1507,7 +1518,8 @@ class Projects extends CI_Controller
 				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
 				$this->data['system_users'] = $users;
 			}
-			$this->data['system_clients'] = $this->ion_auth->users(array(4))->result();;
+			$this->data['system_clients'] = $this->ion_auth->users(array(4))->result();
+			;
 
 			$this->data['project_status'] = project_status();
 
@@ -1551,35 +1563,35 @@ class Projects extends CI_Controller
 			$config["per_page"] = 10;
 			$config["uri_segment"] = 2;
 
-			$config['next_link']        = 'Next';
-			$config['prev_link']        = 'Previous';
-			$config['first_link']       = false;
-			$config['last_link']        = false;
-			$config['full_tag_open']    = '<nav aria-label="...">
+			$config['next_link'] = 'Next';
+			$config['prev_link'] = 'Previous';
+			$config['first_link'] = false;
+			$config['last_link'] = false;
+			$config['full_tag_open'] = '<nav aria-label="...">
 											<ul class="pagination">';
-			$config['full_tag_close']   = '</ul>
+			$config['full_tag_close'] = '</ul>
 											</nav>';
-			$config['attributes']       = ['class' => 'page-link'];
+			$config['attributes'] = ['class' => 'page-link'];
 
-			$config['first_tag_open']   = '<li class="page-item">';
-			$config['first_tag_close']  = '</li>';
+			$config['first_tag_open'] = '<li class="page-item">';
+			$config['first_tag_close'] = '</li>';
 
-			$config['prev_tag_open']    = '<li class="page-item">';
-			$config['prev_tag_close']   = '</li>';
+			$config['prev_tag_open'] = '<li class="page-item">';
+			$config['prev_tag_close'] = '</li>';
 
-			$config['next_tag_open']    = '<li class="page-item">';
-			$config['next_tag_close']   = '</li>';
+			$config['next_tag_open'] = '<li class="page-item">';
+			$config['next_tag_close'] = '</li>';
 
-			$config['last_tag_open']    = '<li class="page-item">';
-			$config['last_tag_close']   = '</li>';
+			$config['last_tag_open'] = '<li class="page-item">';
+			$config['last_tag_close'] = '</li>';
 
-			$config['cur_tag_open']     = '<li class="page-item active">
+			$config['cur_tag_open'] = '<li class="page-item active">
 			<a class="page-link" href="#">';
-			$config['cur_tag_close']    = '<span class="sr-only">(current)</span></a>
+			$config['cur_tag_close'] = '<span class="sr-only">(current)</span></a>
 			</li>';
 
-			$config['num_tag_open']     = '<li class="page-item">';
-			$config['num_tag_close']    = '</li>';
+			$config['num_tag_open'] = '<li class="page-item">';
+			$config['num_tag_close'] = '</li>';
 
 			$this->pagination->initialize($config);
 
@@ -1818,7 +1830,7 @@ class Projects extends CI_Controller
 				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
 				echo json_encode($this->data);
 			}
-			
+
 			$this->form_validation->set_rules('title', 'Project Title', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('client', 'Client', 'required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('board', 'Board', 'trim|strip_tags|xss_clean');

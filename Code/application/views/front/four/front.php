@@ -112,7 +112,7 @@
                     <div class="row align-items-center">
                         <div class="col-6 col-lg-6 col-xl-2">
                             <div class="tp-header-logo tp-header-logo-border">
-                                <a href="<?=base_url()?>">
+                                <a href="<?= base_url() ?>">
                                     <img src='<?= base_url('assets/uploads/logos/' . full_logo()) ?>' height="50" alt="">
                                 </a>
                             </div>
@@ -155,7 +155,7 @@
     <div class="tp-offcanvas-area fix">
         <div class="tp-side-info">
             <div class="tp-side-logo">
-                <a href="<?=base_url()?>">
+                <a href="<?= base_url() ?>">
                     <img src='<?= base_url('assets/uploads/logos/' . full_logo()) ?>' height="30" alt="logo">
                 </a>
             </div>
@@ -221,7 +221,7 @@
                                                     <div class="tp-hero-title-wrapper">
                                                         <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Efficient Solutions for Business Management Needs' ?></h5>
                                                     </div>
-                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our premier solution maximizes productivity with streamlined collaboration. Focused on simplicity and efficiency, it empowers success. Utilizing cutting-edge tech and expert support, our platform offers seamless management of operations and relationships.'?></p>
+                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our premier solution maximizes productivity with streamlined collaboration. Focused on simplicity and efficiency, it empowers success. Utilizing cutting-edge tech and expert support, our platform offers seamless management of operations and relationships.' ?></p>
                                                     <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">
                                                         <a class="tp-btn" href="<?= base_url('auth/register') ?>" target="_blank">Get Started <i class="fa-regular fa-arrow-right-long"></i></a>
                                                         <span>Happy <br> Members</span>
@@ -313,8 +313,8 @@
             <!-- our service area start -->
             <section class="tp-service-area fix tp-service-overlay pt-120 pb-110 p-relative" id="feature">
                 <div class="tp-service-shape">
-                    <img class="service-1" src="<?=base_url('assets/front/four/img/services/shape-wrapper.png')?>" alt="">
-                    <img class="service-2" src="<?=base_url('assets/front/four/img/services/shape-wrapper2.png')?>" alt="">
+                    <img class="service-1" src="<?= base_url('assets/front/four/img/services/shape-wrapper.png') ?>" alt="">
+                    <img class="service-2" src="<?= base_url('assets/front/four/img/services/shape-wrapper2.png') ?>" alt="">
                 </div>
                 <div class="container-fluid">
                     <div class="row">
@@ -363,7 +363,7 @@
         <!-- price area start -->
         <div id="featureItem" class="tp-pricing-area p-relative pt-120">
             <div class="tp-pricing-shape d-none d-lg-block">
-                <img class="mousemove__image shape-1" src="<?=base_url('assets/front/four/img/pricing/bublble-1.png')?>" alt="">
+                <img class="mousemove__image shape-1" src="<?= base_url('assets/front/four/img/pricing/bublble-1.png') ?>" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -525,8 +525,66 @@
                 </div>
             </div>
         </div>
-        </div>
         <!-- price area end -->
+        <!-- about area start -->
+        <section class="tp-about-area pt-120 pb-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="row tp-gx-20 ">
+                            <div class="tp-about-thumb-wrapper wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
+                                <div class="tp-about-thumb">
+                                    <img src="<?=base_url('assets/front/four/img/about/img-1.jpg')?>" alt="">
+                                </div>
+                                <div class="tp-about-thumb p-relative">
+                                    <img class="mb-20" src="<?=base_url('assets/front/four/img/about/img-2.jpg')?>" alt="">
+                                    <div class="skill__progress-circle mr-30">
+                                        <div class="progress-circular">
+                                            <input type="text" class="knob" value="0" data-rel="100" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#ffc700" data-thickness=".15" data-readonly="true" disabled>
+                                        </div>
+                                        <h4>Project Success</h4>
+                                    </div>
+                                    <img src="<?=base_url('assets/front/four/img/about/img-3.jpg')?>" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="tp-about-section-title-wrapper wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
+                            <span class="tp-section__title-pre">
+                                about our company
+                            </span>
+                            <h3 class="tp-section__title mb-25">Efficient Software Solutions by Airnet-Technologies</h3>
+                            <p>Airnet-Technologies offers rapid, user-friendly software solutions tailored for streamlined operations. Our expert team ensures efficiency and excellence in every digital experience.</p>
+                            <div class="tp-about-inner-wrapper d-flex flex-wrap">
+                                <div class="tp-about-inner d-flex">
+                                    <div class="tp-about-inner-thumb">
+                                        <i class="flaticon-cpu"></i>
+                                    </div>
+                                    <div class="tp-about-inner-text">
+                                        <h4 class="tp-about-inner-title">Mobile Application</h4>
+                                        <p>Standard dummy text ever since <br> the unknown printer took.</p>
+                                    </div>
+                                </div>
+                                <div class="tp-about-inner d-flex">
+                                    <div class="tp-about-inner-thumb">
+                                        <i class="flaticon-medal"></i>
+                                    </div>
+                                    <div class="tp-about-inner-text">
+                                        <h4 class="tp-about-inner-title">Award Winning</h4>
+                                        <p>Standard dummy text ever since <br> the unknown printer took.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tp-about-btn">
+                                <a class="tp-btn" href="service.html">Our Services <i class="fa-regular fa-arrow-right-long"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- about area end -->
     </main>
 
     <!-- footer area start -->
@@ -571,18 +629,18 @@
                                 <div class="tp-footer-2-widget-1">
                                     <span class="mb-30 ">Quick Links</span>
                                     <ul class="tp-footer-list-float">
-                                        <li><a href="<?=base_url()?>">Home</a></li>
-                                        <?php if(frontend_permissions('about')){ ?>
-                                        <li><a href="<?=base_url('front/about-us')?>">About</a></li>
+                                        <li><a href="<?= base_url() ?>">Home</a></li>
+                                        <?php if (frontend_permissions('about')) { ?>
+                                            <li><a href="<?= base_url('front/about-us') ?>">About</a></li>
                                         <?php } ?>
                                         <li><a href="#featureItem">Pricing</a></li>
                                         <li><a href="#contact">Contact</a></li>
                                         <li><a href="#">Team Members</a></li>
-                                        <?php if(frontend_permissions('privacy')){ ?>
-                                        <li><a href="<?=base_url('front/privacy-policy')?>">Privacy & Policy</a></li>
+                                        <?php if (frontend_permissions('privacy')) { ?>
+                                            <li><a href="<?= base_url('front/privacy-policy') ?>">Privacy & Policy</a></li>
                                         <?php } ?>
-                                        <?php if(frontend_permissions('terms')){ ?>
-                                        <li><a href="<?=base_url('front/terms-and-conditions')?>">Terms & Condition</a></li>
+                                        <?php if (frontend_permissions('terms')) { ?>
+                                            <li><a href="<?= base_url('front/terms-and-conditions') ?>">Terms & Condition</a></li>
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -596,7 +654,7 @@
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-6 col-lg-4">
                             <div class="tp-footer-2-logo">
-                                <a href="<?=base_url()?>"><img src='<?= base_url('assets/uploads/logos/' . full_logo()) ?>' height="40" alt=""></a>
+                                <a href="<?= base_url() ?>"><img src='<?= base_url('assets/uploads/logos/' . full_logo()) ?>' height="40" alt=""></a>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4">
@@ -655,9 +713,9 @@
     <script src="<?= base_url('assets/front/comman.js') ?>"></script>
     <div id="cookie-bar">
         <div class="cookie-bar-body">
-            <p><?=$this->lang->line('frontend_cookie_message')?htmlspecialchars($this->lang->line('frontend_cookie_message')):'We use cookies to ensure that we give you the best experience on our website.'?></p>
+            <p><?= $this->lang->line('frontend_cookie_message') ? htmlspecialchars($this->lang->line('frontend_cookie_message')) : 'We use cookies to ensure that we give you the best experience on our website.' ?></p>
             <div class="cookie-bar-action">
-                <button type="button" class="text-uppercase btn btn-primary text-white cookie-bar-btn"><?=$this->lang->line('i_agree')?$this->lang->line('i_agree'):'I Agree!'?></button>
+                <button type="button" class="text-uppercase btn btn-primary text-white cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
             </div>
         </div>
     </div>
