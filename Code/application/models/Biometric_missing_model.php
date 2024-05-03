@@ -105,8 +105,12 @@ class Biometric_missing_model extends CI_Model
                     $where .= " WHERE bm.user_id = " . $get['user_id'];
                 } else {
                     $selected = selected_users();
+                    foreach ($selected as $value) {
+                        $id = get_employee_id_from_user_id($value);
+                        $system_user[]=$id;
+                    }
                     if (!empty($selected)) {
-                        $userIdsString = implode(',', $selected);
+                        $userIdsString = implode(',', $system_user);
                         $where = " WHERE bm.user_id IN ($userIdsString)";
                     }
                 }

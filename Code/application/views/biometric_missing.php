@@ -323,7 +323,13 @@
         theadRow += '<th>Time</th>';
         theadRow += '<th>Status</th>';
         theadRow += '<th>Created</th>';
-        theadRow += '<th>Action</th>';
+        <?php
+        if (permissions('biometric_request_edit') || permissions('biometric_request_delete')) {
+        ?>
+          theadRow += '<th>Action</th>';
+        <?php
+        }
+        ?>
         theadRow += '</tr>';
         thead.html(theadRow);
         // Add table body
@@ -339,17 +345,43 @@
           userRow += '<td>' + user.time + '</td>';
           userRow += '<td>' + user.status + '</td>';
           userRow += '<td>' + created + '</td>';
-          userRow += '<td>';
-          userRow += '<div class="d-flex">';
-          if (user.btn) {
-            userRow += '<a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a>';
-            userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
-          } else {
-            userRow += '<a href="#" class="text-muted" disabled><i class="fa fa-pencil"></i></a>';
-            userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
+          <?php
+          if (permissions('biometric_request_edit') || permissions('biometric_request_delete')) {
+          ?>
+            userRow += '<td>';
+            userRow += '<div class="d-flex">';
+            if (user.btn) {
+              <?php
+              if (permissions('biometric_request_edit')) {
+              ?>
+                userRow += '<a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a>';
+              <?php
+              }
+              if (permissions('biometric_request_delete')) {
+              ?>
+                userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
+              <?php
+              }
+              ?>
+            } else {
+              <?php
+              if (permissions('biometric_request_edit')) {
+              ?>
+                userRow += '<a href="#" class="text-muted" disabled><i class="fa fa-pencil"></i></a>';
+              <?php
+              }
+              if (permissions('biometric_request_delete')) {
+              ?>
+                userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
+              <?php
+              }
+              ?>
+            }
+            userRow += '</div>';
+            userRow += '</td>';
+          <?php
           }
-          userRow += '</div>';
-          userRow += '</td>';
+          ?>
           userRow += '</tr>';
           tbody.append(userRow);
         });
@@ -368,7 +400,9 @@
           "order": false,
           "pageLength": 10,
           "dom": '<"top"f>rt<"bottom"lp><"clear">',
-          "order": [[6, "desc"]]
+          "order": [
+            [6, "desc"]
+          ]
         });
       }
 
