@@ -344,7 +344,7 @@ class Board extends CI_Controller
                         <div class="section-title mt-3 mb-1">' . ($this->lang->line('priority') ? ($this->lang->line('priority')) : 'Priority') . '</div>
                         <span class="badge light badge-' . $issue["priority_class"] . '">' . ($issue['priority_title']) . '</span>
                         <div class="row justify-content-between align-items-center kanban-user">
-                            <div class="section-title mt-3 mb-1">' . ($this->lang->line('team_members') ? ($this->lang->line('team_members')) : 'Team Members') . '</div>';
+                            <div class="section-title mt-3 mb-1">' . ($this->lang->line('team_member') ? ($this->lang->line('team_member')) : 'Team Member') . '</div>';
         if (!empty($issue["profile"])) {
             $html .= '<ul class="users col-6">
                                             <li style="cursor: pointer;">
@@ -356,7 +356,7 @@ class Board extends CI_Controller
                                         </ul>';
         }
         $html .= '
-            <!--<div class="col-6 d-flex justify-content-end">
+                            <!--<div class="col-6 d-flex justify-content-end">
                                     <span class="fs-14"><i class="far fa-clock me-2"></i>Due in 4 days</span>
                                 </div> -->
                             </div>

@@ -60,6 +60,7 @@ class Issues extends CI_Controller
             $this->data['page_title'] = 'Edit issue - ' . company_name();
             $this->data['main_page'] = 'Edit issue';
             $this->data['current_user'] = $this->ion_auth->user()->row();
+
             $this->db->select('*');
             $this->db->from('projects');
             $this->db->where_in('saas_id', $this->session->userdata());
@@ -81,6 +82,26 @@ class Issues extends CI_Controller
             $this->db->where('id', $id);
             $query2 = $this->db->get();
             $this->data['issue'] = $query2->row();
+            $project_id = $query2->row()->project_id;
+
+            $this->data['project_id'] = $project_id;
+
+            $this->db->select('*');
+            $this->db->from('projects');
+            $this->db->where_in('id', $project_id);
+            $query = $this->db->get();
+            $this->data['issue_projects'] = $query->row();
+
+            $this->db->select('*');
+            $this->db->from('project_users');
+            $this->db->where_in('project_id', $project_id);
+            $query = $this->db->get();
+            $project_users = $query->result_array();
+
+            foreach ($project_users as $us) {
+                $pr_users[] = $this->ion_auth->user($us["user_id"])->row();
+            }
+            $this->data['project_users'] = $pr_users;
 
             $this->db->select('*');
             $this->db->from('issues_sprint');
@@ -89,8 +110,8 @@ class Issues extends CI_Controller
             $this->data['issues_sprint'] = $query2->row();
 
             $this->db->select('*');
-            $this->db->from('issues_users');
-            $this->db->where('issue_id', $id);
+            $this->db->from('task_users');
+            $this->db->where('task_id', $id);
             $query2 = $this->db->get();
             $this->data['issues_users'] = $query2->row();
 
@@ -310,7 +331,7 @@ class Issues extends CI_Controller
             }
             if (!empty($id) && is_numeric($id) && $this->issues_model->delete_issue($id)) {
                 $this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
-				$this->session->set_flashdata('message_type', 'success');
+                $this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;
                 $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Started successfully.";
                 echo json_encode($this->data);
@@ -361,7 +382,7 @@ class Issues extends CI_Controller
             $project_id = $this->input->post('project_id');
             $data = $this->issues_model->get_project_users($project_id);
             $dash = $this->issues_model->get_project_dash($project_id);
-            echo json_encode(array('users'=>$data,'dash_type'=>$dash));
+            echo json_encode(array('users' => $data, 'dash_type' => $dash));
         } else {
             $this->data['error'] = true;
             $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
