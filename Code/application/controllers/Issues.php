@@ -140,7 +140,6 @@ class Issues extends CI_Controller
     }
     public function create_issue()
     {
-
         if ($this->ion_auth->logged_in()) {
             $this->form_validation->set_rules('issue_type', 'Type', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('project_id', 'Project', 'trim|required|strip_tags|xss_clean');
@@ -149,7 +148,8 @@ class Issues extends CI_Controller
             $this->form_validation->set_rules('description', 'description', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('user', 'Assignee', 'trim|required|strip_tags|xss_clean');
             if ($this->form_validation->run() == TRUE) {
-
+                $due_date = format_date($this->input->post('due_date'), "Y-m-d");
+                $starting_date = format_date($this->input->post('starting_date'), "Y-m-d");
                 $data = [
                     'title' => $this->input->post('title'),
                     'saas_id' => $this->session->userdata('saas_id'),
@@ -160,6 +160,8 @@ class Issues extends CI_Controller
                     'created_by' => $this->session->userdata('user_id'),
                     'status' => $this->input->post('status') ? $this->input->post('status') : '1',
                     'description' => $this->input->post('description') ? $this->input->post('description') : '',
+                    'due_date' => $due_date,
+                    'starting_date' => $starting_date,
                 ];
                 $id = $this->issues_model->create_issue($data);
                 if ($id) {
@@ -212,7 +214,6 @@ class Issues extends CI_Controller
             $this->form_validation->set_rules('priority', 'Priority', 'trim|required|strip_tags|xss_clean');
             $this->form_validation->set_rules('description', 'description', 'trim|required|strip_tags|xss_clean');
             if ($this->form_validation->run() == TRUE) {
-
                 $data = [
                     'title' => $this->input->post('title'),
                     'saas_id' => $this->session->userdata('saas_id'),
@@ -222,6 +223,8 @@ class Issues extends CI_Controller
                     'priority' => $this->input->post('priority') ? $this->input->post('priority') : '1',
                     'status' => $this->input->post('status') ? $this->input->post('status') : '1',
                     'story_points' => $this->input->post('story_points') ? $this->input->post('story_points') : '',
+                    'due_date' => $this->input->post('due_date') ? format_date($this->input->post('due_date'), "Y-m-d") : date('Y-m-d'),
+                    'starting_date' => $this->input->post('starting_date') ? format_date($this->input->post('starting_date'), "Y-m-d") : date('Y-m-d'),
                 ];
                 if ($this->issues_model->edit_issue($this->input->post('update_id'), $data)) {
                     if ($this->input->post('sprint')) {
