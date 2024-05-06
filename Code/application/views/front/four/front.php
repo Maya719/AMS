@@ -218,7 +218,7 @@
                                             <div class="tp-hero-wrapper d-flex align-items-center">
                                                 <div class="tp-hero-2-content">
                                                     <div class="tp-hero-title-wrapper">
-                                                        <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Efficient Solutions for Business Management Needs' ?></h5>
+                                                        <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Efficient Solutions for Business Management' ?></h5>
                                                     </div>
                                                     <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our premier solution maximizes productivity with streamlined collaboration. Focused on simplicity and efficiency, it empowers success. Utilizing cutting-edge tech and expert support, our platform offers seamless management of operations and relationships.' ?></p>
                                                     <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">

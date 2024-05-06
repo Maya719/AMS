@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Issue Type <span class="text-danger">*</span></label>
-                                            <select class="form-control wide" name="issue_type">
+                                            <select class="form-control wide" name="issue_type" id="issue_type">
                                                 <option value="epic" <?= ($issue->issue_type === 'epic') ? 'selected' : ''; ?>>Epic</option>
                                                 <option value="story" <?= ($issue->issue_type === 'story') ? 'selected' : ''; ?>>Story</option>
                                                 <option value="task" <?= ($issue->issue_type === 'task') ? 'selected' : ''; ?>>Task</option>
@@ -96,7 +96,7 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-4 mb-3">
+                                        <div class="col-sm-4 mb-3" id="story_point_show">
                                             <label class="form-label">Story Points</label>
                                             <input type="number" class="form-control" name="story_points" min="0" value="<?= $issue->story_points ?>">
                                         </div>
@@ -255,10 +255,18 @@
             },
             singleDatePicker: true,
             startDate: moment(dueDate, 'YYYY-MM-DD').toDate(),
-            minDate: moment(start_date, 'YYYY-MM-DD').toDate() 
+            minDate: moment(start_date, 'YYYY-MM-DD').toDate()
 
         });
 
+        $('#issue_type').on('change', function() {
+            issue_type = $('#issue_type').val();
+            if (issue_type !== 'task') {
+                $('#story_point_show').show();
+            } else {
+                $('#story_point_show').hide();
+            }
+        });
         startingDatepicker.on('change', function(ev, picker) {
             start = $('#starting_date').val();
             $('#due_date').daterangepicker({
