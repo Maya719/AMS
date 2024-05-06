@@ -100,6 +100,14 @@
                                             <label class="form-label">Story Points</label>
                                             <input type="number" class="form-control" name="story_points" min="0" value="<?= $issue->story_points ?>">
                                         </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
+                                            <input type="text" name="starting_date" id="starting_date" class="form-control" value="">
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label"><?= $this->lang->line('due_date') ? $this->lang->line('due_date') : 'Due Date' ?><span class="text-danger">*</span></label>
+                                            <input type="text" name="due_date" id="due_date" class="form-control" value="">
+                                        </div>
                                         <div class="col-sm-12 mb-3">
                                             <label class="form-label">Title<span class="text-danger">*</span></label>
                                             <input type="text" value="<?= $issue->title ?>" class="form-control" name="title">
@@ -225,6 +233,42 @@
                         }
                     });
                 }
+            });
+        });
+
+        start_date = '<?= $issue->starting_date ?>';
+        dueDate = '<?= $issue->due_date ?>';
+
+
+        var startingDatepicker = $('#starting_date').daterangepicker({
+            locale: {
+                format: date_format_js
+            },
+            singleDatePicker: true,
+            startDate: moment(start_date, 'YYYY-MM-DD').toDate(),
+        });
+
+
+        $('#due_date').daterangepicker({
+            locale: {
+                format: date_format_js
+            },
+            singleDatePicker: true,
+            startDate: moment(dueDate, 'YYYY-MM-DD').toDate(),
+            minDate: moment(start_date, 'YYYY-MM-DD').toDate() 
+
+        });
+
+        startingDatepicker.on('change', function(ev, picker) {
+            start = $('#starting_date').val();
+            $('#due_date').daterangepicker({
+                locale: {
+                    format: date_format_js
+                },
+                singleDatePicker: true,
+                startDate: start,
+                minDate: start
+
             });
         });
     </script>
