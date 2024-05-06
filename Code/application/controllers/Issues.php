@@ -38,6 +38,8 @@ class Issues extends CI_Controller
             $this->data['priorities'] = $query->result_array();
 
 
+            $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("tasks");
+
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
             } elseif (permissions('project_view_selected')) {

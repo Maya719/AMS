@@ -131,6 +131,7 @@ class Users extends CI_Controller
 	}
 	public function create_user()
 	{
+		$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("users");
 		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || permissions('user_view_selected') || $this->ion_auth->in_group(3))) {
 			$saas_id = $this->session->userdata('saas_id');
 			$this->data['user_groups'] = $this->ion_auth->get_all_groups();
@@ -194,6 +195,7 @@ class Users extends CI_Controller
 	}
 	public function index()
 	{
+		$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
 		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || permissions('user_view_selected') || $this->ion_auth->in_group(3))) {
 			$this->data['page_title'] = 'Employee - ' . company_name();
 			$this->data['main_page'] = 'Employee';
@@ -696,7 +698,7 @@ class Users extends CI_Controller
 
 	public function get_employee_id()
 	{
-		$report =  $this->users_model->get_employee_id();
+		$report = $this->users_model->get_employee_id();
 		echo json_encode($report);
 	}
 }

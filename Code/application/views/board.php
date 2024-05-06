@@ -75,10 +75,12 @@
         <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
             <div class="container-fluid">
-                <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
+                <?php if ($this->ion_auth->is_admin() || permissions('task_create')): ?>
                     <div class="row d-flex justify-content-end">
                         <div class="col-xl-2 col-sm-3">
-                            <a href="<?= base_url('issues') ?>" class="btn btn-block btn-primary">Add Issue</a>
+                            <a href="<?= base_url('issues') ?>"
+                                class="btn btn-block btn-primary <?php echo $is_allowd_to_create_new ? "" : "disabled" ?>">Add
+                                Issue</a>
                         </div>
                     </div>
                 <?php endif ?>
@@ -90,36 +92,42 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <select class="form-select" id="board_type">
-                                                <option value="0"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></option>
-                                                <option value="1"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></option>
+                                                <option value="0">
+                                                    <?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?>
+                                                </option>
+                                                <option value="1">
+                                                    <?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?>
+                                                </option>
                                             </select>
                                         </div>
-                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
-                                        <div class="col-lg-3">
-                                            <select class="form-select" id="project_id">
-                                                <option value="" selected>Project</option>
-                                                <?php foreach ($projects as $project) : ?>
-                                                    <?php if ($project["dash_type"] == 1) : ?>
-                                                        <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
-                                                    <?php endif ?>
-                                                <?php endforeach ?>
-                                            </select>
-                                        </div>
+                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')): ?>
+                                            <div class="col-lg-3">
+                                                <select class="form-select" id="project_id">
+                                                    <option value="" selected>Project</option>
+                                                    <?php foreach ($projects as $project): ?>
+                                                        <?php if ($project["dash_type"] == 1): ?>
+                                                            <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
+                                                        <?php endif ?>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
                                         <?php endif ?>
                                         <div class="col-lg-3" id="sprintCol" style="display: none;">
                                             <select class="form-select" id="sprint_id">
-                                                <?php foreach ($sprints as $sprint) : ?>
+                                                <?php foreach ($sprints as $sprint): ?>
                                                     <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
+                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')): ?>
                                             <div class="col-lg-3">
                                                 <select class="form-select" id="user_id">
                                                     <option value="" selected>Member</option>
-                                                    <?php foreach ($system_users as $system_user) : ?>
-                                                        <?php if ($system_user->active == '1') : ?>
-                                                            <option value="<?= $system_user->id ?>"><?= $system_user->first_name . ' ' . $system_user->last_name ?></option>
+                                                    <?php foreach ($system_users as $system_user): ?>
+                                                        <?php if ($system_user->active == '1'): ?>
+                                                            <option value="<?= $system_user->id ?>">
+                                                                <?= $system_user->first_name . ' ' . $system_user->last_name ?>
+                                                            </option>
                                                         <?php endif ?>
                                                     <?php endforeach ?>
                                                 </select>
@@ -139,21 +147,26 @@
                                         <span id="from-to"></span>
                                     </div>
                                     <div class="mt-xl-0 mt-3">
-                                        <div class="d-flex align-items-center mb-xl-4 mb-0 pb-3 justify-content-end flex-wrap">
+                                        <div
+                                            class="d-flex align-items-center mb-xl-4 mb-0 pb-3 justify-content-end flex-wrap">
                                             <h6 class="me-3 mb-0" id="percent"></h6>
                                             <div>
                                                 <div class="dropdown">
                                                     <div class="btn-link" data-bs-toggle="dropdown">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
                                                             <circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5" />
                                                             <circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5" />
                                                             <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
                                                         </svg>
                                                     </div>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item complete_sprint" href="javascript:void(0)">Complete Sprint</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)">Edit Sprint</a>
-                                                        <a class="dropdown-item delete_sprint" href="javascript:void(0)">Delete Sprint</a>
+                                                        <a class="dropdown-item complete_sprint"
+                                                            href="javascript:void(0)">Complete Sprint</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)">Edit
+                                                            Sprint</a>
+                                                        <a class="dropdown-item delete_sprint"
+                                                            href="javascript:void(0)">Delete Sprint</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -191,15 +204,19 @@
                         <div class="default-tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#contact" id="project_tab_anchor"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#contact"
+                                        id="project_tab_anchor"><i class="fa-solid fa-diagram-project me-2"></i> Project
+                                    </a>
                                 </li>
 
                                 <li class="nav-item" id="sprint_li">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#home" id="sprint_tab_anchor"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#home" id="sprint_tab_anchor"><i
+                                            class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#profile"><i class="fa-solid fa-anchor me-2"></i> Additional Information</a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#profile"><i
+                                            class="fa-solid fa-anchor me-2"></i> Additional Information</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -252,16 +269,16 @@
             </div>
         </div>
         <!--**********************************
-	Content body end
+    Content body end
 ***********************************-->
     </div>
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/vendor/draggable/draggable.js') ?>"></script>
     <script>
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             ajaxCall();
-            $('#sprint_id, #user_id, #project_id').change(function() {
+            $('#sprint_id, #user_id, #project_id').change(function () {
                 ajaxCall();
             });
             loading = true;
@@ -282,10 +299,10 @@
                         board: board,
                     },
                     dataType: 'json',
-                    beforeSend: function() {
+                    beforeSend: function () {
                         showLoader();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response);
                         $('#html').html(response.html);
                         initSorting();
@@ -299,10 +316,10 @@
                         $('.complete_sprint').attr('data-id', sprintId);
                         $('#percent').html(response.percent)
                     },
-                    complete: function() {
+                    complete: function () {
                         hideLoader();
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error('AJAX Error:', error);
                     }
                 });
@@ -350,10 +367,10 @@
                         status: status,
                     },
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error('AJAX Error:', error);
                     }
                 });
@@ -366,7 +383,7 @@
                 });
             }
 
-            $('#board_type').change(function() {
+            $('#board_type').change(function () {
                 var boardType = $(this).val();
                 if (boardType == '0') {
                     $('#sprintCol').hide();
@@ -394,27 +411,27 @@
                         boardType: boardType,
                     },
                     dataType: 'json',
-                    beforeSend: function() {
+                    beforeSend: function () {
                         showLoader();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('#project_id').empty();
                         $('#project_id').append('<option value="">Project</option>');
-                        $.each(response, function(index, project) {
+                        $.each(response, function (index, project) {
                             $('#project_id').append('<option value="' + project.id + '">' + project.title + '</option>');
                         });
                         ajaxCall();
                     },
-                    complete: function() {
+                    complete: function () {
                         hideLoader();
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(error);
                     }
                 });
             });
         });
-        $(document).on('click', '.delete_issue', function(e) {
+        $(document).on('click', '.delete_issue', function (e) {
             e.preventDefault();
             var id = $(this).data("issue-id");
             console.log(id);
@@ -433,7 +450,7 @@
                         url: base_url + 'issues/delete_issue/' + id,
                         data: "id=" + id,
                         dataType: "json",
-                        success: function(result) {
+                        success: function (result) {
                             if (result['error'] == false) {
                                 location.reload();
                             } else {
@@ -449,7 +466,7 @@
             });
 
         });
-        $(document).on('click', '.delete_sprint', function(e) {
+        $(document).on('click', '.delete_sprint', function (e) {
             e.preventDefault();
             var id = $(this).data("id");
             console.log(id);
@@ -468,7 +485,7 @@
                         url: base_url + 'backlog/delete_sprint/' + id,
                         data: "id=" + id,
                         dataType: "json",
-                        success: function(result) {
+                        success: function (result) {
                             if (result['error'] == false) {
                                 location.reload();
                             } else {
@@ -483,7 +500,7 @@
                 }
             });
         });
-        $(document).on('click', '.complete_sprint', function(e) {
+        $(document).on('click', '.complete_sprint', function (e) {
             e.preventDefault();
             var id = $(this).data("id");
             console.log(id);
@@ -519,7 +536,7 @@
                                 moveToBacklog: moveToBacklog
                             },
                             dataType: "json",
-                            success: function(result) {
+                            success: function (result) {
                                 if (result['error'] == false) {
                                     location.reload();
                                 } else {
@@ -535,7 +552,7 @@
                 });
             });
         });
-        $(document).on('click', '.btn-detail-model', function(e) {
+        $(document).on('click', '.btn-detail-model', function (e) {
             e.preventDefault();
             var id = $(this).data("id");
             $.ajax({
@@ -543,7 +560,7 @@
                 url: base_url + 'issues/get_issue_by_id/' + id,
                 data: "id=" + id,
                 dataType: "json",
-                success: function(result) {
+                success: function (result) {
                     $("#issue_title").html(result.issue.title);
                     $("#issue_description").html(result.issue.description);
                     if (result.issue.issue_type == 0) {
@@ -615,24 +632,24 @@
                     }
                     console.log(result);
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error(error);
                 }
             });
         });
     </script>
     <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        var sprintSelect = document.getElementById('sprint_id');
-        var agileOption = document.querySelector('#board_type option[value="1"]');
+        window.addEventListener('DOMContentLoaded', function () {
+            var sprintSelect = document.getElementById('sprint_id');
+            var agileOption = document.querySelector('#board_type option[value="1"]');
 
-        if (sprintSelect && sprintSelect.childElementCount === 0) {
-            agileOption.style.display = 'none';
-        } else {
-            agileOption.style.display = 'block';
-        }
-    });
-</script>
+            if (sprintSelect && sprintSelect.childElementCount === 0) {
+                agileOption.style.display = 'none';
+            } else {
+                agileOption.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 
 </html>

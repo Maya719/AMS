@@ -524,24 +524,21 @@
         </div>
         <!-- price area end -->
         <!-- about area start -->
-        <section class="tp-about-area pt-120 pb-120" id="company">
+
             <div class="container">
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="row tp-gx-20 ">
                             <div class="tp-about-thumb-wrapper wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
                                 <div class="tp-about-thumb">
-                                    <img src="<?= base_url('assets/front/four/img/about/img-1.jpg') ?>" alt="">
-                                </div>
-                                <div class="tp-about-thumb p-relative">
-                                    <img class="mb-20" src="<?= base_url('assets/front/four/img/about/img-2.jpg') ?>" alt="">
+
                                     <div class="skill__progress-circle mr-30">
                                         <div class="progress-circular">
                                             <input type="text" class="knob" value="0" data-rel="100" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#ffc700" data-thickness=".15" data-readonly="true" disabled>
                                         </div>
                                         <h4>Project Success</h4>
                                     </div>
-                                    <img src="<?= base_url('assets/front/four/img/about/img-3.jpg') ?>" alt="">
+
                                 </div>
                             </div>
                         </div>
@@ -560,39 +557,17 @@
                                     </div>
                                     <div class="tp-about-inner-text">
                                         <h4 class="tp-about-inner-title">Mobile Application</h4>
-                                        <p>Since the unknown printer took <br> we develop mobile app.</p>
+
                                     </div>
                                 </div>
                                 <div class="tp-about-inner d-flex">
                                     <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Artificial Intelligence</h4>
-                                        <p>Transforming operations, <br> decisions, experiences with AI.</p>
-                                    </div>
-                                </div>
-                                <div class="tp-about-inner d-flex">
-                                    <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Website Development</h4>
-                                        <p>Revolutionizing web development, <br> innovation, efficiency, excellence.</p>
-                                    </div>
-                                </div>
-                                <div class="tp-about-inner d-flex">
-                                    <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Graphic Designing</h4>
-                                        <p>Elevating graphic design, <br> creativity, precision, impact.</p>
+
                                     </div>
                                 </div>
                             </div>
                             <div class="tp-about-btn">
-                                <a class="tp-btn" href="#">Our Services <i class="fa-regular fa-arrow-right-long"></i></a>
+
                             </div>
                         </div>
                     </div>
@@ -600,153 +575,6 @@
             </div>
         </section>
         <!-- about area end -->
-        <!-- team area start -->
-        <section class="tp-team-area pt-120 pb-80 p-relative">
-            <div class="tp-team-bg" data-background="assets/img/team/team-bg.jpg"></div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="tp-team-section-title-wrapper text-center mb-70">
-                            <span class="tp-section__title-pre">
-                                Our Team
-                            </span>
-                            <h3 class="tp-section__title">Qualified Team Member</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".4s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-1.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Muhammad Aman</a></h4>
-                                <p>Project Manager</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-2.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Mohsin Ali</a></h4>
-                                <p>Graphic Designer</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-3.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Hurira Abbasi</a></h4>
-                                <p>SQA Engineer</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInRight" data-wow-duration="1s" data-wow-delay=".4s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-4.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Muhammad Shoaib</a></h4>
-                                <p>Web Developer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- team area end -->
-
-        <!-- contact input area start -->
-        <section class="tp-contact-input pt-100" id="contact">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
-                        <div class="tp-portfolio-2-section-title-wrapper text-center">
-                            <span class="tp-section__title-pre-2">
-                                CONTACT US
-                            </span>
-                            <h3 class="tp-section__title">GET IN TOUCH</h3>
-                        </div>
-                        <div class="tp-contact-from p-relative" data-background="assets/img/brand/home-2/form-input.png">
-                            <div class="tp-brands-from-overlay"></div>
-                            <form id="contact-form2" method="POST" action="<?= base_url('front/send-mail') ?>">
-                                <div class="row tp-gx-20">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="tp-brands-from-input contact-mb">
-                                            <input name="name" type="text" placeholder="Full Name:">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <div class="tp-brands-from-input contact-mb">
-                                            <input name="email" type="email" placeholder="Email Address:">
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="tp-brands-from-input contact-textarea">
-                                            <textarea name="msg" placeholder="Write Message..."></textarea>
-                                        </div>
-                                    </div>
-                                    <p class="ajax-response"></p>
-                                </div>
-                                <div class="tp-contact-submit text-center mt-20">
-                                    <button class="tp-btn savebtn" type="submit">Send Message <i class="fa-regular fa-arrow-right-long"></i></button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- contact input area end -->
-        <!-- contact area start -->
-        <div class="tp-contact-area pt-120 pb-120">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="tp-contact-phone d-sm-flex justify-content-xl-end">
-                            <div class="tp-contact-icon">
-                                <a href="tel:008757845682"><i class="flaticon-telephone-call"></i></a>
-                            </div>
-                            <div class="contact-inner">
-                                <p>Phone:</p>
-                                <a href="tel:008757845682">051-6102534</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="tp-contact-mail d-sm-flex justify-content-xl-center">
-                            <div class="tp-contact-icon">
-                                <a href="mail:info@gmail.com"><i class="flaticon-mail"></i></a>
-                            </div>
-                            <div class="contact-inner">
-                                <p>E-mail:</p>
-                                <a href="mail:info@gmail.com">info@mobipixels.com</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="tp-contact-location d-sm-flex justify-content-xl-start">
-                            <div class="tp-contact-icon">
-                                <a href="https://www.google.com/maps/@23.8297487,90.3766346,19z"><i class="flaticon-location"></i></a>
-                            </div>
-                            <div class="contact-inner">
-                                <p>Address:</p>
-                                <a target="_blank" href="https://www.google.com/maps/place/MobiPixels/@33.5215515,73.0893157,17z/data=!4m16!1m9!3m8!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!2sMobiPixels!8m2!3d33.5215471!4d73.0918906!9m1!1b1!16s%2Fg%2F11kz3p6gj3!3m5!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!8m2!3d33.5215471!4d73.0918906!16s%2Fg%2F11kz3p6gj3?entry=ttu">Sector F DHA, Islamabad</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- contact area end -->
     </main>
 
     <!-- footer area start -->
@@ -874,8 +702,7 @@
     <div id="cookie-bar">
         <div class="cookie-bar-body">
             <p><?= $this->lang->line('frontend_cookie_message') ? htmlspecialchars($this->lang->line('frontend_cookie_message')) : 'We use cookies to ensure that we give you the best experience on our website.' ?></p>
-            <div class="cookie-bar-action tp-hero-2-btn">
-                <button type="button" class="tp-btn cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
+
             </div>
         </div>
     </div>

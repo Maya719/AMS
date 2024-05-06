@@ -440,7 +440,7 @@ class Attendance extends CI_Controller
 			'time' => date("h:i A", strtotime($queryResults[0][0]["finger"])),
 			'remind' => $remind
 		];
-		echo  json_encode($array3);
+		echo json_encode($array3);
 	}
 	public function get_home_attendance_for_admin($date)
 	{
