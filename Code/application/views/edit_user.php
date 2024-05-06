@@ -473,18 +473,17 @@
             });
         });
         $(document).on('click', '.btn-edit-user', function(e) {
-            e.preventDefault();
-
-            var form = $('#form-part')[0];
-            var formData = new FormData(form);
-
+            var form = $('#form-part');
+            var formData = form.serialize();
+            console.log(formData);
             $.ajax({
                 type: 'POST',
-                url: $(form).attr('action'),
+                url: form.attr('action'),
                 data: formData,
-                processData: false,
-                contentType: false,
                 dataType: "json",
+                beforeSend: function() {
+                    $('.btn-edit-user').prop('disabled', true).html('Submiting...');
+                },
                 success: function(result) {
                     if (result['error'] == false) {
                         console.log(result);
@@ -492,8 +491,13 @@
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
-                }
+                },
+                complete: function() {
+                    $('.btn-edit-user').prop('disabled', false).html('Submit');
+                },
             });
+
+            e.preventDefault();
         });
     </script>
     <script>

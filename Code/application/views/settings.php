@@ -643,15 +643,22 @@
     });
 
     $(document).on('click', '.savebtn', function(e) {
-      var form = $('#setting-form');
-      var formData = form.serialize();
+      var form = $('#setting-form')[0]; // Get the form element
+      if (!form || form.nodeName !== 'FORM') {
+        console.error('Form element not found or not a form');
+        return;
+      }
+      var formData = new FormData(form); // Pass the form element
       console.log(formData);
       $.ajax({
         type: 'POST',
-        url: form.attr('action'),
+        url: $(form).attr('action'),
         data: formData,
         dataType: "json",
+        contentType: false, 
+        processData: false, 
         success: function(result) {
+          console.log(result);
           if (result['error'] == false) {
             $('.message').append('<div class="alert alert-success">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           } else {
@@ -662,6 +669,7 @@
 
       e.preventDefault();
     });
+
     $(document).on('click', '.savebtn2', function(e) {
       var form = $('#setting-form');
       var formData = form.serialize();

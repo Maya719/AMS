@@ -332,7 +332,10 @@
         theadRow += '<th>Assignee</th>';
         theadRow += '<th>Stats</th>';
         theadRow += '<th>Created</th>';
-        theadRow += '<th>Action</th>';
+        <?php if (permissions('project_delete') || permissions('project_edit')) { ?>
+          theadRow += '<th>Action</th>';
+        <?php          }
+        ?>
         theadRow += '</tr>';
         thead.html(theadRow);
         // Add table body
@@ -352,12 +355,22 @@
           userRow += '<td>' + row.project_users4 + '</td>';
           userRow += '<td>' + row.stats + '</td>';
           userRow += '<td>' + row.created + '</td>';
-          userRow += '<td>';
-          userRow += '<div class="d-flex">';
-          userRow += '<a href="' + base_url + 'projects/detail/' + row.id + '" class="text-primary" data-id="' + row.id + '" ><i class="fa fa-pencil color-muted"></i></a>';
-          userRow += '<a href="#" class="text-danger delete-project ms-2" data-bs-toggle="tooltip" data-id="' + row.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
-          userRow += '</div>';
-          userRow += '</td>';
+          <?php if (permissions('project_delete') || permissions('project_edit')) { ?>
+            userRow += '<td>';
+            userRow += '<div class="d-flex">';
+            <?php if (permissions('project_edit')) { ?>
+              userRow += '<a href="' + base_url + 'projects/detail/' + row.id + '" class="text-primary" data-id="' + row.id + '" ><i class="fa fa-pencil color-muted"></i></a>';
+            <?php          }
+            ?>
+            <?php if (permissions('project_delete')) { ?>
+              userRow += '<a href="#" class="text-danger delete-project ms-2" data-bs-toggle="tooltip" data-id="' + row.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
+
+            <?php          }
+            ?>
+            userRow += '</div>';
+            userRow += '</td>';
+          <?php          }
+          ?>
           userRow += '</tr>';
           tbody.append(userRow);
           count++;

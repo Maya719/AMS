@@ -62,7 +62,7 @@
           <div class="col-xl-4 col-sm-12">
             <nav class="nav nav-pills flex-column flex-sm-row">
               <?php if ((is_module_allowed('projects'))) : ?>
-              <a class="flex-sm-fill fs-6 text-sm-center nav-link <?= (is_client()) ? '' : 'active'; ?>" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false" <?= (is_client()) ? 'disabled' : ''; ?>><strong>AMS</strong></a>
+                <a class="flex-sm-fill fs-6 text-sm-center nav-link <?= (is_client()) ? '' : 'active'; ?>" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false" <?= (is_client()) ? 'disabled' : ''; ?>><strong>AMS</strong></a>
                 <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4 <?= (is_client()) ? 'active' : ''; ?>" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
               <?php endif ?>
             </nav>
@@ -272,28 +272,93 @@
               </div>
               <div id="navpills2-2" class="tab-pane <?= (is_client()) ? 'active' : ''; ?>">
                 <div class="row">
+                  <?php
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                    $pendingP = get_count('id', 'projects', '(status=1 OR status=2) AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
+                  } elseif (is_client()) {
+                    $pendingP = get_count('id', 'projects', '(status=1 OR status=2) AND client_id=' . htmlspecialchars($this->session->userdata('user_id')));
+                  } elseif (permissions('project_view_selected')) {
+                    $selectedUsers = selected_users();
+                    foreach ($selectedUsers as $selectedUser) {
+                      $pendingP += get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id=pu.project_id', '(status=1 OR status=2) AND pu.user_id=' . htmlspecialchars($selectedUser));
+                    }
+                  } else {
+                    $pendingP = get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id=pu.project_id', '(status=1 OR status=2) AND pu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
+                  }
+
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                    $completedP = get_count('id', 'projects', 'status=3 AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
+                  } elseif (is_client()) {
+                    $completedP = get_count('id', 'projects', 'status=3 AND client_id=' . htmlspecialchars($this->session->userdata('user_id')));
+                  } elseif (permissions('project_view_selected')) {
+                    $selectedUsers = selected_users();
+                    foreach ($selectedUsers as $selectedUser) {
+                      $completedP += get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id=pu.project_id', 'status=3 AND pu.user_id=' . htmlspecialchars($selectedUser));
+                    }
+                  } else {
+                    $completedP = get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id=pu.project_id', 'status=3 AND pu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
+                  }
+                  if ($completedP + $pendingP != 0) {
+                    $perP = $completedP / ($completedP + $pendingP) * 100;
+                  } else {
+                    $perP = 1;
+                  }
+                  ?>
                   <div class="col-xl-6 col-sm-12">
                     <div class="card">
                       <div class="card-body">
                         <div class="static-icon mx-5">
                           <div class="d-flex">
                             <h4 class="text-primary">Projects</h4>
-                            <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
+                            <h4 class="count text-primary ms-auto mb-0"><?= $completedP + $pendingP ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
-                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:5px;" role="progressbar">
-                              <span class="sr-only"><?= $perBio ?> Complete</span>
+                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perP ?>%; height:5px;" role="progressbar">
+                              <span class="sr-only">Total</span>
                             </div>
                           </div>
                           <div class="mt-2">
-                            <p class="mb-0">Approved<strong class="text-primary float-end me-2"><?= $report["bio_approved"] ?></strong></p>
-                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $report["bio_pending"] ?></strong></p>
-                            <p class="mb-0">Rejected<strong class="text-danger float-end me-2"><?= $report["bio_rejected"] ?></strong></p>
+                            <p class="mb-0">Completed<strong class="text-primary float-end me-2"><?= $completedP ?></strong></p>
+                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $pendingP ?></strong></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <?php
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                    $pendingT = get_count('id', 'tasks', '(status=1 OR status=2 OR status=3) AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
+                  } elseif (is_client()) {
+                    $pendingT = get_count('t.id', 'tasks t LEFT JOIN projects p on t.project_id = p.id', '(t.status=1 OR t.status=2 OR t.status=3) AND p.client_id = ' . htmlspecialchars($this->session->userdata('user_id')));
+                  } elseif (permissions('project_view_selected')) {
+                    $selectedUsers = selected_users();
+                    $userIds = implode(',', $selectedUsers);
+                    $pendingT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id = tu.task_id', '(status = 1 OR status = 2 OR status = 3) AND tu.user_id IN (' . htmlspecialchars($userIds) . ')');
+                  } else {
+                    $pendingT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', '(status=1 OR status=2 OR status=3) AND tu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
+                  }
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                    $completedT = get_count('id', 'tasks', 'status=4 AND saas_id=' . $this->session->userdata('saas_id'));
+                  } elseif (is_client()) {
+                    $completedT = get_count('t.id', 'tasks t LEFT JOIN projects p on t.project_id = p.id', 't.status=4 AND p.client_id = ' . htmlspecialchars($this->session->userdata('user_id')));
+                  } elseif (permissions('project_view_selected')) {
+                    $selectedUsers = selected_users();
+                    $userIds = implode(',', $selectedUsers);
+                    $completedT = get_count(
+                      't.id',
+                      'tasks t LEFT JOIN task_users tu ON t.id = tu.task_id',
+                      'status = 4 AND tu.user_id IN (' . htmlspecialchars($userIds) . ')'
+                    );
+                  } else {
+                    $completedT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', 'status=4 AND tu.user_id=' . $this->session->userdata('user_id'));
+                  }
+
+                  if ($completedT + $pendingP != 0) {
+                    $perT = $completedP / ($completedP + $pendingT) * 100;
+                  } else {
+                    $perT = 1;
+                  }
+                  ?>
                   <div class="col-xl-6 col-sm-12">
                     <div class="card">
                       <div class="card-body">
@@ -303,20 +368,20 @@
                             <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
-                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:5px;" role="progressbar">
-                              <span class="sr-only"><?= $perBio ?> Complete</span>
+                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perT ?>%; height:5px;" role="progressbar">
+                              <span class="sr-only">100% Complete</span>
                             </div>
                           </div>
                           <div class="mt-2">
-                            <p class="mb-0">Approved<strong class="text-primary float-end me-2"><?= $report["bio_approved"] ?></strong></p>
-                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $report["bio_pending"] ?></strong></p>
-                            <p class="mb-0">Rejected<strong class="text-danger float-end me-2"><?= $report["bio_rejected"] ?></strong></p>
+                            <p class="mb-0">Completed<strong class="text-primary float-end me-2"><?= $completedT ?></strong></p>
+                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $pendingT ?></strong></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                     <div class="card">
@@ -353,10 +418,50 @@
     <?php $this->load->view('includes/scripts'); ?>
     <script src="<?= base_url('assets2/vendor/apexchart/apexchart.js') ?>"></script>
     <script src="<?= base_url('assets2/vendor/chart-js/chart.bundle.min.js') ?>"></script>
+    <?php
+    foreach ($project_status as $project_title) {
+      $tmpP[] = $project_title['title'];
+      if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+        $tmpPV[] = get_count('id', 'projects', 'status=' . $project_title['id'] . ' AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
+      } elseif (is_client()) {
+        $tmpPV[] = get_count('id', 'projects', 'client_id=' . htmlspecialchars($this->session->userdata('user_id')) . ' AND status=' . htmlspecialchars($project_title['id']));
+      } elseif (permissions('project_view_selected')) {
+        $selectedUsers = selected_users();
+        $userIds = implode(',', $selectedUsers); // Convert the array to a comma-separated string
+        $tmpPV[] = get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id = pu.project_id', 'status = ' . $project_title['id'] . ' AND pu.user_id IN (' . htmlspecialchars($userIds) . ')');
+      } else {
+        $tmpPV[] = get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id=pu.project_id', 'status=' . $project_title['id'] . ' AND pu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
+      }
+    }
+
+    foreach ($task_status as $task_title) {
+      $tmpT[] = $task_title['title'];
+      if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+        $tmpTV[] = get_count('id', 'tasks', 'status=' . htmlspecialchars($task_title['id']) . ' AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
+      } elseif (is_client()) {
+        $tmpTV[] = get_count('t.id', 'tasks t LEFT JOIN projects p on t.project_id = p.id', 'p.client_id = ' . htmlspecialchars($this->session->userdata('user_id')) . ' AND t.status = ' . htmlspecialchars($task_title['id']));
+      } elseif (permissions('project_view_selected')) {
+        $selectedUsers = selected_users();
+        $userIds = implode(',', $selectedUsers); // Convert the array to a comma-separated string
+        $tmpTV[] = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', 'status=' . htmlspecialchars($task_title['id']) . ' AND tu.user_id IN (' . htmlspecialchars($userIds) . ')');
+      } else {
+        $tmpTV[] = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', 'status=' . htmlspecialchars($task_title['id']) . ' AND tu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
+      }
+    }
+
+    ?>
+    <script>
+      project_status = '<?= json_encode($tmpP) ?>';
+      project_status_values = '<?= json_encode($tmpPV) ?>';
+      task_status = '<?= json_encode($tmpT) ?>';
+      task_status_values = '<?= json_encode($tmpTV) ?>';
+      console.log(project_status, project_status_values, task_status, task_status_values);
+    </script>
+
     <script>
       $(document).ready(function() {
-        areaChart1();
         pieChart();
+        areaChart1();
       });
       var areaChart1 = function() {
         if (jQuery('#areaChart_1').length > 0) {
@@ -365,10 +470,10 @@
             type: 'line',
             data: {
               defaultFontFamily: 'Poppins',
-              labels: ["Todo", "In Progress", "In Review", "Completed"],
+              labels: JSON.parse(task_status),
               datasets: [{
                 label: "Task Statistic",
-                data: [11, 7, 0, 861],
+                data: JSON.parse(task_status_values),
                 borderColor: 'rgb(100,201,188)',
                 borderWidth: "1",
                 backgroundColor: 'rgb(164,227,220)',
@@ -409,25 +514,21 @@
             data: {
               defaultFontFamily: 'Poppins',
               datasets: [{
-                data: [31, 4, 1],
+                data: JSON.parse(project_status_values),
                 borderWidth: 0,
                 backgroundColor: [
-                  "rgb(164,227,220)",
                   "rgb(228,52,52)",
+                  "rgb(164,227,220)",
                   "rgba(46,46,46, 0.8)"
                 ],
                 hoverBackgroundColor: [
-                  "rgb(164,227,220)",
                   "rgb(228,52,52)",
+                  "rgb(164,227,220)",
                   "rgba(46,46,46, 0.8)"
                 ]
 
               }],
-              labels: [
-                "On Going",
-                "Not Started",
-                "Completed"
-              ]
+              labels: JSON.parse(project_status),
             },
             options: {
               plugins: {
@@ -585,7 +686,6 @@
       });
 
       function getUniqueDates(data) {
-        // Extract unique dates from the data
         var uniqueDates = [];
         data.forEach(user => {
           Object.keys(user.dates).forEach(date => {
@@ -595,7 +695,6 @@
           });
         });
 
-        // Sort the dates in ascending order
         uniqueDates.sort();
 
         return uniqueDates;

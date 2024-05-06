@@ -1121,6 +1121,7 @@ class Auth extends CI_Controller
 	 */
 	public function edit_user()
 	{
+		
 		$id = $this->input->post('update_id');
 
 		if (empty($id) || !is_numeric($id)) {
@@ -1246,27 +1247,6 @@ class Auth extends CI_Controller
 					$period = $joinDate->format('Y-m-d');
 				}
 				$userLeaveData = [];
-
-				foreach ($this->input->post('leavecount') as $leaveTypeId => $leaveCount) {
-					$leaveTypeId = intval($leaveTypeId);
-
-					$leaveData = [
-						'leave_type_id' => $leaveTypeId,
-						'leave_count' => $leaveCount,
-					];
-
-					$userLeaveData[] = $leaveData;
-				}
-				$sindwitchRule = $this->input->post('sindwitch') == 'on' ? 1 : 0;
-				$applied_data = [
-					'sindwitch' => $sindwitchRule,
-					'leave_data' => $userLeaveData,
-				];
-				$userData = [
-					'applied_rules' => json_encode($applied_data),
-				];
-
-				$this->leaves_model->update_user_leave_policy($user->id, $userData);
 
 				$data = [
 					'first_name' => $this->input->post('first_name'),

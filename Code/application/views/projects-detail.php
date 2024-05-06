@@ -190,7 +190,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <h4><?= $this->lang->line('performance_overview') ? $this->lang->line('performance_overview') : 'Performance Overview' ?></h4>
+                  <h4><?= $this->lang->line('progress_overview') ? $this->lang->line('progress_overview') : 'Progress Overview' ?></h4>
                 </div>
                 <div class="card-body p-2">
                   <div class="table-responsive">
@@ -200,7 +200,7 @@
                           <th><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></th>
                           <th><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></th>
                           <th><?= $this->lang->line('completed') ? $this->lang->line('completed') : 'Completed Tasks' ?> / <?= $this->lang->line('task_count') ? $this->lang->line('task_count') : 'Total Tasks' ?></th>
-                          <th><?= $this->lang->line('performance') ? $this->lang->line('performance') : 'Performance' ?></th>
+                          <th><?= $this->lang->line('progress_ratio') ? $this->lang->line('progress_ratio') : 'Progress Ratio' ?></th>
                         </tr>
                       </thead>
                       <tbody id="customers">

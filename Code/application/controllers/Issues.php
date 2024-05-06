@@ -62,6 +62,7 @@ class Issues extends CI_Controller
             $this->data['page_title'] = 'Edit issue - ' . company_name();
             $this->data['main_page'] = 'Edit issue';
             $this->data['current_user'] = $this->ion_auth->user()->row();
+
             $this->db->select('*');
             $this->db->from('projects');
             $this->db->where_in('saas_id', $this->session->userdata());
@@ -83,6 +84,26 @@ class Issues extends CI_Controller
             $this->db->where('id', $id);
             $query2 = $this->db->get();
             $this->data['issue'] = $query2->row();
+            $project_id = $query2->row()->project_id;
+
+            $this->data['project_id'] = $project_id;
+
+            $this->db->select('*');
+            $this->db->from('projects');
+            $this->db->where_in('id', $project_id);
+            $query = $this->db->get();
+            $this->data['issue_projects'] = $query->row();
+
+            $this->db->select('*');
+            $this->db->from('project_users');
+            $this->db->where_in('project_id', $project_id);
+            $query = $this->db->get();
+            $project_users = $query->result_array();
+
+            foreach ($project_users as $us) {
+                $pr_users[] = $this->ion_auth->user($us["user_id"])->row();
+            }
+            $this->data['project_users'] = $pr_users;
 
             $this->db->select('*');
             $this->db->from('issues_sprint');
@@ -91,8 +112,8 @@ class Issues extends CI_Controller
             $this->data['issues_sprint'] = $query2->row();
 
             $this->db->select('*');
-            $this->db->from('issues_users');
-            $this->db->where('issue_id', $id);
+            $this->db->from('task_users');
+            $this->db->where('task_id', $id);
             $query2 = $this->db->get();
             $this->data['issues_users'] = $query2->row();
 

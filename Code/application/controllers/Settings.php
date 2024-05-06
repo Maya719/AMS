@@ -908,8 +908,8 @@ class Settings extends CI_Controller
 			$query = $this->db->get('leave_hierarchy');
 			$stepResult = $query->result();
 			$this->data['data'] = $stepResult;
-			echo json_encode($this->data);
-			// $this->load->view('settings', $this->data);
+			// echo json_encode($this->data);
+			$this->load->view('settings', $this->data);
 		} else {
 			redirect('auth', 'refresh');
 		}

@@ -98,7 +98,7 @@
                                         </div>
                                         <div class="col-sm-4 mb-3">
                                             <label class="form-label">Story Points</label>
-                                            <input type="number" class="form-control" name="story_points" min="0" value="<?=$issue->story_points?>">
+                                            <input type="number" class="form-control" name="story_points" min="0" value="<?= $issue->story_points ?>">
                                         </div>
                                         <div class="col-sm-12 mb-3">
                                             <label class="form-label">Title<span class="text-danger">*</span></label>
@@ -108,18 +108,21 @@
                                             <label class="form-label">Description</label>
                                             <textarea name="description"><?= $issue->description ?></textarea>
                                         </div>
+                                        <?php
+                                        // var_dump(($issues_users->user_id));
+                                        ?>
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Assignee</label>
                                             <select class="form-control wide" name="user">
                                                 <option value="">Assignee</option>
-                                                <?php foreach ($system_users as $system_user) {
-                                                    if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
-                                                        <option value="<?= htmlspecialchars($system_user->id) ?>" <?= ($system_user->id == $issues_users->user_id) ? 'selected' : '' ?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
+                                                <?php foreach ($project_users as $project_user) {
+                                                    if ($project_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                                                        <option value="<?= htmlspecialchars($project_user->id) ?>" <?= ($project_user->id == $issues_users->user_id) ? 'selected' : '' ?>><?= htmlspecialchars($project_user->first_name) ?> <?= htmlspecialchars($project_user->last_name) ?></option>
                                                 <?php }
                                                 } ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-3">
+                                        <div class="col-sm-6 mb-3 <?= ($issue_projects->dash_type == '1') ? '' : 'hidden' ?>" id="showHideSprint">
                                             <label class="form-label">Sprint</label>
                                             <select class="form-control" name="sprint">
                                                 <option value="">Sprint</option>
@@ -202,11 +205,17 @@
                         },
                         dataType: "json",
                         success: function(response) {
-                            console.log(response);
+                            console.log(response.users);
+                            if (response.dash_type == '0') {
+                                $('#showHideSprint').hide();
+                            } else {
+                                $('#showHideSprint').show();
+                            }
                             var select = $('select[name="user"]');
                             select.empty();
-                            select.append('<option value="">Member</option>');
-                            $.each(response, function(index, user) {
+                            select.append('<option value="">Assignee</option>');
+                            $.each(response.users, function(index, user) {
+                                console.log(user.id);
                                 select.append('<option value="' + user.id + '">' + user.first_name + ' ' + user.last_name + '</option>');
                             });
 

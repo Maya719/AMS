@@ -5801,22 +5801,22 @@ div.demo img {
 }
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {
   .tp-hero-2-title {
-    font-size: 60px;
+    font-size: 40px;
   }
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .tp-hero-2-title {
-    font-size: 53px;
+    font-size: 30px;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px), only screen and (min-width: 576px) and (max-width: 767px) {
   .tp-hero-2-title {
-    font-size: 50px;
+    font-size: 30px;
   }
 }
 @media (max-width: 575px) {
   .tp-hero-2-title {
-    font-size: 37px;
+    font-size: 27px;
   }
 }
 @media only screen and (min-width: 576px) and (max-width: 767px), (max-width: 575px) {

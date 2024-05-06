@@ -125,6 +125,7 @@
                                             <li><a href="#feature">Features</a></li>
                                             <li><a href="#featureItem">Pricing</a></li>
                                             <li> <a href="#contact">Contact</a></li>
+                                            <li> <a href="#company">Our Company</a></li>
                                             <li> <a href="<?= base_url('auth') ?>">Login</a></li>
                                         </ul>
                                     </nav>
@@ -246,7 +247,7 @@
         <!-- hero area end -->
 
         <!-- brands area start -->
-        <section class="tp-brands-2-area pt-75 pb-90 p-relative" id="contact">
+        <section class="tp-brands-2-area pt-75 pb-90 p-relative">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5">
@@ -262,7 +263,7 @@
                                     <input type="email" name="email" placeholder="Email Address:">
                                 </div>
                                 <div class="tp-brands-from-input">
-                                    <textarea name="msg" name="message" placeholder="Write Message..."></textarea>
+                                    <textarea name="msg" placeholder="Write Message..."></textarea>
                                 </div>
                                 <button class="tp-btn">Submit Now <i class="fa-regular fa-arrow-right-long"></i></button>
                                 <div class="w-full px-4 py-2 mt-1 text-left font-semibold text-white bg-red-500 rounded shadow-sm hidden result"></div>
@@ -383,11 +384,11 @@
                                     ?>
                                         <div class="col-md-6 col-lg-6 col-xl-4">
                                             <div class="tp-pricing-item mb-30">
-                                                <div class="tp-pricing-top text-center p-relative">
-                                                    <div class="tp-pricing-plan">
+                                                <div class="tp-pricing-top p-relative">
+                                                    <div class="tp-pricing-plan text-center ">
                                                         <span><?= htmlspecialchars($plan['title']) ?></span>
                                                     </div>
-                                                    <div class="tp-pricing-title-wrapper">
+                                                    <div class="tp-pricing-title-wrapper text-center ">
                                                         <h3 class="tp-price-title"><?= get_saas_currency('currency_symbol') ?><?= htmlspecialchars($plan['price']) ?></h3>
                                                         <p style="margin-top: -30px;" class="lowercase text-gray-500 text-xs">/
                                                             <?php
@@ -409,20 +410,16 @@
                                                             ?>
                                                         </p>
                                                     </div>
-                                                    <div class="tp-pricing-thumb">
-                                                        <div class="tp-pricing-border">
-                                                            <svg width="294" height="204" viewBox="0 0 294 204" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <rect class="line-dash-path" x="0.5" y="0.499878" width="293" height="203" stroke="#2144D8" stroke-opacity="0.25" stroke-dasharray="6 6" />
-                                                            </svg>
-                                                        </div>
-                                                        <!-- <img src="<?= base_url("assets/front/four/img/pricing/img-1.png") ?>" alt=""> -->
+                                                    <div class="ms-3 flex justify-content-start mb-2">
+                                                        <ul class="text-xl">
+                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['storage'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['storage'] . ' GB') ?></span><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?></li>
 
-                                                        <div class="tp-pricing-box">
-                                                            <span class="box-shape top-left"></span>
-                                                            <span class="box-shape top-right"></span>
-                                                            <span class="box-shape bottom-left"></span>
-                                                            <span class="box-shape bottom-right"></span>
-                                                        </div>
+                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['projects'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['projects']) ?></span> <?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></li>
+
+                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['tasks'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['tasks']) ?></span> <?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></li>
+
+                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['users'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['users']) ?></span> <?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                                 <div class="tp-pricing-content">
@@ -510,7 +507,7 @@
                                                         </ul>
                                                     </div>
                                                     <div class="tp-pricing-content-btn text-center">
-                                                        <a href="contact.html" class="tp-btn">Get Started Now <i class="fa-regular fa-arrow-right-long"></i></a>
+                                                        <a href="<?= base_url('auth/register') ?>" class="tp-btn">Get Started Now <i class="fa-regular fa-arrow-right-long"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -527,24 +524,21 @@
         </div>
         <!-- price area end -->
         <!-- about area start -->
-        <section class="tp-about-area pt-120 pb-120">
+
             <div class="container">
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="row tp-gx-20 ">
                             <div class="tp-about-thumb-wrapper wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
                                 <div class="tp-about-thumb">
-                                    <img src="<?=base_url('assets/front/four/img/about/img-1.jpg')?>" alt="">
-                                </div>
-                                <div class="tp-about-thumb p-relative">
-                                    <img class="mb-20" src="<?=base_url('assets/front/four/img/about/img-2.jpg')?>" alt="">
+
                                     <div class="skill__progress-circle mr-30">
                                         <div class="progress-circular">
                                             <input type="text" class="knob" value="0" data-rel="100" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#ffc700" data-thickness=".15" data-readonly="true" disabled>
                                         </div>
                                         <h4>Project Success</h4>
                                     </div>
-                                    <img src="<?=base_url('assets/front/four/img/about/img-3.jpg')?>" alt="">
+
                                 </div>
                             </div>
                         </div>
@@ -563,21 +557,17 @@
                                     </div>
                                     <div class="tp-about-inner-text">
                                         <h4 class="tp-about-inner-title">Mobile Application</h4>
-                                        <p>Standard dummy text ever since <br> the unknown printer took.</p>
+
                                     </div>
                                 </div>
                                 <div class="tp-about-inner d-flex">
                                     <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-medal"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Award Winning</h4>
-                                        <p>Standard dummy text ever since <br> the unknown printer took.</p>
+
                                     </div>
                                 </div>
                             </div>
                             <div class="tp-about-btn">
-                                <a class="tp-btn" href="service.html">Our Services <i class="fa-regular fa-arrow-right-long"></i></a>
+
                             </div>
                         </div>
                     </div>
@@ -701,7 +691,6 @@
     <script src='<?= base_url("assets/front/four/js/jquery.knob.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/circularProgressBar.min.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/purecounter.js") ?>'></script>
-    <script src='<?= base_url("assets/front/four/js/ajax-form.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/main.js") ?>'></script>
     <script>
         site_key = '<?php echo get_google_recaptcha_site_key(); ?>';
@@ -710,15 +699,14 @@
     if ($recaptcha_site_key) { ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars($recaptcha_site_key) ?>"></script>
     <?php } ?>
-    <script src="<?= base_url('assets/front/comman.js') ?>"></script>
     <div id="cookie-bar">
         <div class="cookie-bar-body">
             <p><?= $this->lang->line('frontend_cookie_message') ? htmlspecialchars($this->lang->line('frontend_cookie_message')) : 'We use cookies to ensure that we give you the best experience on our website.' ?></p>
-            <div class="cookie-bar-action">
-                <button type="button" class="text-uppercase btn btn-primary text-white cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
+
             </div>
         </div>
     </div>
+    <script src="<?= base_url('assets/front/comman.js') ?>"></script>
     <script>
         function showDropdownOptions() {
             document.getElementById("options").classList.toggle("hidden");

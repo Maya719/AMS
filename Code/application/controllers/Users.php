@@ -91,6 +91,7 @@ class Users extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && is_module_allowed('clients') && ($this->ion_auth->is_admin() || permissions('client_view'))) {
 			$this->data['page_title'] = 'Clients - ' . company_name();
+			$this->data['main_page'] = 'Clients';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$system_users = $this->ion_auth->users(array(4))->result();
 			foreach ($system_users as $system_user) {
