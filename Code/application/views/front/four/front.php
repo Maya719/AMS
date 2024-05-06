@@ -524,24 +524,39 @@
         </div>
         <!-- price area end -->
         <!-- about area start -->
+<<<<<<< main
+        <section class="tp-about-area pt-120 pb-120">
+=======
         <section class="tp-about-area pt-120 pb-120" id="company">
+>>>>>>> main
             <div class="container">
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="row tp-gx-20 ">
                             <div class="tp-about-thumb-wrapper wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
                                 <div class="tp-about-thumb">
+<<<<<<< main
+                                    <img src="<?=base_url('assets/front/four/img/about/img-1.jpg')?>" alt="">
+                                </div>
+                                <div class="tp-about-thumb p-relative">
+                                    <img class="mb-20" src="<?=base_url('assets/front/four/img/about/img-2.jpg')?>" alt="">
+=======
                                     <img src="<?= base_url('assets/front/four/img/about/img-1.jpg') ?>" alt="">
                                 </div>
                                 <div class="tp-about-thumb p-relative">
                                     <img class="mb-20" src="<?= base_url('assets/front/four/img/about/img-2.jpg') ?>" alt="">
+>>>>>>> main
                                     <div class="skill__progress-circle mr-30">
                                         <div class="progress-circular">
                                             <input type="text" class="knob" value="0" data-rel="100" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#ffc700" data-thickness=".15" data-readonly="true" disabled>
                                         </div>
                                         <h4>Project Success</h4>
                                     </div>
+<<<<<<< main
+                                    <img src="<?=base_url('assets/front/four/img/about/img-3.jpg')?>" alt="">
+=======
                                     <img src="<?= base_url('assets/front/four/img/about/img-3.jpg') ?>" alt="">
+>>>>>>> main
                                 </div>
                             </div>
                         </div>
@@ -560,11 +575,22 @@
                                     </div>
                                     <div class="tp-about-inner-text">
                                         <h4 class="tp-about-inner-title">Mobile Application</h4>
+<<<<<<< main
+                                        <p>Standard dummy text ever since <br> the unknown printer took.</p>
+=======
                                         <p>Since the unknown printer took <br> we develop mobile app.</p>
+>>>>>>> main
                                     </div>
                                 </div>
                                 <div class="tp-about-inner d-flex">
                                     <div class="tp-about-inner-thumb">
+<<<<<<< main
+                                        <i class="flaticon-medal"></i>
+                                    </div>
+                                    <div class="tp-about-inner-text">
+                                        <h4 class="tp-about-inner-title">Award Winning</h4>
+                                        <p>Standard dummy text ever since <br> the unknown printer took.</p>
+=======
                                         <i class="flaticon-cpu"></i>
                                     </div>
                                     <div class="tp-about-inner-text">
@@ -588,11 +614,16 @@
                                     <div class="tp-about-inner-text">
                                         <h4 class="tp-about-inner-title">Graphic Designing</h4>
                                         <p>Elevating graphic design, <br> creativity, precision, impact.</p>
+>>>>>>> main
                                     </div>
                                 </div>
                             </div>
                             <div class="tp-about-btn">
+<<<<<<< main
+                                <a class="tp-btn" href="service.html">Our Services <i class="fa-regular fa-arrow-right-long"></i></a>
+=======
                                 <a class="tp-btn" href="#">Our Services <i class="fa-regular fa-arrow-right-long"></i></a>
+>>>>>>> main
                             </div>
                         </div>
                     </div>
@@ -600,6 +631,8 @@
             </div>
         </section>
         <!-- about area end -->
+<<<<<<< main
+=======
         <!-- team area start -->
         <section class="tp-team-area pt-120 pb-80 p-relative">
             <div class="tp-team-bg" data-background="assets/img/team/team-bg.jpg"></div>
@@ -747,6 +780,7 @@
             </div>
         </div>
         <!-- contact area end -->
+>>>>>>> main
     </main>
 
     <!-- footer area start -->
@@ -874,8 +908,8 @@
     <div id="cookie-bar">
         <div class="cookie-bar-body">
             <p><?= $this->lang->line('frontend_cookie_message') ? htmlspecialchars($this->lang->line('frontend_cookie_message')) : 'We use cookies to ensure that we give you the best experience on our website.' ?></p>
-            <div class="cookie-bar-action tp-hero-2-btn">
-                <button type="button" class="tp-btn cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
+            <div class="cookie-bar-action">
+                <button type="button" class="text-uppercase btn btn-primary text-white cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
             </div>
         </div>
     </div>
