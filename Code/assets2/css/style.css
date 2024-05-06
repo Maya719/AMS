@@ -16589,7 +16589,7 @@ label {
 }
 
 .dlabnav .metismenu>li:hover>a i {
-  color: #305c8b;
+  color: #FFFFFF;
 }
 
 .dlabnav .metismenu>li>a svg {
@@ -16607,7 +16607,7 @@ label {
 
 .dlabnav .metismenu>li:hover>a,
 .dlabnav .metismenu>li:focus>a {
-  color: #305c8b;
+  color: #FFFFFF;
 }
 
 .dlabnav .metismenu>li:hover>a g [fill],
@@ -18729,7 +18729,7 @@ label {
 }
 
 [data-sidebar-style="overlay"] .dlabnav .metismenu>li>a {
-  color: #7f7184;
+  color: #FFFFFF;
   border-radius: 0.625rem;
   -webkit-transition: all 0.5s;
   -ms-transition: all 0.5s;
@@ -18741,11 +18741,11 @@ label {
 }
 
 [data-sidebar-style="overlay"] .dlabnav .metismenu>li:hover>a {
-  color: var(--primary);
+  color: #FFFFFF;
 }
 
 [data-sidebar-style="overlay"] .dlabnav .metismenu>li:hover>a i {
-  color: var(--primary);
+  color: #FFFFFF;
 }
 
 [data-sidebar-style="overlay"] .dlabnav .metismenu>li.mm-active>a {
