@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Issue Type <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="issue_type">
+                                                <select class="form-control" name="issue_type" id="issue_type">
                                                     <option value="epic">Epic</option>
                                                     <option value="story">Story</option>
                                                     <option value="task">Task</option>
@@ -97,7 +97,7 @@
                                                     <?php endforeach ?>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-4 mb-3">
+                                            <div class="col-sm-4 mb-3" id="story_point_show">
                                                 <label class="form-label">Story Points</label>
                                                 <input type="number" min="0" class="form-control" name="story_points" value="0">
                                             </div>
@@ -251,6 +251,14 @@
                 minDate: start
 
             });
+        });
+        $('#issue_type').on('change', function() {
+            issue_type = $('#issue_type').val();
+            if (issue_type !== 'task') {
+                $('#story_point_show').show();
+            } else {
+                $('#story_point_show').hide();
+            }
         });
     </script>
 

@@ -180,7 +180,7 @@ class Board extends CI_Controller
         $html = '';
         $completed = 0;
         $total = 0;
-        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
+        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data,$board);
 
         // Calculate the progress percentage
         $rounded_percent = $this->calculate_progress($completed, $total);
@@ -253,7 +253,7 @@ class Board extends CI_Controller
         return $issues_query->result_array();
     }
 
-    private function generate_html_and_metrics($statuses, $issues_data)
+    private function generate_html_and_metrics($statuses, $issues_data,$board)
     {
         $html = '';
         $completed = 0;
@@ -273,7 +273,7 @@ class Board extends CI_Controller
             // Add issue cards based on status
             foreach ($issues_data as $issue) {
                 if ($status["id"] == $issue["status"]) {
-                    $html .= $this->html_generating($status, $issue);
+                    $html .= $this->html_generating($status, $issue,$board);
                     $total++;
                     if ($status["id"] == 4) {
                         $completed++;
@@ -295,7 +295,7 @@ class Board extends CI_Controller
         return (int) round($completed * 100 / $total);
     }
 
-    public function html_generating($status, $issue)
+    public function html_generating($status, $issue,$board)
     {
         $due_or_not = '';
         $html = '';
@@ -359,10 +359,14 @@ class Board extends CI_Controller
                                         </ul>';
         }
         $due_or_not = $this->get_due_dates($issue["starting_date"], $issue["due_date"], $status["id"]);
-        $html .= '
-                                <div class="col-8 d-flex justify-content-end">
-                                    <span class="fs-14"><i class="far fa-clock me-2"></i>' . $due_or_not . '</span>
-                                </div> 
+        if ($board == '0') {
+            $html .= '
+            <div class="col-8 d-flex justify-content-end">
+                <span class="fs-14"><i class="far fa-clock me-2"></i>' . $due_or_not . '</span>
+            </div>';
+        }
+       
+        $html .= ' 
                             </div>
                         </div>
                     </div>';
@@ -390,7 +394,7 @@ class Board extends CI_Controller
                 $days_until_due = $interval->days;
                 if ($days_until_due == 0) {
                     return 'delivery days';
-                }else{
+                } else {
                     return 'Due in ' . $days_until_due . ' days';
                 }
             }
