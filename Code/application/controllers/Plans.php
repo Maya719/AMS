@@ -929,7 +929,7 @@ class Plans extends CI_Controller
 				$modules['select_all'] = $this->input->post('select_all') ? 1 : 0;
 				$modules['projects'] = $this->input->post('projects_module') ? 1 : 0;
 				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
-				$modules['agile'] = $this->input->post('agile') ? 1 : 0;
+				$modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
 				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
@@ -1005,7 +1005,7 @@ class Plans extends CI_Controller
 				$modules['select_all'] = $this->input->post('select_all') ? 1 : 0;
 				$modules['projects'] = $this->input->post('projects_module') ? 1 : 0;
 				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
-				$modules['agile'] = $this->input->post('agile') ? 1 : 0;
+				$modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
 				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;

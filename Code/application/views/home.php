@@ -353,9 +353,10 @@
                     $completedT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', 'status=4 AND tu.user_id=' . $this->session->userdata('user_id'));
                   }
 
-                  if ($completedT + $pendingP != 0) {
-                    $perT = $completedP / ($completedP + $pendingT) * 100;
-                  } else {
+                  
+                  if ($completedT+$pendingT > 0) {
+                    $perT = $completedT/($completedT+$pendingT)*100;
+                  }else{
                     $perT = 1;
                   }
                   ?>
@@ -365,7 +366,7 @@
                         <div class="static-icon mx-5">
                           <div class="d-flex">
                             <h4 class="text-primary">Tasks</h4>
-                            <h4 class="count text-primary ms-auto mb-0"><?= $totalBio ?></h4>
+                            <h4 class="count text-primary ms-auto mb-0"><?= $completedT+$pendingT ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
                             <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perT ?>%; height:5px;" role="progressbar">

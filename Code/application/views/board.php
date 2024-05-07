@@ -7,7 +7,7 @@
         line-height: 2rem;
         display: block;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 400;
     }
 
     .section .section-title {
@@ -95,7 +95,7 @@
                                                     <?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?>
                                                 </option>
                                                 <option value="1">
-                                                    <?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?>
+                                                    <?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?>
                                                 </option>
                                             </select>
                                         </div>
