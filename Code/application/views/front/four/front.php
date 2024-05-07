@@ -441,8 +441,8 @@
                                                                         $mod_name = $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks';
                                                                     } elseif ($mod_key == 'kanban') {
                                                                         $mod_name = $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban';
-                                                                    } elseif ($mod_key == 'agile') {
-                                                                        $mod_name = $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile';
+                                                                    } elseif ($mod_key == 'scrum') {
+                                                                        $mod_name = $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum';
                                                                     } elseif ($mod_key == 'team_members') {
                                                                         $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
                                                                     } elseif ($mod_key == 'clients') {
