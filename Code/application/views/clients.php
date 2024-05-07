@@ -117,8 +117,9 @@
           <form action="<?= base_url('auth/create-user') ?>" method="POST" class="modal-part" id="modal-add-client-part">
             <div class="modal-body">
               <div class="row">
+                <input type="hidden" name="groups" value="4">
+                <input type="hidden" name="employee_id" id="employee_id" value="">
                 <div class="form-group col-md-6">
-                  <input type="hidden" name="groups" value="4">
                   <label class="col-form-label"><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?><span class="text-danger">*</span></label>
                   <input type="text" name="first_name" class="form-control" required="">
                 </div>
@@ -466,6 +467,22 @@
           });
         }
       });
+    });
+    $(document).ready(function() {
+      function getEmployeeId() {
+        $.ajax({
+          url: '<?= base_url('users/get_employee_id') ?>',
+          method: 'POST',
+          dataType: 'json',
+          success: function(response) {
+            var employee_id = response.max_employee_id;
+            employee_id++;
+
+            $('#employee_id').val(employee_id);
+          },
+        });
+      }
+      getEmployeeId();
     });
   </script>
 </body>

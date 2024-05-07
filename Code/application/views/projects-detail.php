@@ -122,7 +122,7 @@
 
           </div>
           <div class="row mt-3">
-            <div class="col-md-7">
+            <div class="col-md-12">
               <div class="card">
                 <div class="card-header d-flex justify-content-between">
                   <h4>
@@ -141,7 +141,7 @@
                       <svg fill="#000000" width="28" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15.3171203,20 L20.5,20 C20.7761424,20 21,20.2238576 21,20.5 C21,20.7761424 20.7761424,21 20.5,21 L3.5,21 C3.22385763,21 3,20.7761424 3,20.5 C3,20.2238576 3.22385763,20 3.5,20 L11.9975864,20 L11.9992783,19.9999948 C13.3169414,19.9980929 14.5879191,19.4831487 15.5355339,18.5355339 C17.4881554,16.5829124 17.4881554,13.4170876 15.5355339,11.4644661 C15.1550557,11.0839879 14.7285139,10.7776478 14.2738601,10.5454458 C14.254923,10.5373678 14.2363578,10.5280549 14.2182818,10.5174987 C12.5524962,9.69291702 10.5227538,9.8537508 8.99894709,11 L10.5,11 C10.7761424,11 11,11.2238576 11,11.5 C11,11.7761424 10.7761424,12 10.5,12 L7.5,12 C7.22385763,12 7,11.7761424 7,11.5 L7,8.5 C7,8.22385763 7.22385763,8 7.5,8 C7.77614237,8 8,8.22385763 8,8.5 L8,10.5276441 C9.46401314,9.21593206 11.4173682,8.74894646 13.2298049,9.12668728 C13.0840962,8.75531167 13,8.36566448 13,8 C13,6.34314575 14.3431458,5 16,5 L16.2928932,5 L16.1464466,4.85355339 C15.9511845,4.65829124 15.9511845,4.34170876 16.1464466,4.14644661 C16.3417088,3.95118446 16.6582912,3.95118446 16.8535534,4.14644661 L17.8535534,5.14644661 C18.0488155,5.34170876 18.0488155,5.65829124 17.8535534,5.85355339 L16.8535534,6.85355339 C16.6582912,7.04881554 16.3417088,7.04881554 16.1464466,6.85355339 C15.9511845,6.65829124 15.9511845,6.34170876 16.1464466,6.14644661 L16.2928932,6 L16,6 C14.8954305,6 14,6.8954305 14,8 C14,8.56129192 14.3301293,9.27278631 14.7516956,9.66637738 C15.2886433,9.94356402 15.792506,10.3072247 16.2426407,10.7573593 C18.5857864,13.1005051 18.5857864,16.8994949 16.2426407,19.2426407 C15.9569017,19.5283797 15.6466243,19.7813454 15.3171203,20 L15.3171203,20 Z" />
                       </svg>
-                      Agile
+                      Scrum
                     <?php
                     }
                     ?>
@@ -155,21 +155,7 @@
                 </div>
               </div>
             </div>
-            <?php if (!empty($project['project_client'])) { ?>
-              <div class="col-xl-5 col-lg-6 col-xxl-5 col-sm-6">
-                <div class="card text-white text-black">
-                  <div class="card-header">
-                    <h4><?= $this->lang->line('client_detail') ? $this->lang->line('client_detail') : 'Client Detail' ?></h4>
-                  </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></span><strong><?= htmlspecialchars($project['project_client']->first_name) ?> <?= htmlspecialchars($project['project_client']->last_name) ?></strong></li>
-                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('company_name') ? $this->lang->line('company_name') : 'Company Name' ?></span><strong><?= htmlspecialchars($project['project_client']->company) ?></strong></li>
-                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></span><strong><?= htmlspecialchars($project['project_client']->email) ?></strong></li>
-                    <li class="list-group-item d-flex justify-content-between"><span class="mb-0"><?= $this->lang->line('mobile') ? $this->lang->line('mobile') : 'Mobile' ?></span><strong><?= $project['project_client']->phone ? htmlspecialchars($project['project_client']->phone) : 'No Number' ?></strong></li>
-                  </ul>
-                </div>
-              </div>
-            <?php } ?>
+            
             <div class="col-md-<?= !empty($project['project_client']) ? 12 : 5 ?>">
               <div class="card <?= !empty($project['project_client']) ? '' : 'card-' . htmlspecialchars($project['project_class']) ?>">
                 <div class="card-header">
@@ -198,7 +184,6 @@
                       <thead>
                         <tr>
                           <th><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></th>
-                          <th><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></th>
                           <th><?= $this->lang->line('completed') ? $this->lang->line('completed') : 'Completed Tasks' ?> / <?= $this->lang->line('task_count') ? $this->lang->line('task_count') : 'Total Tasks' ?></th>
                           <th><?= $this->lang->line('progress_ratio') ? $this->lang->line('progress_ratio') : 'Progress Ratio' ?></th>
                         </tr>
@@ -207,7 +192,6 @@
                         <?php foreach ($project["get_project_users_performance"] as $user) : ?>
                           <tr>
                             <td><a href="#" style="font-weight: bold;font-size: 12px;"><?= $user["first_name"] . ' ' . $user["last_name"] ?></a></td>
-                            <td><?= $user["email"] ?></td>
                             <td><?= $user["task_count"] ?></td>
                             <td><?= $user["performance"] ?></td>
                           </tr>
@@ -312,7 +296,7 @@
                 <svg fill="#000000" width="200" height="200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.3171203,20 L20.5,20 C20.7761424,20 21,20.2238576 21,20.5 C21,20.7761424 20.7761424,21 20.5,21 L3.5,21 C3.22385763,21 3,20.7761424 3,20.5 C3,20.2238576 3.22385763,20 3.5,20 L11.9975864,20 L11.9992783,19.9999948 C13.3169414,19.9980929 14.5879191,19.4831487 15.5355339,18.5355339 C17.4881554,16.5829124 17.4881554,13.4170876 15.5355339,11.4644661 C15.1550557,11.0839879 14.7285139,10.7776478 14.2738601,10.5454458 C14.254923,10.5373678 14.2363578,10.5280549 14.2182818,10.5174987 C12.5524962,9.69291702 10.5227538,9.8537508 8.99894709,11 L10.5,11 C10.7761424,11 11,11.2238576 11,11.5 C11,11.7761424 10.7761424,12 10.5,12 L7.5,12 C7.22385763,12 7,11.7761424 7,11.5 L7,8.5 C7,8.22385763 7.22385763,8 7.5,8 C7.77614237,8 8,8.22385763 8,8.5 L8,10.5276441 C9.46401314,9.21593206 11.4173682,8.74894646 13.2298049,9.12668728 C13.0840962,8.75531167 13,8.36566448 13,8 C13,6.34314575 14.3431458,5 16,5 L16.2928932,5 L16.1464466,4.85355339 C15.9511845,4.65829124 15.9511845,4.34170876 16.1464466,4.14644661 C16.3417088,3.95118446 16.6582912,3.95118446 16.8535534,4.14644661 L17.8535534,5.14644661 C18.0488155,5.34170876 18.0488155,5.65829124 17.8535534,5.85355339 L16.8535534,6.85355339 C16.6582912,7.04881554 16.3417088,7.04881554 16.1464466,6.85355339 C15.9511845,6.65829124 15.9511845,6.34170876 16.1464466,6.14644661 L16.2928932,6 L16,6 C14.8954305,6 14,6.8954305 14,8 C14,8.56129192 14.3301293,9.27278631 14.7516956,9.66637738 C15.2886433,9.94356402 15.792506,10.3072247 16.2426407,10.7573593 C18.5857864,13.1005051 18.5857864,16.8994949 16.2426407,19.2426407 C15.9569017,19.5283797 15.6466243,19.7813454 15.3171203,20 L15.3171203,20 Z" />
                 </svg>
-                <span class="image-label-text">Agile</span>
+                <span class="image-label-text">Scrum</span>
               </label>
             </div>
             <div class="modal-footer">

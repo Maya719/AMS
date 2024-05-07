@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Issue Type <span class="text-danger">*</span></label>
-                                            <select class="form-control wide" name="issue_type">
+                                            <select class="form-control wide" name="issue_type" id="issue_type">
                                                 <option value="epic" <?= ($issue->issue_type === 'epic') ? 'selected' : ''; ?>>Epic</option>
                                                 <option value="story" <?= ($issue->issue_type === 'story') ? 'selected' : ''; ?>>Story</option>
                                                 <option value="task" <?= ($issue->issue_type === 'task') ? 'selected' : ''; ?>>Task</option>
@@ -96,9 +96,17 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-4 mb-3">
+                                        <div class="col-sm-4 mb-3" id="story_point_show">
                                             <label class="form-label">Story Points</label>
                                             <input type="number" class="form-control" name="story_points" min="0" value="<?= $issue->story_points ?>">
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
+                                            <input type="text" name="starting_date" id="starting_date" class="form-control" value="">
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label"><?= $this->lang->line('due_date') ? $this->lang->line('due_date') : 'Due Date' ?><span class="text-danger">*</span></label>
+                                            <input type="text" name="due_date" id="due_date" class="form-control" value="">
                                         </div>
                                         <div class="col-sm-12 mb-3">
                                             <label class="form-label">Title<span class="text-danger">*</span></label>
@@ -225,6 +233,50 @@
                         }
                     });
                 }
+            });
+        });
+
+        start_date = '<?= $issue->starting_date ?>';
+        dueDate = '<?= $issue->due_date ?>';
+
+
+        var startingDatepicker = $('#starting_date').daterangepicker({
+            locale: {
+                format: date_format_js
+            },
+            singleDatePicker: true,
+            startDate: moment(start_date, 'YYYY-MM-DD').toDate(),
+        });
+
+
+        $('#due_date').daterangepicker({
+            locale: {
+                format: date_format_js
+            },
+            singleDatePicker: true,
+            startDate: moment(dueDate, 'YYYY-MM-DD').toDate(),
+            minDate: moment(start_date, 'YYYY-MM-DD').toDate()
+
+        });
+
+        $('#issue_type').on('change', function() {
+            issue_type = $('#issue_type').val();
+            if (issue_type !== 'task') {
+                $('#story_point_show').show();
+            } else {
+                $('#story_point_show').hide();
+            }
+        });
+        startingDatepicker.on('change', function(ev, picker) {
+            start = $('#starting_date').val();
+            $('#due_date').daterangepicker({
+                locale: {
+                    format: date_format_js
+                },
+                singleDatePicker: true,
+                startDate: start,
+                minDate: start
+
             });
         });
     </script>

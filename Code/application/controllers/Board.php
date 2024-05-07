@@ -180,7 +180,7 @@ class Board extends CI_Controller
         $html = '';
         $completed = 0;
         $total = 0;
-        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
+        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data,$board);
 
         // Calculate the progress percentage
         $rounded_percent = $this->calculate_progress($completed, $total);
@@ -253,7 +253,7 @@ class Board extends CI_Controller
         return $issues_query->result_array();
     }
 
-    private function generate_html_and_metrics($statuses, $issues_data)
+    private function generate_html_and_metrics($statuses, $issues_data,$board)
     {
         $html = '';
         $completed = 0;
@@ -273,7 +273,7 @@ class Board extends CI_Controller
             // Add issue cards based on status
             foreach ($issues_data as $issue) {
                 if ($status["id"] == $issue["status"]) {
-                    $html .= $this->html_generating($status, $issue);
+                    $html .= $this->html_generating($status, $issue,$board);
                     $total++;
                     if ($status["id"] == 4) {
                         $completed++;
@@ -295,8 +295,9 @@ class Board extends CI_Controller
         return (int) round($completed * 100 / $total);
     }
 
-    public function html_generating($status, $issue)
+    public function html_generating($status, $issue,$board)
     {
+        $due_or_not = '';
         $html = '';
         if (isset($issue["profile"]) && !empty($issue["profile"])) {
             if (file_exists('assets/uploads/profiles/' . $issue["profile"])) {
@@ -348,24 +349,58 @@ class Board extends CI_Controller
                         <div class="row justify-content-between align-items-center kanban-user">
                             <div class="section-title mt-3 mb-1">' . ($this->lang->line('team_member') ? ($this->lang->line('team_member')) : 'Team Member') . '</div>';
         if (!empty($issue["profile"])) {
-            $html .= '<ul class="users col-6">
+            $html .= '<ul class="users col-4">
                                             <li style="cursor: pointer;">
                                             <img data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . ($issue["first_name"] . ' ' . $issue["last_name"]) . '" src="' . $file_upload_path . '" alt="' . $file_upload_path . '"></li>
                                         </ul>';
         } else {
-            $html .= '<ul class="kanbanimg col-6">
+            $html .= '<ul class="kanbanimg col-4">
                                             <li><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="' . ($issue["first_name"] . ' ' . $issue["last_name"]) . '">' . (substr($issue["first_name"], 0, 1) . substr($issue["last_name"], 0, 1)) . '</span></li>
                                         </ul>';
         }
-        $html .= '
-                            <!--<div class="col-6 d-flex justify-content-end">
-                                    <span class="fs-14"><i class="far fa-clock me-2"></i>Due in 4 days</span>
-                                </div> -->
+        $due_or_not = $this->get_due_dates($issue["starting_date"], $issue["due_date"], $status["id"]);
+        if ($board == '0') {
+            $html .= '
+            <div class="col-8 d-flex justify-content-end">
+                <span class="fs-14"><i class="far fa-clock me-2"></i>' . $due_or_not . '</span>
+            </div>';
+        }
+       
+        $html .= ' 
                             </div>
                         </div>
                     </div>';
         return $html;
     }
+    public function get_due_dates($starting_date, $due_date, $status)
+    {
+        $current = date('Y-m-d');
+
+        if ($status == 4) {
+            return 'completed';
+        } else {
+            if ($due_date < $current) {
+                // Calculate days overdue
+                $datetime1 = new DateTime($due_date);
+                $datetime2 = new DateTime($current);
+                $interval = $datetime1->diff($datetime2);
+                $days_overdue = $interval->days;
+                return $days_overdue . ' days overdue';
+            } else {
+                // Calculate days until due date
+                $datetime1 = new DateTime($current);
+                $datetime2 = new DateTime($due_date);
+                $interval = $datetime1->diff($datetime2);
+                $days_until_due = $interval->days;
+                if ($days_until_due == 0) {
+                    return 'delivery days';
+                } else {
+                    return 'Due in ' . $days_until_due . ' days';
+                }
+            }
+        }
+    }
+
     public function get_project_by_board_type()
     {
         $dash_type = $this->input->post('boardType');
