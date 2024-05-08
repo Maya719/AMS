@@ -7,7 +7,7 @@
         line-height: 2rem;
         display: block;
         font-size: 12px;
-        font-weight: 400;
+        font-weight: 600;
     }
 
     .section .section-title {
@@ -89,45 +89,24 @@
                             <div class="card-body">
                                 <div class="basic-form">
                                     <div class="row">
-                                        <div class="col-lg-3">
-                                            <select class="form-select" id="board_type">
-                                                <option value="0">
-                                                    <?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?>
-                                                </option>
-                                                <option value="1">
-                                                    <?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?>
-                                                </option>
-                                            </select>
-                                        </div>
                                         <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-6">
                                                 <select class="form-select" id="project_id">
                                                     <option value="" selected>Project</option>
                                                     <?php foreach ($projects as $project) : ?>
-                                                        <?php if ($project["dash_type"] == 1) : ?>
-                                                            <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
-                                                        <?php endif ?>
+                                                        <option value="<?= base_url('board/tasks/' . $project["id"]) ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
                                                     <?php endforeach ?>
                                                 </select>
                                             </div>
                                         <?php endif ?>
-                                        <div class="col-lg-3" id="sprintCol" style="display: none;">
-                                            <select class="form-select" id="sprint_id">
-                                                <?php foreach ($sprints as $sprint) : ?>
-                                                    <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
-                                                <?php endforeach ?>
-                                            </select>
-                                        </div>
                                         <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
-                                            <div class="col-lg-3">
-                                                <select class="form-select" id="user_id">
-                                                    <option value="" selected>Member</option>
-                                                    <?php foreach ($system_users as $system_user) : ?>
-                                                        <?php if ($system_user->active == '1') : ?>
-                                                            <option value="<?= $system_user->id ?>">
-                                                                <?= $system_user->first_name . ' ' . $system_user->last_name ?>
-                                                            </option>
-                                                        <?php endif ?>
+                                            <div class="col-lg-6">
+                                                <select class="form-select" id="task_users">
+                                                    <option value="">Member</option>
+                                                    <?php foreach ($project_users as $system_user) : ?>
+                                                        <option value="<?= $system_user["id"] ?>">
+                                                            <?= $system_user["first_name"] . ' ' . $system_user["last_name"] ?>
+                                                        </option>
                                                     <?php endforeach ?>
                                                 </select>
                                             </div>
@@ -286,160 +265,110 @@
     <script src="<?= base_url('assets2/vendor/draggable/draggable.js') ?>"></script>
     <script>
         $(document).ready(function() {
-            ajaxCall();
-            $('#sprint_id, #user_id, #project_id').change(function() {
-                ajaxCall();
-            });
-            loading = true;
-
-            function ajaxCall() {
-                const sprintId = $('#sprint_id').val();
-                const userId = $('#user_id').val();
-                const projectId = $('#project_id').val();
-                const board = $('#board_type').val();
-                console.log(board);
-                $.ajax({
-                    url: 'board/filter_board',
-                    type: 'POST',
-                    data: {
-                        sprint_id: sprintId,
-                        user_id: userId,
-                        project_id: projectId,
-                        board: board,
-                    },
-                    dataType: 'json',
-                    beforeSend: function() {
-                        showLoader();
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        $('#html').html(response.html);
-                        initSorting();
-                        initPopovers();
-                        if (board == 1) {
-                            $('#sprint_name').html(response.sprint.title);
-                            // const from_to = response.sprint.starting_date + ' - ' + response.sprint.starting_date;
-                            $('#from-to').html(response.sprint.goal);
-                        }
-                        $('.delete_sprint').attr('data-id', sprintId);
-                        $('.complete_sprint').attr('data-id', sprintId);
-                        $('#percent').html(response.percent)
-                    },
-                    complete: function() {
-                        hideLoader();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                    }
-                });
-            }
-
-            function initSorting() {
-                const zones = document.querySelectorAll(".draggable-zone.dropzoneContainer");
-                if (zones.length === 0) return;
-
-                const sortable = new Sortable.default(zones, {
-                    draggable: ".draggable",
-                    handle: ".draggable-handle",
-                    mirror: {
-                        appendTo: "body",
-                        constrainDimensions: true,
-                    },
-                });
-                sortable.on("drag:stop", (event) => {
-                    const draggedElement = event.data.source;
-
-                    if (draggedElement) {
-                        const dataID = draggedElement.getAttribute("data-id");
-                        console.log("Dragged card data-id:", dataID);
-
-                        const closestDropZone = draggedElement.closest(".draggable-zone.dropzoneContainer");
-                        if (closestDropZone) {
-                            const statusID = closestDropZone.getAttribute("data-status-id");
-                            saveStatus(dataID, statusID);
-                            console.log("Closest drop zone data-status-id:", statusID);
-                        } else {
-                            console.log("Could not find a closest drop zone to the dragged element");
-                        }
-                    } else {
-                        console.log("Could not access the dragged element during drag:start event");
-                    }
-                });
-            }
-
-            function saveStatus(task, status) {
-                $.ajax({
-                    url: 'board/saveStatus',
-                    type: 'POST',
-                    data: {
-                        task: task,
-                        status: status,
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                    }
-                });
-            }
-
-            function initPopovers() {
-                $('[data-bs-toggle="popover"]').popover({
-                    trigger: 'hover focus',
-                    placement: 'auto'
-                });
-            }
-
-            $('#board_type').change(function() {
-                var boardType = $(this).val();
-                if (boardType == '0') {
-                    $('#sprintCol').hide();
-                    $('#sprint_detail').hide();
-                    $('#sprint_li').hide();
-                    $('#home').removeClass('active');
-                    $('#contact').addClass('active');
-                    $('#home').removeClass('show');
-                    $('#contact').addClass('show');
-                    $('#project_tab_anchor').addClass('active');
-                    $('#sprint_tab_anchor').removeClass('active');
-                } else {
-                    $('#sprintCol').show();
-                    $('#sprint_detail').show();
-                    $('#sprint_li').show();
-                    $('#home').removeClass('active');
-                    $('#contact').addClass('active');
-                    $('#home').removeClass('show');
-                    $('#contact').addClass('show');
-                }
-                $.ajax({
-                    url: 'board/get_project_by_board_type',
-                    type: 'POST',
-                    data: {
-                        boardType: boardType,
-                    },
-                    dataType: 'json',
-                    beforeSend: function() {
-                        showLoader();
-                    },
-                    success: function(response) {
-                        $('#project_id').empty();
-                        $('#project_id').append('<option value="">Project</option>');
-                        $.each(response, function(index, project) {
-                            $('#project_id').append('<option value="' + project.id + '">' + project.title + '</option>');
-                        });
-                        ajaxCall();
-                    },
-                    complete: function() {
-                        hideLoader();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
+            projectId = '<?= $project_id ?>'
+            user_id = $('#task_users').val();
+            console.log(projectId);
+            callAjax(projectId, user_id);
         });
+        $(document).on('change', '#task_users', function(e) {
+            projectId = '<?= $project_id ?>'
+            user_id = $('#task_users').val();
+            console.log(user_id);
+            callAjax(projectId, user_id);
+        });
+
+        function callAjax(projectId, user_id) {
+            $.ajax({
+                url: base_url + 'board/filter_board',
+                type: 'POST',
+                data: {
+                    project_id: projectId,
+                    user_id: user_id
+                },
+                dataType: 'json',
+                beforeSend: function() {
+                    showLoader();
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('#html').html(response.html);
+                    if (response.sprint_show) {
+                        $('#sprint_detail').show();
+                        $('#sprint_name').html(response.sprint.title);
+                        $('#from-to').html(response.sprint.goal);
+                    } else {
+                        $('#sprint_detail').hide();
+                    }
+                    initSorting();
+                    initPopovers();
+                },
+                complete: function() {
+                    hideLoader();
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+
+        function initSorting() {
+            const zones = document.querySelectorAll(".draggable-zone.dropzoneContainer");
+            if (zones.length === 0) return;
+
+            const sortable = new Sortable.default(zones, {
+                draggable: ".draggable",
+                handle: ".draggable-handle",
+                mirror: {
+                    appendTo: "body",
+                    constrainDimensions: true,
+                },
+            });
+
+            sortable.on("drag:stop", (event) => {
+                const draggedElement = event.data.source;
+
+                if (draggedElement) {
+                    const dataID = draggedElement.getAttribute("data-id");
+                    console.log("Dragged card data-id:", dataID);
+
+                    const closestDropZone = draggedElement.closest(".draggable-zone.dropzoneContainer");
+                    if (closestDropZone) {
+                        const statusID = closestDropZone.getAttribute("data-status-id");
+                        saveStatus(dataID, statusID);
+                        console.log("Closest drop zone data-status-id:", statusID);
+                    } else {
+                        console.log("Could not find a closest drop zone to the dragged element");
+                    }
+                } else {
+                    console.log("Could not access the dragged element during drag:start event");
+                }
+            });
+        }
+
+        function saveStatus(task, status) {
+            $.ajax({
+                url: base_url + 'board/saveStatus',
+                type: 'POST',
+                data: {
+                    task: task,
+                    status: status,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+
+        function initPopovers() {
+            $('[data-bs-toggle="popover"]').popover({
+                trigger: 'hover focus',
+                placement: 'auto'
+            });
+        }
         $(document).on('click', '.delete_issue', function(e) {
             e.preventDefault();
             var id = $(this).data("issue-id");
@@ -626,7 +555,7 @@
                     if (result.project.dash_type == 0) {
                         $('#issue_start').html(moment(result.issue.starting_date, 'YYYY-MM-DD').format(date_format_js));
                         $('#issue_due').html(moment(result.issue.due_date, 'YYYY-MM-DD').format(date_format_js));
-                    }else{
+                    } else {
                         $('#issue_start_li').hide();
                         $('#issue_due_li').hide();
 
@@ -657,14 +586,10 @@
         });
     </script>
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            var sprintSelect = document.getElementById('sprint_id');
-            var agileOption = document.querySelector('#board_type option[value="1"]');
-
-            if (sprintSelect && sprintSelect.childElementCount === 0) {
-                agileOption.style.display = 'none';
-            } else {
-                agileOption.style.display = 'block';
+        document.getElementById('project_id').addEventListener('change', function() {
+            var selectedOption = this.value;
+            if (selectedOption !== '') {
+                window.location.href = selectedOption;
             }
         });
     </script>

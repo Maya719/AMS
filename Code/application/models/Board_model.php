@@ -59,4 +59,20 @@ class Board_model extends CI_Model
         $query2 = $this->db->get();
         return $query2->row();
     }
+    public function get_project_by_id($id)
+    {
+        $this->db->select('*');
+        $this->db->from('projects');
+        $this->db->where('id', $id);
+        $query2 = $this->db->get();
+        return $query2->row();
+    }
+    public function get_running_sprint($project_id)
+    {
+        $this->db->select('*');
+        $this->db->from('sprints');
+        $this->db->where('status', 1);
+        $status_query = $this->db->get();
+        return $status_query->row();
+    }
 }

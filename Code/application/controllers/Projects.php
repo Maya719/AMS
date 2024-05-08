@@ -1815,7 +1815,6 @@ class Projects extends CI_Controller
 				echo json_encode($this->data);
 			}
 		} else {
-
 			$this->data['error'] = true;
 			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
 			echo json_encode($this->data);
