@@ -60,6 +60,12 @@
     <div class="content-body default-height">
       <!-- row -->
       <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<?= base_url('home') ?>">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Library</li>
+          </ol>
+        </nav>
         <?php if ($this->ion_auth->is_admin() || permissions('project_create')) : ?>
           <div class="row d-flex justify-content-end mb-2">
             <div class="col-xl-2 col-sm-3 mb-2">
@@ -68,9 +74,6 @@
             </div>
           </div>
         <?php endif ?>
-
-
-
         <div class="row">
           <div class="col-lg-12">
             <div class="card">
@@ -360,10 +363,7 @@
         theadRow += '<th>Assignee</th>';
         theadRow += '<th>Stats</th>';
         theadRow += '<th>Created</th>';
-        <?php if (permissions('project_delete') || permissions('project_edit')) { ?>
-          theadRow += '<th>Action</th>';
-        <?php          }
-        ?>
+        theadRow += '<th>Action</th>';
         theadRow += '</tr>';
         thead.html(theadRow);
         // Add table body
@@ -383,27 +383,24 @@
           userRow += '<td>' + row.project_users4 + '</td>';
           userRow += '<td>' + row.stats + '</td>';
           userRow += '<td>' + row.created + '</td>';
-          <?php if (permissions('project_delete') || permissions('project_edit')) { ?>
-            userRow += '<td>';
-            userRow += '<div class="d-flex">';
-            userRow += '<a href="' + base_url + 'projects/detail/' + row.id + '" class="text-primary" data-id="' + row.id + '" ><i class="fa fa-eye color-muted"></i></a>';
-            <?php if (permissions('project_edit')) { ?>
-              userRow += '<a href="javascript:void(0);" class="text-primary ms-2 btn-edit-projecct" data-id="' + row.id + '" data-bs-toggle="modal" data-bs-target="#exampleModalToggle3"><i class="fa fa-pencil color-muted"></i></a>';
-            <?php
-            }
-            ?>
-            if (row.dash_type == 1) {
-              userRow += '<a href="' + base_url + 'backlog/project/' + row.id + '" class="text-primary ms-2" data-id="' + row.id + '" ><i class="fas fa-rotate-left"></i></a>';
-            }
-            userRow += '<a href="' + base_url + 'board/tasks/' + row.id + '" class="text-primary ms-2" data-id="' + row.id + '" ><i class="fas fa-th-list"></i></a>';
-            <?php if ($this->ion_auth->is_admin() || permissions('project_delete')) { ?>
-              userRow += '<a href="#" class="text-danger delete-project ms-2" data-bs-toggle="tooltip" data-id="' + row.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
-            <?php          }
-            ?>
-            userRow += '</div>';
-            userRow += '</td>';
+          userRow += '<td>';
+          userRow += '<div class="d-flex">';
+          userRow += '<a href="' + base_url + 'projects/detail/' + row.id + '" class="text-primary" data-id="' + row.id + '" ><i class="fa fa-eye color-muted"></i></a>';
+          <?php if ($this->ion_auth->is_admin() || permissions('project_edit')) { ?>
+            userRow += '<a href="javascript:void(0);" class="text-primary ms-2 btn-edit-projecct" data-id="' + row.id + '" data-bs-toggle="modal" data-bs-target="#exampleModalToggle3"><i class="fa fa-pencil color-muted"></i></a>';
+          <?php
+          }
+          ?>
+          if (row.dash_type == 1) {
+            userRow += '<a href="' + base_url + 'backlog/project/' + row.id + '" class="text-primary ms-2" data-id="' + row.id + '" ><i class="fas fa-rotate-left"></i></a>';
+          }
+          userRow += '<a href="' + base_url + 'board/tasks/' + row.id + '" class="text-primary ms-2" data-id="' + row.id + '" ><i class="fas fa-th-list"></i></a>';
+          <?php if ($this->ion_auth->is_admin() || permissions('project_delete')) { ?>
+            userRow += '<a href="#" class="text-danger delete-project ms-2" data-bs-toggle="tooltip" data-id="' + row.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
           <?php          }
           ?>
+          userRow += '</div>';
+          userRow += '</td>';
           userRow += '</tr>';
           tbody.append(userRow);
           count++;

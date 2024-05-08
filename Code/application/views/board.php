@@ -85,36 +85,32 @@
                 <?php endif ?>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="basic-form">
+                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
+                            <div class="card">
+                                <div class="card-body">
                                     <div class="row">
-                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
-                                            <div class="col-lg-6">
-                                                <select class="form-select" id="project_id">
-                                                    <option value="" selected>Project</option>
-                                                    <?php foreach ($projects as $project) : ?>
-                                                        <option value="<?= base_url('board/tasks/' . $project["id"]) ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                            </div>
-                                        <?php endif ?>
-                                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
-                                            <div class="col-lg-6">
-                                                <select class="form-select" id="task_users">
-                                                    <option value="">Member</option>
-                                                    <?php foreach ($project_users as $system_user) : ?>
-                                                        <option value="<?= $system_user["id"] ?>">
-                                                            <?= $system_user["first_name"] . ' ' . $system_user["last_name"] ?>
-                                                        </option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                            </div>
-                                        <?php endif ?>
+                                        <div class="col-lg-6">
+                                            <select class="form-select" id="project_id">
+                                                <option value="" selected>Project</option>
+                                                <?php foreach ($projects as $project) : ?>
+                                                    <option value="<?= base_url('board/tasks/' . $project["id"]) ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select class="form-select" id="task_users">
+                                                <option value="">Member</option>
+                                                <?php foreach ($project_users as $system_user) : ?>
+                                                    <option value="<?= $system_user["id"] ?>">
+                                                        <?= $system_user["first_name"] . ' ' . $system_user["last_name"] ?>
+                                                    </option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endif ?>
                     </div>
                     <div class="col-xl-12 px-3" id="sprint_detail" style="display: none;">
                         <div class="card">
