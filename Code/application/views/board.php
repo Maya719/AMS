@@ -75,14 +75,23 @@
         <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
             <div class="container-fluid">
-                <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
-                    <div class="row d-flex justify-content-end">
+                <div class="row">
+                    <div class="col-xl-10 col-sm-9 mt-3">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                                <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('projects') ?>">Projects</a></li>
+                                <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
                         <div class="col-xl-2 col-sm-3">
                             <a href="<?= base_url('issues') ?>" class="btn btn-block btn-primary <?php echo $is_allowd_to_create_new ? "" : "disabled" ?>">Add
                                 Issue</a>
                         </div>
-                    </div>
-                <?php endif ?>
+                    <?php endif ?>
+                </div>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
                         <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>

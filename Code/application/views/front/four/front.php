@@ -78,7 +78,7 @@
         <div class="tp-header-2-top d-none d-lg-block">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-10 col-xl-8">
+                    <div class="col-lg-10 col-xl-10">
                         <div class="tp-header-2-top-info">
                             <ul>
                                 <li class="tp-header-2-top-ml-60">
@@ -87,8 +87,8 @@
                                     </a>
                                 </li>
                                 <li class="tp-header-2-top-ml-80">
-                                    <a href="mailto:hr@mobipixels.com">
-                                        <span><i class="flaticon-mail"></i></span>hr@mobipixels.com
+                                    <a href="mailto:ag.rana@airnet-technologies.com">
+                                        <span><i class="flaticon-mail"></i></span>ag.rana@airnet-technologies.com
                                     </a>
                                 </li>
                                 <li class="tp-header-2-top-ml-80">

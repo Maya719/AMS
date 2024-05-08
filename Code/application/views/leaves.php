@@ -33,7 +33,15 @@
       <div class="container-fluid">
 
         <div class="row d-flex justify-content-end">
-          <div class="col-xl-2 col-sm-3 mt-2">
+          <div class="col-xl-10 col-sm-9 mt-3">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col-xl-2 col-sm-3">
             <a href="<?= base_url('leaves/create_leave') ?>" class="btn btn-block btn-primary">+ ADD</a>
           </div>
           <div class="col-lg-12 mt-3">

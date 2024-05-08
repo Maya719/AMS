@@ -69,7 +69,13 @@
         <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
             <div class="container-fluid">
-
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('projects') ?>">Projects</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+                    </ol>
+                </nav>
                 <div class="row d-flex justify-content-end">
                     <div class="col-xl-12 col-lg-12">
                         <div class="card">
