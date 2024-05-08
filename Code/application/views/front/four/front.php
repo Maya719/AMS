@@ -123,7 +123,8 @@
                                             <li><a href="#feature">Features</a></li>
                                             <li><a href="#featureItem">Pricing</a></li>
                                             <li> <a href="#contact">Contact</a></li>
-                                            <li> <a href="#company">Our Company</a></li>
+                                            <li> <a href="#company">Our Company</a></li>                                      
+                                            <li><a href="<?= base_url('front/guide') ?>">Guide</a></li>
                                             <li> <a href="<?= base_url('auth') ?>">Login</a></li>
                                         </ul>
                                     </nav>
@@ -802,6 +803,10 @@
                                         <?php if (frontend_permissions('terms')) { ?>
                                             <li><a href="<?= base_url('front/terms-and-conditions') ?>">Terms & Condition</a></li>
                                         <?php } ?>
+                                        <?php if (frontend_permissions('terms')) { ?>
+                                            <li><a href="<?= base_url('front/guide') ?>">Guide</a></li>
+                                        <?php } ?>
+                                        
                                     </ul>
                                 </div>
                             </div>

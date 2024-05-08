@@ -257,6 +257,20 @@ class Front extends CI_Controller
 		}
 	}
 
+	public function guide()
+	{
+
+		$this->data['page_title'] = 'Guide - ' . company_name();
+		$this->data['data'] = $this->front_model->get_pages(4);
+		$theme_name = frontend_permissions('theme_name');
+		if ($theme_name == 'theme_two') {
+			$this->load->view('front/two/pages', $this->data);
+		} else {
+			$this->load->view('front/one/pages', $this->data);
+		}
+	}
+
+
 	public function theme()
 	{
 
@@ -413,6 +427,24 @@ class Front extends CI_Controller
 			redirect('auth', 'refresh');
 		}
 	}
+
+
+	
+	public function saas_guide()
+	{
+		if ($this->ion_auth->logged_in() && is_saas_admin()) {
+			$this->data['page_title'] = 'Frontend - ' . company_name();
+			$this->data['main_page'] = 'Guide';
+			$this->data['lang'] = $this->languages_model->get_languages('', '', 1);
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$this->data['data'] = $this->front_model->get_pages(4);
+	
+			$this->load->view('saas-guide', $this->data);
+		} else {
+			redirect('auth', 'refresh');
+		}
+	}
+
 
 
 	public function send_mail()

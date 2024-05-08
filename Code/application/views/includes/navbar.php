@@ -317,6 +317,8 @@
 
           <li <?=(current_url() == base_url('front/saas-terms-and-conditions'))?'class="active"':''; ?>><a class="nav-link" href="<?=base_url('front/saas-terms-and-conditions')?>"><?=$this->lang->line('terms_and_conditions')?$this->lang->line('terms_and_conditions'):'Terms and Conditions'?></a></li>
 
+          <li <?=(current_url() == base_url('front/saas-guide'))?'class="active"':''; ?>><a class="nav-link" href="<?= base_url('front/saas-guide') ?>"><?= $this->lang->line('guide') ? $this->lang->line('guide') : 'Guide' ?></a></li>
+
         </ul>
       </li>
       <li <?= (current_url() == base_url('users'))?'class="active"':''; ?>><a class="nav-link" href="<?=base_url('users')?>"><i class="fas fa-user-tie text-success"></i> <span><?=$this->lang->line('saas_admins')?$this->lang->line('saas_admins'):'SaaS Admins'?></span></a></li>
