@@ -1699,7 +1699,6 @@ class Projects extends CI_Controller
 			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('client', 'Client', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('update_id', 'Project ID', 'trim|required|strip_tags|xss_clean|is_numeric');
-			$this->form_validation->set_rules('board', 'Project Type', 'trim|required|strip_tags|xss_clean|is_numeric');
 
 			if ($this->form_validation->run() == TRUE) {
 				$project_id = $this->input->post('update_id');

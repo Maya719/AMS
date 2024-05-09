@@ -13,7 +13,7 @@ class Board extends CI_Controller
     public $lang;
     public $board_model;
 
-    public function tasks($id = '')
+    public function tasks($id = '', )
     {
         if ($this->ion_auth->logged_in()) {
             $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
