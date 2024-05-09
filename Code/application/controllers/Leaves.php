@@ -686,42 +686,7 @@ class Leaves extends CI_Controller
 					if ($leave_id) {
 						$group = get_notifications_group_id();
 						$system_admins = $this->ion_auth->users($group)->result();
-						$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
-						$employee_id_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
-						$employee_id_result = $employee_id_query->row_array();
-						foreach ($system_admins as $system_user) {
-							if (($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')) && $system_user->active == 1) {
-								$to_user = $this->ion_auth->user($system_user->user_id)->row();
-								$template_data = array();
-								$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
-								$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
-								$type = $this->input->post('type_add');
-								$template_data['LEAVE_TYPE'] = '';
-								$querys = $this->db->query("SELECT * FROM leaves_type");
-								$leaves = $querys->result_array();
-								if (!empty($leaves)) {
-									foreach ($leaves as $leave) {
-										if ($type == $leave['id']) {
-											$template_data['LEAVE_TYPE'] = $leave['name'];
-										}
-									}
-								}
-								$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
-								$template_data['REASON'] = $this->input->post('leave_reason');
-								$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
-								$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
-								$email_template = render_email_template('leave_request', $template_data);
-								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
-								$notification_data = array(
-									'notification' => 'Leave request received',
-									'type' => 'leave_request',
-									'type_id' => $leave_id,
-									'from_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
-									'to_id' => $system_user->user_id,
-								);
-								$notification_id = $this->notifications_model->create($notification_data);
-							}
-						}
+
 						$roler = $this->session->userdata('user_id');
 						$group = $this->ion_auth->get_users_groups($roler)->result();
 						$group_id = $group[0]->id;
@@ -729,7 +694,7 @@ class Leaves extends CI_Controller
 						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
 						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
 						$heiCurrentGroupStep_number = $heiCurrentGroupStepResult->step_no;
-						$step = $this->leaves_model->leaveStep($heiCurrentGroupStep_number,$data["user_id"]);
+						$step = $this->leaves_model->leaveStep($heiCurrentGroupStep_number, $data["user_id"]);
 						$log[] = [
 							'leave_id' => $leave_id,
 							'group_id' => $group_id,
@@ -740,6 +705,42 @@ class Leaves extends CI_Controller
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);
 						}
+						$CreateNotifications = $this->CreateNotification($step, $data['user_id']);
+						$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
+						$employee_id_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
+						$employee_id_result = $employee_id_query->row_array();
+						foreach ($CreateNotifications as $system_user) {
+							$template_data = array();
+							$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
+							$template_data['NAME'] = $system_user->first_name . ' ' . $system_user->last_name;
+							$type = $this->input->post('type_add');
+							$template_data['LEAVE_TYPE'] = '';
+							$querys = $this->db->query("SELECT * FROM leaves_type");
+							$leaves = $querys->result_array();
+							if (!empty($leaves)) {
+								foreach ($leaves as $leave) {
+									if ($type == $leave['id']) {
+										$template_data['LEAVE_TYPE'] = $leave['name'];
+									}
+								}
+							}
+							$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
+							$template_data['REASON'] = $this->input->post('leave_reason');
+							$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+							$email_template = render_email_template('leave_request', $template_data);
+							send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+
+							$notification_data = array(
+								'notification' => 'Leave request received',
+								'type' => 'leave_request',
+								'type_id' => $leave_id,
+								'from_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
+								'to_id' => $system_user->user_id,
+							);
+							$notification_id = $this->notifications_model->create($notification_data);
+						}
+
 						$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 						$this->session->set_flashdata('message_type', 'success');
 						$this->data['data'] = $data;
@@ -766,6 +767,26 @@ class Leaves extends CI_Controller
 
 
 
+	public function CreateNotification($step, $employee_id)
+	{
+		$user_id = get_user_id_from_employee_id($employee_id);
+		$saas_id = $this->session->userdata('saas_id');
+		$this->db->where('saas_id', $saas_id);
+		$this->db->where('step_no', $step);
+		$query = $this->db->get('leave_hierarchy');
+		$rows = $query->result();
+		foreach ($rows as &$row) {
+			$step_group = $row->group_id;
+			$step_groupArray[] = $row->group_id;
+			$group = $this->ion_auth->group($step_group)->row();
+			$groups_users[] = $this->ion_auth->users($step_group)->result();
+		}
+		$flattenedArray = [];
+		foreach ($groups_users as $users) {
+			$flattenedArray = array_merge($flattenedArray, $users);
+		}
+		return $flattenedArray;
+	}
 	public function get_leaves_count()
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
