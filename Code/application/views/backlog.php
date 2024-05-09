@@ -461,6 +461,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#profile"><i class="fa-solid fa-anchor me-2"></i> Additional Information</a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#comments"><i class="fa-regular fa-message  me-2"></i> Comments</a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade" id="profile">
@@ -496,12 +500,26 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="tab-pane fade show active" id="contact">
                                     <div class="pt-4">
                                         <h4 id="project_title"></h4>
                                         <p class="" id="project_description"></p>
                                         <div class="cm-content-body publish-content form excerpt" id="project_dates">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="comments" role="tabpanel">
+                                    <div class="pt-2">
+                                        <div class="mt-5 d-flex mb-3">
+                                            <input type="hidden" name="comment_task_id" id="comment_task_id" value="">
+                                            <input type="hidden" name="is_comment" id="is_comment" value="true">
+                                            <input type="text" name="message" id="message" class="form-control" placeholder="<?= $this->lang->line('type_your_message') ? $this->lang->line('type_your_message') : 'Type your message' ?>">
+                                            <button type="submit" class="btn btn-primary sendComment">
+                                                <i class="far fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <div id="comments_append" style="max-height: 400px; overflow:auto">
 
                                         </div>
                                     </div>
@@ -995,6 +1013,47 @@
                     } else if (result.issue.priority != 1) {
                         $("#issue_priority").html(result.priority.title + ' <i class="fa-solid fa-angles-up text-' + result.priority.class + '"></i>');
                     }
+                    $("#comment_task_id").val(id);
+                    var commentsHTML = '';
+                    if (result.comments) {
+                        result.comments.forEach(comment => {
+                            commentsHTML += `<div class="msg-bx d-flex justify-content-between align-items-center">
+                                                <div class="msg d-flex align-items-center w-100">
+                                                    <div class="image-box">
+                                                    <ul class="kanbanimg col-4">
+                                                        <li><span data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="` + comment.first_name + ` ` + comment.last_name + `">` + comment.short_name + `</span></li>
+                                                    </ul>
+                                                    </div>
+                                                    <div class="ms-3 w-100 ">
+                                                        <a href="#">
+                                                            <h5 class="mb-1">` + comment.first_name + ` ` + comment.last_name + `</h5>
+                                                        </a>
+                                                        <div class="d-flex justify-content-between">
+                                                            <p class="me-auto mb-0 text-black">` + comment.message + `</p>
+                                                            <small class="me-4">` + comment.created + `</small>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="dropdown">
+                                                    <div class="btn-link" data-bs-toggle="dropdown">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu dropdown-menu-right">`;
+                            if (comment.can_delete) {
+                                commentsHTML += `<a class="dropdown-item text-danger delete-comment" href="javascript:void(0)" data-id="` + comment.id + `">Delete</a>`;
+                            }
+                            commentsHTML += `       </div>
+                                                </div>
+                                            </div>`;
+
+                        });
+                    }
+                    $("#comments_append").html(commentsHTML);
                     if (result.project && result.project.title !== null) {
                         $("#project_title").html(result.project.title);
                         $("#project_description").html(result.project.description);
@@ -1024,6 +1083,69 @@
                 },
                 error: function(error) {
                     console.error(error);
+                }
+            });
+        });
+        $(document).on('click', '.sendComment', function(e) {
+            var comment_task_id = $("#comment_task_id").val();
+            var message = $("#message").val();
+            var is_comment = $("#is_comment").val();
+            $.ajax({
+                type: "POST",
+                url: base_url + 'projects/create_comment',
+                data: {
+                    comment_task_id: comment_task_id,
+                    message: message,
+                    is_comment: is_comment,
+                },
+                dataType: "json",
+                success: function(result) {
+                    if (result['error'] == false) {
+                        location.reload();
+                    } else {
+                        iziToast.error({
+                            title: result['message'],
+                            message: "",
+                            position: 'topRight'
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            })
+        });
+        $(document).on('click', '.delete-comment', function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            console.log(id);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'projects/delete_task_comment/' + id,
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload();
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    });
                 }
             });
         });

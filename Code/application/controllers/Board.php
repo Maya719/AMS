@@ -13,7 +13,7 @@ class Board extends CI_Controller
     public $lang;
     public $board_model;
 
-    public function tasks($id = '', )
+    public function tasks($id = '', $select_user='')
     {
         if ($this->ion_auth->logged_in()) {
             $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
@@ -46,7 +46,6 @@ class Board extends CI_Controller
             $query = $this->db->get();
             $this->data['project_users'] = $query->result_array();
 
-
             $this->db->select('*');
             $this->db->from('projects');
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
@@ -64,6 +63,7 @@ class Board extends CI_Controller
                 $this->data['system_users'] = $users;
             }
             $this->data["project_id"] = $id;
+            $this->data["select_user"] = $select_user;
             $this->load->view('board', $this->data);
         } else {
             redirect('auth', 'refresh');

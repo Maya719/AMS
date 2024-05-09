@@ -156,7 +156,7 @@
             <div class="col-md-<?= !empty($project['project_client']) ? 12 : 5 ?>">
               <div class="card <?= !empty($project['project_client']) ? '' : 'card-' . htmlspecialchars($project['project_class']) ?>">
                 <div class="card-header">
-                  <h4><?= $this->lang->line('task_overview') ? $this->lang->line('task_overview') : 'Task Overview' ?></h4>
+                  <h4><?= $this->lang->line('issues_status_overview') ? $this->lang->line('issues_status_overview') : 'Issues Status Overview' ?></h4>
                 </div>
                 <div class="card-body text-white text-black">
                   <ul class="list-group list-group-flush">
@@ -173,7 +173,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <h4><?= $this->lang->line('Tasks_overview') ? $this->lang->line('Tasks_overview') : 'Tasks Overview' ?></h4>
+                  <h4><?= $this->lang->line('issues_overview') ? $this->lang->line('issues_overview') : 'Issues Overview' ?></h4>
                 </div>
                 <div class="card-body p-2">
                   <div class="table-responsive">
@@ -188,7 +188,7 @@
                       <tbody id="customers">
                         <?php foreach ($project["get_project_users_performance"] as $user) : ?>
                           <tr>
-                            <td><a href="#" style="font-weight: bold;font-size: 12px;"><?= $user["first_name"] . ' ' . $user["last_name"] ?></a></td>
+                            <td><a href="<?=base_url('board/tasks/'.$project["id"].'/'.$user["id"])?>" style="font-weight: bold;font-size: 12px;"><?= $user["first_name"] . ' ' . $user["last_name"] ?></a></td>
                             <td><?= $user["task_count"] ?></td>
                             <td><?= $user["performance"] ?></td>
                           </tr>

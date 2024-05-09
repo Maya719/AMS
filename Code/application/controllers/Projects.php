@@ -582,8 +582,8 @@ class Projects extends CI_Controller
 			} else {
 				$this->data['error'] = true;
 				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-				echo json_encode($this->data);
 			}
+			echo json_encode($this->data);
 		}
 	}
 
@@ -1511,12 +1511,7 @@ class Projects extends CI_Controller
 			if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (permissions('project_view_selected')) {
-				$selected = selected_users();
-				foreach ($selected as $user_id) {
-					$users[] = $this->ion_auth->user($user_id)->row();
-				}
-				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
-				$this->data['system_users'] = $users;
+				$this->data['system_users'] = $this->ion_auth->members()->result();
 			}
 			$this->data['system_clients'] = $this->ion_auth->users(array(4))->result();
 			;
@@ -1699,6 +1694,7 @@ class Projects extends CI_Controller
 			$this->form_validation->set_rules('description', 'Description', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('client', 'Client', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('update_id', 'Project ID', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('board2', 'Board Type', 'trim|required|strip_tags|xss_clean|is_numeric');
 
 			if ($this->form_validation->run() == TRUE) {
 				$project_id = $this->input->post('update_id');
@@ -1711,7 +1707,7 @@ class Projects extends CI_Controller
 						'created_by' => $this->session->userdata('user_id'),
 						'title' => $this->input->post('title'),
 						'description' => $this->input->post('description'),
-						'dash_type' => $this->input->post('board') ? $this->input->post('board') : '0',
+						'dash_type' => $this->input->post('board2') ? $this->input->post('board2') : '0',
 					);
 				} else {
 					$ending_date = format_date($this->input->post('ending_date'), "Y-m-d");
@@ -1729,7 +1725,7 @@ class Projects extends CI_Controller
 						'created_by' => $this->session->userdata('user_id'),
 						'title' => $this->input->post('title'),
 						'description' => $this->input->post('description'),
-						'dash_type' => $this->input->post('board') ? $this->input->post('board') : '0',
+						'dash_type' => $this->input->post('board2') ? $this->input->post('board2') : '0',
 					);
 				}
 
