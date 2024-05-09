@@ -743,6 +743,8 @@ class Leaves extends CI_Controller
 
 						$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 						$this->session->set_flashdata('message_type', 'success');
+						$this->data['template_data'] = $template_data;
+						$this->data['CreateNotification'] = $CreateNotifications;
 						$this->data['data'] = $data;
 						$this->data['error'] = false;
 						$this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
