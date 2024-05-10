@@ -298,11 +298,11 @@
         $(document).on('change', '#task_users', function(e) {
             projectId = '<?= $project_id ?>'
             user_id = $('#task_users').val();
-            console.log(user_id);
             callAjax(projectId, user_id);
         });
 
         function callAjax(projectId, user_id) {
+            console.log(projectId, user_id);
             $.ajax({
                 url: base_url + 'board/filter_board',
                 type: 'POST',

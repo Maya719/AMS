@@ -86,9 +86,14 @@
                                     <!-- <p class="mb-0">8 Issues</p> -->
                                 </div>
                                 <?php if ($this->ion_auth->is_admin() || permissions('project_create')) : ?>
-                                    <div class="d-flex">
-                                        <a href="javascript:void(0);" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#sprint-add-modal">+ Sprint</a>
-                                    </div>
+                                    <?php if ($sprints) : ?>
+                                        <!-- TRUE -->
+                                    <?php else : ?>
+                                        <div class="d-flex">
+                                            <a href="javascript:void(0);" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#sprint-add-modal">+ Sprint</a>
+                                        </div>
+                                    <?php endif ?>
+
                                 <?php endif ?>
 
                             </div>
@@ -807,9 +812,9 @@
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
             }).then((result) => {
-                var moveToBacklog = false;
+                var moveToBacklog = 0;
                 if (result.isConfirmed) {
-                    moveToBacklog = true;
+                    moveToBacklog = 1;
                 }
                 Swal.fire({
                     title: 'Are you sure?',
@@ -830,6 +835,7 @@
                             },
                             dataType: "json",
                             success: function(result) {
+                                console.log(result);
                                 if (result['error'] == false) {
                                     location.reload();
                                 } else {
@@ -1154,19 +1160,17 @@
     <?php
     function getTitleAcronym($title)
     {
-        $words = explode(" ", $title); // Split title into words
+        $words = explode(" ", $title);
 
         $acronym = "";
         $num_words = count($words);
         $limit = min($num_words, 3);
 
         if ($num_words == 1) {
-            // If there's only one word, get the first three letters
             $acronym = strtoupper(substr($words[0], 0, 3));
         } else {
-            // If there are multiple words, get the first letter of each word
             for ($i = 0; $i < $limit; $i++) {
-                $acronym .= strtoupper(substr($words[$i], 0, 1)); // Get the first letter of each word and convert it to uppercase
+                $acronym .= strtoupper(substr($words[$i], 0, 1));
             }
         }
         return $acronym;
