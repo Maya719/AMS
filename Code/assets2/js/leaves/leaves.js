@@ -18,8 +18,8 @@ $(document).on('click', '.btn-create-leave', function (e) {
         },
         success: function (result) {
             if (result['error'] == false) {
-                console.log(result);
-                // window.location.href = base_url + 'leaves';
+                // console.log(result);
+                window.location.href = base_url + 'leaves';
             } else {
                 toastr.error(result['message'], "Error", {
                     positionClass: "toast-top-right",
@@ -354,7 +354,7 @@ $(document).on('click', '.btn-edit-leave', function (e) {
         },
         success: function (result) {
             console.log(result);
-            window.location.href = base_url + 'leaves';
+            // window.location.href = base_url + 'leaves';
         },
         complete: function () {
             $(".btn-edit-leave").prop("disabled", false);
