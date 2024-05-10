@@ -352,7 +352,7 @@ class Leaves extends CI_Controller
 									$template_data = array();
 									$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
 									$template_data['NAME'] = $to_user->first_name . ' ' . $to_user->last_name;
-									$type = $this->input->post('type_add');
+									$type = $this->input->post('type');
 									$template_data['LEAVE_TYPE'] = '';
 									$querys = $this->db->query("SELECT * FROM leaves_type");
 									$leaves = $querys->result_array();
