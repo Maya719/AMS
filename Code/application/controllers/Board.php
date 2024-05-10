@@ -197,7 +197,7 @@ class Board extends CI_Controller
             'total' => $total,
             'completed' => $completed,
             'sprint_show' => $sprint_show,
-            'user_id' => $user_id,
+            'user_id' => $users,
             'percent' => 'Total Progress ' . $rounded_percent . '%',
         ];
 
