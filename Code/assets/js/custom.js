@@ -5072,9 +5072,10 @@ $("#register").submit(function(e) {
 					processData: false,
 					dataType: "json",
 					success:function(result){
+						console.log(result);
 						card_progress.dismiss(function() {
 							if(result['error'] == false){
-								window.location.replace(base_url+'auth/confirmation');
+								window.location.replace(base_url+'auth/create-profile/'+result.saas_id);
 							}else{
 								output_status.prepend('<div class="alert alert-danger">'+result['message']+'</div>');
 							}

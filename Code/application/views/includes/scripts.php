@@ -226,16 +226,7 @@
       },
       dataType: "json",
       success: function(result) {
-        console.log(result);
-        if (result['error'] == false) {
-          location.reload();
-        } else {
-          iziToast.error({
-            title: result['message'],
-            message: "",
-            position: 'topRight'
-          });
-        }
+        // console.log(result);
       }
     });
 
