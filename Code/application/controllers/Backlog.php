@@ -7,15 +7,20 @@ class Backlog extends CI_Controller
     }
     public $data = [];
     public $ion_auth;
-    public function index()
+    public function project($id = '')
     {
         if ($this->ion_auth->logged_in()) {
             $this->data['page_title'] = 'Backlog - ' . company_name();
             $this->data['main_page'] = 'Backlog';
             $this->data['current_user'] = $this->ion_auth->user()->row();
+            if (empty($id)) {
+                $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
+            }
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
+            $this->db->where('status !=', 2);
             $query = $this->db->get('sprints');
             $sprints = $query->result_array();
+
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
             } else if (permissions('project_view_selected')) {
                 $users = selected_users();
@@ -39,16 +44,17 @@ class Backlog extends CI_Controller
             $this->data['task_statuses'] = $query7->result_array();
             $this->data["sprints"] = $sprints;
 
-            $this->db->select('tasks.*'); 
+            $this->db->select('tasks.*');
             $this->db->from('tasks');
-            $this->db->join('projects', 'tasks.project_id = projects.id'); 
+            $this->db->join('projects', 'tasks.project_id = projects.id');
             $this->db->join('task_users iu', 'iu.task_id = tasks.id', 'left');
             $this->db->where('projects.dash_type', 1);
+            $this->db->where('projects.id', $id);
             if (!empty($users)) {
                 $this->db->where_in('iu.user_id', $users);
             }
-            $query = $this->db->get(); 
-            $issues = $query->result_array(); 
+            $query = $this->db->get();
+            $issues = $query->result_array();
 
             foreach ($issues as &$issue) {
                 $project_users = [];
@@ -151,7 +157,7 @@ class Backlog extends CI_Controller
     }
     public function complete_sprint($id = '')
     {
-        if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('plan_holiday_view'))) {
+        if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin())) {
             if (empty($id)) {
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
             }
@@ -159,6 +165,39 @@ class Backlog extends CI_Controller
                 'status' => 2
             ];
             if (!empty($id) && is_numeric($id) && $this->board_model->status_change_sprint($id, $data)) {
+                $moveToBacklog = $this->input->post('moveToBacklog');
+                if ($moveToBacklog == 1) {
+                    $this->data['moveTasksToBackLog'] = $this->board_model->moveTasksToBackLog($id);
+                }
+                $this->session->set_flashdata('message', $this->lang->line('sprint_completed') ? $this->lang->line('sprint_completed') : "Sprint Completed.");
+                $this->session->set_flashdata('message_type', 'success');
+                $this->data['error'] = false;
+                $this->data['message'] = $this->lang->line('started_successfully') ? $this->lang->line('started_successfully') : "Status Change Successfully.";
+                echo json_encode($this->data);
+            } else {
+                $this->data['error'] = true;
+                $this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+                echo json_encode($this->data);
+            }
+        } else {
+            $this->data['error'] = true;
+            $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
+            echo json_encode($this->data);
+        }
+    }
+    public function complete_sprint_ascnr()
+    {
+        if ($this->ion_auth->logged_in()) {
+            $id = $this->board_model->get_active_sprint();
+
+            $data = [
+                'status' => 2
+            ];
+            if (!empty($id) && is_numeric($id) && $this->board_model->status_change_sprint($id, $data)) {
+                $moveToBacklog = $this->input->post('moveToBacklog');
+                if ($moveToBacklog == 1) {
+                    $this->data['moveTasksToBackLog'] = $this->board_model->moveTasksToBackLog($id);
+                }
                 $this->session->set_flashdata('message', $this->lang->line('sprint_completed') ? $this->lang->line('sprint_completed') : "Sprint Completed.");
                 $this->session->set_flashdata('message_type', 'success');
                 $this->data['error'] = false;

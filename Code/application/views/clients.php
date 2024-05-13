@@ -33,17 +33,25 @@
       <!-- row -->
       <div class="container-fluid">
 
-        <?php
-        if (permissions('client_create') || $this->ion_auth->is_admin()) {
-        ?>
-          <div class="row d-flex justify-content-end">
-            <div class="col-xl-2 col-sm-3 mt-2 ">
+        <div class="row d-flex justify-content-end">
+          <div class="col-xl-10 col-sm-9 mt-3">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+              </ol>
+            </nav>
+          </div>
+          <?php
+          if (permissions('client_create') || $this->ion_auth->is_admin()) {
+          ?>
+            <div class="col-xl-2 col-sm-3">
               <a href="javascript:void(0);" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#client-add-modal" class="btn btn-block btn-primary">+ ADD</a>
             </div>
-          </div>
-        <?php
-        }
-        ?>
+          <?php
+          }
+          ?>
+        </div>
         <div class="row mt-3">
           <div class="col-lg-12">
             <div class="card">

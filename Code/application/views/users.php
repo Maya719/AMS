@@ -33,19 +33,26 @@
       <!-- row -->
       <div class="container-fluid">
 
-        <?php
-        if (permissions('user_create') || $this->ion_auth->is_admin()) {
-          ?>
-          <div class="row d-flex justify-content-end">
-            <div class="col-xl-2 col-sm-3 mt-2 ">
-              <a href="<?= base_url('users/create_user') ?>" id="modal-add-leaves"
-                class="btn btn-block btn-primary <?php echo $is_allowd_to_create_new ? "" : "disabled" ?>">+
-                ADD</a>
-            </div>
+        <div class="row d-flex justify-content-end">
+          <div class="col-xl-10 col-sm-9 mt-3">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+              </ol>
+            </nav>
           </div>
           <?php
-        }
-        ?>
+          if (permissions('user_create') || $this->ion_auth->is_admin()) {
+          ?>
+            <div class="col-xl-2 col-sm-3">
+              <a href="<?= base_url('users/create_user') ?>" id="modal-add-leaves" class="btn btn-block btn-primary <?php echo $is_allowd_to_create_new ? "" : "disabled" ?>">+
+                ADD</a>
+            </div>
+          <?php
+          }
+          ?>
+        </div>
 
         <div class="card mt-3">
           <div class="card-body">
@@ -60,7 +67,7 @@
               <div class="col-lg-4">
                 <select class="form-select" id="department">
                   <option value="" selected>Department</option>
-                  <?php foreach ($departments as $department): ?>
+                  <?php foreach ($departments as $department) : ?>
                     <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
                   <?php endforeach ?>
                 </select>
@@ -68,7 +75,7 @@
               <div class="col-lg-4">
                 <select class="form-select" id="shift">
                   <option value="" selected>Shift</option>
-                  <?php foreach ($shift_types as $shift_type): ?>
+                  <?php foreach ($shift_types as $shift_type) : ?>
                     <option value="<?= $shift_type["id"] ?>"><?= $shift_type["name"] ?></option>
                   <?php endforeach ?>
                 </select>
@@ -111,9 +118,9 @@
   </div>
   <?php $this->load->view('includes/scripts'); ?>
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
       setFilter();
-      $(document).on('change', '#active,#department,#shift', function () {
+      $(document).on('change', '#active,#department,#shift', function() {
         setFilter();
       });
 
@@ -134,15 +141,15 @@
             department: department,
             shift: shift,
           },
-          success: function (response) {
+          success: function(response) {
             var tableData = JSON.parse(response);
             console.log(tableData);
             showTable(tableData);
           },
-          complete: function () {
+          complete: function() {
             hideLoader();
           },
-          error: function (error) {
+          error: function(error) {
             console.error(error);
           }
         });

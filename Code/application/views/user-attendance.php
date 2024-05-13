@@ -60,13 +60,14 @@
     <div class="content-body default-height">
       <!-- row -->
       <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+            <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('attendance') ?>">Attendance</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><?= $name ?></li>
+          </ol>
+        </nav>
         <div class="row">
-          <div class="col-lg-12 mb-3 d-flex">
-            <a class="fs-6" class="btn btn-outline-secondary" href="<?=base_url('attendance')?>"><i class="fas fa-angle-left mx-3 mt-2"></i></a>
-            <div class="title">
-              <div style="color: #6B6D71; font-size: 20px; font-family: Poppins; font-weight: 500; line-height: 30px; letter-spacing: 0.10px; word-wrap: break-word"><?= $name ?></div>
-            </div>
-          </div>
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">

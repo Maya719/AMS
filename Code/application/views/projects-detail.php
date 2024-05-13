@@ -87,39 +87,36 @@
     <?php $this->load->view('includes/sidebar'); ?>
     <div class="content-body default-height">
 
+
       <?php
       if (isset($project[0]) && !empty($project[0])) {
         $project = $project[0];
       ?>
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-12">
-              <?php if (($this->ion_auth->is_admin() || permissions('task_view')) && is_module_allowed('tasks')) { ?>
-                <a href="<?= base_url("board") ?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-tasks"></i> <?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></a>
-              <?php } ?>
-
-
-              <?php if (($this->ion_auth->is_admin() || permissions('calendar_view')) && is_module_allowed('calendar')) { ?>
-                <a href="<?= base_url("projects/calendar/" . htmlspecialchars($project['id'])) ?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-calendar-alt"></i> <?= $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar' ?></a>
-              <?php } ?>
-
-              <?php if (($this->ion_auth->is_admin() || permissions('gantt_view')) && is_module_allowed('gantt')) { ?>
-                <a href="<?= base_url("projects/gantt/" . htmlspecialchars($project['id'])) ?>" class="btn btn-icon icon-left btn-primary"><i class="fas fa-layer-group"></i> <?= $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt' ?></a>
-              <?php } ?>
-
-              <?php if (!$this->ion_auth->in_group(4) && is_module_allowed('timesheet')) { ?>
-                <a href="<?= base_url("projects/timesheet/" . htmlspecialchars($project['id'])) ?>" class="btn btn-icon icon-left btn-primary"><i class="far fa-clock"></i> <?= $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet' ?></a>
-              <?php } ?>
-
-              <?php if ($this->ion_auth->is_admin() || permissions('project_edit')) { ?>
-                <a href="#" data-id="<?= htmlspecialchars($project['id']) ?>" class="btn btn-icon icon-left btn-info btn-edit-projecct" data-bs-toggle="modal" data-bs-target="#exampleModalToggle"><i class="fas fa-edit"></i> <?= $this->lang->line('edit') ? $this->lang->line('edit') : 'Edit' ?></a>
-              <?php } ?>
-
-              <?php if ($this->ion_auth->is_admin() || permissions('project_delete')) { ?>
-                <a href="#" class="btn btn-icon icon-left btn-danger delete-project" data-id="<?= htmlspecialchars($project['id']) ?>"><i class="fas fa-times"></i> <?= $this->lang->line('delete') ? $this->lang->line('delete') : 'Delete' ?></a>
-              <?php } ?>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+              <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('projects') ?>">Projects</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+            </ol>
+          </nav>
+          <div class="card">
+            <div class="card-body">
+              <?php if ($project['dash_type'] == 1) : ?>
+                <a class="btn btn-sm btn-outline-primary" href="<?= base_url('backlog/project/' . $project["id"]) ?>" aria-expanded="false">
+                  <i class="fas fa-clone"></i>
+                  <span class="nav-text">Backlog</span>
+                </a>
+              <?php endif ?>
+              <a class="btn btn-sm btn-outline-primary" href="<?= base_url('board/tasks/' . $project["id"]) ?>" aria-expanded="false">
+                <i class="fas fa-table"></i>
+                <span class="nav-text">Board</span>
+              </a>
+              <a class="btn btn-sm btn-outline-primary" href="javascript:void()" aria-expanded="false">
+                <i class="fas fa-chart-line"></i>
+                <span class="nav-text">Analytics</span>
+              </a>
             </div>
-
           </div>
           <div class="row mt-3">
             <div class="col-md-12">
@@ -155,11 +152,11 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="col-md-<?= !empty($project['project_client']) ? 12 : 5 ?>">
               <div class="card <?= !empty($project['project_client']) ? '' : 'card-' . htmlspecialchars($project['project_class']) ?>">
                 <div class="card-header">
-                  <h4><?= $this->lang->line('task_overview') ? $this->lang->line('task_overview') : 'Task Overview' ?></h4>
+                  <h4><?= $this->lang->line('issues_status_overview') ? $this->lang->line('issues_status_overview') : 'Issues Status Overview' ?></h4>
                 </div>
                 <div class="card-body text-white text-black">
                   <ul class="list-group list-group-flush">
@@ -176,7 +173,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <h4><?= $this->lang->line('progress_overview') ? $this->lang->line('progress_overview') : 'Progress Overview' ?></h4>
+                  <h4><?= $this->lang->line('issues_overview') ? $this->lang->line('issues_overview') : 'Issues Overview' ?></h4>
                 </div>
                 <div class="card-body p-2">
                   <div class="table-responsive">
@@ -185,13 +182,13 @@
                         <tr>
                           <th><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?></th>
                           <th><?= $this->lang->line('completed') ? $this->lang->line('completed') : 'Completed Tasks' ?> / <?= $this->lang->line('task_count') ? $this->lang->line('task_count') : 'Total Tasks' ?></th>
-                          <th><?= $this->lang->line('progress_ratio') ? $this->lang->line('progress_ratio') : 'Progress Ratio' ?></th>
+                          <th><?= $this->lang->line('task_completeness_ratio') ? $this->lang->line('task_completeness_ratio') : 'Task Completeness Ratio' ?></th>
                         </tr>
                       </thead>
                       <tbody id="customers">
                         <?php foreach ($project["get_project_users_performance"] as $user) : ?>
                           <tr>
-                            <td><a href="#" style="font-weight: bold;font-size: 12px;"><?= $user["first_name"] . ' ' . $user["last_name"] ?></a></td>
+                            <td><a href="<?=base_url('board/tasks/'.$project["id"].'/'.$user["id"])?>" style="font-weight: bold;font-size: 12px;"><?= $user["first_name"] . ' ' . $user["last_name"] ?></a></td>
                             <td><?= $user["task_count"] ?></td>
                             <td><?= $user["performance"] ?></td>
                           </tr>
@@ -219,7 +216,7 @@
                             <th><?= $this->lang->line('ending') ? $this->lang->line('ending') : 'Ending at' ?></th>
                             <th><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?></th>
                             <th><?= $this->lang->line('task_count') ? $this->lang->line('task_count') : 'Task Count' ?></th>
-                            <th><?= $this->lang->line('total_story_points') ? $this->lang->line('total_story_points') : 'Comulative Story Points' ?></th>
+                            <th><?= $this->lang->line('total_effort_points') ? $this->lang->line('total_effort_points') : 'Comulative Effort Points' ?></th>
                           </tr>
                         </thead>
                         <tbody id="customers">
@@ -431,68 +428,6 @@
           $(".loader-progress").remove();
         }
       });
-    });
-    $(document).on('click', '.edit-project', function(e) {
-      var form = $('#form-project');
-      var formData = form.serialize();
-      console.log(formData);
-      $.ajax({
-        type: 'POST',
-        url: form.attr('action'),
-        data: formData,
-        dataType: "json",
-        success: function(result) {
-          console.log(result);
-          if (result['error'] == false) {
-            location.reload();
-          } else {
-            $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
-          }
-        },
-      });
-
-      e.preventDefault();
-    });
-    $(document).on('click', '.delete-project', function(e) {
-      e.preventDefault();
-      var id = $(this).data("id");
-      console.log(id);
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'OK'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            type: "POST",
-            url: base_url + 'projects/delete_project/' + id,
-            data: "id=" + id,
-            dataType: "json",
-            beforeSend: function() {
-              showLoader();
-            },
-            success: function(result) {
-              if (result['error'] == false) {
-                window.location.href = base_url + 'projects';
-              } else {
-                iziToast.error({
-                  title: result['message'],
-                  message: "",
-                  position: 'topRight'
-                });
-              }
-            },
-            error: function(error) {
-              console.error(error);
-            }
-          });
-        }
-      });
-
     });
 
     var table3 = $('#project_performance_list').DataTable({

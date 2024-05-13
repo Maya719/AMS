@@ -48,6 +48,12 @@
         <div class="content-body default-height">
             <!-- row -->
             <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+                    </ol>
+                </nav>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">

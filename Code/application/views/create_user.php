@@ -34,6 +34,12 @@
         <div class="content-body default-height">
             <!-- row -->
             <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+                    </ol>
+                </nav>
                 <div class="row">
                     <div class="col-xl-12">
                         <?php if ($is_allowd_to_create_new) { ?>
@@ -44,20 +50,16 @@
                                         <div class="custom-tab-1">
                                             <ul class="nav nav-tabs">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-bs-toggle="tab" href="#home1"><i
-                                                            class="la la-user me-2"></i> Information</a>
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#home1"><i class="la la-user me-2"></i> Information</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile1"><i
-                                                            class="la la-fingerprint me-2"></i> Attendance Configuration</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile1"><i class="la la-fingerprint me-2"></i> Attendance Configuration</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#contact1"><i
-                                                            class="la la-file-contract me-2"></i> Important Documents</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#contact1"><i class="la la-file-contract me-2"></i> Important Documents</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#message1"><i
-                                                            class="la la-home me-2"></i> Account Setting</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
@@ -65,56 +67,36 @@
                                                     <div class="pt-4">
                                                         <div class="row ms-5">
                                                             <div class="col-6 mb-3">
-                                                                <label for="employee_id_create"
-                                                                    class="col-form-label">Employee ID</label>
-                                                                <input type="number" class="form-control" name="employee_id"
-                                                                    id="employee_id_create" readonly>
+                                                                <label for="employee_id_create" class="col-form-label">Employee ID</label>
+                                                                <input type="number" class="form-control" name="employee_id" id="employee_id_create" readonly>
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput1"
-                                                                    class="col-form-label">First Name <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" name="first_name"
-                                                                    id="exampleFormControlInput1">
+                                                                <label for="exampleFormControlInput1" class="col-form-label">First Name <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="first_name" id="exampleFormControlInput1">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput2"
-                                                                    class="col-form-label">last Name <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" name="last_name"
-                                                                    id="exampleFormControlInput2">
+                                                                <label for="exampleFormControlInput2" class="col-form-label">last Name <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="last_name" id="exampleFormControlInput2">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput301"
-                                                                    class="col-form-label">Father Name</label>
-                                                                <input type="text" class="form-control" name="father_name"
-                                                                    id="exampleFormControlInput301">
+                                                                <label for="exampleFormControlInput301" class="col-form-label">Father Name</label>
+                                                                <input type="text" class="form-control" name="father_name" id="exampleFormControlInput301">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput3"
-                                                                    class="col-form-label">Blood Group</label>
-                                                                <input type="text" class="form-control" name="blood_group"
-                                                                    id="exampleFormControlInput3">
+                                                                <label for="exampleFormControlInput3" class="col-form-label">Blood Group</label>
+                                                                <input type="text" class="form-control" name="blood_group" id="exampleFormControlInput3">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput4"
-                                                                    class="col-form-label">Date Of Birth <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="date" class="form-control" name="date_of_birth"
-                                                                    id="exampleFormControlInput4">
+                                                                <label for="exampleFormControlInput4" class="col-form-label">Date Of Birth <span class="text-danger">*</span></label>
+                                                                <input type="date" class="form-control" name="date_of_birth" id="exampleFormControlInput4">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput5"
-                                                                    class="col-form-label">CNIC</label>
-                                                                <input type="text" class="form-control" name="cnic"
-                                                                    id="exampleFormControlInput5">
+                                                                <label for="exampleFormControlInput5" class="col-form-label">CNIC</label>
+                                                                <input type="text" class="form-control" name="cnic" id="exampleFormControlInput5">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput6"
-                                                                    class="col-form-label">Martial Status</label>
-                                                                <select class="form-select" name="martial_status"
-                                                                    id="exampleFormControlInput6"
-                                                                    aria-label="Default select example">
+                                                                <label for="exampleFormControlInput6" class="col-form-label">Martial Status</label>
+                                                                <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
                                                                     <option value="" selected>Martial Status</option>
                                                                     <option value="single">Single</option>
                                                                     <option value="married">Married</option>
@@ -122,12 +104,8 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput7"
-                                                                    class="col-form-label">Gender <span
-                                                                        class="text-danger">*</span></label>
-                                                                <select class="form-select" name="gender"
-                                                                    id="exampleFormControlInput7"
-                                                                    aria-label="Default select example">
+                                                                <label for="exampleFormControlInput7" class="col-form-label">Gender <span class="text-danger">*</span></label>
+                                                                <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
                                                                     <option selected>Gender</option>
                                                                     <option value="male">Male</option>
                                                                     <option value="female">Female</option>
@@ -135,37 +113,24 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput8"
-                                                                    class="col-form-label">Phone Number <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" name="phone"
-                                                                    id="exampleFormControlInput8">
+                                                                <label for="exampleFormControlInput8" class="col-form-label">Phone Number <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="phone" id="exampleFormControlInput8">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput9"
-                                                                    class="col-form-label">Emergency Person</label>
-                                                                <input type="text" class="form-control" name="emg_person"
-                                                                    id="exampleFormControlInput9">
+                                                                <label for="exampleFormControlInput9" class="col-form-label">Emergency Person</label>
+                                                                <input type="text" class="form-control" name="emg_person" id="exampleFormControlInput9">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput10"
-                                                                    class="col-form-label">Emergency Contact</label>
-                                                                <input type="text" class="form-control" name="emg_number"
-                                                                    id="exampleFormControlInput10">
+                                                                <label for="exampleFormControlInput10" class="col-form-label">Emergency Contact</label>
+                                                                <input type="text" class="form-control" name="emg_number" id="exampleFormControlInput10">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput14"
-                                                                    class="col-form-label">Joining Date <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="Date" class="form-control" name="join_date"
-                                                                    id="exampleFormControlInput14">
+                                                                <label for="exampleFormControlInput14" class="col-form-label">Joining Date <span class="text-danger">*</span></label>
+                                                                <input type="Date" class="form-control" name="join_date" id="exampleFormControlInput14">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput15"
-                                                                    class="col-form-label">Probation</label>
-                                                                <select class="form-select" name="probation_period"
-                                                                    id="exampleFormControlInput15"
-                                                                    aria-label="Default select example">
+                                                                <label for="exampleFormControlInput15" class="col-form-label">Probation</label>
+                                                                <select class="form-select" name="probation_period" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Probation</option>
                                                                     <option value="1">1 Month</option>
                                                                     <option value="2">2 months</option>
@@ -173,19 +138,14 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput16"
-                                                                    class="col-form-label">Designation</label>
-                                                                <input type="text" class="form-control" name="desgnation"
-                                                                    id="exampleFormControlInput16">
+                                                                <label for="exampleFormControlInput16" class="col-form-label">Designation</label>
+                                                                <input type="text" class="form-control" name="desgnation" id="exampleFormControlInput16">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput15"
-                                                                    class="col-form-label">Department</label>
-                                                                <select class="form-select" name="department"
-                                                                    id="exampleFormControlInput15"
-                                                                    aria-label="Default select example">
+                                                                <label for="exampleFormControlInput15" class="col-form-label">Department</label>
+                                                                <select class="form-select" name="department" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected value="">Department</option>
-                                                                    <?php foreach ($departments as $department): ?>
+                                                                    <?php foreach ($departments as $department) : ?>
                                                                         <option value="<?= $department["id"] ?>">
                                                                             <?= $department["department_name"] ?>
                                                                         </option>
@@ -193,10 +153,8 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-12 mb-3">
-                                                                <label for="exampleFormControlInput11"
-                                                                    class="col-form-label">Address</label>
-                                                                <textarea type="text" class="form-control" name="address"
-                                                                    id="exampleFormControlInput11"></textarea>
+                                                                <label for="exampleFormControlInput11" class="col-form-label">Address</label>
+                                                                <textarea type="text" class="form-control" name="address" id="exampleFormControlInput11"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -205,25 +163,17 @@
                                                     <div class="pt-4">
                                                         <div class="row ms-5">
                                                             <div class="ms-3 col-12 mb-2 form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    name="finger_config" id="flexCheckDefault" checked>
+                                                                <input class="form-check-input" type="checkbox" name="finger_config" id="flexCheckDefault" checked>
                                                                 <label class="form-check-label" for="flexCheckDefault">
                                                                     Biometric
                                                                 </label>
-                                                                <a type="button" class="text-primary"
-                                                                    data-bs-container="body" data-bs-toggle="popover"
-                                                                    data-bs-placement="top"
-                                                                    data-bs-content="Enable Punch will checked for those emplyee who will punch in/out and it will recorded."
-                                                                    title="Help"><i class="fas fa-circle-question"></i></a>
+                                                                <a type="button" class="text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Enable Punch will checked for those emplyee who will punch in/out and it will recorded." title="Help"><i class="fas fa-circle-question"></i></a>
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput2"
-                                                                    class="col-form-label">Shift <span
-                                                                        class="text-danger">*</span></label>
-                                                                <select class="form-select enable-disable-select"
-                                                                    name="type" aria-label="Default select example">
+                                                                <label for="exampleFormControlInput2" class="col-form-label">Shift <span class="text-danger">*</span></label>
+                                                                <select class="form-select enable-disable-select" name="type" aria-label="Default select example">
                                                                     <option selected value="">Shift</option>
-                                                                    <?php foreach ($shift_types as $shift_type): ?>
+                                                                    <?php foreach ($shift_types as $shift_type) : ?>
                                                                         <option value="<?= $shift_type["id"] ?>">
                                                                             <?= $shift_type["name"] ?>
                                                                         </option>
@@ -231,13 +181,10 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput3"
-                                                                    class="col-form-label">Device <span
-                                                                        class="text-danger">*</span></label>
-                                                                <select class="form-select enable-disable-select"
-                                                                    name="device" aria-label="Default select example">
+                                                                <label for="exampleFormControlInput3" class="col-form-label">Device <span class="text-danger">*</span></label>
+                                                                <select class="form-select enable-disable-select" name="device" aria-label="Default select example">
                                                                     <option selected value="">Device</option>
-                                                                    <?php foreach ($devices as $device): ?>
+                                                                    <?php foreach ($devices as $device) : ?>
                                                                         <option value="<?= $device["id"] ?>">
                                                                             <?= $device["device_name"] ?>
                                                                         </option>
@@ -251,8 +198,7 @@
                                                     <div class="pt-4">
                                                         <div class="row ms-3" id="inputs">
                                                             <div class="col-10 mb-3">
-                                                                <input class="form-control" type="file" name="files[]"
-                                                                    id="formFile">
+                                                                <input class="form-control" type="file" name="files[]" id="formFile">
                                                             </div>
                                                             <div class="col-2 mb-3">
                                                                 <a class="btn text-primary fw-600 remove-btn">Remove</a>
@@ -270,37 +216,24 @@
                                                     <div class="pt-4">
                                                         <div class="row ms-3">
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput12"
-                                                                    class="col-form-label">Email <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="email" name="email" class="form-control"
-                                                                    id="exampleFormControlInput12">
+                                                                <label for="exampleFormControlInput12" class="col-form-label">Email <span class="text-danger">*</span></label>
+                                                                <input type="email" name="email" class="form-control" id="exampleFormControlInput12">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput13"
-                                                                    class="col-form-label">Password <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="password" name="password" class="form-control"
-                                                                    id="exampleFormControlInput13">
+                                                                <label for="exampleFormControlInput13" class="col-form-label">Password <span class="text-danger">*</span></label>
+                                                                <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
                                                             </div>
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput14"
-                                                                    class="col-form-label">Confirm Password <span
-                                                                        class="text-danger">*</span></label>
-                                                                <input type="password" name="password_confirm"
-                                                                    class="form-control" id="exampleFormControlInput14">
+                                                                <label for="exampleFormControlInput14" class="col-form-label">Confirm Password <span class="text-danger">*</span></label>
+                                                                <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
                                                             </div>
 
                                                             <div class="col-6 mb-3">
-                                                                <label for="exampleFormControlInput15"
-                                                                    class="col-form-label">Role <span
-                                                                        class="text-danger">*</span></label>
-                                                                <select class="form-select" name="groups"
-                                                                    id="exampleFormControlInput15"
-                                                                    aria-label="Default select example">
+                                                                <label for="exampleFormControlInput15" class="col-form-label">Role <span class="text-danger">*</span></label>
+                                                                <select class="form-select" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Role</option>
-                                                                    <?php foreach ($user_groups as $user_group): ?>
-                                                                        <?php if ($user_group->id !== '3' && $user_group->id !== '4'): ?>
+                                                                    <?php foreach ($user_groups as $user_group) : ?>
+                                                                        <?php if ($user_group->id !== '3' && $user_group->id !== '4') : ?>
                                                                             <option value="<?= $user_group->id ?>">
                                                                                 <?= $user_group->description ?>
                                                                             </option>
@@ -343,29 +276,29 @@
     </div>
     <?php $this->load->view('includes/scripts'); ?>
     <script>
-        $(document).ready(function () {
-            $(".add-btn").click(function () {
+        $(document).ready(function() {
+            $(".add-btn").click(function() {
                 var newRow = $("#inputs").first().clone();
                 newRow.find('input[type="file"]').val('');
                 $("#inputs:last").after(newRow);
             });
 
-            $(document).on("click", ".remove-btn", function () {
+            $(document).on("click", ".remove-btn", function() {
                 $(this).closest("#inputs").remove();
             });
 
         });
-        $(document).ready(function () {
+        $(document).ready(function() {
             function toggleElements() {
                 var isChecked = $("#flexCheckDefault").prop("checked");
                 $(".enable-disable-select").prop("disabled", !isChecked);
             }
 
-            $("#flexCheckDefault").change(function () {
+            $("#flexCheckDefault").change(function() {
                 toggleElements();
             });
 
-            setTimeout(function () {
+            setTimeout(function() {
                 toggleElements();
             }, 100);
         });
@@ -373,14 +306,14 @@
 
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             function getEmployeeId() {
 
                 $.ajax({
                     url: '<?= base_url('users/get_employee_id') ?>',
                     method: 'POST',
                     dataType: 'json',
-                    success: function (response) {
+                    success: function(response) {
                         var employee_id = response.max_employee_id;
                         employee_id++;
 
@@ -390,7 +323,7 @@
             }
             getEmployeeId();
         });
-        $(document).on('click', '.btn-create', function (e) {
+        $(document).on('click', '.btn-create', function(e) {
             var form = $('#form-part');
             var formData = form.serialize();
             console.log(formData);
@@ -399,17 +332,17 @@
                 url: form.attr('action'),
                 data: formData,
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $('.btn-create').prop('disabled', true).html('Submiting...');
                 },
-                success: function (result) {
+                success: function(result) {
                     if (result['error'] == false) {
                         location.href = base_url + 'users';
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
                 },
-                complete: function () {
+                complete: function() {
                     $('.btn-create').prop('disabled', false).html('Submit');
                 },
             });

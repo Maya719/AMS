@@ -353,7 +353,7 @@ $(document).on('click', '.btn-edit-leave', function (e) {
             $(".btn-edit-leave").prop("disabled", true);
         },
         success: function (result) {
-            console.log(result);
+            // console.log(result);
             window.location.href = base_url + 'leaves';
         },
         complete: function () {
