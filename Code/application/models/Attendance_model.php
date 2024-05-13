@@ -776,4 +776,5 @@ class Attendance_model extends CI_Model
             }
         }
     }
+    
 }

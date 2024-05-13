@@ -48,17 +48,19 @@ if ($google_client_id) { ?>
                   </div>
 
                   <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-6" style="position: relative;">
                       <label for="password" class="d-block"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                       <input id="password" type="password" class="form-control pwstrength" data-indicator="pwindicator" name="password" tabindex="4" required>
+                      <i class="fa fa-eye password-toggle2" style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
                       <div id="pwindicator" class="pwindicator">
                         <div class="bar"></div>
                         <div class="label"></div>
                       </div>
                     </div>
-                    <div class="form-group col-6">
-                      <label for="password2" class="d-block"><?= $this->lang->line('password_confirmation') ? $this->lang->line('password_confirmation') : 'Password Confirmation' ?></label>
+                    <div class="form-group col-6" style="position: relative;">
+                      <label for="password2" class="d-block"><?= $this->lang->line('password_confirmation') ? $this->lang->line('password_confirmation') : 'Confirm Password' ?></label>
                       <input id="password2" type="password" class="form-control" name="password_confirm" tabindex="5" required>
+                      <i class="fa fa-eye password-toggle" style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
                     </div>
                   </div>
 
@@ -189,6 +191,30 @@ if ($google_client_id) { ?>
           },
         });
       }
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      $('.password-toggle').click(function() {
+        var input = $('#password2');
+        if (input.attr('type') === 'password') {
+          input.attr('type', 'text');
+          $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          input.attr('type', 'password');
+          $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+      $('.password-toggle2').click(function() {
+        var input = $('#password');
+        if (input.attr('type') === 'password') {
+          input.attr('type', 'text');
+          $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          input.attr('type', 'password');
+          $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
     });
   </script>
 </body>

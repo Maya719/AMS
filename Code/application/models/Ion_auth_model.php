@@ -2977,4 +2977,18 @@ class Ion_auth_model extends CI_Model
 
 		return $this;
 	}
+
+	public function encryptId($data, $key)
+	{
+		$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+		$encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+		return urlencode(base64_encode($encrypted . '::' . $iv)); // URL-safe Base64 encoding
+	}
+
+	public function decryptId($encryptedData, $key)
+	{
+		$decodedEncryptedData = base64_decode(urldecode($encryptedData));
+		list($encrypted, $iv) = explode('::', $decodedEncryptedData, 2);
+		return openssl_decrypt($encrypted, 'aes-256-cbc', $key, 0, $iv);
+	}
 }
