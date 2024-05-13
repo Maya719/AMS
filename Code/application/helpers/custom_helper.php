@@ -2863,5 +2863,19 @@ function if_allowd_to_create_new($checking_for)
     return false;
 }
 
+// function save_notifications($type, $notification, $to_id)
+// {
+//     $CI =& get_instance();
+//     $query = $CI->db->query("insert into notifications(notification, type, type_id, from_id, to_id) values ('$notification', '$type', 888, $to_id) ");
+//     $data = $query->row_array();
+//     return "done";
+// }
+
+function sanitizeDigits($string)
+{
+    return preg_replace('/[^0-9]/', '', (string) $string);
+}
+
+
 
 ?>

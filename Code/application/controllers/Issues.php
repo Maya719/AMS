@@ -138,7 +138,7 @@ class Issues extends CI_Controller
             redirect('auth', 'refresh');
         }
     }
-    public function create_issue()
+    public function create_issue() // *
     {
         if ($this->ion_auth->logged_in()) {
             $this->form_validation->set_rules('issue_type', 'Type', 'trim|required|strip_tags|xss_clean');

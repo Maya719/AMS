@@ -11,7 +11,7 @@ class Leaves extends CI_Controller
 
 	public function index()
 	{
-		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+		if ($this->ion_auth->logged_in() && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
@@ -64,7 +64,7 @@ class Leaves extends CI_Controller
 	}
 
 
-	public function edit()
+	public function edit() // *
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->form_validation->set_rules('update_id', 'Leave ID', 'trim|required|strip_tags|xss_clean|is_numeric');
@@ -82,7 +82,7 @@ class Leaves extends CI_Controller
 				$data['type'] = $this->input->post('type');
 				$data['paid'] = $this->input->post('paid');
 
-				$this->db->where('leave_id',  $this->input->post('update_id'));
+				$this->db->where('leave_id', $this->input->post('update_id'));
 				$this->db->order_by('level', 'desc');
 				$this->db->limit(1);
 				$query = $this->db->get('leave_logs');
@@ -90,10 +90,10 @@ class Leaves extends CI_Controller
 				$step = $leave->level;
 
 				/*
-			*
-			*	highest role??
-			*
-			*/
+				 *
+				 *	highest role??
+				 *
+				 */
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->order_by('step_no', 'desc');
 				$this->db->limit(1);
@@ -101,9 +101,9 @@ class Leaves extends CI_Controller
 				$heiResult = $heiQuery->row();
 				$highStep = $heiResult->step_no;
 				/*
-			*
-			* 	current step Approver/Recommender
-			*/
+				 *
+				 * 	current step Approver/Recommender
+				 */
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->where('step_no', $step);
 				$this->db->limit(1);
@@ -255,9 +255,9 @@ class Leaves extends CI_Controller
 							$startDate = $value4["starting_date"];
 							$endDate = $value4["ending_date"];
 							$apply = $value4["apply"];
-							$startDateTimestamp  = strtotime($startDate);
-							$endDateTimestamp  = strtotime($endDate);
-							$dateToCheckTimestamp  = strtotime($formatted_date);
+							$startDateTimestamp = strtotime($startDate);
+							$endDateTimestamp = strtotime($endDate);
+							$dateToCheckTimestamp = strtotime($formatted_date);
 							if ($apply == '1' && $dateToCheckTimestamp >= $startDateTimestamp && $dateToCheckTimestamp <= $endDateTimestamp) {
 								$departments = json_decode($value4["department"]);
 								foreach ($departments as $department) {
@@ -356,7 +356,8 @@ class Leaves extends CI_Controller
 								}
 							}
 							if ($this->input->post('status') == 1) {
-								$template_data['REASON'] = $this->input->post('remarks') . '<br> Approved: ' . $group[0]->description;;
+								$template_data['REASON'] = $this->input->post('remarks') . '<br> Approved: ' . $group[0]->description;
+								;
 								$email_template = render_email_template('leave_accept', $template_data);
 								send_mail($to_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 								$notification_data = array(
@@ -628,9 +629,9 @@ class Leaves extends CI_Controller
 							$startDate = $value4["starting_date"];
 							$endDate = $value4["ending_date"];
 							$apply = $value4["apply"];
-							$startDateTimestamp  = strtotime($startDate);
-							$endDateTimestamp  = strtotime($endDate);
-							$dateToCheckTimestamp  = strtotime($formatted_date);
+							$startDateTimestamp = strtotime($startDate);
+							$endDateTimestamp = strtotime($endDate);
+							$dateToCheckTimestamp = strtotime($formatted_date);
 							if ($apply == '1' && $dateToCheckTimestamp >= $startDateTimestamp && $dateToCheckTimestamp <= $endDateTimestamp) {
 								$departments = json_decode($value4["department"]);
 								foreach ($departments as $department) {
@@ -729,7 +730,7 @@ class Leaves extends CI_Controller
 						$getCurrentGroupStep = $this->db->get('leave_hierarchy');
 						$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
 						$heiCurrentGroupStep_number = $heiCurrentGroupStepResult->step_no;
-						$step = $this->leaves_model->leaveStep($heiCurrentGroupStep_number,$data["user_id"]);
+						$step = $this->leaves_model->leaveStep($heiCurrentGroupStep_number, $data["user_id"]);
 						$log[] = [
 							'leave_id' => $leave_id,
 							'group_id' => $group_id,
@@ -783,7 +784,7 @@ class Leaves extends CI_Controller
 	}
 	public function manage($id)
 	{
-		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+		if ($this->ion_auth->logged_in() && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
@@ -830,10 +831,10 @@ class Leaves extends CI_Controller
 			redirect('auth', 'refresh');
 		}
 	}
-	public function create_leave()
+	public function create_leave() // *
 	{
 
-		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+		if ($this->ion_auth->logged_in() && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();

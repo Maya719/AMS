@@ -1822,7 +1822,7 @@ class Projects extends CI_Controller
 		}
 	}
 
-	public function create_project()
+	public function create_project() //*
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('project_create'))) {
 			if (!my_plan_features('projects')) {
@@ -1881,7 +1881,7 @@ class Projects extends CI_Controller
 						$system_admins = $this->ion_auth->users($group)->result();
 					}
 					if ($system_admins) {
-						foreach ($system_admins as $system_user) {
+						foreach ($system_admins as $system_user) { // *
 							if ($this->session->userdata('saas_id') == $system_user->saas_id && $system_user->user_id != $this->session->userdata('user_id')) {
 								$data = array(
 									'notification' => '<span class="text-primary">' . $this->input->post('title') . '</span>',

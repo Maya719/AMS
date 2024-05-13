@@ -25,7 +25,7 @@ class Backlog extends CI_Controller
             foreach ($sprints as &$sprint) {
                 if (!$sprint["starting_date"] && !$sprint["ending_date"] && $sprint["duration"]) {
                     $current = new DateTime($sprint["created"]);
-                    $sprint["starting_date"] =  $current->format('d M Y');
+                    $sprint["starting_date"] = $current->format('d M Y');
                     if ($sprint["duration"] == 1) {
                         $current = new DateTime($sprint["created"]);
                         $current->modify('+1 week');
@@ -39,16 +39,16 @@ class Backlog extends CI_Controller
             $this->data['task_statuses'] = $query7->result_array();
             $this->data["sprints"] = $sprints;
 
-            $this->db->select('tasks.*'); 
+            $this->db->select('tasks.*');
             $this->db->from('tasks');
-            $this->db->join('projects', 'tasks.project_id = projects.id'); 
+            $this->db->join('projects', 'tasks.project_id = projects.id');
             $this->db->join('task_users iu', 'iu.task_id = tasks.id', 'left');
             $this->db->where('projects.dash_type', 1);
             if (!empty($users)) {
                 $this->db->where_in('iu.user_id', $users);
             }
-            $query = $this->db->get(); 
-            $issues = $query->result_array(); 
+            $query = $this->db->get();
+            $issues = $query->result_array();
 
             foreach ($issues as &$issue) {
                 $project_users = [];
