@@ -96,6 +96,8 @@ class Issues_model extends CI_Model
         $issue_sprint = $query->row();
         $sprint_id = $issue_sprint->sprint_id;
 
+        $comments = $this->projects_model->get_comments('task_comment', '', $id);
+
         $this->db->select('*');
         $this->db->from('sprints');
         $this->db->where('saas_id', $this->session->userdata('saas_id'));
@@ -134,6 +136,7 @@ class Issues_model extends CI_Model
 
         return array(
             "issue" => $issue,
+            "comments" => $comments,
             "project" => $project,
             "user" => $user,
             "sprint" => $sprint,

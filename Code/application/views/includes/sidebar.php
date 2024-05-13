@@ -722,24 +722,13 @@
       ?> -->
 
       <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects'))) { ?>
-        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+        <li <?= (strpos(current_url(), 'projects/detail/') !== false ||
+              strpos(current_url(), 'backlog/project/') !== false ||
+              strpos(current_url(), 'board/tasks/') !== false) ? 'class="mm-active ms-hover"' : ''; ?>>
+          <a href="<?= base_url('projects') ?>" aria-expanded="false">
             <i class="fas fa-bezier-curve"></i>
             <span class="nav-text"><?= $this->lang->line('pms') ? $this->lang->line('pms') : 'PMS' ?></span>
           </a>
-          <ul aria-expanded="false">
-            <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('project_view'))) { ?>
-              <li><a href="<?= base_url('projects') ?>"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></a></li>
-            <?php } ?>
-
-            <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
-              <li><a href="<?= base_url('backlog') ?>"><?= $this->lang->line('backlog') ? $this->lang->line('backlog') : 'Backlog' ?></a></li>
-            <?php } ?>
-
-            <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
-              <li><a href="<?= base_url('board') ?>"><?= $this->lang->line('Board') ? $this->lang->line('Board') : 'Board' ?></a></li>
-            <?php } ?>
-
-          </ul>
         </li>
       <?php
       }
@@ -768,6 +757,9 @@
             <li><a href="<?= base_url('front/about') ?>"><?= $this->lang->line('about') ? $this->lang->line('about') : 'About Us' ?></a></li>
             <li><a href="<?= base_url('front/saas-privacy-policy') ?>"><?= $this->lang->line('privacy_policy') ? $this->lang->line('privacy_policy') : 'Privacy Policy' ?></a></li>
             <li><a href="<?= base_url('front/saas-terms-and-conditions') ?>"><?= $this->lang->line('terms_and_conditions') ? $this->lang->line('terms_and_conditions') : 'Terms and Conditions' ?></a></li>
+
+            <li><a href="<?= base_url('front/saas-guide') ?>"><?= $this->lang->line('guide') ? $this->lang->line('guide') : 'Guide' ?></a></li>
+
           </ul>
         </li>
 
@@ -786,7 +778,7 @@
           </a>
         </li>
 
-        <?php if (is_module_allowed('projects')) { ?>
+        <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('client_view'))) { ?>
           <li><a href="<?= base_url('users/client') ?>" aria-expanded="false">
               <i class="fas fa-handshake"></i>
               <span class="nav-text">Clients</span>

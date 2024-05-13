@@ -60,11 +60,12 @@
                             </div>
                             <form action="<?= base_url('issues/edit_issue') ?>" method="post" id="modal-edit-issue-part">
                                 <input type="hidden" name="update_id" value="<?= $issue->id ?>">
+                                <input type="hidden" name="redirect_to" id="redirect_to" value="<?= ($issue_projects->dash_type == '0') ? 'kanban' : 'scrum' ?>">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Project <span class="text-danger">*</span></label>
-                                            <select class="form-control wide" name="project_id">
+                                            <select class="form-control wide" name="project_id" id="project_id3">
                                                 <option value="">Project</option>
                                                 <?php foreach ($projects as $project) : ?>
                                                     <option value="<?= $project["id"] ?>" <?= ($issue->project_id === $project["id"]) ? 'selected' : ''; ?>><?= $project["title"] ?></option>
@@ -182,7 +183,9 @@
             var form = $('#modal-edit-issue-part');
             var formData = form.serialize();
             console.log(formData);
-
+            project_id = $('#project_id3').val();
+            redirect_to = $('#redirect_to').val();
+            console.log(redirect_to);
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
@@ -191,7 +194,11 @@
                 success: function(result) {
                     console.log(result);
                     if (result['error'] == false) {
-                        window.location.href = base_url + 'backlog'
+                        if (redirect_to == 'scrum') {
+                            window.location.href = base_url + 'backlog/project/' + project_id;
+                        }else{
+                            window.location.href = base_url + 'board';
+                        }
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
@@ -215,8 +222,10 @@
                         success: function(response) {
                             console.log(response.users);
                             if (response.dash_type == '0') {
+                                $("#redirect_to").val('kanban');
                                 $('#showHideSprint').hide();
                             } else {
+                                $("#redirect_to").val('scrum');
                                 $('#showHideSprint').show();
                             }
                             var select = $('select[name="user"]');

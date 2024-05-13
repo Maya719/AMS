@@ -78,7 +78,7 @@
         <div class="tp-header-2-top d-none d-lg-block">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-10 col-xl-8">
+                    <div class="col-lg-10 col-xl-10">
                         <div class="tp-header-2-top-info">
                             <ul>
                                 <li class="tp-header-2-top-ml-60">
@@ -87,8 +87,8 @@
                                     </a>
                                 </li>
                                 <li class="tp-header-2-top-ml-80">
-                                    <a href="mailto:hr@mobipixels.com">
-                                        <span><i class="flaticon-mail"></i></span>hr@mobipixels.com
+                                    <a href="mailto:ag.rana@airnet-technologies.com">
+                                        <span><i class="flaticon-mail"></i></span>ag.rana@airnet-technologies.com
                                     </a>
                                 </li>
                                 <li class="tp-header-2-top-ml-80">
@@ -123,7 +123,7 @@
                                             <li><a href="#feature">Features</a></li>
                                             <li><a href="#featureItem">Pricing</a></li>
                                             <li> <a href="#contact">Contact</a></li>
-                                            <li> <a href="#company">Our Company</a></li>
+                                            <li><a href="<?= base_url('front/guide') ?>">Guide</a></li>
                                             <li> <a href="<?= base_url('auth') ?>">Login</a></li>
                                         </ul>
                                     </nav>
@@ -199,14 +199,6 @@
         <!-- hero area start -->
         <section class="tp-hero-2-area p-relative">
             <div class="hero-2-active splide">
-                <div class="splide__arrows splide__arrows--ltr">
-                    <button class="splide__arrow splide__arrow--prev">
-                        <i class="fa-regular fa-arrow-left"></i>
-                    </button>
-                    <button class="splide__arrow splide__arrow--next">
-                        <i class="fa-regular fa-arrow-right"></i>
-                    </button>
-                </div>
                 <div class="splide__track">
                     <div class="splide__list">
                         <div class="splide__slide slider-item">
@@ -218,9 +210,9 @@
                                             <div class="tp-hero-wrapper d-flex align-items-center">
                                                 <div class="tp-hero-2-content">
                                                     <div class="tp-hero-title-wrapper">
-                                                        <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Efficient Solutions for Business Management' ?></h5>
+                                                        <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Transform with Attendance, Project, HR Management' ?></h5>
                                                     </div>
-                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our premier solution maximizes productivity with streamlined collaboration. Focused on simplicity and efficiency, it empowers success. Utilizing cutting-edge tech and expert support, our platform offers seamless management of operations and relationships.' ?></p>
+                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our solution drives productivity through collaboration. Emphasizing simplicity, efficiency, it fosters success. Leveraging tech, support, it manages operations, relationships seamlessly.' ?></p>
                                                     <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">
                                                         <a class="tp-btn" href="<?= base_url('auth/register') ?>" target="_blank">Get Started <i class="fa-regular fa-arrow-right-long"></i></a>
                                                         <span>Happy <br> Members</span>
@@ -521,146 +513,6 @@
             </div>
         </div>
         <!-- price area end -->
-        <!-- about area start -->
-        <section class="tp-about-area pt-120 pb-120" id="company">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="row tp-gx-20 ">
-                            <div class="tp-about-thumb-wrapper wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
-                                <div class="tp-about-thumb">
-                                    <img src="<?= base_url('assets/front/four/img/about/img-1.jpg') ?>" alt="">
-                                </div>
-                                <div class="tp-about-thumb p-relative">
-                                    <img class="mb-20" src="<?= base_url('assets/front/four/img/about/img-2.jpg') ?>" alt="">
-                                    <div class="skill__progress-circle mr-30">
-                                        <div class="progress-circular">
-                                            <input type="text" class="knob" value="0" data-rel="100" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#ffc700" data-thickness=".15" data-readonly="true" disabled>
-                                        </div>
-                                        <h4>Project Success</h4>
-                                    </div>
-                                    <img src="<?= base_url('assets/front/four/img/about/img-3.jpg') ?>" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="tp-about-section-title-wrapper wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
-                            <span class="tp-section__title-pre">
-                                about our company
-                            </span>
-                            <h3 class="tp-section__title mb-25">Efficient Software Solutions by Airnet-Technologies</h3>
-                            <p>Airnet-Technologies offers rapid, user-friendly software solutions tailored for streamlined operations. Our expert team ensures efficiency and excellence in every digital experience.</p>
-                            <div class="tp-about-inner-wrapper d-flex flex-wrap">
-                                <div class="tp-about-inner d-flex">
-                                    <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Mobile Application</h4>
-                                        <p>Since the unknown printer took <br> we develop mobile app.</p>
-                                    </div>
-                                </div>
-                                <div class="tp-about-inner d-flex">
-                                    <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Artificial Intelligence</h4>
-                                        <p>Transforming operations, <br> decisions, experiences with AI.</p>
-                                    </div>
-                                </div>
-                                <div class="tp-about-inner d-flex">
-                                    <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Website Development</h4>
-                                        <p>Revolutionizing web development, <br> innovation, efficiency, excellence.</p>
-                                    </div>
-                                </div>
-                                <div class="tp-about-inner d-flex">
-                                    <div class="tp-about-inner-thumb">
-                                        <i class="flaticon-cpu"></i>
-                                    </div>
-                                    <div class="tp-about-inner-text">
-                                        <h4 class="tp-about-inner-title">Graphic Designing</h4>
-                                        <p>Elevating graphic design, <br> creativity, precision, impact.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tp-about-btn">
-                                <a class="tp-btn" href="#">Our Services <i class="fa-regular fa-arrow-right-long"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- about area end -->
-        <!-- team area start -->
-        <section class="tp-team-area pt-120 pb-80 p-relative">
-            <div class="tp-team-bg" data-background="assets/img/team/team-bg.jpg"></div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="tp-team-section-title-wrapper text-center mb-70">
-                            <span class="tp-section__title-pre">
-                                Our Team
-                            </span>
-                            <h3 class="tp-section__title">Qualified Team Member</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".4s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-1.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Muhammad Aman</a></h4>
-                                <p>Project Manager</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-2.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Mohsin Ali</a></h4>
-                                <p>Graphic Designer</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-3.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Hurira Abbasi</a></h4>
-                                <p>SQA Engineer</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="tp-team-wrapper p-relative wow fadeInRight" data-wow-duration="1s" data-wow-delay=".4s">
-                            <div class="tp-team-thumb">
-                                <a href="#"><img src="<?= base_url('assets/front/four/img/team/team-4.png') ?>" alt=""></a>
-                            </div>
-                            <div class="tp-team-content text-center mt-30">
-                                <h4 class="tp-team-title-1"><a href="#">Muhammad Shoaib</a></h4>
-                                <p>Web Developer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- team area end -->
 
         <!-- contact input area start -->
         <section class="tp-contact-input pt-100" id="contact">
@@ -711,22 +563,22 @@
                     <div class="col-lg-4">
                         <div class="tp-contact-phone d-sm-flex justify-content-xl-end">
                             <div class="tp-contact-icon">
-                                <a href="tel:008757845682"><i class="flaticon-telephone-call"></i></a>
+                                <a href="tel:051-6102534"><i class="flaticon-telephone-call"></i></a>
                             </div>
                             <div class="contact-inner">
                                 <p>Phone:</p>
-                                <a href="tel:008757845682">051-6102534</a>
+                                <a href="tel:051-6102534" style="font-size: 18px;">051-6102534</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="tp-contact-mail d-sm-flex justify-content-xl-center">
                             <div class="tp-contact-icon">
-                                <a href="mail:info@gmail.com"><i class="flaticon-mail"></i></a>
+                                <a href="mail:ag.rana@airnet-technologies.com"><i class="flaticon-mail"></i></a>
                             </div>
                             <div class="contact-inner">
                                 <p>E-mail:</p>
-                                <a href="mail:info@gmail.com">info@mobipixels.com</a>
+                                <a href="mail:ag.rana@airnet-technologies.com" style="font-size: 18px;">ag.rana@airnet-technologies.com</a>
                             </div>
                         </div>
                     </div>
@@ -737,7 +589,7 @@
                             </div>
                             <div class="contact-inner">
                                 <p>Address:</p>
-                                <a target="_blank" href="https://www.google.com/maps/place/MobiPixels/@33.5215515,73.0893157,17z/data=!4m16!1m9!3m8!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!2sMobiPixels!8m2!3d33.5215471!4d73.0918906!9m1!1b1!16s%2Fg%2F11kz3p6gj3!3m5!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!8m2!3d33.5215471!4d73.0918906!16s%2Fg%2F11kz3p6gj3?entry=ttu">Sector F DHA, Islamabad</a>
+                                <a target="_blank" style="font-size: 18px;" href="https://www.google.com/maps/place/MobiPixels/@33.5215515,73.0893157,17z/data=!4m16!1m9!3m8!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!2sMobiPixels!8m2!3d33.5215471!4d73.0918906!9m1!1b1!16s%2Fg%2F11kz3p6gj3!3m5!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!8m2!3d33.5215471!4d73.0918906!16s%2Fg%2F11kz3p6gj3?entry=ttu">Sector F DHA, Islamabad</a>
                             </div>
                         </div>
                     </div>
@@ -766,21 +618,21 @@
                 <div class="tp-footer-2-widget-area">
                     <div class="container">
                         <div class="row">
-                            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-4">
                                 <div class="tp-footer-2-widget mb-30">
                                     <span class="mb-30">Contact Us</span>
                                     <div class="tp-footer-2-widget-contact d-flex align-items-center mb-30">
                                         <a class="icon" href="#"><i class="flaticon-telephone-call"></i></a>
                                         <div class="contact-inner">
                                             <p>Phone:</p>
-                                            <a href="tel:">051-6102534</a>
+                                            <a href="tel:051-6102534" style="font-size: 18px;">051-6102534</a>
                                         </div>
                                     </div>
                                     <div class="tp-footer-2-widget-contact d-flex align-items-center">
                                         <a class="icon" href="#"><i class="flaticon-mail"></i></a>
                                         <div class="contact-inner">
                                             <p>E-mail:</p>
-                                            <a href="mailto:">info@gmail.com</a>
+                                            <a href="mailto:ag.rana@airnet-technologies.com" style="font-size: 18px;">ag.rana@airnet-technologies.com</a>
                                         </div>
                                     </div>
                                 </div>
@@ -802,6 +654,10 @@
                                         <?php if (frontend_permissions('terms')) { ?>
                                             <li><a href="<?= base_url('front/terms-and-conditions') ?>">Terms & Condition</a></li>
                                         <?php } ?>
+                                        <?php if (frontend_permissions('terms')) { ?>
+                                            <li><a href="<?= base_url('front/guide') ?>">Guide</a></li>
+                                        <?php } ?>
+                                        
                                     </ul>
                                 </div>
                             </div>

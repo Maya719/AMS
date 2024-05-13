@@ -190,7 +190,7 @@ class Todo extends CI_Controller
 			}
 
 			$this->data['page_title'] = 'ToDo - '.company_name();
-			$this->data['main_page'] = $filter;
+			$this->data['main_page'] = 'To Do';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['todo'] = $this->todo_model->get_todo($this->session->userdata('user_id'), '',$filter);
 			$this->load->view('todo',$this->data);

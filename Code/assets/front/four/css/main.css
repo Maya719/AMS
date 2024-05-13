@@ -133,7 +133,7 @@ li,
   --tp-text-body: #6A6D7A;
   --tp-text-1: #5B677D;
   --tp-text-2: #0D1C37;
-  --tp-theme-primary: #2144D8;
+  --tp-theme-primary: var(--theme-color);
   --tp-theme-secondary: #FFC700;
   --tp-theme-1: #F4F6FD;
   --tp-border-primary: #000;
@@ -1603,7 +1603,7 @@ div.demo img {
     background: var(--secondary-color);
   }
   75% {
-    background: #2144D8;
+    background: var(--theme-color);
   }
   50.0001%, 100% {
     left: auto;
@@ -5568,7 +5568,7 @@ div.demo img {
 .tp-hero-overlay::before {
   position: absolute;
   content: "";
-  background: linear-gradient(90deg, #2144D8 18.05%, rgba(33, 68, 216, 0) 85.78%);
+  background: linear-gradient(90deg, var(--theme-color) 18.05%, rgba(33, 68, 216, 0) 85.78%);
   left: 0;
   top: 0;
   width: 100%;
@@ -5580,7 +5580,7 @@ div.demo img {
 .tp-hero-2-overlay::before {
   position: absolute;
   content: "";
-  background: #2144D8;
+  background: var(--theme-color);
   left: 0;
   top: 0;
   width: 100%;
@@ -5606,7 +5606,7 @@ div.demo img {
   }
 }
 .tp-hero-2-thumb img {
-  max-width: 110%;
+  max-width: 180%;
 }
 .tp-hero-shape .shape-1 {
   position: absolute;
@@ -6592,7 +6592,7 @@ div.demo img {
   left: 0;
   top: 0;
   z-index: -1;
-  background: linear-gradient(180deg, #FFF 0%, rgba(33, 68, 216, 0.81) 100%);
+  background: linear-gradient(180deg, #FFF 0%, var(--theme-color) 100%);
 }
 .tp-brands-from .tp-btn {
   padding: 18px 37px;
@@ -7652,7 +7652,7 @@ div.demo img {
   left: 0;
   width: 100%;
   height: 80%;
-  background: linear-gradient(0deg, rgba(173, 182, 221, 0) 0%, #2144D8 100%);
+  background: linear-gradient(0deg, rgba(173, 182, 221, 0) 0%, var(--theme-color) 100%);
   opacity: 0.6;
   z-index: -1;
 }
@@ -7845,7 +7845,7 @@ div.demo img {
   height: 100%;
   left: 0px;
   bottom: 0px;
-  background: linear-gradient(180deg, rgba(33, 68, 216, 0) 0%, #2144D8 100%);
+  background: linear-gradient(180deg, rgba(33, 68, 216, 0) 0%, var(--theme-color) 100%);
   transition: all 0.3s ease-in-out;
   z-index: 1;
   visibility: hidden;
@@ -8178,7 +8178,7 @@ div.demo img {
   height: 100%;
   left: 0px;
   bottom: 0px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #2144D8 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--theme-color) 100%);
   transition: all 0.3s ease-in-out;
   z-index: 1;
 }
@@ -8507,7 +8507,7 @@ div.demo img {
 }
 .tp-portfolio-3-content {
   position: relative;
-  background: linear-gradient(270deg, #F4F6FD 0%, #2144D8 100%);
+  background: linear-gradient(270deg, #F4F6FD 0%, var(--theme-color) 100%);
   padding: 20px 30px;
   justify-content: space-between;
 }
@@ -8718,7 +8718,7 @@ div.demo img {
   height: 102%;
   left: -2px;
   top: -1px;
-  background: linear-gradient(90deg, #2144D8 0%, rgba(13, 28, 55, 0) 100%);
+  background: linear-gradient(90deg, var(--theme-color) 0%, rgba(13, 28, 55, 0) 100%);
   transition: all 0.3s ease-in;
   opacity: 0;
   visibility: hidden;
@@ -9534,7 +9534,7 @@ div.demo img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, #2144D8 0%, #FFC700 100%);
+  background: linear-gradient(180deg, var(--theme-color) 0%, #FFC700 100%);
   opacity: 0.92;
   z-index: 1;
 }
@@ -10734,7 +10734,7 @@ div.demo img {
   height: 100%;
   left: 0px;
   bottom: 0px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #2144D8 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--theme-color) 100%);
   transition: all 0.3s ease-in-out;
   z-index: 1;
   opacity: 0;
@@ -10996,7 +10996,7 @@ div.demo img {
   height: 100%;
   left: 0px;
   bottom: 0px;
-  background: linear-gradient(180deg, rgba(33, 68, 216, 0.37) 0%, #2144D8 100%);
+  background: linear-gradient(180deg, rgba(33, 68, 216, 0.37) 0%, var(--theme-color) 100%);
   transition: all 0.3s ease-in-out;
   visibility: hidden;
   opacity: 0;

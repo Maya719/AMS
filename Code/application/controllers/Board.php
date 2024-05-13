@@ -13,9 +13,8 @@ class Board extends CI_Controller
     public $lang;
     public $board_model;
 
-    public function index()
+    public function tasks($id = '', $select_user='')
     {
-
         if ($this->ion_auth->logged_in()) {
             $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
 
@@ -40,6 +39,13 @@ class Board extends CI_Controller
             $query2 = $this->db->get();
             $this->data['sprints'] = $query2->result_array();
 
+            $this->db->select('users.*');
+            $this->db->from('users');
+            $this->db->join('project_users', 'project_users.user_id = users.id');
+            $this->db->where('project_users.project_id', $id);
+            $query = $this->db->get();
+            $this->data['project_users'] = $query->result_array();
+
             $this->db->select('*');
             $this->db->from('projects');
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
@@ -56,7 +62,8 @@ class Board extends CI_Controller
                 $users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
                 $this->data['system_users'] = $users;
             }
-
+            $this->data["project_id"] = $id;
+            $this->data["select_user"] = $select_user;
             $this->load->view('board', $this->data);
         } else {
             redirect('auth', 'refresh');
@@ -153,15 +160,16 @@ class Board extends CI_Controller
     }
     public function filter_board()
     {
-        // Validate inputs
-        $sprint_id = $this->input->post('sprint_id');
-        $user_id = $this->input->post('user_id');
+        $sprint_show = false;
         $project_id = $this->input->post('project_id');
-        $board = $this->input->post('board');
+        $user_id = $this->input->post('user_id');
 
-        // Determine the users based on input and permissions
+        $project = $this->board_model->get_project_by_id($project_id);
+        if ($project->dash_type == 1) {
+            $sprint_data = $this->board_model->get_running_sprint($project_id);
+            $sprint_show = true;
+        }
         if (!empty($user_id)) {
-            // Use the provided user_id
             $users = [$user_id];
         } else {
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
@@ -171,43 +179,32 @@ class Board extends CI_Controller
                 $users = [$this->session->userdata('user_id')];
             }
         }
-        // Fetch statuses
         $statuses = $this->get_statuses();
 
-        $issues_data = $this->get_issues($sprint_id, $project_id, $board, $users);
-        $sprint_data = $this->get_sprint($sprint_id);
+        $issues_data = $this->get_issues($project_id, $users);
 
         $html = '';
         $completed = 0;
         $total = 0;
-        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data,$board);
+        list($html, $completed, $total) = $this->generate_html_and_metrics($statuses, $issues_data);
 
-        // Calculate the progress percentage
         $rounded_percent = $this->calculate_progress($completed, $total);
 
-        // Prepare the result
         $result = [
             'sprint' => $sprint_data ?? [],
             'issues' => $issues_data,
             'html' => $html,
             'total' => $total,
             'completed' => $completed,
-            'user_id' => $user_id,
+            'sprint_show' => $sprint_show,
+            'user_id' => $users,
             'percent' => 'Total Progress ' . $rounded_percent . '%',
         ];
 
-        // Return JSON-encoded result
         echo json_encode($result);
     }
 
-    private function get_sprint($sprint_id)
-    {
-        $this->db->select('*');
-        $this->db->from('sprints');
-        $this->db->where('id', $sprint_id);
-        $status_query = $this->db->get();
-        return $status_query->row();
-    }
+
     private function get_statuses()
     {
         $this->db->select('*');
@@ -216,7 +213,7 @@ class Board extends CI_Controller
         return $status_query->result_array();
     }
 
-    private function get_issues($sprint_id, $project_id, $board, $users)
+    private function get_issues($project_id, $users)
     {
         // Fetch issues based on the input filters
         $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
@@ -226,17 +223,6 @@ class Board extends CI_Controller
         $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
         $this->db->join('users u', 'u.id = iu.user_id', 'left');
 
-        // Add filters based on input parameters
-        if ($board && trim($board) == '1') {
-            // Handle sprint board
-            $this->db->join('issues_sprint is', 'is.issue_id = i.id', 'left');
-            if ($sprint_id && trim($sprint_id) !== '') {
-                $this->db->where('is.sprint_id', $sprint_id);
-            }
-        } else {
-            // Handle other boards
-            $this->db->where('p.dash_type', 0);
-        }
 
         // Additional filters
         $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
@@ -253,7 +239,7 @@ class Board extends CI_Controller
         return $issues_query->result_array();
     }
 
-    private function generate_html_and_metrics($statuses, $issues_data,$board)
+    private function generate_html_and_metrics($statuses, $issues_data)
     {
         $html = '';
         $completed = 0;
@@ -273,7 +259,7 @@ class Board extends CI_Controller
             // Add issue cards based on status
             foreach ($issues_data as $issue) {
                 if ($status["id"] == $issue["status"]) {
-                    $html .= $this->html_generating($status, $issue,$board);
+                    $html .= $this->html_generating($status, $issue);
                     $total++;
                     if ($status["id"] == 4) {
                         $completed++;
@@ -295,7 +281,7 @@ class Board extends CI_Controller
         return (int) round($completed * 100 / $total);
     }
 
-    public function html_generating($status, $issue,$board)
+    public function html_generating($status, $issue)
     {
         $due_or_not = '';
         $html = '';
@@ -359,13 +345,7 @@ class Board extends CI_Controller
                                         </ul>';
         }
         $due_or_not = $this->get_due_dates($issue["starting_date"], $issue["due_date"], $status["id"]);
-        if ($board == '0') {
-            $html .= '
-            <div class="col-8 d-flex justify-content-end">
-                <span class="fs-14"><i class="far fa-clock me-2"></i>' . $due_or_not . '</span>
-            </div>';
-        }
-       
+
         $html .= ' 
                             </div>
                         </div>

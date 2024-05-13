@@ -54,8 +54,8 @@
 
 <?= get_footer_code() ?>
 <script src="<?= base_url('assets2/vendor/global/global.min.js') ?>"></script>
-<script src="<?=base_url('assets2/vendor/select2/js/select2.full.min.js')?>"></script>
-<script src="<?=base_url('assets2/js/plugins-init/select2-init.js');?>"></script>
+<script src="<?= base_url('assets2/vendor/select2/js/select2.full.min.js') ?>"></script>
+<script src="<?= base_url('assets2/js/plugins-init/select2-init.js'); ?>"></script>
 <script src="<?= base_url('assets2/vendor/bootstrap-select/js/bootstrap-select.min.js') ?>"></script>
 
 <script src="<?= base_url('assets2/vendor/moment/moment.min.js') ?>"></script>
@@ -64,7 +64,7 @@
 <script src="<?= base_url('assets2/vendor/jquery-asColor/jquery-asColor.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/jquery-asGradient/jquery-asGradient.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/jquery-asColorPicker/js/jquery-asColorPicker.min.js') ?>"></script>
-<script src="<?=base_url('assets/modules/bootstrap-timepicker/timepicker.js')?>"></script>
+<script src="<?= base_url('assets/modules/bootstrap-timepicker/timepicker.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/pickadate/picker.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/pickadate/picker.time.js') ?>"></script>
@@ -202,17 +202,43 @@
 </script>
 <script>
   function showLoader() {
-        $("#main-wrapper").removeClass("show");
-        $("#loader").css("display", "flex");
-    }
+    $("#main-wrapper").removeClass("show");
+    $("#loader").css("display", "flex");
+  }
 
-    // Function to hide the loader
-    function hideLoader() {
-        setTimeout(function () {
-            $("#main-wrapper").addClass("show");
-            $("#loader").css("display", "none");
-        }, 400);
-    }
+  // Function to hide the loader
+  function hideLoader() {
+    setTimeout(function() {
+      $("#main-wrapper").addClass("show");
+      $("#loader").css("display", "none");
+    }, 400);
+  }
 
-    var ModelProgress = '<div class="loader-progress"><div class="overlay"></div><span class="loader2"></span></div>';
+  var ModelProgress = '<div class="loader-progress"><div class="overlay"></div><span class="loader2"></span></div>';
+</script>
+<script>
+  function checkSprintDate() {
+    $.ajax({
+      type: "POST",
+      url: base_url + 'backlog/complete_sprint_ascnr',
+      data: {
+        moveToBacklog: 1
+      },
+      dataType: "json",
+      success: function(result) {
+        console.log(result);
+        if (result['error'] == false) {
+          location.reload();
+        } else {
+          iziToast.error({
+            title: result['message'],
+            message: "",
+            position: 'topRight'
+          });
+        }
+      }
+    });
+
+  }
+  checkSprintDate();
 </script>

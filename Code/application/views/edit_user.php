@@ -23,6 +23,12 @@
         <div class="content-body default-height">
             <!-- row -->
             <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+                    </ol>
+                </nav>
                 <div class="row">
                     <div class="col-xl-12">
                         <form action="<?= base_url('auth/edit-user') ?>" method="post" id="form-part" enctype="multipart/form-data">
@@ -45,12 +51,12 @@
                                                 <a class="nav-link" data-bs-toggle="tab" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
                                             </li>
                                             <?php
-                                            if ((permissions('user_edit') && permissions('user_view'))|| $this->ion_auth->is_admin()) {
-                                                ?>
+                                            if ((permissions('user_edit') && permissions('user_view')) || $this->ion_auth->is_admin()) {
+                                            ?>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-bs-toggle="tab" href="#message2"><i class="la la-sign-out me-2"></i>Resignation / Termination</a>
                                                 </li>
-                                            <?php }?>
+                                            <?php } ?>
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active" id="home1" role="tabpanel">
@@ -487,7 +493,7 @@
                 success: function(result) {
                     if (result['error'] == false) {
                         console.log(result);
-                        window.location.href=base_url+'users';
+                        window.location.href = base_url + 'users';
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }

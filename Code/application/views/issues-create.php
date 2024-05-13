@@ -60,11 +60,12 @@
                                     <h6 class="title">Create Issue</h6>
                                 </div>
                                 <form action="<?= base_url('issues/create_issue') ?>" method="post" id="modal-add-issue-part">
+                                <input type="hidden" name="redirect_to" id="redirect_to">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Project <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="project_id">
+                                                <select class="form-control" name="project_id" id="project_id3">
                                                     <option value="">Project</option>
                                                     <?php foreach ($projects as $project) : ?>
                                                         <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
@@ -189,6 +190,9 @@
             var form = $('#modal-add-issue-part');
             var formData = form.serialize();
             console.log(formData);
+            project_id = $("#project_id3").val();
+            redirect_to = $("#redirect_to").val();
+            console.log(redirect_to);
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
@@ -197,7 +201,11 @@
                 success: function(result) {
                     console.log(result);
                     if (result['error'] == false) {
-                        window.location.href = base_url + 'backlog';
+                        if (redirect_to == 'scrum') {
+                            window.location.href = base_url + 'backlog/project/'+project_id;
+                        }else{
+                            window.location.href = base_url + 'board';
+                        }
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
@@ -226,9 +234,12 @@
                             $.each(response['users'], function(index, user) {
                                 select.append('<option value="' + user.id + '">' + user.first_name + ' ' + user.last_name + '</option>');
                                 if (response['dash_type'] == 0) {
+                                    $("#redirect_to").val('kanban');
                                     $("#sprint_div").addClass('hidden');
+
                                 } else {
                                     $("#sprint_div").removeClass('hidden');
+                                    $("#redirect_to").val('scrum');
                                 }
                             });
 

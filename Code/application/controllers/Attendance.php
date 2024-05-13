@@ -346,7 +346,7 @@ class Attendance extends CI_Controller
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 
 			$employee_id = $this->uri->segment($this->uri->total_segments());
-			if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+			if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
 				$user_data = $this->ion_auth->user($employee_id)->row();
 				$user_query = $this->db->get_where('users', array('employee_id' => $employee_id));
 				$user_data = $user_query->row();
