@@ -147,7 +147,7 @@
                     <ul>
                         <li class="d-flex align-items-center">
                             <div class="tp-sidebar__contact-text">
-                                <a target="_blank" href="https://www.google.com/maps/place/MobiPixels/@33.5215515,73.0893157,17z/data=!4m16!1m9!3m8!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!2sMobiPixels!8m2!3d33.5215471!4d73.0918906!9m1!1b1!16s%2Fg%2F11kz3p6gj3!3m5!1s0x38dfed84b5ecb5e7:0x5311609efac1bc28!8m2!3d33.5215471!4d73.0918906!16s%2Fg%2F11kz3p6gj3?entry=ttu"><i class="fal fa-map-marker-alt"></i> Sector F DHA, Islamabad Capital Territory</a>
+                                <a target="_blank" href="#"><i class="fal fa-map-marker-alt"></i> Dubai</a>
                             </div>
                         </li>
                         <li class="d-flex align-items-center">
@@ -157,7 +157,7 @@
                         </li>
                         <li class="d-flex align-items-center">
                             <div class="tp-sidebar__contact-text">
-                                <a href="mailto:hr@mobipixels.com"><i class="fal fa-envelope"></i> hr@mobipixels.com</a>
+                                <a href="mailto:ag.rana@airnet-technologies.com"><i class="fal fa-envelope"></i> ag.rana@airnet-technologies.com</a>
                             </div>
                         </li>
                     </ul>
