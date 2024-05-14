@@ -259,7 +259,6 @@ class Settings extends CI_Controller
 		}
 	}
 
-	
 	public function save_company_setting()
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || $this->ion_auth->in_group(4) || permissions('company_view'))) {
@@ -299,30 +298,6 @@ class Settings extends CI_Controller
 			} else {
 				$this->data['error'] = true;
 				$this->data['message'] = validation_errors();
-				echo json_encode($this->data);
-			}
-		} elseif (isset($this->input->post('saas_id')) && !empty($this->input->post('saas_id'))) {
-			$setting_type = 'company_' . $this->input->post('saas_id');
-			$data_json = array(
-				'company_name' => $this->input->post('company_name'),
-				'address' => $this->input->post('address'),
-				'city' => $this->input->post('city'),
-				'state' => $this->input->post('state'),
-				'country' => $this->input->post('country'),
-				'zip_code' => $this->input->post('zip_code'),
-			);
-
-			$data = array(
-				'value' => json_encode($data_json)
-			);
-			if ($this->settings_model->save_settings($setting_type, $data)) {
-				$this->data['error'] = false;
-				$this->data['data'] = $data_json;
-				$this->data['message'] = $this->lang->line('company_setting_saved') ? $this->lang->line('company_setting_saved') : "Company Setting Saved.";
-				echo json_encode($this->data);
-			} else {
-				$this->data['error'] = true;
-				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
 				echo json_encode($this->data);
 			}
 		} else {
@@ -1306,8 +1281,7 @@ class Settings extends CI_Controller
 						'general_view' => $this->input->post($role['name'] . '_general_view') != '' ? 1 : 0,
 						'company_view' => $this->input->post($role['name'] . '_company_view') != '' ? 1 : 0,
 						'support_view' => $this->input->post($role['name'] . '_support_view') != '' ? 1 : 0,
-						'notice_board_view' => $this->input->post($role['name'] . '_notice_board_view') != '' ? 1 : 0,
-						'notification_view_all' => $this->input->post($role['name'] . '_notification_view_all') != '' ? 1 : 1,
+						'notification_view_all' => $this->input->post($role['name'] . '_notification_view_all') != '' ? 1 : 0,
 						'notification_view_pms' => $this->input->post($role['name'] . '_notification_view_pms') != '' ? 1 : 0,
 						'team_members_and_client_can_chat' => $this->input->post('team_members_and_client_can_chat') != '' ? 1 : 0,
 						'general_edit' => $this->input->post($role['name'] . '_general_edit') != '' ? 1 : 0,
@@ -1633,7 +1607,7 @@ class Settings extends CI_Controller
 
 	public function roles_permissions()
 	{
-
+		
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
 			$this->data['main_page2'] = 'roles_permissions';
