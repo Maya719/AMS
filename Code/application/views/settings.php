@@ -655,8 +655,8 @@
         url: $(form).attr('action'),
         data: formData,
         dataType: "json",
-        contentType: false, 
-        processData: false, 
+        contentType: false,
+        processData: false,
         success: function(result) {
           console.log(result);
           if (result['error'] == false) {
@@ -1088,6 +1088,40 @@
       window.location.replace(value);
     });
   </script>
+
+
+  <script>
+    $(document).ready(function() {
+      // Function to handle checkbox behavior for view_all and view_selected
+      function handleViewAllSelected(checkedCheckbox, uncheckedCheckbox) {
+        if ($(checkedCheckbox).prop('checked')) {
+          $(uncheckedCheckbox).prop('checked', false); // Uncheck the other checkbox
+        }
+      }
+
+      // Function to handle view_all and view_selected checkboxes for a specific section
+      function handleViewAllSelectedInSection(sectionName) {
+        // Event listener for view_all checkbox
+        $(`#${sectionName}_view_all`).change(function() {
+          handleViewAllSelected(this, `#${sectionName}_view_selected`);
+        });
+
+        // Event listener for view_selected checkbox
+        $(`#${sectionName}_view_selected`).change(function() {
+          handleViewAllSelected(this, `#${sectionName}_view_all`);
+        });
+      }
+      <?php foreach ($roles as $role) : ?>
+      handleViewAllSelectedInSection('<?= $role['name'] ?>_user');
+      handleViewAllSelectedInSection('<?= $role['name'] ?>_attendance');
+      handleViewAllSelectedInSection('<?= $role['name'] ?>_leaves');
+      handleViewAllSelectedInSection('<?= $role['name'] ?>_biometric_request');
+      handleViewAllSelectedInSection('<?= $role['name'] ?>_task');
+      handleViewAllSelectedInSection('<?= $role['name'] ?>_project');
+      <?php endforeach; ?>
+    });
+  </script>
+
 </body>
 
 </html>

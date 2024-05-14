@@ -7106,6 +7106,11 @@ div.demo img {
 .tp-service-overlay {
   background: #F4F6FD;
 }
+
+.tp-service-overlay_2 {
+  background: #F4F6FD;
+}
+
 .tp-service-overlay::before {
   content: "";
   position: absolute;
