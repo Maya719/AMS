@@ -204,7 +204,7 @@
                         if (redirect_to == 'scrum') {
                             window.location.href = base_url + 'backlog/project/'+project_id;
                         }else{
-                            window.location.href = base_url + 'board';
+                            window.location.href = base_url + 'board/tasks/'+project_id;
                         }
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();

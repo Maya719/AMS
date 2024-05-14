@@ -4,7 +4,15 @@
 <body class="sidebar-mini">
     <div id="app">
         <section class="section">
+            
             <div class="container mt-5">
+            <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="alert alert-warning" role="alert">
+                        If you skip the step you will receive free trial!
+                    </div>
+                </div>
+            </div>
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="login-brand">
@@ -16,6 +24,7 @@
                             <div class="card-header d-flex justify-content-center">
                                 <h4><?= $this->lang->line('create_company') ? htmlspecialchars($this->lang->line('create_company')) : 'Create Company' ?></h4>
                             </div>
+
                             <div class="row">
                                 <?php foreach ($plans as $plan) : ?>
                                     <?php
@@ -66,19 +75,19 @@
                                                         <div class="pricing-item">
                                                             <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></div>
                                                             <div class="badge badge-primary">
-                                                                <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'projects', 'saas_id=' . $this->session->userdata('saas_id')) . ' / ' : '' ?>
+                                                                <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'projects', 'saas_id=' . $saas_id) . ' / ' : '' ?>
                                                                 <?= $plan['projects'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['projects']) ?></div>
                                                         </div>
                                                         <div class="pricing-item">
                                                             <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></div>
                                                             <div class="badge badge-primary">
-                                                                <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'tasks', 'saas_id=' . $this->session->userdata('saas_id')) . ' / ' : '' ?>
+                                                                <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'tasks', 'saas_id=' . $saas_id) . ' / ' : '' ?>
                                                                 <?= $plan['tasks'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['tasks']) ?></div>
                                                         </div>
                                                         <div class="pricing-item">
                                                             <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('including_admins_clients_and_users') ? $this->lang->line('including_admins_clients_and_users') : 'Including Admins, Clients and Users.' ?>"></i></div>
                                                             <div class="badge badge-primary">
-                                                                <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'users', 'saas_id=' . $this->session->userdata('saas_id')) . ' / ' : '' ?>
+                                                                <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'users', 'saas_id=' . $saas_id) . ' / ' : '' ?>
                                                                 <?= $plan['users'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['users']) ?></div>
                                                         </div>
                                                         <?php
@@ -165,7 +174,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="pricing-cta">
-                                                    <a href="#" class="payment-button" data-amount="<?= htmlspecialchars($plan['price']) ?>" data-id="<?= htmlspecialchars($plan['id']) ?>"><?= $my_plan['plan_id'] == $plan['id'] ? ($this->lang->line('renew_plan') ? $this->lang->line('renew_plan') : 'Renew Plan.') : ($this->lang->line('subscribe') ? $this->lang->line('subscribe') : 'Upgrade') ?> <i class="fas fa-arrow-right"></i></a>
+                                                    <a href="javascript:void(0);" class="payment-button" data-saas="<?= htmlspecialchars($saas_id) ?>" data-amount="<?= htmlspecialchars($plan['price']) ?>" data-id="<?= htmlspecialchars($plan['id']) ?>"><?= $my_plan['plan_id'] == $plan['id'] ? ($this->lang->line('renew_plan') ? $this->lang->line('renew_plan') : 'Renew Plan.') : ($this->lang->line('subscribe') ? $this->lang->line('subscribe') : 'Upgrade') ?> <i class="fas fa-arrow-right"></i></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,14 +184,17 @@
                                     ?>
                                 <?php endforeach ?>
                             </div>
-
+                            <div class="card-footer bg-whitesmoke text-md-right">
+                                    <a href="<?=base_url('auth')?>" class="savebtn btn btn-primary btn-lg" tabindex="6">
+                                        <?= $this->lang->line('skip') ? $this->lang->line('skip') : 'Skip' ?>
+                                    </a>
+                                </div>
                             <div class="simple-footer">
                                 <?= htmlspecialchars(footer_text()) ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <?php var_dump($user->email); ?>
                 <div class="row d-none" id="payment-div">
                     <div id="paypal-button" class="col-md-8 mx-auto paymet-box"></div>
                     <?php if (get_stripe_secret_key() && get_stripe_publishable_key()) { ?>

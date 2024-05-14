@@ -16,13 +16,17 @@
                             <div class="card-header d-flex justify-content-center">
                                 <h4><?= $this->lang->line('create_company') ? htmlspecialchars($this->lang->line('create_company')) : 'Create Company' ?></h4>
                             </div>
-                            <form action="<?= base_url('auth/save-departments') ?>" method="POST" id="create-company">
+                            <form action="<?= base_url('auth/save-roles') ?>" method="POST" id="create-company">
                                 <input type="hidden" name="saas_id" value="<?= $saas_id ?>">
-                                <div class="card-body row">
-                                    <div class="form-group col-md-12">
-                                        <label class="col-form-label"><?= $this->lang->line('department_name') ? $this->lang->line('department_name') : 'Department Name' ?><span class="text-danger">*</span></label>
-                                        <div id="input-container">
-                                            <input type="text" name="department_name[]" class="form-control" required="">
+                                <div class="card-body" id="input-container">
+                                    <div class="input-group row">
+                                        <div class="form-group col-lg-6">
+                                            <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
+                                            <input type="text" name="description[]" class="form-control" required="">
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            <label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
+                                            <input type="text" name="descriptive_name[]" class="form-control" required="">
                                         </div>
                                     </div>
                                 </div>
@@ -70,7 +74,7 @@
                     console.log(result);
                     card_progress.dismiss(function() {
                         if (result['error'] == false) {
-                            window.location.replace(base_url + 'auth/create-roles/' + result.saas_id);
+                            window.location.replace(base_url + 'auth/purchase-plan/' + result['saas_id']);
                         } else {
                             output_status.prepend('<div class="alert alert-danger">' + result['message'] + '</div>');
                         }
@@ -90,16 +94,34 @@
     </script>
     <script>
         $(document).ready(function() {
+            // Function to add more fields
             $(".add-btn").click(function() {
-                var inputHtml = '<div class="input-group mt-2"><input type="text" name="department_name[]" class="form-control" required=""><div class="input-group-append"><button class="remove-btn btn btn-danger" type="button">Remove</button></div></div>';
-                $("#input-container").append(inputHtml);
+                var html = '<div class="input-group row">';
+                html += '<div class="form-group col-lg-5">';
+                html += '<label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>';
+                html += '<input type="text" name="description[]" class="form-control" required="">';
+                html += '</div>';
+                html += '<div class="form-group col-lg-5">';
+                html += '<label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>';
+                html += '<input type="text" name="descriptive_name[]" class="form-control" required="">';
+                html += '</div>';
+                html += '<div class="form-group col-lg-2">';
+                html += '<label class="col-form-label"><?= $this->lang->line('remove') ? $this->lang->line('remove') : 'remove' ?><span class="text-danger">*</span></label>';
+                html += '<button class="remove btn btn-danger btn-block" tabindex="3" type="button">Remove</button>';
+                html += '</div>';
+                html += '</div>';
+
+                $("#input-container").append(html);
             });
 
-            $(document).on("click", ".remove-btn", function() {
-                $(this).closest(".input-group").remove();
+            // Function to remove the added fields
+            $(document).on('click', '.remove', function() {
+                $(this).closest('.input-group').remove();
             });
         });
     </script>
+
+
 </body>
 
 </html>

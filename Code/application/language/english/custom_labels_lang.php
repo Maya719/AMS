@@ -281,6 +281,7 @@ $lang['offline_request_rejected_successfully'] = "Offline request rejected succe
 $lang['payment_unsuccessful_please_try_again_later'] = "Payment unsuccessful. Please Try again later.";
 $lang['choose_valid_subscription_plan'] = "Choose valid subscription plan.";
 $lang['plan_subscribed_successfully'] = "Plan subscribed successfully.";
+$lang['plan_subscribed_successfully_and_check_email'] = "Plan subscribed successfully. Please Check You Email to activate your account.";
 $lang['notification_deleted_successfully'] = "Notification deleted successfully.";
 $lang['note_deleted_successfully'] = "Note deleted successfully.";
 $lang['note_updated_successfully'] = "Note updated successfully.";
