@@ -13,7 +13,7 @@ class Board extends CI_Controller
     public $lang;
     public $board_model;
 
-    public function tasks($id = '', $select_user='')
+    public function tasks($id = '', $select_user = '')
     {
         if ($this->ion_auth->logged_in()) {
             $this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
@@ -163,12 +163,6 @@ class Board extends CI_Controller
         $sprint_show = false;
         $project_id = $this->input->post('project_id');
         $user_id = $this->input->post('user_id');
-
-        $project = $this->board_model->get_project_by_id($project_id);
-        if ($project->dash_type == 1) {
-            $sprint_data = $this->board_model->get_running_sprint($project_id);
-            $sprint_show = true;
-        }
         if (!empty($user_id)) {
             $users = [$user_id];
         } else {
@@ -179,9 +173,19 @@ class Board extends CI_Controller
                 $users = [$this->session->userdata('user_id')];
             }
         }
+        $project = $this->board_model->get_project_by_id($project_id);
+        if ($project->dash_type == 1) {
+            $sprint_data = $this->board_model->get_running_sprint($project_id);
+            if ($sprint_data) {
+                $sprint_show = true;
+                $issues_data = $this->get_sprint_issues($project_id, $users,$sprint_data->id);
+            }
+        }else{
+            $issues_data = $this->get_issues($project_id, $users);
+        }
+
         $statuses = $this->get_statuses();
 
-        $issues_data = $this->get_issues($project_id, $users);
 
         $html = '';
         $completed = 0;
@@ -213,16 +217,39 @@ class Board extends CI_Controller
         return $status_query->result_array();
     }
 
-    private function get_issues($project_id, $users)
+    private function get_sprint_issues($project_id, $users,$sprint_id)
     {
-        // Fetch issues based on the input filters
         $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
         $this->db->from('tasks i');
         $this->db->join('projects p', 'p.id = i.project_id', 'left');
         $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
         $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
         $this->db->join('users u', 'u.id = iu.user_id', 'left');
+        $this->db->join('issues_sprint is', 'i.id = is.issue_id', 'left');
+        $this->db->where_in('i.parent_task', 0);
+        $this->db->where_in('is.sprint_id', $sprint_id);
 
+        $this->db->where('i.saas_id', $this->session->userdata('saas_id'));
+        if (!empty($users)) {
+            $this->db->where_in('iu.user_id', $users);
+        }
+        if ($project_id && trim($project_id) !== '') {
+            $this->db->where('p.id', $project_id);
+        }
+
+        $this->db->order_by('created', 'desc');
+        $issues_query = $this->db->get();
+        return $issues_query->result_array();
+    }
+    private function get_issues($project_id, $users)
+    {
+        $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
+        $this->db->from('tasks i');
+        $this->db->join('projects p', 'p.id = i.project_id', 'left');
+        $this->db->join('priorities pr', 'i.priority = pr.id', 'left');
+        $this->db->join('task_users iu', 'iu.task_id = i.id', 'left');
+        $this->db->join('users u', 'u.id = iu.user_id', 'left');
+        $this->db->where_in('i.parent_task', 0);
 
         // Additional filters
         $this->db->where('i.saas_id', $this->session->userdata('saas_id'));

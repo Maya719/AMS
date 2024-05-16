@@ -117,9 +117,7 @@
                                             <label class="form-label">Description</label>
                                             <textarea name="description"><?= $issue->description ?></textarea>
                                         </div>
-                                        <?php
-                                        // var_dump(($issues_users->user_id));
-                                        ?>
+                                        
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Assignee</label>
                                             <select class="form-control wide" name="user">
@@ -196,8 +194,8 @@
                     if (result['error'] == false) {
                         if (redirect_to == 'scrum') {
                             window.location.href = base_url + 'backlog/project/' + project_id;
-                        }else{
-                            window.location.href = base_url + 'board';
+                        } else {
+                            window.location.href = base_url + 'board/tasks/' + project_id;
                         }
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
@@ -208,13 +206,19 @@
             e.preventDefault();
         });
         $(document).ready(function() {
+            var projectId = $('select[name="project_id"]').val();
+            update_option_user(projectId);
             $('select[name="project_id"]').change(function() {
                 var projectId = $(this).val();
+                update_option_user(projectId);
+            });
+
+            function update_option_user(projectId) {
                 console.log(projectId);
                 if (projectId !== '') {
                     $.ajax({
                         type: "POST",
-                        url: base_url + 'issues/get_project_users', // Replace with your AJAX endpoint URL
+                        url: base_url + 'issues/get_project_users',
                         data: {
                             project_id: projectId
                         },
@@ -242,7 +246,7 @@
                         }
                     });
                 }
-            });
+            }
         });
 
         start_date = '<?= $issue->starting_date ?>';

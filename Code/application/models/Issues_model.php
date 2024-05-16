@@ -54,8 +54,8 @@ class Issues_model extends CI_Model
 
     public function delete_issue($id)
     {
-        $this->db->where('issue_id', $id);
-        $this->db->delete('issues_users');
+        $this->db->where('task_id', $id);
+        $this->db->delete('task_users');
 
         $this->db->where('issue_id', $id);
         $this->db->delete('issues_sprint');
@@ -72,9 +72,10 @@ class Issues_model extends CI_Model
         $this->db->where('i.id', $id);
         $query = $this->db->get();
         $issue = $query->row();
+
         $project_id = $issue->project_id;
         $priority_id = $issue->priority;
-        
+
         $this->db->select('*');
         $this->db->from('priorities');
         $this->db->where('id', $priority_id);
@@ -82,8 +83,8 @@ class Issues_model extends CI_Model
         $priority = $query->row();
 
         $this->db->select('*');
-        $this->db->from('issues_users');
-        $this->db->where('issue_id', $id);
+        $this->db->from('task_users');
+        $this->db->where('task_id', $id);
         $query = $this->db->get();
         $issue_user = $query->row();
         $user_id = $issue_user->user_id;
@@ -134,8 +135,22 @@ class Issues_model extends CI_Model
         $query = $this->db->get();
         $project = $query->row();
 
+        $this->db->select('*');
+        $this->db->from('tasks i');
+        $this->db->where('i.parent_task', $id);
+        $query = $this->db->get();
+        $SubTasks = $query->result_array();
+        foreach ($SubTasks as &$SubTask) {
+            $status = $SubTask["status"];
+            $this->db->select('*');
+            $this->db->from('task_status');
+            $this->db->where('id', $status);
+            $query = $this->db->get();
+            $SubTask["status"] = $query->row();
+        }
         return array(
             "issue" => $issue,
+            "SubTasks" => $SubTasks,
             "comments" => $comments,
             "project" => $project,
             "user" => $user,
@@ -176,8 +191,8 @@ class Issues_model extends CI_Model
         $results = $query->row();
         if ($results->dash_type == 0) {
             return true;
-        }else{
-            return false; 
+        } else {
+            return false;
         }
     }
 }

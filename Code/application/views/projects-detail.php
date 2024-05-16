@@ -86,8 +86,6 @@
   <div id="main-wrapper">
     <?php $this->load->view('includes/sidebar'); ?>
     <div class="content-body default-height">
-
-
       <?php
       if (isset($project[0]) && !empty($project[0])) {
         $project = $project[0];
@@ -112,10 +110,10 @@
                 <i class="fas fa-table"></i>
                 <span class="nav-text">Board</span>
               </a>
-              <a class="btn btn-sm btn-outline-primary" href="javascript:void()" aria-expanded="false">
+              <!-- <a class="btn btn-sm btn-outline-primary" href="javascript:void()" aria-expanded="false">
                 <i class="fas fa-chart-line"></i>
                 <span class="nav-text">Analytics</span>
-              </a>
+              </a> -->
             </div>
           </div>
           <div class="row mt-3">
