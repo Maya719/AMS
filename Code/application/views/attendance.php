@@ -61,7 +61,7 @@
                                 <div class="basic-form">
                                     <div class="row">
                                         <div class="col-lg-3">
-                                            <select class="form-select" id="employee_id">
+                                            <select class="form-select select2" id="employee_id">
                                                 <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                                                 <?php foreach ($system_users as $system_user) {
                                                     if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
@@ -71,7 +71,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
-                                            <select class="form-select" id="shift_id">
+                                            <select class="form-select select2" id="shift_id">
                                                 <option value=""><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></option>
                                                 <?php foreach ($shifts as $shift) : ?>
                                                     <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
@@ -79,7 +79,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
-                                            <select class="form-select" id="department_id">
+                                            <select class="form-select select2" id="department_id">
                                                 <option value=""><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></option>
                                                 <?php foreach ($departments as $department) : ?>
                                                     <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
@@ -87,7 +87,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
-                                            <select class="form-select" id="dateFilter">
+                                            <select class="form-select select2" id="dateFilter">
                                                 <option value="today"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today' ?></option>
                                                 <option value="ystdy"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday' ?></option>
                                                 <option value="tweek"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Week' ?></option>
@@ -513,6 +513,8 @@
 
             });
         });
+
+        $('.select2').select2()
     </script>
 </body>
 

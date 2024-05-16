@@ -114,7 +114,7 @@
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
-                                                        <select name="half_day_period" class=" form-group form-control">
+                                                        <select name="half_day_period" class=" form-group form-control select2">
                                                             <option value="0">First Time</option>
                                                             <option value="1">Second Time</option>
                                                         </select>
@@ -246,6 +246,8 @@
         $('#user_id').on('change', function() {
             multiLineChart();
         });
+
+        $('.select2').select2()
     </script>
 </body>
 
