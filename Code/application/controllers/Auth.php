@@ -57,29 +57,7 @@ class Auth extends CI_Controller
 			$this->load->view('companyProfile/create-profile', $this->data);
 		}
 	}
-	public function create_departments($saas_id = '')
-	{
-		if ($this->ion_auth->logged_in()) {
-			redirect('home', 'refresh');
-		} else {
-			$saas_id = $this->ion_auth->decryptId($saas_id, 'GeekForGeek');
-			$this->data['saas_id'] = $saas_id;
-			$this->data['page_title'] = 'Create Profile - ' . company_name();
-			$this->load->view('companyProfile/create-departments', $this->data);
-		}
-	}
-	public function create_roles($saas_id = '')
-	{
-		if ($this->ion_auth->logged_in()) {
-			redirect('home', 'refresh');
-		} else {
-			$saas_id = $this->ion_auth->decryptId($saas_id, 'GeekForGeek');
-			$this->data['saas_id'] = $saas_id;
-			$this->data['permissions'] = permissions();
-			$this->data['page_title'] = 'Create Profile - ' . company_name();
-			$this->load->view('companyProfile/create-roles', $this->data);
-		}
-	}
+
 	public function purchase_plan($saas_id = '')
 	{
 		if ($this->ion_auth->logged_in()) {
