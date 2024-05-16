@@ -259,6 +259,7 @@ class Settings extends CI_Controller
 		}
 	}
 
+
 	public function save_company_setting()
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || $this->ion_auth->in_group(4) || permissions('company_view'))) {
@@ -753,6 +754,7 @@ class Settings extends CI_Controller
 		}
 	}
 
+	
 	public function save_front_setting()
 	{
 
@@ -1281,7 +1283,8 @@ class Settings extends CI_Controller
 						'general_view' => $this->input->post($role['name'] . '_general_view') != '' ? 1 : 0,
 						'company_view' => $this->input->post($role['name'] . '_company_view') != '' ? 1 : 0,
 						'support_view' => $this->input->post($role['name'] . '_support_view') != '' ? 1 : 0,
-						'notification_view_all' => $this->input->post($role['name'] . '_notification_view_all') != '' ? 1 : 0,
+						'notice_board_view' => $this->input->post($role['name'] . '_notice_board_view') != '' ? 1 : 0,
+						'notification_view_all' => $this->input->post($role['name'] . '_notification_view_all') != '' ? 1 : 1,
 						'notification_view_pms' => $this->input->post($role['name'] . '_notification_view_pms') != '' ? 1 : 0,
 						'team_members_and_client_can_chat' => $this->input->post('team_members_and_client_can_chat') != '' ? 1 : 0,
 						'general_edit' => $this->input->post($role['name'] . '_general_edit') != '' ? 1 : 0,
@@ -1607,7 +1610,7 @@ class Settings extends CI_Controller
 
 	public function roles_permissions()
 	{
-		
+
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
 			$this->data['main_page2'] = 'roles_permissions';
