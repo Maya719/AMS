@@ -115,6 +115,7 @@
             <input type="text" name="file_upload_format" id="file-upload-input" value="<?= htmlspecialchars($file_upload_format) ?>" class="form-control">
             <div id="file-upload-format" class="dropdown-content">
               <label><input type="checkbox" value="JPG"> JPG</label>
+              <label><input type="checkbox" value="JPG"> JPEG</label>
               <label><input type="checkbox" value="PNG"> PNG</label>
               <label><input type="checkbox" value="ZIP"> ZIP</label>
               <label><input type="checkbox" value="DOC"> DOC</label>
