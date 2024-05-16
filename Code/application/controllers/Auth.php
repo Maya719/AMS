@@ -966,80 +966,76 @@ class Auth extends CI_Controller
 		// }
 
 		if ($this->form_validation->run() === TRUE && $new_user_id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group)) {
-			$userLeaveData = [];
-
-
-
 			if ($this->ion_auth->is_admin()  || permissions('user_create') || permissions('client_create') || $this->input->post('create_saas_admin')) {
 				$update_saas_id_data = [
 					'saas_id' => $this->session->userdata('saas_id'),
 				];
 			} else {
-				// if ($recaptcha_secret_key && $this->input->post('new_register')) {
-				// 	// Create department data
-				// 	$departmentData = array(
-				// 		array('saas_id' => $new_user_id, 'company_name' => 'ABC', 'department_name' => 'Administration'),
-				// 		array('saas_id' => $new_user_id, 'company_name' => 'ABC', 'department_name' => 'HR Manager')
-				// 	);
+				if ($recaptcha_secret_key && $this->input->post('new_register')) {
+					// Create department data
+					$departmentData = array(
+						array('saas_id' => $new_user_id, 'company_name' => 'ABC', 'department_name' => 'Administration'),
+						array('saas_id' => $new_user_id, 'company_name' => 'ABC', 'department_name' => 'HR Manager')
+					);
 
-				// 	// Insert department data
-				// 	foreach ($departmentData as $data) {
-				// 		$this->department_model->create($data);
-				// 	}
+					// Insert department data
+					foreach ($departmentData as $data) {
+						$this->department_model->create($data);
+					}
 
-				// 	// Create role data
-				// 	$roleData = array(
-				// 		array(
-				// 			'saas_id' => $new_user_id,
-				// 			'name' => str_replace(' ', '_', strtolower('employee')),
-				// 			'description' => 'Employee',
-				// 			'descriptive_name' => 'Employee',
-				// 			'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
-				// 			'change_permissions_of' => '',
-				// 			'assigned_users' => ''
-				// 		),
-				// 		array(
-				// 			'saas_id' => $new_user_id,
-				// 			'name' => str_replace(' ', '_', strtolower('HR Manager')),
-				// 			'description' => 'HR Manager',
-				// 			'descriptive_name' => 'HR Manager',
-				// 			'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
-				// 			'change_permissions_of' => '',
-				// 			'assigned_users' => ''
-				// 		),
-				// 		array(
-				// 			'saas_id' => $new_user_id,
-				// 			'name' => str_replace(' ', '_', strtolower('client')),
-				// 			'description' => 'Clients',
-				// 			'descriptive_name' => '',
-				// 			'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
-				// 			'change_permissions_of' => '',
-				// 			'assigned_users' => ''
-				// 		),
-				// 		array(
-				// 			'saas_id' => $new_user_id,
-				// 			'name' => str_replace(' ', '_', strtolower('CEO')),
-				// 			'description' => 'CEO',
-				// 			'descriptive_name' => 'CEO',
-				// 			'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
-				// 			'change_permissions_of' => '',
-				// 			'assigned_users' => ''
-				// 		)
-				// 	);
+					// Create role data
+					$roleData = array(
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('employee')),
+							'description' => 'Employee',
+							'descriptive_name' => 'Employee',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						),
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('HR Manager')),
+							'description' => 'HR Manager',
+							'descriptive_name' => 'HR Manager',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						),
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('client')),
+							'description' => 'Clients',
+							'descriptive_name' => '',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						),
+						array(
+							'saas_id' => $new_user_id,
+							'name' => str_replace(' ', '_', strtolower('CEO')),
+							'description' => 'CEO',
+							'descriptive_name' => 'CEO',
+							'permissions' => '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]',
+							'change_permissions_of' => '',
+							'assigned_users' => ''
+						)
+					);
 
 
-				// 	// Insert role data
-				// 	foreach ($roleData as $data) {
-				// 		$setting["type"] = $data["name"] . '_permissions_' . $new_user_id;
-				// 		if ($data["name"] == 'client') {
-				// 			$setting['value'] = '{"project_view":0,"project_create":0,"project_edit":0,"project_delete":0,"task_view":0,"task_create":0,"task_edit":0,"task_delete":0,"user_view":0,"client_view":0,"setting_view":0,"setting_update":0,"todo_view":0,"notes_view":0,"chat_view":0,"chat_delete":0,"team_members_and_client_can_chat":1,"task_status":0,"project_budget":0,"gantt_view":0,"gantt_edit":0,"calendar_view":0,"lead_view":0,"lead_create":0,"lead_edit":0,"lead_delete":0}';
-				// 		} else {
-				// 			$setting['value'] = '{"attendance_view":0,"attendance_view_all":0,"leaves_view":0,"leaves_create":0,"leaves_edit":0,"leaves_delete":0,"leaves_status":0,"leaves_view_all":0,"biometric_request_view":0,"biometric_request_create":0,"biometric_request_edit":0,"biometric_request_delete":0,"biometric_request_status":0,"biometric_request_view_all":0,"biometric_request_view_selected":0,"project_view":1,"project_create":1,"project_edit":1,"project_delete":0,"project_view_all":0,"task_view":1,"task_create":1,"task_edit":1,"task_delete":0,"task_status":0,"task_view_all":0,"device_view":1,"device_create":0,"device_edit":0,"device_delete":0,"departments_view":0,"departments_create":0,"departments_edit":0,"departments_delete":0,"shift_view":0,"shift_create":0,"shift_edit":0,"shift_delete":0,"plan_holiday_view":0,"plan_holiday_create":0,"plan_holiday_edit":0,"plan_holiday_delete":0,"time_schedule_view":0,"time_schedule_edit":0,"user_view":1,"user_edit":0,"client_view":0,"setting_view":0,"setting_update":0,"todo_view":1,"notes_view":1,"chat_view":1,"chat_delete":0,"project_budget":0,"gantt_view":0,"gantt_edit":0,"calendar_view":0,"meetings_view":0,"meetings_create":0,"meetings_edit":0,"meetings_delete":0,"lead_view":0,"lead_create":0,"lead_edit":0,"lead_delete":0,"attendance_view_selected":0,"leaves_view_selected":0,"project_view_selected":0,"task_view_selected":0,"reports_view":0,"client_create":0,"client_edit":0,"client_delete":0,"user_create":0,"user_view_selected":0,"user_delete":0,"user_view_all":0,"leave_type_view":0,"leave_type_create":0,"leave_type_edit":0,"leave_type_delete":0,"general_view":0,"company_view":0,"support_view":0,"notification_view_all":0,"notification_view_pms":0,"team_members_and_client_can_chat":0,"general_edit":0,"company_edit":0}';
-				// 		}
-				// 		$this->db->insert('settings', $setting);
-				// 		$this->settings_model->roles_create($data);
-				// 	}
-				// }
+					// Insert role data
+					foreach ($roleData as $data) {
+						$setting["type"] = $data["name"] . '_permissions_' . $new_user_id;
+						if ($data["name"] == 'client') {
+							$setting['value'] = '{"project_view":0,"project_create":0,"project_edit":0,"project_delete":0,"task_view":0,"task_create":0,"task_edit":0,"task_delete":0,"user_view":0,"client_view":0,"setting_view":0,"setting_update":0,"todo_view":0,"notes_view":0,"chat_view":0,"chat_delete":0,"team_members_and_client_can_chat":1,"task_status":0,"project_budget":0,"gantt_view":0,"gantt_edit":0,"calendar_view":0,"lead_view":0,"lead_create":0,"lead_edit":0,"lead_delete":0}';
+						} else {
+							$setting['value'] = '{"attendance_view":0,"attendance_view_all":0,"leaves_view":0,"leaves_create":0,"leaves_edit":0,"leaves_delete":0,"leaves_status":0,"leaves_view_all":0,"biometric_request_view":0,"biometric_request_create":0,"biometric_request_edit":0,"biometric_request_delete":0,"biometric_request_status":0,"biometric_request_view_all":0,"biometric_request_view_selected":0,"project_view":1,"project_create":1,"project_edit":1,"project_delete":0,"project_view_all":0,"task_view":1,"task_create":1,"task_edit":1,"task_delete":0,"task_status":0,"task_view_all":0,"device_view":1,"device_create":0,"device_edit":0,"device_delete":0,"departments_view":0,"departments_create":0,"departments_edit":0,"departments_delete":0,"shift_view":0,"shift_create":0,"shift_edit":0,"shift_delete":0,"plan_holiday_view":0,"plan_holiday_create":0,"plan_holiday_edit":0,"plan_holiday_delete":0,"time_schedule_view":0,"time_schedule_edit":0,"user_view":1,"user_edit":0,"client_view":0,"setting_view":0,"setting_update":0,"todo_view":1,"notes_view":1,"chat_view":1,"chat_delete":0,"project_budget":0,"gantt_view":0,"gantt_edit":0,"calendar_view":0,"meetings_view":0,"meetings_create":0,"meetings_edit":0,"meetings_delete":0,"lead_view":0,"lead_create":0,"lead_edit":0,"lead_delete":0,"attendance_view_selected":0,"leaves_view_selected":0,"project_view_selected":0,"task_view_selected":0,"reports_view":0,"client_create":0,"client_edit":0,"client_delete":0,"user_create":0,"user_view_selected":0,"user_delete":0,"user_view_all":0,"leave_type_view":0,"leave_type_create":0,"leave_type_edit":0,"leave_type_delete":0,"general_view":0,"company_view":0,"support_view":0,"notification_view_all":0,"notification_view_pms":0,"team_members_and_client_can_chat":0,"general_edit":0,"company_edit":0}';
+						}
+						$this->db->insert('settings', $setting);
+						$this->settings_model->roles_create($data);
+					}
+				}
 
 				$this->data["saas_id"] = $this->ion_auth->encryptId($new_user_id, 'GeekForGeek');
 				$update_saas_id_data = [

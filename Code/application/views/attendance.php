@@ -9,9 +9,7 @@
         position: sticky;
         bottom: 0;
         background-color: white;
-        /* Adjust as needed */
         z-index: 1000;
-        /* Adjust as needed */
     }
 
     #attendance_list tbody td {
@@ -513,8 +511,6 @@
 
             });
         });
-
-        $('.select2').select2()
     </script>
 </body>
 
