@@ -265,6 +265,11 @@
                                 <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-7.png") ?>' alt="img-7"></a>
 
                             </div>
+                            <div class="tp-brands-2-bottom-img">
+
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-8.png") ?>' alt="img-7"></a>
+
+                            </div>
                         </div>
                     </div>
                 </div>

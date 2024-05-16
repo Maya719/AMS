@@ -78,7 +78,7 @@
                                         <div class="row">
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Project <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="project_id" id="project_id3">
+                                                <select class="form-control select2" name="project_id" id="project_id3">
                                                     <option value="">Project</option>
                                                     <?php foreach ($projects as $project) : ?>
                                                         <option value="<?= $project["id"] ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
@@ -87,7 +87,7 @@
                                             </div>
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Issue Type <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="issue_type" id="issue_type">
+                                                <select class="form-control select2" name="issue_type" id="issue_type">
                                                     <?php if ($selectedproject->dash_type == 0) : ?>
                                                         <option value="task">Task</option>
                                                     <?php else : ?>
@@ -99,7 +99,7 @@
                                             </div>
                                             <div class="col-sm-4 mb-3">
                                                 <label class="form-label">Status </label>
-                                                <select class="form-control" name="status">
+                                                <select class="form-control select2" name="status">
                                                     <?php foreach ($statuses as $status) : ?>
                                                         <option value="<?= $status["id"] ?>"><?= $status["title"] ?></option>
                                                     <?php endforeach ?>
@@ -108,7 +108,7 @@
 
                                             <div class="col-sm-4 mb-3">
                                                 <label class="form-label">Priority </label>
-                                                <select class="form-control" name="priority">
+                                                <select class="form-control select2" name="priority">
                                                     <?php foreach ($priorities as $priority) : ?>
                                                         <option value="<?= $priority["id"] ?>"><?= $priority["title"] ?>
                                                         </option>
@@ -137,7 +137,7 @@
                                             </div>
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Assignee <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="user">
+                                                <select class="form-control select2" name="user">
                                                     <option value="">Member</option>
                                                     <?php foreach ($project_userss as $p_user) {
                                                         if ($p_user->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -151,7 +151,7 @@
                                             </div>
                                             <div class="col-sm-6 mb-3 <?= ($selectedproject->dash_type == 0) ? 'hidden' : '' ?>" id="sprint_div">
                                                 <label class="form-label">Sprint</label>
-                                                <select class="form-control" name="sprint">
+                                                <select class="form-control select2" name="sprint">
                                                     <option value="">Sprint</option>
                                                     <?php foreach ($sprints as $sprint) : ?>
                                                         <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
@@ -303,13 +303,13 @@
                 var newChild = '<div class="col-sm-12 mb-3">' +
                     '<div class="row undercard">' +
                     '<div class="col-md-5">' +
-                    '<select class="form-control" name="subType[]">' +
+                    '<select class="form-control select2" name="subType[]">' +
                     '<option value="task">Task</option>' +
                     '<option value="story">Story</option>' +
                     '</select>' +
                     '</div>' +
                     '<div class="col-sm-5 mb-3 ms-1">' +
-                    '<select class="form-control" name="subStatus[]">' +
+                    '<select class="form-control select2" name="subStatus[]">' +
                     '<?php foreach ($statuses as $status) : ?>' +
                     '<option value="<?= $status["id"] ?>"><?= $status["title"] ?></option>' +
                     '<?php endforeach ?>' +
@@ -353,6 +353,11 @@
                 subChildsBtn.style.display = 'block';
             }
         });
+
+
+        $('.select2').select2()
+
+
     </script>
 
 

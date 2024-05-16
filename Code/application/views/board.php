@@ -99,7 +99,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <select class="form-select" id="project_id">
+                                            <select class="form-select select2" id="project_id">
                                                 <option value="" selected>Project</option>
                                                 <?php foreach ($projects as $project) : ?>
                                                     <option value="<?= base_url('board/tasks/' . $project["id"]) ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
@@ -107,7 +107,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-6">
-                                            <select class="form-select" id="task_users">
+                                            <select class="form-select select2" id="task_users">
                                                 <option value="">Member</option>
                                                 <?php foreach ($project_users as $system_user) : ?>
                                                     <option value="<?= $system_user["id"] ?>" <?= ($select_user == $system_user["id"]) ? 'selected' : '' ?>>
@@ -814,6 +814,9 @@
                 window.location.href = selectedOption;
             }
         });
+
+        $('.select2').select2()
+
     </script>
 </body>
 

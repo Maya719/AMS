@@ -731,6 +731,9 @@ $('.modal-edit-task').click(function (event) {
       });
     });
   });
+
+
+  $('.select2').select2()
 </script>
 
 <script src="<?=base_url('assets/modules/dragula/dragula.min.js');?>"></script>

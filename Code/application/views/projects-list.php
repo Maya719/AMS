@@ -179,7 +179,7 @@
 
                 <div class="form-group mt-3">
                   <label class="col-form-label"><?= $this->lang->line('project_client') ? $this->lang->line('project_client') : 'Project Client' ?></label>
-                  <select name="client" class="form-control" id="clients_create">
+                  <select name="client" class="form-control select2" id="clients_create">
                     <?php foreach ($system_clients as $system_client) {
                       if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= htmlspecialchars($system_client->id) ?>">
@@ -268,7 +268,7 @@
               </div>
               <div class="form-group mt-3">
                 <label class="col-form-label"><?= $this->lang->line('project_client') ? $this->lang->line('project_client') : 'Project Client' ?></label>
-                <select name="client" class="form-control" id="clients_create3">
+                <select name="client" class="form-control select2" id="clients_create3">
                   <option value="">Client</option>
                   <?php foreach ($system_clients as $system_client) {
                     if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -585,6 +585,8 @@
 
       e.preventDefault();
     });
+
+    $('.select2').select2()
   </script>
 </body>
 

@@ -320,7 +320,7 @@
 
               <div class="form-group mt-3">
                 <label class="col-form-label"><?= $this->lang->line('project_users') ? $this->lang->line('project_users') : 'Project Users' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project') ? $this->lang->line('add_users_who_will_work_on_this_project_only_this_users_are_able_to_see_this_project') : "Add users who will work on this project. Only this users are able to see this project." ?>"></i></label>
-                <select name="users[]" class="form-control multiple" multiple="multiple" id="assignees">
+                <select name="users[]" class="form-control multiple " multiple="multiple" id="assignees">
                   <?php foreach ($system_users as $system_user) {
                     if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == 1) { ?>
                       <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
@@ -330,7 +330,7 @@
               </div>
               <div class="form-group mt-3">
                 <label class="col-form-label"><?= $this->lang->line('project_client') ? $this->lang->line('project_client') : 'Project Client' ?></label>
-                <select name="client" class="form-control" id="clients_create">
+                <select name="client" class="form-control select2" id="clients_create">
                   <option value="">Client</option>
                   <?php foreach ($system_clients as $system_client) {
                     if ($system_client->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -460,6 +460,8 @@
       "pageLength": 10,
       "dom": '<"top"f>rt<"bottom"lp><"clear">',
     });
+
+    $('.select2').select2()
   </script>
   <script src="<?= base_url('assets/modules/dropzonejs/min/dropzone.min.js'); ?>"></script>
   <script src="<?= base_url('assets/js/page/projects-details.js') ?>"></script>

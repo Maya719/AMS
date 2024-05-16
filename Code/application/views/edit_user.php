@@ -92,7 +92,7 @@
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput6" class="form-label">Martial Status</label>
-                                                            <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
+                                                            <select class="form-select select2" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
                                                                 <option selected value="">Martial Status</option>
                                                                 <option value="single" <?= ($data->martial_status === 'single') ? 'selected' : '' ?>>Single</option>
                                                                 <option value="married" <?= $data->martial_status === 'married' ? 'selected' : '' ?>>Married</option>
@@ -100,7 +100,7 @@
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput7" class="form-label">Gender</label>
-                                                            <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
+                                                            <select class="form-select select2" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
                                                                 <option value="male" <?= $data->gender === 'male' ? 'selected' : '' ?>>Male</option>
                                                                 <option value="female" <?= $data->gender === 'female' ? 'selected' : '' ?>>Female</option>
                                                                 <option value="other" <?= $data->gender === 'other' ? 'selected' : '' ?>>Other</option>
@@ -124,7 +124,7 @@
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput15" class="form-label">Probation</label>
-                                                            <select name="probation_period" class="form-control select3">
+                                                            <select name="probation_period" class="form-control select2">
                                                                 <?php
                                                                 $join_date = new DateTime($data->join_date);
                                                                 $probation = new DateTime($data->probation);
@@ -145,7 +145,7 @@
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput15" class="form-label">Department</label>
-                                                            <select name="department" class="form-control select3">
+                                                            <select name="department" class="form-control select2">
                                                                 <?php foreach ($departments as $department) { ?>
                                                                     <option value="<?= $department['id'] ?>" <?= ($data->department == $department['id']) ? 'selected' : '' ?>>
                                                                         <?= $department['department_name'] ?>
@@ -172,7 +172,7 @@
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label for="shifts_select" class="form-label">Shift</label>
-                                                            <select class="form-select enable-disable-select" name="type" aria-label="Default select example" <?= $data->finger_config == 1 ? '' : 'disabled' ?>>
+                                                            <select class="form-select enable-disable-select select2" name="type" aria-label="Default select example" <?= $data->finger_config == 1 ? '' : 'disabled' ?>>
                                                                 <?php foreach ($shift_types as $shift_type) { ?>
                                                                     <option value="<?= $shift_type['id'] ?>" <?= ($data->shift_id == $shift_type['id']) ? 'selected' : '' ?>>
                                                                         <?= $shift_type['name'] ?>
@@ -182,7 +182,7 @@
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label for="devices_select" class="form-label">Device</label>
-                                                            <select class="form-select enable-disable-select" name="device" aria-label="Default select example" <?= $data->finger_config == 1 ? '' : 'disabled' ?>>
+                                                            <select class="form-select enable-disable-select select2" name="device" aria-label="Default select example" <?= $data->finger_config == 1 ? '' : 'disabled' ?>>
                                                                 <?php foreach ($devices as $device) { ?>
                                                                     <option value="<?= $device['id'] ?>" <?= ($data->device_id == $device['id']) ? 'selected' : '' ?>>
                                                                         <?= $device['device_name'] ?>
@@ -239,7 +239,7 @@
 
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput15" class="form-label">Role</label>
-                                                            <select name="groups" class="form-control">
+                                                            <select name="groups" class="form-control select2">
                                                                 <?php foreach ($user_groups as $user_group) {
                                                                     if ($user_group->id == 3 || $user_group->id == 4) {
                                                                         continue;
@@ -522,6 +522,9 @@
 
         toggleElements();
         document.getElementById('flexCheckDefault8').addEventListener('change', toggleElements);
+
+        $('.select2').select2()
+
     </script>
 </body>
 
