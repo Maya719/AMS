@@ -191,9 +191,9 @@
                                             <div class="tp-hero-wrapper d-flex align-items-center">
                                                 <div class="tp-hero-2-content">
                                                     <div class="tp-hero-title-wrapper">
-                                                        <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Transform with Attendance, Project, HR Management' ?></h5>
+                                                        <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Agile your work' ?></h5>
                                                     </div>
-                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our solution drives productivity through collaboration. Emphasizing simplicity, efficiency, it fosters success. Leveraging tech, support, it manages operations, relationships seamlessly.' ?></p>
+                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our solution fosters your work productivity through simplicity, collaboration and agile methodologies. Our one stop solution helps to organize and improve efficiency of your work management.' ?></p>
 
                                                     <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">
                                                         <a class="tp-btn" href="<?= base_url('auth/register') ?>" target="_blank">Get Started <i class="fa-regular fa-arrow-right-long"></i></a>
@@ -248,7 +248,9 @@
                                 <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-4.png") ?>' alt="img-4"></a>
 
                             </div>
+
                         </div>
+
                         <div class="tp-brands-2-bottom d-flex d-flex justify-content-center align-items-center">
                             <div class="tp-brands-2-bottom-img">
 
@@ -271,6 +273,20 @@
 
                             </div>
                         </div>
+                        <br>
+                        <div class="tp-brands-2-bottom d-flex d-flex justify-content-center align-items-center">
+                            <div class="tp-brands-2-bottom-img">
+
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-9.png") ?>' alt="img-7"></a>
+
+                            </div>
+                            <div class="tp-brands-2-bottom-img">
+
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-10.png") ?>' alt="img-7"></a>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
