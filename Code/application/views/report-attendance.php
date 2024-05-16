@@ -50,7 +50,7 @@
                         <div class="basic-form">
                             <form class="row">
                                 <div class="col-lg-3 mb-3">
-                                    <select class="form-select" id="employee_id">
+                                    <select class="form-select select2" id="employee_id">
                                     <option value=""><?=$this->lang->line('employee') ? $this->lang->line('employee') : 'Employee'?></option>
                                     <?php foreach ($system_users as $system_user) {if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') {?>
                                     <option value="<?=$system_user->id?>"><?=htmlspecialchars($system_user->first_name)?> <?=htmlspecialchars($system_user->last_name)?></option>
@@ -58,7 +58,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-3 mb-3">
-                                    <select class="form-select" id="shift_id">
+                                    <select class="form-select select2" id="shift_id">
                                         <option value=""><?=$this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts'?></option>
                                         <?php foreach ($shifts as $shift): ?>
                                             <option value="<?=$shift["id"]?>"><?=$shift["name"]?></option>
@@ -66,7 +66,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-3 mb-3">
-                                    <select class="form-select" id="department_id">
+                                    <select class="form-select select2" id="department_id">
                                         <option value=""><?=$this->lang->line('departments') ? $this->lang->line('departments') : 'Departments'?></option>
                                         <?php foreach ($departments as $department): ?>
                                             <option value="<?=$department["id"]?>"><?=$department["department_name"]?></option>
@@ -74,7 +74,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-3 mb-3">
-                                    <select class="form-select" id="dateFilter">
+                                    <select class="form-select select2" id="dateFilter">
                                         <option value="today"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today'?></option>
                                         <option value="ystdy"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday'?></option>
                                         <option value="tweek"><?=$this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Week'?></option>
@@ -399,6 +399,8 @@ $(document).on('change', '#shift_id', function() {
 
     });
 });
+
+$('.select2').select2()
 </script>
 </body>
 </html>

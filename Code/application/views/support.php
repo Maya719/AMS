@@ -38,7 +38,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-lg-3">
-                    <select class="form-control" id="support_filter_status">
+                    <select class="form-control select2" id="support_filter_status">
                       <option value=""><?= $this->lang->line('select_status') ? htmlspecialchars($this->lang->line('select_status')) : 'Select Status' ?></option>
                       <?php if ($this->ion_auth->in_group(3)) { ?>
                         <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
@@ -115,7 +115,7 @@
                 </div>
                 <div class="form-group mb-3">
                   <label class="col-form-label"><?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></label>
-                  <select name="status" class="form-control">
+                  <select name="status" class="form-control select2">
                     <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
                     <option value="2"><?= $this->lang->line('opened_and_resolving') ? htmlspecialchars($this->lang->line('opened_and_resolving')) : 'Opened and Resolving' ?></option>
                     <option value="3"><?= $this->lang->line('resolved_and_closed') ? htmlspecialchars($this->lang->line('resolved_and_closed')) : 'Resolved and Closed' ?></option>
@@ -149,7 +149,7 @@
               <?php if (is_saas_admin()) { ?>
                 <div class="form-group mt-3">
                   <label class="col-form-label"><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></label>
-                  <select name="user_id" id="user_id" class="form-control">
+                  <select name="user_id" id="user_id" class="form-control select2">
                     <?php foreach ($system_users as $system_user) { ?>
                       <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                     <?php } ?>
@@ -158,7 +158,7 @@
 
                 <div class="form-group mt-3">
                   <label class="col-form-label"><?= $this->lang->line('status') ? htmlspecialchars($this->lang->line('status')) : 'Status' ?></label>
-                  <select name="status" id="status" class="form-control">
+                  <select name="status" id="status" class="form-control select2">
                     <option value="1"><?= $this->lang->line('received') ? htmlspecialchars($this->lang->line('received')) : 'Received' ?></option>
                     <option value="2"><?= $this->lang->line('opened_and_resolving') ? htmlspecialchars($this->lang->line('opened_and_resolving')) : 'Opened and Resolving' ?></option>
                     <option value="3"><?= $this->lang->line('resolved_and_closed') ? htmlspecialchars($this->lang->line('resolved_and_closed')) : 'Resolved and Closed' ?></option>
@@ -408,6 +408,9 @@
         }
       });
     });
+
+    $('.select2').select2()
+
   </script>
 </body>
 

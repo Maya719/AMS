@@ -96,7 +96,7 @@
                                                             </div>
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput6" class="col-form-label">Martial Status</label>
-                                                                <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
+                                                                <select class="form-select select2" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
                                                                     <option value="" selected>Martial Status</option>
                                                                     <option value="single">Single</option>
                                                                     <option value="married">Married</option>
@@ -105,7 +105,7 @@
                                                             </div>
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput7" class="col-form-label">Gender <span class="text-danger">*</span></label>
-                                                                <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
+                                                                <select class="form-select select2" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
                                                                     <option selected>Gender</option>
                                                                     <option value="male">Male</option>
                                                                     <option value="female">Female</option>
@@ -130,7 +130,7 @@
                                                             </div>
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput15" class="col-form-label">Probation</label>
-                                                                <select class="form-select" name="probation_period" id="exampleFormControlInput15" aria-label="Default select example">
+                                                                <select class="form-select select2" name="probation_period" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Probation</option>
                                                                     <option value="1">1 Month</option>
                                                                     <option value="2">2 months</option>
@@ -143,7 +143,7 @@
                                                             </div>
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput15" class="col-form-label">Department</label>
-                                                                <select class="form-select" name="department" id="exampleFormControlInput15" aria-label="Default select example">
+                                                                <select class="form-select select2" name="department" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected value="">Department</option>
                                                                     <?php foreach ($departments as $department) : ?>
                                                                         <option value="<?= $department["id"] ?>">
@@ -171,7 +171,7 @@
                                                             </div>
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput2" class="col-form-label">Shift <span class="text-danger">*</span></label>
-                                                                <select class="form-select enable-disable-select" name="type" aria-label="Default select example">
+                                                                <select class="form-select enable-disable-select select2" name="type" aria-label="Default select example">
                                                                     <option selected value="">Shift</option>
                                                                     <?php foreach ($shift_types as $shift_type) : ?>
                                                                         <option value="<?= $shift_type["id"] ?>">
@@ -182,7 +182,7 @@
                                                             </div>
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput3" class="col-form-label">Device <span class="text-danger">*</span></label>
-                                                                <select class="form-select enable-disable-select" name="device" aria-label="Default select example">
+                                                                <select class="form-select enable-disable-select select2" name="device" aria-label="Default select example">
                                                                     <option selected value="">Device</option>
                                                                     <?php foreach ($devices as $device) : ?>
                                                                         <option value="<?= $device["id"] ?>">
@@ -230,7 +230,7 @@
 
                                                             <div class="col-6 mb-3">
                                                                 <label for="exampleFormControlInput15" class="col-form-label">Role <span class="text-danger">*</span></label>
-                                                                <select class="form-select" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
+                                                                <select class="form-select select2" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Role</option>
                                                                     <?php foreach ($user_groups as $user_group) : ?>
                                                                         <?php if ($user_group->id !== '3' && $user_group->id !== '4') : ?>
@@ -349,6 +349,9 @@
 
             e.preventDefault();
         });
+
+        $('.select2').select2()
+
     </script>
 </body>
 

@@ -85,7 +85,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
-                                            <select class="form-select" id="dateFilter">
+                                            <select class="form-select select2" id="dateFilter">
                                                 <option value="today"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today' ?></option>
                                                 <option value="ystdy"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday' ?></option>
                                                 <option value="tweek"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Week' ?></option>
@@ -511,7 +511,6 @@
 
             });
         });
-        $('.select2').select2();
     </script>
 </body>
 
