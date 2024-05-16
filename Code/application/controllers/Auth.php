@@ -432,7 +432,8 @@ class Auth extends CI_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				$this->session->set_flashdata('message_type', 'success');
 			}
-			redirect("auth", 'refresh');
+			$saas_id = $this->ion_auth->encryptId($id, 'GeekForGeek');
+			redirect("auth/create_profile/".$saas_id, 'refresh');
 		}
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !permissions('user_edit') && !permissions('client_edit') && !$this->ion_auth->in_group(3))) {
