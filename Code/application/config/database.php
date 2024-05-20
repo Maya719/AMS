@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -74,13 +74,41 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 /* 
- *
- *  Local
- *
- */
+*
+*  Local
+*
+*/
+
+// $db['default'] = array(
+// 	'dsn'	=> '',
+// 	'hostname' => 'localhost',
+// 	'username' => 'root',
+// 	'password' => '',
+// 	'database' => 'main_project',
+// 	'dbdriver' => 'mysqli',
+// 	'dbprefix' => '',
+// 	'pconnect' => FALSE,
+// 	'db_debug' => (ENVIRONMENT !== 'production'),
+// 	'cache_on' => FALSE,
+// 	'cachedir' => '',
+// 	'char_set' => 'utf8',
+// 	'dbcollat' => 'utf8_general_ci',
+// 	'swap_pre' => '',
+// 	'encrypt' => FALSE,
+// 	'compress' => FALSE,
+// 	'stricton' => FALSE,
+// 	'failover' => array(),
+// 	'save_queries' => TRUE
+// );
+
+/* 
+*
+*  shared
+*
+*/
 
 $db['default'] = array(
-	'dsn' => '',
+	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'u945088377_pms_user',
 	'password' => '$9oHb0zSjey',
@@ -102,13 +130,19 @@ $db['default'] = array(
 );
 
 
-// // // for localhost
+
+/* 
+*
+*  Airnet
+*
+*/
+
 // $db['default'] = array(
-// 	'dsn' => '',
+// 	'dsn'	=> '',
 // 	'hostname' => 'localhost',
-// 	'username' => 'root',
-// 	'password' => '',
-// 	'database' => 'main_project',
+// 	'username' => 'pms',
+// 	'password' => 'kbq5lRmYU5j1Q35su0fj',
+// 	'database' => 'pms',
 // 	'dbdriver' => 'mysqli',
 // 	'dbprefix' => '',
 // 	'pconnect' => FALSE,
