@@ -25,9 +25,6 @@ class API extends CI_Controller
 
   public function push_subscription()
   {
-    header('Content-Type: text/json');
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
     // $res = save_notifications("testing", "this is test notification", "999");
     // echo $res;
@@ -39,16 +36,9 @@ class API extends CI_Controller
       return;
     }
 
-    // if ($user == 1) {
-    //   $query = $this->db->query("SELECT * FROM users WHERE active ='1' AND finger_config = '1'" . $where);
-    // } elseif ($user == 2) {
-    //   $query = $this->db->query("SELECT * FROM users WHERE active ='0'  AND finger_config = '1'" . $where);
-    // }
-    // $results = $query->result_array();
-    // echo json_encode($results);
-
-    $user_id = "90";
-    $saas_id = "8";
+    $user_id = $this->session->userdata('user_id');
+    $employee_id = get_employee_id_from_user_id($user_id);
+    $saas_id = $this->session->userdata('saas_id');
 
     $existing_record = $this->db->get_where('notification_subscribers', array('user_id' => $user_id));
     if ($existing_record)
@@ -60,11 +50,11 @@ class API extends CI_Controller
           $sub = array();
           $sub['saas_id'] = $saas_id;
           $sub['user_id'] = $user_id;
+          $sub['emp_id'] = $employee_id;
           $sub["endpoint"] = json_encode($subscription);
           $this->db->insert('notification_subscribers', $sub);
           echo json_encode(['message' => "Updated"]);
           exit;
-          break;
         case 'DELETE':
           // delete the subscription corresponding to the endpoint
           break;
@@ -89,7 +79,7 @@ class API extends CI_Controller
     error_reporting(E_ALL);
 
     $recipients = [8];
-    push_notifications('holiday', $recipients);
+    push_notifications('event', $recipients);
 
     exit;
   }

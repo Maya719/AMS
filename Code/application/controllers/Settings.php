@@ -310,7 +310,7 @@ class Settings extends CI_Controller
 
 	public function shift()
 	{
-		if ($this->ion_auth->logged_in() &&  ($this->ion_auth->in_group(1) || permissions('shift_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('shift_view'))) {
 			$this->data['page_title'] = 'Shift Settings - ' . company_name();
 			$this->data['main_page2'] = 'shift';
 			$this->data['main_page'] = 'Shift';
@@ -322,12 +322,12 @@ class Settings extends CI_Controller
 			$shift_types = $query->result_array();
 
 			foreach ($shift_types as &$shift_type) {
-				$shift_type["starting_time"] =  date("h:i A", strtotime($shift_type["starting_time"]));
-				$shift_type["ending_time"] =  date("h:i A", strtotime($shift_type["ending_time"]));
-				$shift_type["break_start"] =  date("h:i A", strtotime($shift_type["break_start"]));
-				$shift_type["break_end"] =  date("h:i A", strtotime($shift_type["break_end"]));
-				$shift_type["half_day_check_in"] =  date("h:i A", strtotime($shift_type["half_day_check_in"]));
-				$shift_type["half_day_check_out"] =  date("h:i A", strtotime($shift_type["half_day_check_out"]));
+				$shift_type["starting_time"] = date("h:i A", strtotime($shift_type["starting_time"]));
+				$shift_type["ending_time"] = date("h:i A", strtotime($shift_type["ending_time"]));
+				$shift_type["break_start"] = date("h:i A", strtotime($shift_type["break_start"]));
+				$shift_type["break_end"] = date("h:i A", strtotime($shift_type["break_end"]));
+				$shift_type["half_day_check_in"] = date("h:i A", strtotime($shift_type["half_day_check_in"]));
+				$shift_type["half_day_check_out"] = date("h:i A", strtotime($shift_type["half_day_check_out"]));
 			}
 
 			$this->data['shift_types'] = $shift_types;
@@ -801,9 +801,9 @@ class Settings extends CI_Controller
 				mkdir($upload_path, 0775, true);
 			}
 
-			$config['upload_path']          = $upload_path;
-			$config['allowed_types']        = 'zip';
-			$config['overwrite']             = true;
+			$config['upload_path'] = $upload_path;
+			$config['allowed_types'] = 'zip';
+			$config['overwrite'] = true;
 
 			$this->load->library('upload', $config);
 			if (!empty($_FILES['update']['name']) && ($_FILES['update']['name'] == 'update.zip' || $_FILES['update']['name'] == 'additional.zip')) {
@@ -1330,9 +1330,9 @@ class Settings extends CI_Controller
 
 			if ($this->form_validation->run() == TRUE) {
 
-				$template_path 	= 'assets/templates/email.php';
+				$template_path = 'assets/templates/email.php';
 
-				$output_path 	= 'application/config/email.php';
+				$output_path = 'application/config/email.php';
 
 				$email_file = file_get_contents($template_path);
 
@@ -1342,10 +1342,10 @@ class Settings extends CI_Controller
 					$smtp_encryption = $this->input->post('smtp_encryption') . '://' . $this->input->post('smtp_host');
 				}
 
-				$new  = str_replace("%SMTP_HOST%", $smtp_encryption, $email_file);
-				$new  = str_replace("%SMTP_PORT%", $this->input->post('smtp_port'), $new);
-				$new  = str_replace("%SMTP_USER%", $this->input->post('smtp_username'), $new);
-				$new  = str_replace("%SMTP_PASS%", $this->input->post('smtp_password'), $new);
+				$new = str_replace("%SMTP_HOST%", $smtp_encryption, $email_file);
+				$new = str_replace("%SMTP_PORT%", $this->input->post('smtp_port'), $new);
+				$new = str_replace("%SMTP_USER%", $this->input->post('smtp_username'), $new);
+				$new = str_replace("%SMTP_PASS%", $this->input->post('smtp_password'), $new);
 
 				if (!write_file($output_path, $new)) {
 					$this->data['error'] = true;
@@ -1436,12 +1436,12 @@ class Settings extends CI_Controller
 						mkdir($upload_path, 0775, true);
 					}
 
-					$config['upload_path']          = $upload_path;
-					$config['allowed_types']        = 'gif|jpg|png|ico';
-					$config['overwrite']             = false;
-					$config['max_size']             = 0;
-					$config['max_width']            = 0;
-					$config['max_height']           = 0;
+					$config['upload_path'] = $upload_path;
+					$config['allowed_types'] = 'gif|jpg|png|ico';
+					$config['overwrite'] = false;
+					$config['max_size'] = 0;
+					$config['max_width'] = 0;
+					$config['max_height'] = 0;
 					$this->load->library('upload', $config);
 					if (!empty($_FILES['full_logo']['name'])) {
 						if ($this->upload->do_upload('full_logo')) {
@@ -1607,7 +1607,7 @@ class Settings extends CI_Controller
 
 	public function roles_permissions()
 	{
-		
+
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
 			$this->data['main_page2'] = 'roles_permissions';

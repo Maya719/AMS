@@ -1497,12 +1497,6 @@ class Projects extends CI_Controller
 
 	public function index()
 	{
-
-		// ini_set('display_errors', 1);
-		// ini_set('display_startup_errors', 1);
-		// error_reporting(E_ALL);
-
-
 		if ($this->ion_auth->logged_in() && is_module_allowed('projects') && !$this->ion_auth->in_group(3) && ($this->ion_auth->is_admin() || permissions('project_view'))) {
 			$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
 			$this->data['page_title'] = 'Projects - ' . company_name();
@@ -1818,6 +1812,7 @@ class Projects extends CI_Controller
 
 	public function create_project() //*
 	{
+		// header("Content-Type: text/json");
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('project_create'))) {
 			if (!my_plan_features('projects')) {
 				$this->data['error'] = true;
@@ -1928,6 +1923,16 @@ class Projects extends CI_Controller
 						);
 						$this->projects_model->create_project_users($user_data);
 					}
+
+					// users -> $this->input->post('users')
+					// $this->input->post('client')
+
+					push_notifications('project', [
+						'saas_id' => $this->session->userdata('saas_id'),
+						'client_id' => $this->input->post('users'),
+						'users' => $this->input->post('users')
+					]);
+
 					$this->session->set_flashdata('message', $this->lang->line('project_created_successfully') ? $this->lang->line('project_created_successfully') : "Project created successfully.");
 					$this->session->set_flashdata('message_type', 'success');
 					$this->data['error'] = false;
