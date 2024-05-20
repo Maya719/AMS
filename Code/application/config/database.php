@@ -80,11 +80,11 @@ $query_builder = TRUE;
  */
 
 $db['default'] = array(
-	'dsn' => '',
+	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'main_project',
+	'username' => 'u945088377_pms_user',
+	'password' => '$9oHb0zSjey',
+	'database' => 'u945088377_NewPMS',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
