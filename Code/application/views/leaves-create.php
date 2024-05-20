@@ -141,10 +141,15 @@
                                                             class="form-control datepicker-default required">
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
+<<<<<<< HEAD
                                                         <label
                                                             class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span
                                                                 class="text-danger">*</span></label>
                                                         <select name="half_day_period" class=" form-group form-control">
+=======
+                                                        <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
+                                                        <select name="half_day_period" class=" form-group form-control select2">
+>>>>>>> c91cf1b744f9756dcae046010762ec5b3d8a9d51
                                                             <option value="0">First Time</option>
                                                             <option value="1">Second Time</option>
                                                         </select>
@@ -293,6 +298,8 @@
         $('#user_id').on('change', function () {
             multiLineChart();
         });
+
+        $('.select2').select2()
     </script>
 </body>
 

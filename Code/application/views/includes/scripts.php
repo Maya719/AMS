@@ -75,12 +75,10 @@
 <script src="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/multiselect/multiselect.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
-
 <script src="<?= base_url('assets2/js/stisla.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.min.js') ?>"></script>
 <script src="<?= base_url('assets2/js/dlabnav-init.js') ?>"></script>
-<script src="<?= base_url('assets2/js/demo.js') ?>"></script>
 <?php if ($this->session->flashdata('message') && $this->session->flashdata('message_type') == 'success') { ?>
   <script>
     toastr.success("<?= $this->session->flashdata('message'); ?>", "Success", {
@@ -226,16 +224,7 @@
       },
       dataType: "json",
       success: function(result) {
-        console.log(result);
-        if (result['error'] == false) {
-          location.reload();
-        } else {
-          iziToast.error({
-            title: result['message'],
-            message: "",
-            position: 'topRight'
-          });
-        }
+        // console.log(result);
       }
     });
 

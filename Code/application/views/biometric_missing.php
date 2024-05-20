@@ -55,10 +55,15 @@
                 <div class="basic-form">
                   <form class="row">
                     <div class="col-lg-4">
+<<<<<<< HEAD
                       <select class="form-select" id="employee_id">
                         <option value="">
                           <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?>
                         </option>
+=======
+                      <select class="form-select select2" id="employee_id">
+                        <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
+>>>>>>> c91cf1b744f9756dcae046010762ec5b3d8a9d51
                         <?php foreach ($system_users as $system_user) {
                           if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
                             <option value="<?= $system_user->employee_id ?>">
@@ -70,7 +75,7 @@
                       </select>
                     </div>
                     <div class="col-lg-4">
-                      <select class="form-select" id="status">
+                      <select class="form-select select2" id="status">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
                         <option value="3">Pending</option>
@@ -78,7 +83,7 @@
                       </select>
                     </div>
                     <div class="col-lg-4">
-                      <select class="form-select" id="dateFilter">
+                      <select class="form-select select2" id="dateFilter">
                         <option value="tmonth" selected>This Month</option>
                         <option value="lmonth">Last Month</option>
                         <option value="tyear">This Year</option>
@@ -130,12 +135,18 @@
             <div class="modal-body">
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
                 <div class="form-group mb-3">
+<<<<<<< HEAD
                   <label
                     class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id_add" class="form-control">
                     <option value="">
                       <?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?>
                     </option>
+=======
+                  <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
+                  <select name="user_id" id="user_id_add" class="form-control select2">
+                    <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
+>>>>>>> c91cf1b744f9756dcae046010762ec5b3d8a9d51
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?>
@@ -195,12 +206,18 @@
 
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
                 <div class="form-group mb-3">
+<<<<<<< HEAD
                   <label
                     class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id" class="form-control">
                     <option value="">
                       <?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?>
                     </option>
+=======
+                  <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
+                  <select name="user_id" id="user_id" class="form-control select2">
+                    <option value=""><?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?></option>
+>>>>>>> c91cf1b744f9756dcae046010762ec5b3d8a9d51
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?>
@@ -620,6 +637,9 @@
         }
       });
     });
+
+    $('.select2').select2()
+
   </script>
 </body>
 

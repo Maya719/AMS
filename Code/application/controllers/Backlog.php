@@ -12,6 +12,7 @@ class Backlog extends CI_Controller
         if ($this->ion_auth->logged_in()) {
             $this->data['page_title'] = 'Backlog - ' . company_name();
             $this->data['main_page'] = 'Backlog';
+            $this->data['projectid'] = $id;
             $this->data['current_user'] = $this->ion_auth->user()->row();
             if (empty($id)) {
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
@@ -49,6 +50,7 @@ class Backlog extends CI_Controller
             $this->db->join('projects', 'tasks.project_id = projects.id');
             $this->db->join('task_users iu', 'iu.task_id = tasks.id', 'left');
             $this->db->where('projects.dash_type', 1);
+            $this->db->where('tasks.parent_task', 0);
             $this->db->where('projects.id', $id);
             if (!empty($users)) {
                 $this->db->where_in('iu.user_id', $users);
@@ -71,9 +73,10 @@ class Backlog extends CI_Controller
                 $issue["project_users"] = $project_users;
 
                 $this->db->select('*');
-                $this->db->where('issue_id', $id);
-                $query5 = $this->db->get('issues_users');
+                $this->db->where('task_id', $id);
+                $query5 = $this->db->get('task_users');
                 $row5 = $query5->row();
+                $issue["user"] = $row5->user_id;
 
                 $this->db->select('*');
                 $this->db->where('issue_id', $id);
@@ -85,20 +88,17 @@ class Backlog extends CI_Controller
                 $proQuery = $this->db->get('projects');
                 $project = $proQuery->row();
                 $issue["project_title"] = $project->title;
-                if ($row) {
-                    $issue["sprint_id"] = $row->sprint_id;
-                    $this->db->select('*');
-                    $this->db->where('id', $row->sprint_id);
-                    $query2 = $this->db->get('sprints');
-                    $row2 = $query2->row();
-                    $issue["sprint_title"] = $row2->title;
-                    $issue["starting_date"] = $row2->starting_date;
-                    $issue["ending_date"] = $row2->ending_date;
-                    $issue["starting_time"] = $row2->starting_time;
-                    $issue["ending_time"] = $row2->ending_time;
-                    $issue["duration"] = $row2->duration;
-                    $issue["user"] = $row5->user_id;
-                }
+                $issue["sprint_id"] = $row->sprint_id;
+                $this->db->select('*');
+                $this->db->where('id', $row->sprint_id);
+                $query2 = $this->db->get('sprints');
+                $row2 = $query2->row();
+                $issue["sprint_title"] = $row2->title;
+                $issue["starting_date"] = $row2->starting_date;
+                $issue["ending_date"] = $row2->ending_date;
+                $issue["starting_time"] = $row2->starting_time;
+                $issue["ending_time"] = $row2->ending_time;
+                $issue["duration"] = $row2->duration;
             }
             // $tasks = [];
             // foreach ($issues as $issue) {

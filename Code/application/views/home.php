@@ -13,12 +13,10 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    /* Ensure the column takes up full height */
   }
 
   .widget-media {
     flex-grow: 1;
-    /* Allow the content to grow to fill the available space */
   }
 </style>
 </head>
@@ -53,8 +51,14 @@
     <?php $this->load->view('includes/sidebar'); ?>
     <!--**********************************
     Sidebar end
+<<<<<<< HEAD
 ***********************************--> <!--**********************************
   Content body start
+=======
+***********************************--> 
+<!--**********************************
+	Content body start
+>>>>>>> c91cf1b744f9756dcae046010762ec5b3d8a9d51
 ***********************************-->
     <div class="content-body default-height">
       <div class="container-fluid">

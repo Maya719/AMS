@@ -87,7 +87,7 @@
                     </div>
                     <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
                         <div class="col-xl-2 col-sm-3">
-                            <a href="<?= base_url('issues') ?>" class="btn btn-block btn-primary <?php echo $is_allowd_to_create_new ? "" : "disabled" ?>">Add
+                            <a href="<?= base_url('issues/tasks/' . $project_id) ?>" class="btn btn-block btn-primary <?php echo $is_allowd_to_create_new ? "" : "disabled" ?>">Add
                                 Issue</a>
                         </div>
                     <?php endif ?>
@@ -99,7 +99,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <select class="form-select" id="project_id">
+                                            <select class="form-select select2" id="project_id">
                                                 <option value="" selected>Project</option>
                                                 <?php foreach ($projects as $project) : ?>
                                                     <option value="<?= base_url('board/tasks/' . $project["id"]) ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
@@ -107,7 +107,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-6">
-                                            <select class="form-select" id="task_users">
+                                            <select class="form-select select2" id="task_users">
                                                 <option value="">Member</option>
                                                 <?php foreach ($project_users as $system_user) : ?>
                                                     <option value="<?= $system_user["id"] ?>" <?= ($select_user == $system_user["id"]) ? 'selected' : '' ?>>
@@ -187,6 +187,10 @@
                                     </a>
                                 </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link " data-bs-toggle="tab" id="sub22" href="#sub"><i class="fa-solid fa-diagram-next me-2"></i> Sub Issues </a>
+                                </li>
+
                                 <li class="nav-item" id="sprint_li">
                                     <a class="nav-link" data-bs-toggle="tab" href="#home" id="sprint_tab_anchor"><i class="fa-solid fa-arrow-rotate-left me-2"></i> Sprint </a>
                                 </li>
@@ -208,6 +212,11 @@
                                         <div class="cm-content-body publish-content form excerpt" id="sprint_dates">
 
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="sub" role="tabpanel">
+                                    <div class="pt-2" id="subtasksDetail">
+
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="profile">
@@ -397,7 +406,6 @@
         $(document).on('click', '.delete_issue', function(e) {
             e.preventDefault();
             var id = $(this).data("issue-id");
-            console.log(id);
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'You won\'t be able to revert this!',
@@ -408,12 +416,14 @@
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    console.log(id);
                     $.ajax({
                         type: "POST",
                         url: base_url + 'issues/delete_issue/' + id,
                         data: "id=" + id,
                         dataType: "json",
                         success: function(result) {
+                            console.log(result);
                             if (result['error'] == false) {
                                 location.reload();
                             } else {
@@ -706,6 +716,50 @@
                         html2 += '</ul>';
                         $("#project_dates").html(html2);
                     }
+                    var subTaskHTML = '';
+                    if (result.SubTasks && result.SubTasks.length > 0) {
+                        result.SubTasks.forEach(SubTask => {
+                            console.log('Subtask', SubTask.title);
+                            subTaskHTML += `<div class="project-details">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h5 class="mt-3">` + SubTask.title + `</h5>
+                                                <div class="dropdown">
+                                                    <div class="btn-link" data-bs-toggle="dropdown">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <?php if (permissions('task_delete') || $this->ion_auth->is_admin()) { ?>
+                                                            <a class="dropdown-item delete_issue text-danger" href="javascript:void(0)" data-issue-id="` + SubTask.id + `">Delete</a>
+                                                        <?php } ?>
+                                                        
+                                                        <?php if (permissions('task_edit') || $this->ion_auth->is_admin()) { ?>
+                                                        <a class="dropdown-item edit_sub_task text-primary" href="javascript:void(0)" data-type="` + SubTask.issue_type + `" data-title="` + SubTask.title + `" data-status2="` + SubTask.status.id + `" data-bs-toggle="modal" data-bs-target="#sub-task-edit-modal" data-issue-id="` + SubTask.id + `">Edit</a>
+                                                        <?php } ?>
+                                                        
+                                                        <?php if (permissions('task_status') || $this->ion_auth->is_admin()) { ?>
+                                                        <?php foreach ($task_statuses as $status) : ?>
+                                                            <a class="dropdown-item status_change text-<?= $status["class"] ?>" href="javascript:void(0)" data-status="<?= $status["id"] ?>" data-issue-id="` + SubTask.id + `"><?= $status["title"] ?></a>
+                                                        <?php endforeach ?>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="projects">
+                                                <span class="badge badge-warning light me-3">` + SubTask.issue_type + `</span>
+                                                <span class="badge badge-` + SubTask.status.class + ` light">` + SubTask.status.title + `</span>
+                                            </div>
+                                        </div>
+                                        <hr>`;
+
+                        });
+                    } else {
+                        subTaskHTML += `<p class="mt-3">No Sub Issue Available</p>`;
+                    }
+                    $("#subtasksDetail").html(subTaskHTML);
                     console.log(result);
                 },
                 error: function(error) {
@@ -713,7 +767,45 @@
                 }
             });
         });
-
+        $(document).on('click', '.status_change', function(e) {
+            var id = $(this).data("issue-id");
+            var status = $(this).data("status");
+            console.log(id, status);
+            $.ajax({
+                url: '<?= base_url('issues/update_issues_status') ?>',
+                type: 'POST',
+                data: {
+                    issue: id,
+                    status: status
+                },
+                success: function(response) {
+                    var tableData = JSON.parse(response);
+                    console.log(tableData);
+                    $('#issue-detail-modal').modal('hide');
+                    toastr.success("Status Changed", "Success", {
+                        positionClass: "toast-top-right",
+                        timeOut: 5e3,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        });
     </script>
     <script>
         document.getElementById('project_id').addEventListener('change', function() {
@@ -722,6 +814,9 @@
                 window.location.href = selectedOption;
             }
         });
+
+        $('.select2').select2()
+
     </script>
 </body>
 

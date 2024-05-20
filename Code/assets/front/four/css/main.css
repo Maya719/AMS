@@ -6710,9 +6710,14 @@ div.demo img {
   }
 }
 .tp-brands-2-top-img img {
-  filter: grayscale(100%);
-  opacity: 45%;
+  opacity: 65%;
   transition: all 0.3s ease-in-out;
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
 }
 .tp-brands-2-top-img img:hover {
   filter: none;
@@ -6794,9 +6799,14 @@ div.demo img {
   }
 }
 .tp-brands-2-bottom-img img {
-  filter: grayscale(100%);
-  opacity: 45%;
-  transition: all 0.3s ease-in-out;
+   opacity: 65%;
+   transition: all 0.3s ease-in-out;
+   filter: grayscale(100%);
+   -webkit-filter: grayscale(100%);
+   -webkit-transition: all 0.3s ease-in-out;
+   -moz-transition: all 0.3s ease-in-out;
+   -ms-transition: all 0.3s ease-in-out;
+   -o-transition: all 0.3s ease-in-out;
 }
 .tp-brands-2-bottom-img img:hover {
   filter: none;
@@ -7106,6 +7116,11 @@ div.demo img {
 .tp-service-overlay {
   background: #F4F6FD;
 }
+
+.tp-service-overlay_2 {
+  background: #F4F6FD;
+}
+
 .tp-service-overlay::before {
   content: "";
   position: absolute;
@@ -8489,7 +8504,13 @@ div.demo img {
   color: #6A6D7A;
 }
 .tp-portfolio-3-thumb {
-  padding: 60px 40px;
+  padding: 5px;
+  border-image: linear-gradient(-45deg, #FFC701, #fcfcfc);
+  border-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  box-shadow: inset 0px 0px 5px #c5c5c5;
+ 
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .tp-portfolio-3-thumb {
@@ -8502,7 +8523,7 @@ div.demo img {
   }
 }
 .tp-portfolio-3-thumb img {
-  min-height: 322px;
+  min-height: 300px;
   max-width: 100%;
 }
 .tp-portfolio-3-content {

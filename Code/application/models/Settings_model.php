@@ -119,8 +119,7 @@ class Settings_model extends CI_Model
 
     function get_roles()
     {
-        // error_reporting(E_ALL);
-        // ini_set('display_errors', 1);
+        
         $offset = 0;
         $limit = 10;
         $sort = 'r.id';

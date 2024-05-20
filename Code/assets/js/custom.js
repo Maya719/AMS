@@ -5072,6 +5072,7 @@ $("#register").submit(function(e) {
 					processData: false,
 					dataType: "json",
 					success:function(result){
+						console.log(result);
 						card_progress.dismiss(function() {
 							if(result['error'] == false){
 								window.location.replace(base_url+'auth/confirmation');

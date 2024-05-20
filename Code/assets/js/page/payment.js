@@ -13,7 +13,9 @@ $(document).on('click','.payment-button',function(){
 
   amount = $(this).data("amount");
   plan_id = $(this).data("id");
-  
+  saas_id = $(this).data("saas");
+  console.log(saas_id,plan_id,amount);
+
   $("#plan_id").val(plan_id);
 
   // Free Renew
@@ -21,7 +23,7 @@ $(document).on('click','.payment-button',function(){
     $.ajax({
       type: "POST",
       url: base_url+'plans/order-completed/', 
-      data: "amount="+amount+"&plan_id="+plan_id,
+      data: "amount="+amount+"&plan_id="+plan_id+"&saas_id="+saas_id,
       dataType: "json",
       success: function(result) 
       {	
@@ -187,7 +189,7 @@ if(get_stripe_publishable_key != ""){
   stripeButton.addEventListener('click', function() {
     $('#stripe-button').addClass('disabled');
 
-    fetch(base_url+'plans/create-session/'+plan_id, {
+    fetch(base_url+'plans/create-session/'+plan_id+'/'+saas_id, {
       method: 'POST',
     })
     .then(function(response) {
@@ -195,6 +197,7 @@ if(get_stripe_publishable_key != ""){
     })
     .then(function(session) {
       if(session.error != true){
+        console.log(session);
         return stripe.redirectToCheckout({ sessionId: session.id });
       }
     })

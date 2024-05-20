@@ -2977,4 +2977,37 @@ class Ion_auth_model extends CI_Model
 
 		return $this;
 	}
+
+	public function encryptId($data, $key)
+	{
+		$data = strval($data);
+
+		$ivLength = openssl_cipher_iv_length('aes-256-cbc');
+		$iv = openssl_random_pseudo_bytes($ivLength);
+		$encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+		$combinedData = $iv . $encrypted;
+		$result = rtrim(strtr(base64_encode($combinedData), '+/', '-_'), '=');
+
+		return $result;
+		// $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+		// $encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+		// return urlencode(base64_encode($encrypted . '::' . $iv)); // URL-safe Base64 encoding
+	}
+
+	public function decryptId($encryptedData, $key)
+	{
+		$encryptedNum = str_pad($encryptedData, strlen($encryptedData) % 4, '=', STR_PAD_RIGHT);
+		$combinedData = base64_decode(strtr($encryptedNum, '-_', '+/'));
+		$ivLength = openssl_cipher_iv_length('aes-256-cbc');
+		$iv = substr($combinedData, 0, $ivLength);
+		$encrypted = substr($combinedData, $ivLength);
+		$decrypted = openssl_decrypt($encrypted, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+		$result = intval($decrypted);
+
+		return $result;
+		// 
+		// $decodedEncryptedData = base64_decode(urldecode($encryptedData));
+		// list($encrypted, $iv) = explode('::', $decodedEncryptedData, 2);
+		// return openssl_decrypt($encrypted, 'aes-256-cbc', $key, 0, $iv);
+	}
 }

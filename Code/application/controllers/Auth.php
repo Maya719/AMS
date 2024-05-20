@@ -46,6 +46,36 @@ class Auth extends CI_Controller
 			$this->load->view('confirmation', $this->data);
 		}
 	}
+	public function create_profile($saas_id = '')
+	{
+		if ($this->ion_auth->logged_in()) {
+			redirect('home', 'refresh');
+		} else {
+			$saas_id = $this->ion_auth->decryptId($saas_id, 'GeekForGeek');
+			$this->data['saas_id'] = $saas_id;
+			$this->data['page_title'] = 'Create Profile - ' . company_name();
+			$this->load->view('companyProfile/create-profile', $this->data);
+		}
+	}
+
+	public function purchase_plan($saas_id = '')
+	{
+		if ($this->ion_auth->logged_in()) {
+			redirect('home', 'refresh');
+		} else {
+
+			$saas_id = $this->ion_auth->decryptId($saas_id, 'GeekForGeek');
+			$this->data['saas_id'] = $saas_id;
+			$query = $this->db->select('*')
+				->from('users')
+				->where('saas_id', $saas_id)
+				->get();
+			$this->data['user'] = $query->row();
+			$this->data['plans'] = $this->plans_model->get_plans();
+			$this->data['page_title'] = 'Create Profile - ' . company_name();
+			$this->load->view('companyProfile/purchase-plan', $this->data);
+		}
+	}
 
 	/**
 	 * login_as_admin
@@ -380,7 +410,8 @@ class Auth extends CI_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				$this->session->set_flashdata('message_type', 'success');
 			}
-			redirect("auth", 'refresh');
+			$saas_id = $this->ion_auth->encryptId($id, 'GeekForGeek');
+			redirect("auth/create_profile/".$saas_id, 'refresh');
 		}
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !permissions('user_edit') && !permissions('client_edit') && !$this->ion_auth->in_group(3))) {
@@ -914,10 +945,6 @@ class Auth extends CI_Controller
 		// }
 
 		if ($this->form_validation->run() === TRUE && $new_user_id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group)) {
-			$userLeaveData = [];
-
-
-
 			if ($this->ion_auth->is_admin()  || permissions('user_create') || permissions('client_create') || $this->input->post('create_saas_admin')) {
 				$update_saas_id_data = [
 					'saas_id' => $this->session->userdata('saas_id'),
@@ -989,6 +1016,7 @@ class Auth extends CI_Controller
 					}
 				}
 
+				$this->data["saas_id"] = $this->ion_auth->encryptId($new_user_id, 'GeekForGeek');
 				$update_saas_id_data = [
 					'saas_id' => $new_user_id,
 				];
@@ -1121,7 +1149,7 @@ class Auth extends CI_Controller
 	 */
 	public function edit_user()
 	{
-		
+
 		$id = $this->input->post('update_id');
 
 		if (empty($id) || !is_numeric($id)) {
@@ -1511,16 +1539,157 @@ class Auth extends CI_Controller
 	 *
 	 * @return mixed
 	 */
-	public function _render_page($view, $data = NULL, $returnhtml = FALSE) // ANCHOR I think this makes more sense
+	public function _render_page($view, $data = NULL, $returnhtml = FALSE)
 	{
 
 		$viewdata = (empty($data)) ? $this->data : $data;
 
 		$view_html = $this->load->view($view, $viewdata, $returnhtml);
 
-		// ANCHOR  This will return html on 3rd argument being true
 		if ($returnhtml) {
 			return $view_html;
+		}
+	}
+	public function create_company()
+	{
+		$this->form_validation->set_rules('company_name', 'Company Name', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('address', 'Address', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('city', 'City', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('state', 'State', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('country', 'Country', 'trim|required|strip_tags|xss_clean');
+		if ($this->form_validation->run() == TRUE) {
+			$setting_type = 'company_' . $this->input->post('saas_id');
+			$data_json = array(
+				'company_name' => $this->input->post('company_name'),
+				'address' => $this->input->post('address'),
+				'city' => $this->input->post('city'),
+				'state' => $this->input->post('state'),
+				'country' => $this->input->post('country'),
+				'zip_code' => $this->input->post('zip_code'),
+			);
+
+			$data = array(
+				'value' => json_encode($data_json)
+			);
+			if ($this->settings_model->save_settings($setting_type, $data)) {
+				$this->data['error'] = false;
+				$this->data['data'] = $data_json;
+				$this->data["saas_id"] = $this->ion_auth->encryptId($this->input->post('saas_id'), 'GeekForGeek');
+				$this->data['message'] = $this->lang->line('company_setting_saved') ? $this->lang->line('company_setting_saved') : "Company Setting Saved.";
+				echo json_encode($this->data);
+			} else {
+				$this->data['error'] = true;
+				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+				echo json_encode($this->data);
+			}
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = validation_errors();
+			echo json_encode($this->data);
+		}
+	}
+	public function save_departments()
+	{
+		$this->form_validation->set_rules('department_name[]', 'Department Name', 'trim|required|strip_tags|xss_clean');
+		if ($this->form_validation->run() == TRUE) {
+			$departments = $this->input->post('department_name');
+			foreach ($departments as $department) {
+				$data = array(
+					'saas_id' => $this->input->post('saas_id'),
+					'company_name' => '',
+					'department_name' => $department,
+				);
+				$id = $this->department_model->create($data);
+			}
+			$this->data['error'] = false;
+			$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
+			$this->session->set_flashdata('message_type', 'success');
+			$this->data["saas_id"] = $this->ion_auth->encryptId($this->input->post('saas_id'), 'GeekForGeek');
+			$this->data['message'] = $this->lang->line('company_setting_saved') ? $this->lang->line('company_setting_saved') : "Company Setting Saved.";
+			echo json_encode($this->data);
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = validation_errors();
+			echo json_encode($this->data);
+		}
+	}
+	public function save_roles()
+	{
+		$this->form_validation->set_rules('description[]', 'Name', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('descriptive_name[]', 'Description', 'trim|strip_tags|xss_clean');
+
+		$permissions = '["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88"]';
+
+		$change_permissions_of = $this->input->post('change_permissions_of') ? $this->input->post('change_permissions_of') : 0;
+		$change_permissions_of = json_encode($change_permissions_of);
+
+		if ($this->form_validation->run() == TRUE) {
+			$descriptions = $this->input->post('description');
+			$descriptive_name = $this->input->post('descriptive_name');
+			foreach ($descriptions as $key => $description) {
+				$data = array(
+					'saas_id' => $this->input->post('saas_id'),
+					'name' => str_replace(' ', '_', strtolower($description)),
+					'description' => $description,
+					'descriptive_name' => $descriptive_name[$key],
+					'permissions' => $permissions,
+					'assigned_users' => '',
+					'change_permissions_of' => '',
+				);
+
+				$id = $this->settings_model->roles_create($data);
+
+				$data_json = array(
+					'project_view' => 0,
+					'project_create' => 0,
+					'project_edit' => 0,
+					'project_delete' => 0,
+					'task_view' => 0,
+					'task_create' => 0,
+					'task_edit' => 0,
+					'task_delete' => 0,
+					'user_view' => 0,
+					'user_edit' => 0,
+					'client_view' => 0,
+					'setting_view' => 0,
+					'setting_update' => 0,
+					'todo_view' => 0,
+					'notes_view' => 0,
+					'chat_view' => 0,
+					'chat_delete' => 0,
+					'team_members_and_client_can_chat' => 0,
+					'task_status' => 0,
+					'project_budget' => 0,
+					'gantt_view' => 0,
+					'gantt_edit' => 0,
+					'calendar_view' => 0,
+					'meetings_view' => 0,
+					'meetings_create' => 0,
+					'meetings_edit' => 0,
+					'meetings_delete' => 0,
+					'lead_view' => 0,
+					'lead_create' => 0,
+					'lead_edit' => 0,
+					'lead_delete' => 0,
+				);
+
+				$data = array(
+					'value' => json_encode($data_json)
+				);
+				$setting_type = str_replace(' ', '_', strtolower($description)) . '_permissions_' . $this->input->post('saas_id');
+
+				$this->settings_model->save_settings($setting_type, $data);
+			}
+			$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
+			$this->session->set_flashdata('message_type', 'success');
+			$this->data['error'] = false;
+			$this->data["saas_id"] = $this->ion_auth->encryptId($this->input->post('saas_id'), 'GeekForGeek');
+			$this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
+			echo json_encode($this->data);
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = validation_errors();
+			echo json_encode($this->data);
 		}
 	}
 }

@@ -858,11 +858,11 @@
                 <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || permissions('leave_type_view')) && is_module_allowed('leaves_types')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) && is_module_allowed('leaves')) { ?>
                 <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || permissions('leave_type_view')) && is_module_allowed('leave_hierarchy')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) && is_module_allowed('leaves')) { ?>
                 <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave Approval Hierarchy' ?></a></li>
               <?php } ?>
 
@@ -877,8 +877,8 @@
               <?php if (($this->ion_auth->is_admin() || permissions('departments_view')) && is_module_allowed('departments')) { ?>
                 <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
               <?php } ?>
-              <?php if ($this->ion_auth->is_admin() && is_module_allowed('')) { ?>
-                <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('time_schedule') ? $this->lang->line('time_schedule') : 'Applied Policy' ?></a></li>
+              <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) && (is_module_allowed('leaves') && is_module_allowed('leaves'))) { ?>
+                <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('applied_policy') ? $this->lang->line('applied_policy') : 'Applied Policy' ?></a></li>
               <?php } ?>
 
               <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
@@ -896,7 +896,7 @@
       ?>
     </ul>
     <div class="copyright">
-      <p class="fs-12">Made with <span class="heart"></span> by Mobipixels</p>
+      <p class="fs-12 text-center">Made with <span class="heart"></span> by Airnet Technologies</p>
     </div>
   </div>
 </div>
