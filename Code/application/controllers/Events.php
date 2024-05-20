@@ -56,6 +56,9 @@ class Events extends CI_Controller
                 );
                 $id = $this->events_model->create($data);
                 if ($id) {
+                    push_notifications('event', [
+                        'saas_id' => $this->session->userdata('saas_id'),
+                    ]);
                     $this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
                     $this->session->set_flashdata('message_type', 'success');
                     $this->data['error'] = false;
