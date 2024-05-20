@@ -1,6 +1,6 @@
 <div class="row d-flex justify-content-end">
     <div class="col-xl-2 col-sm-3 mt-2">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#add-role-modal" class="btn btn-block btn-primary">+ ADD</a>
+        <a href="#" id="role-model-btn" data-bs-toggle="modal" data-bs-target="#add-role-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
     <div class="card mt-3 p-0">
         <div class="card-body p-1">
@@ -45,22 +45,22 @@
 
 <div class="modal fade" id="add-role-modal">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+        <div class="modal-content" id="stepTitle">
             <div class="modal-header">
                 <h5 class="modal-title">Create</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button  type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="<?= base_url('settings/roles_create') ?>" method="POST" class="modal-part" id="modal-add-role-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
-                <div class="modal-body">
+                <div class="modal-body" >
                     <div class="form-group">
                         <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
-                        <input type="text" name="description" class="form-control" required="">
+                        <input id="stepInput1" type="text" name="description" class="form-control" required="">
                     </div>
-                    <div class="form-group mt-3">
+                    <div class="form-group" id="stepDescription">
                         <label class="col-form-label"><?= $this->lang->line('description') ? $this->lang->line('description') : 'Description' ?><span class="text-danger">*</span></label>
-                        <input type="text" name="descriptive_name" class="form-control" required="">
+                        <input  type="text" name="descriptive_name" class="form-control" id="stepInput2" required="">
                     </div>
-                    <div class="form-group mt-3">
+                    <div class="form-group mt-3" >
                         <label class="col-form-label"><?= $this->lang->line('show_permissions') ? $this->lang->line('show_permissions') : 'Show Permissions' ?><span class="text-danger">*</span></label>
                         <input type="checkbox" id="selectAllUsers"> Select All
                         <select name="permissions[]" id='users' multiple='multiple'>
@@ -108,8 +108,8 @@
                         </select>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <div class="col-lg-4">
+                <div class="modal-footer d-flex justify-content-center" >
+                    <div class="col-lg-4" id="stepCreateBtn">
                         <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
                     </div>
                 </div>
