@@ -51,25 +51,34 @@
     <?php $this->load->view('includes/sidebar'); ?>
     <!--**********************************
     Sidebar end
+<<<<<<< HEAD
+***********************************--> <!--**********************************
+  Content body start
+=======
 ***********************************--> 
 <!--**********************************
 	Content body start
+>>>>>>> c91cf1b744f9756dcae046010762ec5b3d8a9d51
 ***********************************-->
     <div class="content-body default-height">
       <div class="container-fluid">
         <div class="row justify-content-between">
           <div class="col-xl-4 col-sm-12">
             <nav class="nav nav-pills flex-column flex-sm-row">
-              <?php if ((is_module_allowed('projects'))) : ?>
-                <a class="flex-sm-fill fs-6 text-sm-center nav-link <?= (is_client()) ? '' : 'active'; ?>" href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false" <?= (is_client()) ? 'disabled' : ''; ?>><strong>AMS</strong></a>
-                <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4 <?= (is_client()) ? 'active' : ''; ?>" href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
+              <?php if ((is_module_allowed('projects'))): ?>
+                <a class="flex-sm-fill fs-6 text-sm-center nav-link <?= (is_client()) ? '' : 'active'; ?>"
+                  href="#navpills2-1" data-bs-toggle="tab" aria-expanded="false" <?= (is_client()) ? 'disabled' : ''; ?>><strong>AMS</strong></a>
+                <a class="flex-sm-fill fs-6 text-sm-center nav-link ms-4 <?= (is_client()) ? 'active' : ''; ?>"
+                  href="#navpills2-2" data-bs-toggle="tab" aria-expanded="false"><strong>PMS</strong></a>
               <?php endif ?>
             </nav>
           </div>
           <div class="col-xl-2 col-sm-12">
             <div class="card">
               <div class="card-body text-sm-center py-3 text-primary">
-                <input style="border:none; height:20px;" name="datepicker" class="text-primary text-center fs-6 fw-bold datepicker-default2 form-control p-0" value="<?= date('j F, Y') ?>" id="from">
+                <input style="border:none; height:20px;" name="datepicker"
+                  class="text-primary text-center fs-6 fw-bold datepicker-default2 form-control p-0"
+                  value="<?= date('j F, Y') ?>" id="from">
               </div>
             </div>
           </div>
@@ -82,7 +91,7 @@
                       <div class="row shapreter-row">
                         <?php
                         if ($this->ion_auth->is_admin() || permissions('attendance_view')) {
-                        ?>
+                          ?>
                           <?php
                           $totalStaff = $report["present"] + $report["leave"] + $report["abs"];
                           if ($totalStaff > 0) {
@@ -99,36 +108,43 @@
 
                                 <?php
                                 if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
-                                ?>
+                                  ?>
                                   <h4 class="text-primary">Staff</h4>
-                                <?php
+                                  <?php
                                 } else {
-                                ?>
+                                  ?>
                                   <h4 class="text-primary">Working Days</h4>
-                                <?php
+                                  <?php
                                 } ?>
-                                <h4 class="count ms-auto mb-0"><a class="text-primary" id="total_staff" href="javascript:void(0)"><?= $report["total_staff"] ?></a></h4>
+                                <h4 class="count ms-auto mb-0"><a class="text-primary" id="total_staff"
+                                    href="javascript:void(0)"><?= $report["total_staff"] ?></a></h4>
                               </div>
                               <?php
                               if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
-                              ?>
+                                ?>
                                 <p class="mb-0 text-muted" style="margin-top: -10px;">(Attendance)</p>
-                              <?php
+                                <?php
                               } else {
-                              ?>
+                                ?>
                                 <p class="mb-0 text-muted" style="margin-top: -10px;">(This Month)</p>
-                              <?php
+                                <?php
                               }
                               ?>
                               <div class="progress default-progress mt-2">
-                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perStaff ?>; height:5px;" role="progressbar">
+                                <div class="progress-bar bg-gradient1 progress-animated"
+                                  style="width: <?= $perStaff ?>; height:5px;" role="progressbar">
                                   <span class="sr-only"><?= $perStaff ?> Complete</span>
                                 </div>
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Present<strong class="float-end me-2"><a class="text-primary" id="total_present" href="javascript:void(0);"><?= $report["present"] ?></a></strong></p>
-                                <p class="mb-0">On Leave<strong class="float-end me-2"><a id="total_leave" class="text-warning" href="javascript:void(0);"><?= $report["leave"] ?></a></strong></p>
-                                <p class="mb-0">Absent<strong class="float-end me-2"><a class="text-danger " id="total_absent" href="javascript:void(0);"><?= $report["abs"] ?></a></strong></p>
+                                <p class="mb-0">Present<strong class="float-end me-2"><a class="text-primary"
+                                      id="total_present" href="javascript:void(0);"><?= $report["present"] ?></a></strong>
+                                </p>
+                                <p class="mb-0">On Leave<strong class="float-end me-2"><a id="total_leave"
+                                      class="text-warning" href="javascript:void(0);"><?= $report["leave"] ?></a></strong>
+                                </p>
+                                <p class="mb-0">Absent<strong class="float-end me-2"><a class="text-danger "
+                                      id="total_absent" href="javascript:void(0);"><?= $report["abs"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -147,19 +163,24 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h4 class="text-primary">Leaves</h4>
-                                <h4 class="count  ms-auto mb-0"><a class="text-primary" href="<?= base_url('leaves') ?>"><?= $totalleave ?></a></h4>
+                                <h4 class="count  ms-auto mb-0"><a class="text-primary"
+                                    href="<?= base_url('leaves') ?>"><?= $totalleave ?></a></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
-                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perLeave ?>; height:5px;" role="progressbar">
+                                <div class="progress-bar bg-gradient1 progress-animated"
+                                  style="width: <?= $perLeave ?>; height:5px;" role="progressbar">
                                   <span class="sr-only"><?= $perLeave ?> Complete</span>
                                 </div>
 
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?= base_url('leaves') ?>"><?= $report["leave_approved"] ?></a></strong></p>
-                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning " href="<?= base_url('leaves') ?>"><?= $report["leave_pending"] ?></a></strong></p>
-                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger " href="<?= base_url('leaves') ?>"><?= $report["leave_rejected"] ?></a></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary"
+                                      href="<?= base_url('leaves') ?>"><?= $report["leave_approved"] ?></a></strong></p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning "
+                                      href="<?= base_url('leaves') ?>"><?= $report["leave_pending"] ?></a></strong></p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger "
+                                      href="<?= base_url('leaves') ?>"><?= $report["leave_rejected"] ?></a></strong></p>
                               </div>
                             </div>
                           </div>
@@ -177,22 +198,30 @@
                             <div class="static-icon mx-5">
                               <div class="d-flex">
                                 <h4 class="text-primary">Biometrics</h4>
-                                <h4 class="count ms-auto mb-0"><a class="text-primary" href="<?= base_url('biometric_missing') ?>"><?= $totalBio ?></a></h4>
+                                <h4 class="count ms-auto mb-0"><a class="text-primary"
+                                    href="<?= base_url('biometric_missing') ?>"><?= $totalBio ?></a></h4>
                               </div>
                               <p class="mb-0 text-muted" style="margin-top: -10px;">(This month)</p>
                               <div class="progress default-progress mt-2">
-                                <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perBio ?>; height:5px;" role="progressbar">
+                                <div class="progress-bar bg-gradient1 progress-animated"
+                                  style="width: <?= $perBio ?>; height:5px;" role="progressbar">
                                   <span class="sr-only"><?= $perBio ?> Complete</span>
                                 </div>
                               </div>
                               <div class="mt-2">
-                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary" href="<?= base_url('biometric_missing') ?>"><?= $report["bio_approved"] ?></a></strong></p>
-                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning" href="<?= base_url('biometric_missing') ?>"><?= $report["bio_pending"] ?></a></strong></p>
-                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger" href="<?= base_url('biometric_missing') ?>"><?= $report["bio_rejected"] ?></a></strong></p>
+                                <p class="mb-0">Approved<strong class="float-end me-2"><a class="text-primary"
+                                      href="<?= base_url('biometric_missing') ?>"><?= $report["bio_approved"] ?></a></strong>
+                                </p>
+                                <p class="mb-0">Pending<strong class="float-end me-2"><a class="text-warning"
+                                      href="<?= base_url('biometric_missing') ?>"><?= $report["bio_pending"] ?></a></strong>
+                                </p>
+                                <p class="mb-0">Rejected<strong class="float-end me-2"><a class="text-danger"
+                                      href="<?= base_url('biometric_missing') ?>"><?= $report["bio_rejected"] ?></a></strong>
+                                </p>
                               </div>
                             </div>
                           </div>
-                        <?php
+                          <?php
                         } ?>
                       </div>
                     </div>
@@ -225,20 +254,20 @@
                     <div class="card-body p-0">
                       <?php
                       if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
-                      ?>
+                        ?>
                         <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height500 mb-1">
-                        <?php
+                          <?php
                       } else {
                         ?>
                           <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height400 mb-1">
-                          <?php
-                        } ?>
+                            <?php
+                      } ?>
                           <ul class="timeline ">
-                            <?php foreach ($events as $event) : ?>
+                            <?php foreach ($events as $event): ?>
                               <li>
                                 <div class="timeline-panel">
                                   <div class="avatar avatar-xl me-2">
-                                    <?php if ($event["profile"]) : ?>
+                                    <?php if ($event["profile"]): ?>
                                       <?php
                                       if (file_exists('assets/uploads/profiles/' . $event["profile"])) {
                                         $file_upload_path = 'assets/uploads/profiles/' . $event["profile"];
@@ -246,8 +275,9 @@
                                         $file_upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/' . $event["profile"];
                                       }
                                       ?>
-                                      <div class=""><img class="rounded-circle img-fluid" src="<?= base_url($file_upload_path) ?>" width="40" alt=""></div>
-                                    <?php else : ?>
+                                      <div class=""><img class="rounded-circle img-fluid"
+                                          src="<?= base_url($file_upload_path) ?>" width="40" alt=""></div>
+                                    <?php else: ?>
                                       <div class="d-flex align-items-center flex-wrap">
                                         <ul class="kanbanimg me-3">
                                           <li><span><?= $event["short"] ?></span></li>
@@ -263,8 +293,8 @@
                               </li>
                             <?php endforeach ?>
                           </ul>
-                          </div>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -312,13 +342,16 @@
                             <h4 class="count text-primary ms-auto mb-0"><?= $completedP + $pendingP ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
-                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perP ?>%; height:5px;" role="progressbar">
+                            <div class="progress-bar bg-gradient1 progress-animated"
+                              style="width: <?= $perP ?>%; height:5px;" role="progressbar">
                               <span class="sr-only">Total</span>
                             </div>
                           </div>
                           <div class="mt-2">
-                            <p class="mb-0">Completed<strong class="text-primary float-end me-2"><?= $completedP ?></strong></p>
-                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $pendingP ?></strong></p>
+                            <p class="mb-0">Completed<strong
+                                class="text-primary float-end me-2"><?= $completedP ?></strong></p>
+                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $pendingP ?></strong>
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -352,10 +385,10 @@
                     $completedT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', 'status=4 AND tu.user_id=' . $this->session->userdata('user_id'));
                   }
 
-                  
-                  if ($completedT+$pendingT > 0) {
-                    $perT = $completedT/($completedT+$pendingT)*100;
-                  }else{
+
+                  if ($completedT + $pendingT > 0) {
+                    $perT = $completedT / ($completedT + $pendingT) * 100;
+                  } else {
                     $perT = 1;
                   }
                   ?>
@@ -365,16 +398,19 @@
                         <div class="static-icon mx-5">
                           <div class="d-flex">
                             <h4 class="text-primary">Tasks</h4>
-                            <h4 class="count text-primary ms-auto mb-0"><?= $completedT+$pendingT ?></h4>
+                            <h4 class="count text-primary ms-auto mb-0"><?= $completedT + $pendingT ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
-                            <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perT ?>%; height:5px;" role="progressbar">
+                            <div class="progress-bar bg-gradient1 progress-animated"
+                              style="width: <?= $perT ?>%; height:5px;" role="progressbar">
                               <span class="sr-only">100% Complete</span>
                             </div>
                           </div>
                           <div class="mt-2">
-                            <p class="mb-0">Completed<strong class="text-primary float-end me-2"><?= $completedT ?></strong></p>
-                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $pendingT ?></strong></p>
+                            <p class="mb-0">Completed<strong
+                                class="text-primary float-end me-2"><?= $completedT ?></strong></p>
+                            <p class="mb-0">Pending<strong class="text-warning float-end me-2"><?= $pendingT ?></strong>
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -410,7 +446,7 @@
         </div>
       </div>
       <!--**********************************
-	Content body end
+  Content body end
 ***********************************-->
       <?php $this->load->view('includes/footer'); ?>
     </div>
@@ -459,11 +495,11 @@
     </script>
 
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         pieChart();
         areaChart1();
       });
-      var areaChart1 = function() {
+      var areaChart1 = function () {
         if (jQuery('#areaChart_1').length > 0) {
           const areaChart_1 = document.getElementById("areaChart_1").getContext('2d');
           new Chart(areaChart_1, {
@@ -505,7 +541,7 @@
           });
         }
       };
-      var pieChart = function() {
+      var pieChart = function () {
         if (jQuery('#pie_chart').length > 0) {
           const pie_chart = document.getElementById("pie_chart").getContext('2d');
           pie_chart.height = 100;
@@ -544,9 +580,9 @@
       }
     </script>
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         setFilter();
-        $(document).on('change', '#from', function() {
+        $(document).on('change', '#from', function () {
           var date = $('#from').val();
           var all = 0;
           var present = 0;
@@ -554,7 +590,7 @@
           var leave = 0;
           setFilter(date, all, present, absent, leave);
         });
-        $(document).on('click', '#total_present', function() {
+        $(document).on('click', '#total_present', function () {
           var date = $('#from').val();
           var all = 0;
           var present = 1;
@@ -562,7 +598,7 @@
           var leave = 0;
           setFilter(date, all, present, absent, leave);
         });
-        $(document).on('click', '#total_absent', function() {
+        $(document).on('click', '#total_absent', function () {
           var date = $('#from').val();
           var all = 0;
           var present = 0;
@@ -570,7 +606,7 @@
           var leave = 0;
           setFilter(date, all, present, absent, leave);
         });
-        $(document).on('click', '#total_leave', function() {
+        $(document).on('click', '#total_leave', function () {
           var date = $('#from').val();
           var all = 0;
           var present = 0;
@@ -578,7 +614,7 @@
           var leave = 1;
           setFilter(date, all, present, absent, leave);
         });
-        $(document).on('click', '#total_staff', function() {
+        $(document).on('click', '#total_staff', function () {
           var date = $('#from').val();
           var all = 1;
           var present = 0;
@@ -604,10 +640,10 @@
               absent: absent,
               leave: leave,
             },
-            beforeSend: function() {
+            beforeSend: function () {
               showLoader();
             },
-            success: function(response) {
+            success: function (response) {
               var tableData = JSON.parse(response);
               showTable(tableData.attendance);
               console.log(tableData);
@@ -618,10 +654,10 @@
               $("#total_staff").html(total);
 
             },
-            complete: function() {
+            complete: function () {
               hideLoader();
             },
-            error: function(error) {
+            error: function (error) {
               console.error(error);
             }
           });
@@ -699,7 +735,7 @@
 
         return uniqueDates;
       }
-      $(document).ready(function() {
+      $(document).ready(function () {
         $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
         $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
       });
