@@ -13,10 +13,68 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    /* Ensure the column takes up full height */
   }
 
   .widget-media {
     flex-grow: 1;
+    /* Allow the content to grow to fill the available space */
+  }
+
+  .modal .modal-dialog .modal-content .close:hover {
+    color: #555;
+  }
+
+  .modal .modal-dialog .modal-content .modal-body {
+    padding: 30px 10px 30px !important;
+  }
+
+  .modal .modal-dialog .modal-content .modal-body .modal-icon {
+    color: <?= theme_color(); ?>;
+    background: #e3e6f1;
+    line-height: 150px;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 45px;
+    border-radius: 50%;
+  }
+
+  .modal .modal-dialog .modal-content .modal-body .title {
+    font-size: 17px;
+    line-height: 17px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 15px;
+  }
+
+  .modal .modal-dialog .modal-content .modal-body .description {
+    color: #555;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 5px 25px;
+  }
+
+  .modal .modal-dialog .modal-content .modal-body .btn:hover {
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, .9);
+  }
+
+  .modal .modal-dialog .modal-content .modal-body .btn:focus {
+    outline: none;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .modal-dialog {
+      width: 94% !important;
+    }
+  }
+
+  .customTooltip * {
+    color: #4a4a4a;
+    font-size: 18px
+  }
+
+  .customTooltip .introjs-tooltip-title {
+    color: #0a41c9;
   }
 </style>
 </head>
@@ -51,8 +109,7 @@
     <?php $this->load->view('includes/sidebar'); ?>
     <!--**********************************
     Sidebar end
-***********************************--> 
-<!--**********************************
+***********************************--> <!--**********************************
 	Content body start
 ***********************************-->
     <div class="content-body default-height">
@@ -352,10 +409,10 @@
                     $completedT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', 'status=4 AND tu.user_id=' . $this->session->userdata('user_id'));
                   }
 
-                  
-                  if ($completedT+$pendingT > 0) {
-                    $perT = $completedT/($completedT+$pendingT)*100;
-                  }else{
+
+                  if ($completedT + $pendingT > 0) {
+                    $perT = $completedT / ($completedT + $pendingT) * 100;
+                  } else {
                     $perT = 1;
                   }
                   ?>
@@ -365,7 +422,7 @@
                         <div class="static-icon mx-5">
                           <div class="d-flex">
                             <h4 class="text-primary">Tasks</h4>
-                            <h4 class="count text-primary ms-auto mb-0"><?= $completedT+$pendingT ?></h4>
+                            <h4 class="count text-primary ms-auto mb-0"><?= $completedT + $pendingT ?></h4>
                           </div>
                           <div class="progress default-progress mt-2">
                             <div class="progress-bar bg-gradient1 progress-animated" style="width: <?= $perT ?>%; height:5px;" role="progressbar">
@@ -413,6 +470,24 @@
 	Content body end
 ***********************************-->
       <?php $this->load->view('includes/footer'); ?>
+      <div class="modal fade" id="myModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <div class="modal-icon">
+                <svg width="80px" height="80px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="<?= theme_color() ?>" d="M640 608h-64V416h64v192zm0 160v160a32 32 0 0 1-32 32H416a32 32 0 0 1-32-32V768h64v128h128V768h64zM384 608V416h64v192h-64zm256-352h-64V128H448v128h-64V96a32 32 0 0 1 32-32h192a32 32 0 0 1 32 32v160z" />
+                  <path fill="<?= theme_color() ?>" d="m220.8 256-71.232 80 71.168 80H768V256H220.8zm-14.4-64H800a32 32 0 0 1 32 32v224a32 32 0 0 1-32 32H206.4a32 32 0 0 1-23.936-10.752l-99.584-112a32 32 0 0 1 0-42.496l99.584-112A32 32 0 0 1 206.4 192zm678.784 496-71.104 80H266.816V608h547.2l71.168 80zm-56.768-144H234.88a32 32 0 0 0-32 32v224a32 32 0 0 0 32 32h593.6a32 32 0 0 0 23.936-10.752l99.584-112a32 32 0 0 0 0-42.496l-99.584-112A32 32 0 0 0 828.48 544z" />
+                </svg>
+                <!-- <i class="fas fa-gift"></i> -->
+              </div>
+              <h3 class="title text-primary">Welcome To PERI!</h3>
+              <p class="description">Please click the button below for guidance! </p>
+              <button class="btn btn-primary text-center" id="startGuide">Guide me</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <?php $this->load->view('includes/scripts'); ?>
@@ -710,6 +785,51 @@
         singleDatePicker: true,
         maxDate: moment()
       });
+    </script>
+    <script>
+      document.getElementById('startGuide').addEventListener('click', function() {
+        $('#myModel').modal('hide');
+        document.getElementById('GuideStep1').click();
+        setTimeout(function() {
+          startTutorial();
+        }, 1500);
+      });
+
+      function startTutorial() {
+        introJs().setOptions({
+          steps: [{
+            element: '#GuideStep1',
+            intro: "Click the Settings link to proceed.",
+            position:'top'
+          }],
+          showBullets: false,
+          disableInteraction: true,
+          tooltipClass: 'customTooltip'
+        }).start().oncomplete(function() {
+          localStorage.setItem('tourStep', '2');
+          console.log(localStorage.getItem('tourStep'));
+        }).onexit(function() {
+          startSecondTutorial();
+          console.log('Tutorial exited');
+        });
+      }
+
+      function startSecondTutorial() {
+        introJs().setOptions({
+          steps: [{
+            element: '#GuideStep2',
+            intro: "This is Step 2.",
+            position:'top'
+          }],
+          showBullets: false,
+          disableInteraction: true,
+          tooltipClass: 'customTooltip'
+        }).start().oncomplete(function() {
+          window.location.href=base_url+'settings/roles'
+        }).onexit(function() {
+          console.log('Second tour exited');
+        });
+      }
     </script>
 </body>
 
