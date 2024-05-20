@@ -51,7 +51,7 @@
                   <form class="row">
                     <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                       <div class="col-lg-3">
-                        <select class="form-select" id="employee_id">
+                        <select class="form-select select2" id="employee_id">
                           <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                           <?php foreach ($system_users as $system_user) {
                             if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
@@ -63,7 +63,7 @@
                     <?php
                     } ?>
                     <div class="col-lg-3">
-                      <select class="form-select" id="leave_type">
+                      <select class="form-select select2" id="leave_type">
                         <option value=""><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave type' ?></option>
                         <?php foreach ($leaves_types as $leaves_type) : ?>
                           <option value="<?= $leaves_type["id"] ?>"><?= htmlspecialchars($leaves_type["name"]) ?></option>
@@ -71,7 +71,7 @@
                       </select>
                     </div>
                     <div class="col-lg-3">
-                      <select class="form-select" id="status_name">
+                      <select class="form-select select2" id="status_name">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
                         <option value="3">Pending</option>
@@ -79,7 +79,7 @@
                       </select>
                     </div>
                     <div class="col-lg-3">
-                      <select class="form-select" id="dateFilter">
+                      <select class="form-select select2" id="dateFilter">
                         <option value="tmonth" selected>This Month</option>
                         <option value="lmonth">Last Month</option>
                         <option value="tyear">This Year</option>
@@ -130,6 +130,10 @@
         setFilter();
       });
     });
+
+
+    $('.select2').select2()
+
   </script>
 </body>
 

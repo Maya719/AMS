@@ -1,3 +1,32 @@
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown content */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 5px;
+  }
+
+  /* Dropdown content items */
+  .dropdown-content label {
+    display: block;
+    cursor: pointer;
+  }
+
+  /* Show dropdown content */
+  .show {
+    display: block;
+  }
+</style>
+
 <div class="row">
   <div class="card">
     <div class="card-body">
@@ -55,7 +84,7 @@
             <input type="hidden" id="date_format_js" name="date_format_js" value="<?= isset($date_format_js) ? htmlspecialchars($date_format_js) : '' ?>">
             <select name="date_format" id="date_format" class="form-control select2">
               <?php foreach ($date_formats as $option) { ?>
-                <option data-js_value="<?= htmlspecialchars($option['js_format']) ?>" value="<?= htmlspecialchars($option['format']) ?>" <?= (isset($date_format) && $date_format == $option['format']) ? 'selected' : ''; ?>><?= htmlspecialchars($option['format']) ?> (<?= date(htmlspecialchars($option['format'])) ?>)</option>
+                <option data-js_value="<?= htmlspecialchars($option['js_format']) ?>" value="<?= htmlspecialchars($option['format']) ?>" <?= (isset($date_format) && $date_format == $option['format']) ? 'selected' : ''; ?>> <?= date(htmlspecialchars($option['format'])) ?> </option>
               <?php } ?>
             </select>
           </div>
@@ -83,9 +112,17 @@
 
           <div class="form-group col-md-6">
             <label class="col-form-label"><?= $this->lang->line('file_upload_format') ? $this->lang->line('file_upload_format') : 'File Upload Format' ?><span class="text-danger">*</span><i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('only_this_type_of_files_going_to_be_allowed_to_upload_in_projects_and_tasks') ? $this->lang->line('only_this_type_of_files_going_to_be_allowed_to_upload_in_projects_and_tasks') : 'Only this type of files going to be allowed to upload in projects and tasks.' ?>"></i></label>
-            <input type="text" name="file_upload_format" value="<?= htmlspecialchars($file_upload_format) ?>" class="form-control">
-          </div>
+            <input type="text" name="file_upload_format" id="file-upload-input" value="<?= htmlspecialchars($file_upload_format) ?>" class="form-control">
+            <div id="file-upload-format" class="dropdown-content">
+              <label><input type="checkbox" value="JPG"> JPG</label>
+              <label><input type="checkbox" value="JPG"> JPEG</label>
+              <label><input type="checkbox" value="PNG"> PNG</label>
+              <label><input type="checkbox" value="ZIP"> ZIP</label>
+              <label><input type="checkbox" value="DOC"> DOC</label>
+              <label><input type="checkbox" value="PDF"> PDF</label>
+            </div>
 
+          </div>
           <?php if ($this->ion_auth->in_group(3)) { ?>
 
             <div class="form-group col-md-6">
@@ -144,3 +181,36 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('file-upload-input');
+    const dropdown = document.getElementById('file-upload-format');
+    const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+
+    input.addEventListener('click', function() {
+      dropdown.classList.toggle('show');
+    });
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', updateInput);
+    });
+
+    function updateInput() {
+      const selectedValues = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value.toLowerCase())
+        .join('|');
+      input.value = selectedValues;
+    }
+
+    window.addEventListener('click', function(event) {
+      if (!input.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+  });
+
+
+</script>

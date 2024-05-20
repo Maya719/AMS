@@ -88,7 +88,7 @@
                     console.log(result);
                     card_progress.dismiss(function() {
                         if (result['error'] == false) {
-                            location.href = base_url + 'auth/create-departments/' + result.saas_id;
+                            location.href = base_url + 'auth/purchase-plan/' + result.saas_id;
                         } else {
                             output_status.prepend('<div class="alert alert-danger">' + result['message'] + '</div>');
                         }

@@ -27,6 +27,11 @@
         cursor: pointer;
         display: none;
     }
+
+    .undercard {
+        padding: 15px;
+        border: 2px dashed <?= theme_color() ?>;
+    }
 </style>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 </head>
@@ -52,6 +57,14 @@
         <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
             <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('projects') ?>">Projects</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('board/tasks/' . $selectedproject->id) ?>">Board</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
+                    </ol>
+                </nav>
                 <div class="row">
                     <?php if ($is_allowd_to_create_new) { ?>
                         <div class="col-xl-9 col-lg-8">
@@ -60,29 +73,33 @@
                                     <h6 class="title">Create Issue</h6>
                                 </div>
                                 <form action="<?= base_url('issues/create_issue') ?>" method="post" id="modal-add-issue-part">
-                                <input type="hidden" name="redirect_to" id="redirect_to">
+                                    <input type="hidden" name="redirect_to" id="redirect_to" value="<?= $selectedproject->dash_type ?>">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Project <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="project_id" id="project_id3">
+                                                <select class="form-control select2" name="project_id" id="project_id3">
                                                     <option value="">Project</option>
                                                     <?php foreach ($projects as $project) : ?>
-                                                        <option value="<?= $project["id"] ?>"><?= $project["title"] ?></option>
+                                                        <option value="<?= $project["id"] ?>" <?= ($project_id == $project["id"]) ? 'selected' : '' ?>><?= $project["title"] ?></option>
                                                     <?php endforeach ?>
                                                 </select>
                                             </div>
                                             <div class="col-sm-6 mb-3">
                                                 <label class="form-label">Issue Type <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="issue_type" id="issue_type">
-                                                    <option value="epic">Epic</option>
-                                                    <option value="story">Story</option>
-                                                    <option value="task">Task</option>
+                                                <select class="form-control select2" name="issue_type" id="issue_type">
+                                                    <?php if ($selectedproject->dash_type == 0) : ?>
+                                                        <option value="task">Task</option>
+                                                    <?php else : ?>
+                                                        <option value="epic">Epic</option>
+                                                        <option value="story">Story</option>
+                                                        <option value="task">Task</option>
+                                                    <?php endif ?>
                                                 </select>
                                             </div>
                                             <div class="col-sm-4 mb-3">
                                                 <label class="form-label">Status </label>
-                                                <select class="form-control" name="status">
+                                                <select class="form-control select2" name="status">
                                                     <?php foreach ($statuses as $status) : ?>
                                                         <option value="<?= $status["id"] ?>"><?= $status["title"] ?></option>
                                                     <?php endforeach ?>
@@ -91,7 +108,7 @@
 
                                             <div class="col-sm-4 mb-3">
                                                 <label class="form-label">Priority </label>
-                                                <select class="form-control" name="priority">
+                                                <select class="form-control select2" name="priority">
                                                     <?php foreach ($priorities as $priority) : ?>
                                                         <option value="<?= $priority["id"] ?>"><?= $priority["title"] ?>
                                                         </option>
@@ -115,36 +132,44 @@
                                                 <input type="text" class="form-control" name="title">
                                             </div>
                                             <div class="col-sm-12 mb-3">
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">Description <span class="text-danger">*</span></label>
                                                 <textarea name="description"></textarea>
                                             </div>
                                             <div class="col-sm-6 mb-3">
-                                                <label class="form-label">Assignee</label>
-                                                <select class="form-control" name="user">
+                                                <label class="form-label">Assignee <span class="text-danger">*</span></label>
+                                                <select class="form-control select2" name="user">
                                                     <option value="">Member</option>
-                                                    <?php foreach ($system_users as $system_user) {
-                                                        if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
-                                                            <option value="<?= htmlspecialchars($system_user->id) ?>">
-                                                                <?= htmlspecialchars($system_user->first_name) ?>
-                                                                <?= htmlspecialchars($system_user->last_name) ?>
+                                                    <?php foreach ($project_userss as $p_user) {
+                                                        if ($p_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                                                            <option value="<?= htmlspecialchars($p_user->id) ?>">
+                                                                <?= htmlspecialchars($p_user->first_name) ?>
+                                                                <?= htmlspecialchars($p_user->last_name) ?>
                                                             </option>
                                                     <?php }
                                                     } ?>
                                                 </select>
                                             </div>
-                                            <div class="col-sm-6 mb-3" id="sprint_div">
+                                            <div class="col-sm-6 mb-3 <?= ($selectedproject->dash_type == 0) ? 'hidden' : '' ?>" id="sprint_div">
                                                 <label class="form-label">Sprint</label>
-                                                <select class="form-control" name="sprint">
+                                                <select class="form-control select2" name="sprint">
                                                     <option value="">Sprint</option>
                                                     <?php foreach ($sprints as $sprint) : ?>
                                                         <option value="<?= $sprint["id"] ?>"><?= $sprint["title"] ?></option>
                                                     <?php endforeach ?>
                                                 </select>
                                             </div>
+                                            
+                                            <?php if ($selectedproject->dash_type == 1) : ?>
+                                                <div id="sub-childs">
+                                                </div>
+                                            <?php endif ?>
+
                                         </div>
                                         <div class="message"></div>
                                     </div>
-                                    <div class="card-footer text-end">
+                                    <!-- <?php var_dump(json_encode($project_userss)); ?> -->
+                                    <div class="card-footer d-flex justify-content-end">
+                                        <button type="button" id="sub-child-div" class="btn btn-light add-child mb-2 me-2"><i class="fa-solid fa-diagram-project me-2"></i> Child Issue</button>
                                         <button type="button" class="btn btn-primary mb-2 btn-create">+ Add</button>
                                     </div>
                                 </form>
@@ -201,10 +226,10 @@
                 success: function(result) {
                     console.log(result);
                     if (result['error'] == false) {
-                        if (redirect_to == 'scrum') {
-                            window.location.href = base_url + 'backlog/project/'+project_id;
-                        }else{
-                            window.location.href = base_url + 'board/tasks/'+project_id;
+                        if (redirect_to == '1') {
+                            window.location.href = base_url + 'backlog/project/' + project_id;
+                        } else {
+                            window.location.href = base_url + 'board/tasks/' + project_id;
                         }
                     } else {
                         $('.message').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
@@ -221,7 +246,7 @@
                 if (projectId !== '') {
                     $.ajax({
                         type: "POST",
-                        url: base_url + 'issues/get_project_users', // Replace with your AJAX endpoint URL
+                        url: base_url + 'issues/get_project_users',
                         data: {
                             project_id: projectId
                         },
@@ -263,15 +288,78 @@
 
             });
         });
-        $('#issue_type').on('change', function() {
-            issue_type = $('#issue_type').val();
-            if (issue_type !== 'task') {
-                $('#story_point_show').show();
-            } else {
-                $('#story_point_show').hide();
+    </script>
+
+    <script>
+        document.getElementById("project_id3").addEventListener("change", function() {
+            var projectId = this.value;
+            if (projectId !== "") {
+                window.location.href = base_url + 'issues/tasks/' + projectId;
             }
         });
+        $(document).ready(function() {
+            // Add child
+            $('.add-child').on('click', function() {
+                var newChild = '<div class="col-sm-12 mb-3">' +
+                    '<div class="row undercard">' +
+                    '<div class="col-md-5">' +
+                    '<select class="form-control select2" name="subType[]">' +
+                    '<option value="task">Task</option>' +
+                    '<option value="story">Story</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="col-sm-5 mb-3 ms-1">' +
+                    '<select class="form-control select2" name="subStatus[]">' +
+                    '<?php foreach ($statuses as $status) : ?>' +
+                    '<option value="<?= $status["id"] ?>"><?= $status["title"] ?></option>' +
+                    '<?php endforeach ?>' +
+                    '</select>' +
+                    '</div>' +
+                    '<div class="col-md-10">' +
+                    '<input type="text" class="form-control" name="subTitle[]" placeholder="Sub Child Description">' +
+                    '</div>' +
+                    '<div class="col-md-1">' +
+                    '<button type="button" class="btn btn-outline-danger ms-1 remove-child"><i class="fas fa-times"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#sub-childs').append(newChild);
+            });
+
+            // Remove child
+            $('#sub-childs').on('click', '.remove-child', function() {
+                $(this).closest('.col-sm-12').remove();
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var issueTypeSelect = document.getElementById('issue_type');
+            var subChildsDiv = document.getElementById('sub-childs');
+            var subChildsBtn = document.getElementById('sub-child-div');
+
+            issueTypeSelect.addEventListener('change', function() {
+                if (this.value === 'epic') {
+                    subChildsDiv.style.display = 'block';
+                    subChildsBtn.style.display = 'block';
+                } else {
+                    subChildsDiv.style.display = 'none';
+                    subChildsBtn.style.display = 'none';
+                }
+            });
+
+            if (issueTypeSelect.value === 'epic') {
+                subChildsDiv.style.display = 'block';
+                subChildsBtn.style.display = 'block';
+            }
+        });
+
+
+        $('.select2').select2()
+
+
     </script>
+
 
 
 </body>

@@ -134,7 +134,7 @@
                                             </div>
 
                                             <div class="col-auto ms-2">
-                                                <select class="me-sm-2 form-control wide issue_user" id="inlineFormCustomSelect12" data-issue-id="<?= $issue["id"]; ?>">
+                                                <select class="me-sm-2 form-control wide issue_user" id="inlineForm CustomSelect12" data-issue-id="<?= $issue["id"]; ?>">
                                                     <option value="">Member</option>
                                                     <?php foreach ($issue["project_users"] as $system_user) {
                                                         if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -179,10 +179,9 @@
                             <div class="card-footer d-flex justify-content-end">
                                 <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
                                     <div class="col-1">
-                                        <a href="<?= base_url('issues') ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
+                                        <a href="<?= base_url('issues/tasks/' . $projectid) ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
                                     </div>
                                 <?php endif ?>
-
                             </div>
                         </div>
                     </div>
@@ -309,7 +308,7 @@
                                 <div class="card-footer d-flex justify-content-end">
                                     <?php if ($this->ion_auth->is_admin() || permissions('task_create')) : ?>
                                         <div class="col-1">
-                                            <a href="<?= base_url('issues') ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
+                                            <a href="<?= base_url('issues/tasks/' . $projectid) ?>" class="btn btn-primary btn-block btn-xs">+ Issue</a>
                                         </div>
                                     <?php endif ?>
                                 </div>
@@ -440,6 +439,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="issue-detail-modal">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -456,7 +456,11 @@
                         <div class="default-tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#contact"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
+                                    <a class="nav-link active" data-bs-toggle="tab" id="contact22" href="#contact"><i class="fa-solid fa-diagram-project me-2"></i> Project </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link " data-bs-toggle="tab" id="sub22" href="#sub"><i class="fa-solid fa-diagram-next me-2"></i> Sub Issues </a>
                                 </li>
 
                                 <li class="nav-item">
@@ -472,6 +476,12 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
+                                <div class="tab-pane fade" id="sub" role="tabpanel">
+                                    <div class="pt-2" id="subtasksDetail">
+
+                                    </div>
+                                </div>
+
                                 <div class="tab-pane fade" id="profile">
                                     <div class="cm-content-body publish-content form excerpt">
                                         <ul class="list-style-1 block">
@@ -496,6 +506,7 @@
                                         </ul>
                                     </div>
                                 </div>
+
                                 <div class="tab-pane fade" id="home" role="tabpanel">
                                     <div class="pt-2">
                                         <h4 id="sprint_title"></h4>
@@ -535,12 +546,57 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="sub-task-edit-modal">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="<?= base_url('issues/edit_sub_task') ?>" method="post" id="modal-edit-sub-task-part">
+                        <input type="hidden" name="update_id" id="sub-task-id">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xl-12 form-group mb-3">
+                                    <label class="col-form-label"><?= $this->lang->line('title') ? $this->lang->line('title') : 'Title' ?><span class="text-danger">*</span></label>
+                                    <input type="text" name="title" class="form-control" id="sub-task-title" required="">
+                                </div>
+                                <div class="col-xl-12 form-group mb-3">
+                                    <label class="col-form-label"><?= $this->lang->line('issue_type') ? $this->lang->line('issue_type') : 'Issue Type' ?></label>
+                                    <select name="issue_type" class="form-control" id="sub-task-type">
+                                        <option value="task">Task</option>
+                                        <option value="story">Story</option>
+                                    </select>
+                                </div>
+                                <div class="col-xl-12 form-group mb-3">
+                                    <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'status' ?></label>
+                                    <select name="status" class="form-control" id="sub-task-status">
+                                        <?php foreach ($task_statuses as $task_status) : ?>
+                                            <option value="<?= $task_status["id"] ?>"><?= $task_status["title"] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <div class="col-lg-4">
+                                <button type="button" class="btn btn-edit-sub-task btn-block btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <!--**********************************
 	Content body end
 ***********************************-->
     </div>
     <?php $this->load->view('includes/scripts'); ?>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <?php
+    echo "<script>console.log(" . json_encode($issues) . ");</script>";
+    ?>
+
     <script>
         $(document).ready(function() {
             updateItemCounts();
@@ -1081,6 +1137,50 @@
                     } else {
                         $("#sprint_title").html('Backlog');
                     }
+                    var subTaskHTML = '';
+                    if (result.SubTasks && result.SubTasks.length > 0) {
+                        result.SubTasks.forEach(SubTask => {
+                            subTaskHTML += `<div class="project-details">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h5 class="mt-3">` + SubTask.title + `</h5>
+                                                <div class="dropdown">
+                                                    <div class="btn-link" data-bs-toggle="dropdown">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5" />
+                                                            <circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <?php if (permissions('task_delete') || $this->ion_auth->is_admin()) { ?>
+                                                            <a class="dropdown-item delete_issue text-danger" href="javascript:void(0)" data-issue-id="` + SubTask.id + `">Delete</a>
+                                                        <?php } ?>
+                                                        
+                                                        <?php if (permissions('task_edit') || $this->ion_auth->is_admin()) { ?>
+                                                        <a class="dropdown-item edit_sub_task text-primary" href="javascript:void(0)" data-type="` + SubTask.issue_type + `" data-title="` + SubTask.title + `" data-status2="` + SubTask.status.id + `" data-bs-toggle="modal" data-bs-target="#sub-task-edit-modal" data-issue-id="` + SubTask.id + `">Edit</a>
+                                                        <?php } ?>
+                                                        
+                                                        <?php if (permissions('task_status') || $this->ion_auth->is_admin()) { ?>
+                                                        <?php foreach ($task_statuses as $status) : ?>
+                                                            <a class="dropdown-item status_change text-<?= $status["class"] ?>" href="javascript:void(0)" data-status="<?= $status["id"] ?>" data-issue-id="` + SubTask.id + `"><?= $status["title"] ?></a>
+                                                        <?php endforeach ?>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="projects">
+                                                <span class="badge badge-warning light me-3">` + SubTask.issue_type + `</span>
+                                                <span class="badge badge-` + SubTask.status.class + ` light">` + SubTask.status.title + `</span>
+                                            </div>
+                                        </div>
+                                        <hr>`;
+
+                        });
+                    } else {
+                        subTaskHTML += `<p class="mt-3">No Sub Issue Available</p>`;
+                    }
+                    $("#subtasksDetail").html(subTaskHTML);
+
                     if (result.sprint && result.sprint.goal !== null) {
                         $("#sprint_goal").html(result.sprint.goal);
                     } else {
@@ -1121,6 +1221,45 @@
                 }
             })
         });
+        $(document).on('click', '.status_change', function(e) {
+            var id = $(this).data("issue-id");
+            var status = $(this).data("status");
+            console.log(id, status);
+            $.ajax({
+                url: '<?= base_url('issues/update_issues_status') ?>',
+                type: 'POST',
+                data: {
+                    issue: id,
+                    status: status
+                },
+                success: function(response) {
+                    var tableData = JSON.parse(response);
+                    console.log(tableData);
+                    $('#issue-detail-modal').modal('hide');
+                    toastr.success("Status Changed", "Success", {
+                        positionClass: "toast-top-right",
+                        timeOut: 5e3,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        });
         $(document).on('click', '.delete-comment', function(e) {
             e.preventDefault();
             var id = $(this).data("id");
@@ -1154,6 +1293,42 @@
                     });
                 }
             });
+        });
+        $(document).on('click', '.edit_sub_task', function(e) {
+            e.preventDefault();
+            $('#sub-task-id').val($(this).data('issue-id'));
+            $('#sub-task-status').val($(this).data('status2'));
+            $('#sub-task-title').val($(this).data('title'));
+            $('#sub-task-type').val($(this).data('type'));
+            console.log($(this).data('title'));
+        });
+        $("#sub-task-edit-modal").on('click', '.btn-edit-sub-task', function(e) {
+            var modal = $('#sprint-edit-modal');
+            var form = $('#modal-edit-sub-task-part');
+            var formData = form.serialize();
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                dataType: "json",
+                beforeSend: function() {
+                    $(".modal-body").append(ModelProgress);
+                },
+                success: function(result) {
+                    console.log(result);
+                    if (result['error'] == false) {
+                        location.reload();
+                    } else {
+                        modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+                    }
+                },
+                complete: function() {
+                    $(".loader-progress").remove();
+                }
+            });
+
+            e.preventDefault();
         });
     </script>
 

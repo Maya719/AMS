@@ -77,7 +77,7 @@
                           </div>
                           <div class="col-6 mb-3">
                             <label for="exampleFormControlInput6" class="form-label">Martial Status</label>
-                            <select class="form-select" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
+                            <select class="form-select select2" name="martial_status" id="exampleFormControlInput6" aria-label="Default select example">
                               <option selected value="">Martial Status</option>
                               <option value="single" <?= $profile_user['martial_status'] === 'single' ? 'selected' : '' ?>>Single</option>
                               <option value="married" <?= $profile_user['martial_status'] === 'married' ? 'selected' : '' ?>>Married</option>
@@ -85,7 +85,7 @@
                           </div>
                           <div class="col-6 mb-3">
                             <label for="exampleFormControlInput7" class="form-label">Gender</label>
-                            <select class="form-select" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
+                            <select class="form-select select2" name="gender" id="exampleFormControlInput7" aria-label="Default select example">
                               <option value="male" <?= $profile_user['gender'] === 'male' ? 'selected' : '' ?>>Male</option>
                               <option value="female" <?= $profile_user['gender'] === 'female' ? 'selected' : '' ?>>Female</option>
                               <option value="other" <?= $profile_user['gender'] === 'other' ? 'selected' : '' ?>>Other</option>
@@ -189,6 +189,9 @@
 
       e.preventDefault();
     });
+
+    $('.select2').select2()
+
   </script>
 
 </body>

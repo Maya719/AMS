@@ -8,7 +8,7 @@ class Issues extends CI_Controller
     {
         parent::__construct();
     }
-    public function index()
+    public function tasks($project_id = '')
     {
         if ($this->ion_auth->logged_in()) {
             $this->data['page_title'] = 'Create issue - ' . company_name();
@@ -21,8 +21,10 @@ class Issues extends CI_Controller
             $query = $this->db->get();
             $this->data['projects'] = $query->result_array();
 
+            $sprint_data = $this->board_model->get_running_sprint($project_id);
             $this->db->select('*');
             $this->db->from('sprints');
+            $this->db->where_in('id', $sprint_data->id);
             $this->db->where_in('saas_id', $this->session->userdata());
             $query = $this->db->get();
             $this->data['sprints'] = $query->result_array();
@@ -50,7 +52,21 @@ class Issues extends CI_Controller
                 $users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
                 $this->data['system_users'] = $users;
             }
+            $this->db->select('*');
+            $this->db->from('projects');
+            $this->db->where_in('id', $project_id);
+            $query = $this->db->get();
+            $this->data['selectedproject'] = $query->row();
 
+            $this->db->select('*');
+            $this->db->from('project_users pu');
+            $this->db->join('users u', 'pu.user_id = u.id', 'left');
+            $this->db->where_in('project_id', $project_id);
+            $query = $this->db->get();
+            $project_userss = $query->result();
+
+            $this->data["project_userss"] = $project_userss;
+            $this->data["project_id"] = $project_id;
             $this->load->view('issues-create', $this->data);
         } else {
             redirect('auth', 'refresh');
@@ -84,6 +100,13 @@ class Issues extends CI_Controller
             $this->db->where('id', $id);
             $query2 = $this->db->get();
             $this->data['issue'] = $query2->row();
+
+            $this->db->select('*');
+            $this->db->from('tasks');
+            $this->db->where('parent_task', $id);
+            $query2 = $this->db->get();
+            $this->data['sub_issues'] = $query2->result();
+
             $project_id = $query2->row()->project_id;
 
             $this->data['project_id'] = $project_id;
@@ -117,11 +140,19 @@ class Issues extends CI_Controller
             $query2 = $this->db->get();
             $this->data['issues_users'] = $query2->row();
 
+            $sprint_data = $this->board_model->get_running_sprint($project_id);
             $this->db->select('*');
             $this->db->from('sprints');
+            $this->db->where_in('id', $sprint_data->id);
             $this->db->where_in('saas_id', $this->session->userdata());
             $query = $this->db->get();
             $this->data['sprints'] = $query->result_array();
+
+            $this->db->select('*');
+            $this->db->from('projects');
+            $this->db->where_in('id', $project_id);
+            $query = $this->db->get();
+            $this->data['selectedproject'] = $query->row();
 
             if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
@@ -165,6 +196,29 @@ class Issues extends CI_Controller
                 ];
                 $id = $this->issues_model->create_issue($data);
                 if ($id) {
+                    $this->data["id"] = $id;
+
+                    $subTitle = $this->input->post('subTitle');
+                    if (isset($subTitle) && !empty($subTitle)) {
+                        $subStatus = $this->input->post('subStatus');
+                        $subTypes = $this->input->post('subType');
+                        foreach ($subTypes as $key => $subTypes) {
+                            if ($subTitle[$key]) {
+                                $subTask = [
+                                    'parent_task' => $this->data["id"],
+                                    'title' => $subTitle[$key],
+                                    'saas_id' => $this->session->userdata('saas_id'),
+                                    'project_id' => $this->input->post('project_id'),
+                                    'issue_type' => $subTypes,
+                                    'created_by' => $this->session->userdata('user_id'),
+                                    'priority' => $this->input->post('priority'),
+                                    'status' => $subStatus[$key] ? $subStatus[$key] : '1',
+                                    'description' => $this->input->post('description') ? $this->input->post('description') : '',
+                                ];
+                                $sub_id = $this->issues_model->create_issue($subTask);
+                            }
+                        }
+                    }
                     if ($this->input->post('sprint')) {
                         $sprintIssue = [
                             'issue_id' => $id,
@@ -181,9 +235,9 @@ class Issues extends CI_Controller
                         $this->issues_model->create_task_user($sprintIssue);
                     }
 
+                    $this->data['data'] = $this->input->post();
                     $this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
                     $this->session->set_flashdata('message_type', 'success');
-                    $this->data['data'] = $data;
                     $this->data['error'] = false;
                     $this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
                     echo json_encode($this->data);
@@ -330,7 +384,7 @@ class Issues extends CI_Controller
 
     public function delete_issue($id = '')
     {
-        if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin())) {
+        if ($this->ion_auth->logged_in()) {
             if (empty($id)) {
                 $id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
             }
@@ -375,6 +429,41 @@ class Issues extends CI_Controller
             }
             $data = $this->issues_model->get_issue_by_id($id);
             echo json_encode($data);
+        } else {
+            $this->data['error'] = true;
+            $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
+            echo json_encode($this->data);
+        }
+    }
+    public function edit_sub_task()
+    {
+        if ($this->ion_auth->logged_in()) {
+            $this->form_validation->set_rules('update_id', 'ID', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('issue_type', 'Type', 'trim|required|strip_tags|xss_clean');
+            $this->form_validation->set_rules('title', 'Title', 'trim|required|strip_tags|xss_clean');
+            if ($this->form_validation->run() == TRUE) {
+                $data = [
+                    'title' => $this->input->post('title'),
+                    'issue_type' => $this->input->post('issue_type'),
+                    'status' => $this->input->post('status') ? $this->input->post('status') : '1',
+                ];
+                if ($this->issues_model->edit_issue($this->input->post('update_id'), $data)) {
+                    $this->session->set_flashdata('message', $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated successfully.");
+                    $this->session->set_flashdata('message_type', 'success');
+                    $this->data['data'] = $data;
+                    $this->data['error'] = false;
+                    $this->data['message'] = $this->lang->line('updated_successfully') ? $this->lang->line('updated_successfully') : "Updated successfully.";
+                    echo json_encode($this->data);
+                } else {
+                    $this->data['error'] = true;
+                    $this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+                    echo json_encode($this->data);
+                }
+            } else {
+                $this->data['error'] = true;
+                $this->data['message'] = validation_errors();
+                echo json_encode($this->data);
+            }
         } else {
             $this->data['error'] = true;
             $this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";

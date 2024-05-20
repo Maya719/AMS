@@ -757,9 +757,9 @@
             <li><a href="<?= base_url('front/about') ?>"><?= $this->lang->line('about') ? $this->lang->line('about') : 'About Us' ?></a></li>
             <li><a href="<?= base_url('front/saas-privacy-policy') ?>"><?= $this->lang->line('privacy_policy') ? $this->lang->line('privacy_policy') : 'Privacy Policy' ?></a></li>
             <li><a href="<?= base_url('front/saas-terms-and-conditions') ?>"><?= $this->lang->line('terms_and_conditions') ? $this->lang->line('terms_and_conditions') : 'Terms and Conditions' ?></a></li>
-         
+
             <li><a href="<?= base_url('front/saas-guide') ?>"><?= $this->lang->line('guide') ? $this->lang->line('guide') : 'Guide' ?></a></li>
-         
+
           </ul>
         </li>
 
@@ -778,7 +778,7 @@
           </a>
         </li>
 
-        <?php if (is_module_allowed('projects') && ( $this->ion_auth->is_admin() || permissions('client_view'))) { ?>
+        <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('client_view'))) { ?>
           <li><a href="<?= base_url('users/client') ?>" aria-expanded="false">
               <i class="fas fa-handshake"></i>
               <span class="nav-text">Clients</span>
@@ -877,7 +877,7 @@
               <?php if (($this->ion_auth->is_admin() || permissions('departments_view')) && is_module_allowed('departments')) { ?>
                 <li><a href="<?= base_url('settings/departments') ?>"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></a></li>
               <?php } ?>
-              <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) &&( is_module_allowed('leaves') && is_module_allowed('leaves'))) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) && (is_module_allowed('leaves') && is_module_allowed('leaves'))) { ?>
                 <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('applied_policy') ? $this->lang->line('applied_policy') : 'Applied Policy' ?></a></li>
               <?php } ?>
 

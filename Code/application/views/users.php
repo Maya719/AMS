@@ -58,14 +58,14 @@
           <div class="card-body">
             <div class="row">
               <div class="col-lg-4">
-                <select class="form-select" id="active">
+                <select class="form-select select2" id="active">
                   <option value="">All</option>
                   <option value="1" selected>Active</option>
                   <option value="0">Inactive</option>
                 </select>
               </div>
               <div class="col-lg-4">
-                <select class="form-select" id="department">
+                <select class="form-select select2" id="department">
                   <option value="" selected>Department</option>
                   <?php foreach ($departments as $department) : ?>
                     <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
@@ -73,7 +73,7 @@
                 </select>
               </div>
               <div class="col-lg-4">
-                <select class="form-select" id="shift">
+                <select class="form-select select2" id="shift">
                   <option value="" selected>Shift</option>
                   <?php foreach ($shift_types as $shift_type) : ?>
                     <option value="<?= $shift_type["id"] ?>"><?= $shift_type["name"] ?></option>
@@ -220,6 +220,9 @@
         table.find('tbody').empty();
       }
     });
+
+    $('.select2').select2()
+
   </script>
 </body>
 
