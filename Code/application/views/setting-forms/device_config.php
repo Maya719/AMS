@@ -1,6 +1,6 @@
 <div class="row d-flex justify-content-end">
   <div class="col-xl-2 col-sm-3 mt-2">
-    <a href="#" data-bs-toggle="modal" data-bs-target="#add-device-modal" class="btn btn-block btn-primary">+ ADD</a>
+    <a href="#" id="stepDeviceBtn" data-bs-toggle="modal" data-bs-target="#add-device-modal" class="btn btn-block btn-primary">+ ADD</a>
   </div>
   <div class="card mt-3 p-0">
     <div class="card-body p-0">
@@ -40,7 +40,7 @@
 
 <div class="modal fade" id="add-device-modal">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
+    <div class="modal-content" id="stepDeviceModel">
       <div class="modal-header">
         <h5 class="modal-title">Create</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -50,21 +50,21 @@
           <div class="row" id="dates">
             <div class="form-group col-md-12 mb-3">
               <label class="col-form-label"><?= $this->lang->line('device_name') ? $this->lang->line('device_name') : 'Device name' ?><span class="text-danger">*</span></label>
-              <input type="text" name="device_name" class="form-control" required="">
+              <input type="text" id="stepInput4" name="device_name" class="form-control" required="">
             </div>
             <div class="form-group col-md-12 mb-3">
               <label class="col-form-label"><?= $this->lang->line('device_ip') ? $this->lang->line('device_ip') : 'Device Ip Address' ?><span class="text-danger">*</span></label>
-              <input type="text" name="device_ip" class="form-control" required="">
+              <input type="text" id="stepInput5" name="device_ip" class="form-control" required="">
             </div>
             <div class="form-group col-md-12">
               <label class="col-form-label"><?= $this->lang->line('port') ? $this->lang->line('port') : 'Device External Port' ?><span class="text-danger">*</span></label>
-              <input type="text" name="port" class="form-control" required="">
+              <input type="text" id="stepInput6" name="port" class="form-control" required="">
             </div>
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">
           <div class="col-lg-4">
-            <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
+            <button type="button" id="stepDeviceModelBtn" class="btn btn-create btn-block btn-primary">Create</button>
           </div>
         </div>
       </form>
