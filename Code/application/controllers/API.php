@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-
+// comment
 require __DIR__ . '/../../../vendor/autoload.php';
 
 use Minishlink\WebPush\WebPush;
