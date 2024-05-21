@@ -356,7 +356,6 @@ class Front extends CI_Controller
 			if ($theme_name == 'theme_four') {
 				
 				$this->load->view('front/four/front', $this->data);
-				$this->load->view('setting-forms/pricing_table', $this->data);
 
 			}elseif ($theme_name == 'theme_three') {
 				$this->load->view('front/three/front', $this->data);
