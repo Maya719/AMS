@@ -1851,9 +1851,8 @@ class Ion_auth_model extends CI_Model
 			$this->identity_column => $user->{$this->identity_column},
 			'email'                => $user->email,
 			'saas_id'              => $user->saas_id,
-			'user_id'              => $user->id, 
+			'user_id'              => $user->id, //everyone likes to overwrite id so we'll use user_id
 			'old_last_login'       => $user->last_login,
-			'show_demo'       	   => $user->last_login,
 			'last_check'           => time(),
 			'alerts'               => '1',
 			'reminder'               => '1',
