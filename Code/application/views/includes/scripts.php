@@ -231,16 +231,3 @@
   }
   checkSprintDate();
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
-<script>
-  $(document).ready(function() {
-    <?php
-    if (is_null($this->session->userdata('show_demo'))) {
-    ?>
-      $('#myModel').modal('show');
-    <?php
-    }
-    ?>
-  });
-</script>

@@ -87,9 +87,6 @@ if($my_current_lang){
 
 <link href="<?=base_url('assets2/vendor/select2/css/select2.min.css')?>" rel="stylesheet" type="text/css"/>	
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/introjs.min.css">
-
-
 <link href="<?=base_url('assets2/vendor/bootstrap-select/css/bootstrap-select.min.css')?>" rel="stylesheet" type="text/css"/>		
 
 <link href="<?=base_url('assets2/css/style.css')?>" rel="stylesheet" type="text/css"/>		
