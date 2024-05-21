@@ -28,7 +28,6 @@ class Home extends CI_Controller
 			} else {
 				$this->data["report"] = $this->attendance_model->get_count_abs();
 				$this->data["events"] = $this->home_model->Get_events();
-
 				$this->load->view('home', $this->data);
 				// echo json_encode($this->data);
 			}

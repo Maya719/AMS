@@ -126,13 +126,6 @@ class Auth extends CI_Controller
 			$remember = (bool)$this->input->post('remember');
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), true)) {
-				$user = $this->ion_auth->user()->row();
-
-				if (is_null($user->last_login) || $user->last_login == '0000-00-00 00:00:00') {
-					$this->session->set_userdata('first_time_login', TRUE);
-				} else {
-					$this->session->set_userdata('first_time_login', FALSE);
-				}
 				$this->data['error'] = false;
 				$this->data['message'] = $this->ion_auth->messages();
 				echo json_encode($this->data);
@@ -418,7 +411,7 @@ class Auth extends CI_Controller
 				$this->session->set_flashdata('message_type', 'success');
 			}
 			$saas_id = $this->ion_auth->encryptId($id, 'GeekForGeek');
-			redirect("auth/create_profile/" . $saas_id, 'refresh');
+			redirect("auth/create_profile/".$saas_id, 'refresh');
 		}
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !permissions('user_edit') && !permissions('client_edit') && !$this->ion_auth->in_group(3))) {

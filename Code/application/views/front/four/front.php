@@ -360,11 +360,11 @@
 
                             <div class="tp-portfolio-tab-button d-flex align-items-center justify-content-center">
                                 <ul class="nav" id="pills-tab" role="tablist">
-                                    <li class="nav-item" role="presentation">
+                                    <!-- <li class="nav-item" role="presentation">
                                         <button class=" active" id="kitchen-tab" data-bs-toggle="pill" data-bs-target="#kitchen" type="button" role="tab" aria-controls="kitchen" aria-selected="true">Admin Dashboard</button>
-                                    </li>
+                                    </li> -->
                                     <li class="nav-item" role="presentation">
-                                        <button class="" id="OFFICE-tab" data-bs-toggle="pill" data-bs-target="#OFFICE" type="button" role="tab" aria-controls="OFFICE" aria-selected="false">HR Dashboard</button>
+                                        <button class="active" id="OFFICE-tab" data-bs-toggle="pill" data-bs-target="#OFFICE" type="button" role="tab" aria-controls="OFFICE" aria-selected="false">HR Dashboard</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="" id="HOME-tab" data-bs-toggle="pill" data-bs-target="#HOME" type="button" role="tab" aria-controls="HOME" aria-selected="false">PMS Dashboard</button>
@@ -377,7 +377,7 @@
                         </div>
                         <div class="tab-content p-relative wow fadeInDown" data-wow-duration="1s" data-wow-delay=".3s" id="pills-tabContent">
 
-                            <div class="tab-pane fade show active" id="kitchen" role="tabpanel" aria-labelledby="kitchen-tab" tabindex="0">
+                            <!-- <div class="tab-pane fade show " id="kitchen" role="tabpanel" aria-labelledby="kitchen-tab" tabindex="0">
                                 <div class="">
                                     <div class="tp-portfolio-slider-3">
                                         <div class="tp-portfolio-3-inner grid-item item-2 item-1">
@@ -387,8 +387,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade show" id="OFFICE" role="tabpanel" aria-labelledby="OFFICE-tab" tabindex="0">
+                            </div> -->
+                            <div class="tab-pane fade show active" id="OFFICE" role="tabpanel" aria-labelledby="OFFICE-tab" tabindex="0">
                                 <div class="">
                                     <div class="tp-portfolio-slider-3">
                                         <div class="tp-portfolio-3-inner grid-item item-1 item-3">
@@ -441,7 +441,7 @@
                             <div class="tp-inner-pre">
                                 <span><i class="flaticon-mop"></i></span>
                             </div>
-                            <h3 class="tp-section__title">price and planning</h3>
+                            <h3 class="tp-section__title">Price and Planning</h3>
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -479,14 +479,42 @@
                                                         </p>
                                                     </div>
                                                     <div class="ms-3 flex justify-content-start mb-2">
-                                                        <ul class="text-xl">
-                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['storage'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['storage'] . ' GB') ?></span><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?></li>
+                                                        <ul class="text-xl mb-3">
+                                                            <li style="list-style: none; " class="d-flex justify-content-between align-items-center">
+                                                                <span>
+                                                                    <?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?>
+                                                                </span>
+                                                                <span class="badge bg-secondary mx-3">
+                                                                    <?= $plan['storage'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['storage'] . ' GB') ?>
+                                                                </span>
+                                                            </li>
 
-                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['projects'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['projects']) ?></span> <?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></li>
+                                                            <li style="list-style: none;" class="   d-flex justify-content-between align-items-center">
+                                                                <span>
 
-                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['tasks'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['tasks']) ?></span> <?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></li>
+                                                                    <?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?>
+                                                                </span>
+                                                                <span class="badge bg-secondary mx-3">
+                                                                    <?= $plan['projects'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['projects']) ?>
+                                                                </span>
+                                                            </li>
 
-                                                            <li style="list-style: none;"><span class="badge bg-secondary mx-3"><?= $plan['users'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['users']) ?></span> <?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?>
+                                                            <li style="list-style: none;" class="  d-flex justify-content-between align-items-center">
+                                                                <span>
+
+                                                                    <?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?>
+                                                                </span>
+                                                                <span class="badge bg-secondary mx-3"><?= $plan['tasks'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['tasks']) ?></span>
+                                                            </li>
+
+                                                            <li style="list-style: none;" class=" d-flex justify-content-between align-items-center">
+                                                                <span>
+                                                                    Employees<br>
+                                                                    <strong style="font-size: 13.5px;">Employee addition: $3 fee</strong>
+                                                                    <!-- <?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?> -->
+                                                                </span>
+                                                                <span class="badge bg-secondary mx-3"><?= $plan['users'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['users']) ?></span>
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -619,13 +647,13 @@
                                     Empower your teams with streamlined workflows, enabling faster decision-making and smoother project execution.
                                 </li>
                                 <li>
-                                    Break down silos and foster collaboration across teams by bringing together all project-related details within Acme's unified platform.
+                                    Break down silos and foster collaboration across teams by bringing together all project-related details within PERI's unified platform.
                                 </li>
                                 <li>
                                     Maximize productivity and minimize delays by having immediate access to relevant context, facilitating quicker problem-solving and decision-making.
                                 </li>
                                 <li>
-                                    Ensure transparency and accountability across your projects with Acme's comprehensive visibility into every aspect of your workflow.
+                                    Ensure transparency and accountability across your projects with PERI's comprehensive visibility into every aspect of your workflow.
                                 </li>
                             </ul>
                             </p>
@@ -646,11 +674,11 @@
                             <br>
                             <ul class="list_style container">
                                 <li>
-                                    Tailor Acme to align precisely with your team's processes, workflows, and terminology. </li>
+                                    Tailor PERI to align precisely with your team's processes, workflows, and terminology. </li>
                                 <li>
-                                    Enjoy the flexibility of Acme's customizable features, adapting the platform to your team's unique requirements. </li>
+                                    Enjoy the flexibility of PERI's customizable features, adapting the platform to your team's unique requirements. </li>
                                 <li>
-                                    Streamline operations by customizing Acme to match your preferred roles, permissions enhancing communication and collaboration. </li>
+                                    Streamline operations by customizing PERI to match your preferred roles, permissions enhancing communication and collaboration. </li>
                                 <li>
                                     Empower your team with a tailored workspace that meets their needs, boosting efficiency.
                                 </li>
@@ -681,17 +709,17 @@
 
                             <ul class="list_style container">
                                 <li>
-                                    Acme streamlines your daily operations by automating repetitive tasks, saving time and reducing manual workload.
+                                    PERI streamlines your daily operations by automating repetitive tasks, saving time and reducing manual workload.
                                 </li>
                                 <li>
-                                    Use Acme with your organization for a seamless workflow, ensuring data consistency and efficiency.
+                                    Use PERI with your organization for a seamless workflow, ensuring data consistency and efficiency.
                                 <li>
-                                    Acme offers a complete suite of HR management features, including performance management, and attendance tracking.
+                                    PERI offers a complete suite of HR management features, including performance management, and attendance tracking.
                                 <li>
-                                    Acme provides valuable insights into your operations through comprehensive analytics and reporting tools, empowering data-driven decision-making.
+                                    PERI provides valuable insights into your operations through comprehensive analytics and reporting tools, empowering data-driven decision-making.
                                 </li>
                                 <li>
-                                    With Acme, employees experience a smoother onboarding process, streamlined performance evaluations, and simplified leave management, resulting in higher satisfaction.
+                                    With PERI, employees experience a smoother onboarding process, streamlined performance evaluations, and simplified leave management, resulting in higher satisfaction.
                                 </li>
                             </ul>
                             </p>
@@ -719,6 +747,10 @@
                                     Work closely with your organization to develop and implement strategies that align with its vision and values.
                                 <li>
                                     Establish clear metrics and goals to track progress and measure the success of initiatives implemented to support organizational success.
+                                </li>
+                               
+                                <li>
+                                    Foster a culture of innovation and continuous improvement by encouraging feedback, experimentation, and collaboration among team members, driving sustainable growth and competitive advantage.
                                 </li>
                             </ul>
                             </p>
@@ -779,7 +811,7 @@
                             </div>
                             <h3 class="tp-section__title">Everything your<br> team is looking for</h3>
                             <p>
-                                Acme's remarkable adaptability makes it capable of managing various types of tasks efficiently. <br>
+                                PERI's remarkable adaptability makes it capable of managing various types of tasks efficiently. <br>
                                 Moreover, our commitment to continuous innovation ensures that we're always enhancing our platform to meet evolving needs and challenges.
                             </p>
                             <div class="tp-about-3-inner d-flex">
@@ -787,9 +819,9 @@
                                     <i class="fas fa-tasks"></i>
                                 </div>
                                 <div class="tp-about-inner-text">
-                                    <h4>Acme's Excellence</h4>
+                                    <h4>PERI's Excellence</h4>
                                     <p>
-                                        "<em>Acme excels, setting industry standards. We continually refine our approach to meet your team's evolving needs.</em>"
+                                        "<em>PERI excels, setting industry standards. We continually refine our approach to meet your team's evolving needs.</em>"
                                     </p>
                                 </div>
                             </div>
@@ -902,7 +934,7 @@
                             <span class="tp-section__title-pre-2">
                                 CONTACT US
                             </span>
-                            <h3 class="tp-section__title">GET IN TOUCH</h3>
+                            <h3 class="tp-section__title">Get in Touch</h3>
                         </div>
                         <div class="tp-contact-from p-relative" data-background="assets/img/brand/home-2/form-input.png">
                             <div class="tp-brands-from-overlay"></div>
@@ -970,7 +1002,7 @@
                             </div>
                             <div class="contact-inner">
                                 <p>Address:</p>
-                                <a target="_blank" style="font-size: 18px;" href="#">Dubai</a>
+                                <a target="_blank" style="font-size: 18px;" href="https://www.google.com/maps/place/Dubai+-+United+Arab+Emirates/@25.0756569,54.8971529,10z/data=!3m1!4b1!4m6!3m5!1s0x3e5f43496ad9c645:0xbde66e5084295162!8m2!3d25.2048493!4d55.2707828!16zL20vMDFmMDhy?entry=ttu" target="_blank">Dubai</a>
                             </div>
                         </div>
                     </div>
@@ -1003,14 +1035,14 @@
                                 <div class="tp-footer-2-widget mb-30">
                                     <span class="mb-30">Contact Us</span>
                                     <div class="tp-footer-2-widget-contact d-flex align-items-center mb-30">
-                                        <a class="icon" href="#"><i class="flaticon-telephone-call"></i></a>
+                                        <a class="icon" href="tel:051-6102534"><i class="flaticon-telephone-call"></i></a>
                                         <div class="contact-inner">
                                             <p>Phone:</p>
                                             <a href="tel:051-6102534" style="font-size: 18px;">051-6102534</a>
                                         </div>
                                     </div>
                                     <div class="tp-footer-2-widget-contact d-flex align-items-center">
-                                        <a class="icon" href="#"><i class="flaticon-mail"></i></a>
+                                        <a class="icon" href="mailto:ag.rana@airnet-technologies.com"><i class="flaticon-mail"></i></a>
                                         <div class="contact-inner">
                                             <p>E-mail:</p>
                                             <a href="mailto:ag.rana@airnet-technologies.com" style="font-size: 18px;">ag.rana@airnet-technologies.com</a>
@@ -1058,9 +1090,9 @@
                             <div class="tp-btn-effect">
                                 <div class="tp-footer-2-social text-md-center d-flex align-items-center">
                                     <span>Follow Us:</span>
-                                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                                    <a href="#"><i class="fa-brands fa-skype"></i></a>
+                                    <a href="https://www.facebook.com/MobiPixels" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                                    <a href="https://www.linkedin.com/company/mobipixels" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                                    <a href="https://www.youtube.com/@mobipixels4547" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                                 </div>
                             </div>
                         </div>
