@@ -1,6 +1,6 @@
 <div class="row d-flex justify-content-end">
   <div class="col-xl-2 col-sm-3 mt-2">
-    <a href="#" data-bs-toggle="modal" data-bs-target="#add-department-modal" class="btn btn-block btn-primary">+ ADD</a>
+    <a href="#" id="departemntAddGuide" data-bs-toggle="modal" data-bs-target="#add-department-modal" class="btn btn-block btn-primary">+ ADD</a>
   </div>
   <div class="card mt-3 p-0">
     <div class="card-body p-1">
@@ -43,7 +43,7 @@
 
 <div class="modal fade" id="add-department-modal">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
+    <div class="modal-content" id="stepGuideDepartmentModel">
       <div class="modal-header">
         <h5 class="modal-title">Create</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -52,12 +52,12 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="col-form-label"><?= $this->lang->line('department_name') ? $this->lang->line('department_name') : 'Department Name' ?><span class="text-danger">*</span></label>
-            <input type="text" name="department_name" class="form-control" required="">
+            <input type="text" id="stepInput3" name="department_name" class="form-control" required="">
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">
           <div class="col-lg-4">
-            <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
+            <button type="button" id="stepGuideDepartmentModelBtn" class="btn btn-create btn-block btn-primary">Create</button>
           </div>
         </div>
       </form>

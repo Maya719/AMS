@@ -78,15 +78,13 @@ $query_builder = TRUE;
 *  Local
 *
 */
-<<<<<<< HEAD
-=======
 
 // $db['default'] = array(
 // 	'dsn'	=> '',
 // 	'hostname' => 'localhost',
 // 	'username' => 'root',
 // 	'password' => '',
-// 	'database' => 'ams',
+// 	'database' => 'main_project',
 // 	'dbdriver' => 'mysqli',
 // 	'dbprefix' => '',
 // 	'pconnect' => FALSE,
@@ -108,14 +106,13 @@ $query_builder = TRUE;
 *  shared
 *
 */
->>>>>>> a4799e03488dd17c0003e95b172fe0deb5164681
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'ams',
+	'username' => 'u945088377_pms_user',
+	'password' => '$9oHb0zSjey',
+	'database' => 'u945088377_NewPMS',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -132,35 +129,6 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-/* 
-*
-*  shared
-*
-*/
-
-<<<<<<< HEAD
-// $db['default'] = array(
-// 	'dsn'	=> '',
-// 	'hostname' => 'localhost',
-// 	'username' => 'u945088377_pms_user',
-// 	'password' => '$9oHb0zSjey',
-// 	'database' => 'u945088377_NewPMS',
-// 	'dbdriver' => 'mysqli',
-// 	'dbprefix' => '',
-// 	'pconnect' => FALSE,
-// 	'db_debug' => (ENVIRONMENT !== 'production'),
-// 	'cache_on' => FALSE,
-// 	'cachedir' => '',
-// 	'char_set' => 'utf8',
-// 	'dbcollat' => 'utf8_general_ci',
-// 	'swap_pre' => '',
-// 	'encrypt' => FALSE,
-// 	'compress' => FALSE,
-// 	'stricton' => FALSE,
-// 	'failover' => array(),
-// 	'save_queries' => TRUE
-// );
-
 
 
 /* 
@@ -172,17 +140,6 @@ $db['default'] = array(
 // $db['default'] = array(
 // 	'dsn'	=> '',
 // 	'hostname' => 'localhost',
-=======
-/* 
-*
-*  Airnet
-*
-*/
-
-// $db['default'] = array(
-// 	'dsn'	=> '',
-// 	'hostname' => 'localhost',
->>>>>>> a4799e03488dd17c0003e95b172fe0deb5164681
 // 	'username' => 'pms',
 // 	'password' => 'kbq5lRmYU5j1Q35su0fj',
 // 	'database' => 'pms',

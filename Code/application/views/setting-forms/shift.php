@@ -1,6 +1,6 @@
 <div class="row d-flex justify-content-end">
     <div class="col-xl-2 col-sm-3 mt-2">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#add-shift-modal" class="btn btn-block btn-primary">+ ADD</a>
+        <a href="#" id="stepShiftBtn" data-bs-toggle="modal" data-bs-target="#add-shift-modal" class="btn btn-block btn-primary">+ ADD</a>
     </div>
     <div class="card mt-3 p-0">
         <div class="card-body p-1">
@@ -64,45 +64,45 @@
                 <div class="modal-body">
                     <div class="form-group mb-3">
                         <label class="col-form-label"><?= $this->lang->line('name') ? $this->lang->line('name') : 'Name' ?><span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control" required="">
+                        <input type="text" id="stepInput14" name="name" class="form-control" required="">
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 form-group mb-3">
                             <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="starting_time" class="form-control timepicker" required="" value="9:00 AM">
+                            <input type="text" id="stepInput8" name="starting_time" class="form-control timepicker" required="" value="9:00 AM">
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="ending_time" class="form-control timepicker" required="" value="6:00 PM">
+                            <input type="text" id="stepInput9" name="ending_time" class="form-control timepicker" required="" value="6:00 PM">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 form-group mb-3">
                             <label class="col-form-label"><?= $this->lang->line('break_start') ? $this->lang->line('break_start') : 'Break Start' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="break_start" class="form-control timepicker" required="" value="1:15 PM">
+                            <input type="text" name="break_start" id="stepInput10" class="form-control timepicker" required="" value="1:15 PM">
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label class="col-form-label"><?= $this->lang->line('break_end') ? $this->lang->line('break_end') : 'Break End' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="break_end" class="form-control timepicker" required="" value="2:15 PM">
+                            <input type="text" name="break_end" id="stepInput11" class="form-control timepicker" required="" value="2:15 PM">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('half_day_check_in') ? $this->lang->line('half_day_check_in') : 'Half Day Check In' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="half_day_check_in" class="form-control timepicker" required="">
+                            <input type="text" name="half_day_check_in" id="stepInput12" class="form-control timepicker" required="">
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="col-form-label"><?= $this->lang->line('half_day_check_out') ? $this->lang->line('half_day_check_out') : 'Half Day Check Out' ?><span class="text-danger">*</span></label>
-                            <input type="text" name="half_day_check_out" class="form-control timepicker" required="">
+                            <input type="text" name="half_day_check_out" id="stepInput13" class="form-control timepicker" required="">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
                     <div class="col-lg-4">
-                        <button type="button" class="btn btn-create btn-block btn-primary">Create</button>
+                        <button type="button" id="stepShiftModelBtn" class="btn btn-create btn-block btn-primary">Create</button>
                     </div>
                 </div>
             </form>
