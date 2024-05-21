@@ -265,11 +265,11 @@ button:focus {
 }
 
 .uppercase {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 
 .capitalize {
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 
 input[type=text],
@@ -1246,7 +1246,7 @@ div.demo img {
   letter-spacing: -0.02em;
   position: relative;
   z-index: 1;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 .tp-btn-offcanvas i {
   padding-left: 5px;
@@ -2291,7 +2291,7 @@ div.demo img {
 .breadcrumb__title {
   font-size: 48px;
   color: var(--tp-common-white);
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media (max-width: 575px) {
   .breadcrumb__title {
@@ -2318,7 +2318,7 @@ div.demo img {
   font-size: 13px;
   line-height: 16px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-common-white);
   background-color: var(--tp-theme-primary);
   padding: 9px 23px;
@@ -2338,7 +2338,7 @@ div.demo img {
   font-size: 16px;
   color: var(--tp-common-white);
   font-weight: 500;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 .breadcrumb__list span a:hover {
   color: var(--tp-theme-secondary);
@@ -2572,7 +2572,7 @@ div.demo img {
   font-weight: 700;
   font-size: 42px;
   line-height: 1.2;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   position: relative;
   z-index: 0;
 }
@@ -2602,7 +2602,7 @@ div.demo img {
   font-size: 13px;
   line-height: 16px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-common-white);
   background-color: var(--tp-theme-primary);
   padding: 9px 22px;
@@ -2624,7 +2624,7 @@ div.demo img {
   font-size: 13px;
   line-height: 16px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-text-2);
   background: linear-gradient(90deg, #FFC700 0%, rgba(255, 255, 255, 0) 100%);
   padding: 9px 22px;
@@ -3563,7 +3563,7 @@ div.demo img {
   color: #fff;
   border-top: 1px solid #e0e3ed;
   text-decoration: none;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   width: 100%;
   padding: 10px 0;
   color: #4a4a4a;
@@ -4440,7 +4440,7 @@ div.demo img {
 }
 
 .tp-features-item-wrapper-2.tp-footer-2-margin .tp-features-item-title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {
   .tp-features-item-wrapper-2.tp-footer-2-margin .tp-features-item-title {
@@ -5400,7 +5400,7 @@ div.demo img {
   }
 }
 .tp-about-3-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   margin-bottom: 14px;
 }
 @media only screen and (min-width: 1200px) and (max-width: 1399px), only screen and (min-width: 992px) and (max-width: 1199px), only screen and (min-width: 768px) and (max-width: 991px), only screen and (min-width: 576px) and (max-width: 767px), (max-width: 575px) {
@@ -5629,7 +5629,7 @@ div.demo img {
   font-size: 13px;
   line-height: 16px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-text-2);
   background-color: var(--tp-common-white);
   padding: 9px 22px;
@@ -5649,7 +5649,7 @@ div.demo img {
   font-weight: 800;
   font-size: 70px;
   line-height: 1.1;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   color: var(--tp-common-white);
   margin-bottom: 12px;
 }
@@ -5739,7 +5739,7 @@ div.demo img {
   font-size: 18px;
   margin-left: 30px;
   letter-spacing: 0.1em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-common-white);
   display: block;
   margin-bottom: 20px;
@@ -5795,7 +5795,7 @@ div.demo img {
   font-weight: 800;
   font-size: 50px;
   line-height: 1.1;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-common-white);
   margin-bottom: 17px;
 }
@@ -5987,7 +5987,7 @@ div.demo img {
   font-weight: 800;
   font-size: 69px;
   line-height: 1.2;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   margin-bottom: 20px;
 }
 @media only screen and (min-width: 300px) and (max-width: 400px) {
@@ -6642,7 +6642,7 @@ div.demo img {
   }
 }
 .tp-brands-2-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 .tp-brands-2-top {
   padding-left: 45px;
@@ -6895,7 +6895,7 @@ div.demo img {
   font-size: 30px;
   line-height: 1.3;
   text-align: center;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   color: var(--tp-common-white);
 }
 .tp-features-item-wrapper-2 p {
@@ -7013,7 +7013,7 @@ div.demo img {
 .tp-features-item-title {
   font-weight: 700;
   font-size: 29px;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   color: var(--tp-text-2);
   text-align: center;
   margin-bottom: 15px;
@@ -7264,7 +7264,7 @@ div.demo img {
   right: 0;
 }
 .tp-service-2-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 .tp-service-2-item {
   background: #F4F6FD;
@@ -7735,7 +7735,7 @@ div.demo img {
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 .tp-team-title {
   font-weight: 600;
@@ -7814,7 +7814,7 @@ div.demo img {
   }
 }
 .tp-team-2-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   line-height: 1.3;
   margin-bottom: 18px;
 }
@@ -7920,7 +7920,7 @@ div.demo img {
 .tp-team-2-inner span {
   font-weight: 600;
   font-size: 12px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--tp-theme-secondary);
   z-index: 2;
@@ -7980,7 +7980,7 @@ div.demo img {
   }
 }
 .tp-team-3-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media only screen and (min-width: 300px) and (max-width: 400px) {
   .tp-team-3-wrapper .tp-section__title br {
@@ -8095,7 +8095,7 @@ div.demo img {
   font-size: 13px;
   line-height: 16px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   margin-bottom: 28px;
 }
 .tp-team-details-content p {
@@ -8178,7 +8178,7 @@ div.demo img {
   font-size: 12px;
   line-height: 15px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-theme-secondary);
 }
 .tp-portfolio-thumb {
@@ -8362,7 +8362,7 @@ div.demo img {
   }
 }
 .tp-portfolio-2-section-title-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media only screen and (min-width: 576px) and (max-width: 767px), (max-width: 575px) {
   .tp-portfolio-2-section-title-wrapper .tp-section__title {
@@ -8483,7 +8483,7 @@ div.demo img {
 }
 
 .tp-portfolio-3-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 .tp-portfolio-3-inner {
   background: #F4F6FD;
@@ -8582,7 +8582,7 @@ div.demo img {
   font-size: 12px;
   line-height: 15px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-theme-secondary);
   text-align: start;
   margin: 0;
@@ -8597,7 +8597,7 @@ div.demo img {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: #6A6D7A;
   background: #F4F6FD;
   padding: 6px 22px;
@@ -9245,7 +9245,7 @@ div.demo img {
   text-align: center;
   display: block;
   letter-spacing: 0.13em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-theme-primary);
 }
 
@@ -9668,7 +9668,7 @@ div.demo img {
   }
 }
 .tp-blog-2-section-title-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media only screen and (min-width: 576px) and (max-width: 767px), (max-width: 575px) {
   .tp-blog-2-section-title-wrapper .tp-section__title {
@@ -9764,13 +9764,13 @@ div.demo img {
   font-weight: 600;
   font-size: 12px;
   color: var(--tp-common-white);
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   letter-spacing: 0.15em;
 }
 .tp-blog-2-content .tp-blog-title {
   font-weight: 700;
   font-size: 24px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   margin-bottom: 23px;
 }
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {
@@ -9851,7 +9851,7 @@ div.demo img {
 .tp-blog-details-name span {
   font-weight: 700;
   font-size: 14px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: #666666;
 }
 .tp-blog-details-date {
@@ -9872,7 +9872,7 @@ div.demo img {
 .tp-blog-details-date span {
   font-weight: 700;
   font-size: 14px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: #666666;
 }
 .tp-blog-details-message i {
@@ -9885,7 +9885,7 @@ div.demo img {
 .tp-blog-details-message span {
   font-weight: 700;
   font-size: 14px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: #666666;
 }
 .tp-blog-details-title {
@@ -9995,7 +9995,7 @@ div.demo img {
 .tagcloud a {
   font-weight: 700;
   font-size: 12px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: #8A879F;
   margin-right: 8px;
   background: #F6F6F4;
@@ -10204,7 +10204,7 @@ div.demo img {
   letter-spacing: 0.18em;
   color: #8A879F;
   line-height: 1.1;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 .postbox__comment-name p {
   font-weight: 400;
@@ -10425,7 +10425,7 @@ div.demo img {
 .tp-blog-details__search-box .search-form input::placeholder {
   font-weight: 500;
   font-size: 12px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: #8A879F;
 }
 .tp-blog-details__search-box .search-form button {
@@ -10449,7 +10449,7 @@ div.demo img {
   left: 94px;
 }
 .tp-pricing-title-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media (max-width: 575px) {
   .tp-pricing-title-wrapper .tp-section__title {
@@ -10490,7 +10490,7 @@ div.demo img {
   font-size: 12px;
   display: inline-block;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-text-2);
   background: var(--tp-theme-secondary);
   padding: 10px 49px;
@@ -10506,7 +10506,7 @@ div.demo img {
   z-index: 1;
   font-weight: 700;
   font-size: 44px;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   color: var(--tp-text-2);
   margin-bottom: 36px;
 }
@@ -10688,7 +10688,7 @@ div.demo img {
 .tp-pricing-tab-nav .nav.background button {
   background: var(--tp-common-white);
   color: var(--tp-text-2);
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.12em;
@@ -10777,7 +10777,7 @@ div.demo img {
   font-weight: 700;
   font-size: 26px;
   margin-bottom: 4px;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
   color: var(--tp-common-white);
   opacity: 0;
   visibility: hidden;
@@ -10798,7 +10798,7 @@ div.demo img {
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.12em;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-theme-secondary);
   margin-bottom: 0;
   opacity: 0;
@@ -11906,7 +11906,7 @@ div.demo img {
   font-size: 13px;
   line-height: 19px;
   color: var(--tp-common-white);
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   padding: 12px 30px;
   background-color: var(--tp-theme-1);
   border-radius: 50px;
@@ -11980,7 +11980,7 @@ div.demo img {
 .table-content table td.product-name {
   font-size: 16px;
   font-weight: 500;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 
 .table-content table td.product-name a:hover {
@@ -12078,7 +12078,7 @@ div.demo img {
 .cart-page-total > h2 {
   font-size: 25px;
   margin-bottom: 20px;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 
 .cart-page-total > ul {
@@ -12244,7 +12244,7 @@ td.product-thumbnail img {
   line-height: 40px;
   margin-right: 15px;
   padding: 0 15px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   transition: all 0.3s ease 0s;
 }
 
@@ -12583,7 +12583,7 @@ p.checkout-coupon input[type=text]:focus {
   height: 40px;
   margin: 0px 0 0;
   padding: 0;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   transition: all 0.3s ease 0s;
   width: 100%;
 }
@@ -12606,7 +12606,7 @@ p.checkout-coupon input[type=text]:focus {
   margin-bottom: 0;
   padding: 3px 10px;
   text-align: center;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   transition: all 0.3s ease 0s;
   vertical-align: middle;
   white-space: nowrap;
@@ -12699,7 +12699,7 @@ p.checkout-coupon input[type=text]:focus {
 .tp-error-page-title {
   font-weight: 700;
   font-size: 46px;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   color: var(--tp-text-2);
   margin-bottom: 30px;
 }
@@ -12901,7 +12901,7 @@ p.checkout-coupon input[type=text]:focus {
   }
 }
 .tp-appointment-section-title-wrapper .tp-section__title {
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
 }
 @media only screen and (min-width: 576px) and (max-width: 767px) {
   .tp-appointment-section-title-wrapper .tp-section__title {
@@ -13274,7 +13274,7 @@ p.checkout-coupon input[type=text]:focus {
   background-color: var(--tp-common-black);
   padding: 4px 10px 4px;
   margin-bottom: 5px;
-  /* text-transform: capitalize; */
+  text-transform: capitalize;
 }
 .product__badge-item.has-new {
   background-color: var(--tp-theme-primary);

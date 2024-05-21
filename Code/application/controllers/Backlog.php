@@ -31,7 +31,7 @@ class Backlog extends CI_Controller
             foreach ($sprints as &$sprint) {
                 if (!$sprint["starting_date"] && !$sprint["ending_date"] && $sprint["duration"]) {
                     $current = new DateTime($sprint["created"]);
-                    $sprint["starting_date"] =  $current->format('d M Y');
+                    $sprint["starting_date"] = $current->format('d M Y');
                     if ($sprint["duration"] == 1) {
                         $current = new DateTime($sprint["created"]);
                         $current->modify('+1 week');

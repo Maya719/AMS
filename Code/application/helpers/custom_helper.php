@@ -2834,6 +2834,42 @@ function get_user_id_from_employee_id($employee_id)
     $employeeId = $employeeIdRow->id;
     return $employeeId;
 }
+
+function remove_permissions_and_saas_id($string)
+{
+    $name = explode("_permissions_", $string)[0];
+    if ($name[0] === '_')
+        $name = substr($name, 1);
+    if (substr($name, -1) === '_')
+        $name = substr($name, 0, -1);
+    return $name;
+}
+
+function get_users_that_can_accept_biometric_requset()
+{
+    $CI =& get_instance();
+    $query = $CI->db->select('type')
+        ->like('value', 'biometric_request_status":1')
+        ->like('type', "_" . $CI->session->userdata('saas_id'))
+        ->get('settings');
+    $permission_roles = [];
+    foreach ($query->result_array() as $value)
+        $permission_roles[] = remove_permissions_and_saas_id($value['type']);
+
+    // $query = $CI->db->select('GROUP_CONCAT(id) AS id_string')
+    $query = $CI->db->select('id')
+        ->from('groups')
+        ->where_in('name', $permission_roles)
+        ->where('saas_id', 8)
+        ->get();
+    $group_ids = $query->result_array();
+    $ids = [];
+    foreach ($group_ids as $value)
+        $ids[] = $value['id'];
+
+    return $ids;
+}
+
 function get_employee_id_from_user_id($id)
 {
     $CI =& get_instance();
@@ -2862,6 +2898,20 @@ function if_allowd_to_create_new($checking_for)
         return true;
     return false;
 }
+
+// function save_notifications($type, $notification, $to_id)
+// {
+//     $CI =& get_instance();
+//     $query = $CI->db->query("insert into notifications(notification, type, type_id, from_id, to_id) values ('$notification', '$type', 888, $to_id) ");
+//     $data = $query->row_array();
+//     return "done";
+// }
+
+function sanitizeDigits($string)
+{
+    return preg_replace('/[^0-9]/', '', (string) $string);
+}
+
 
 
 ?>
