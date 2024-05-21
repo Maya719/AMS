@@ -15,7 +15,6 @@
     #attendance_list tbody td {
         padding: 1px 5px;
     }
-    
 </style>
 </head>
 

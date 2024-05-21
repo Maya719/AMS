@@ -33,8 +33,8 @@
                 $permissionsVariableName = $role['name'] . '_permissions';
                 $permissions = $$permissionsVariableName; ?>
                 <div class="accordion-item">
-                  <h2 class="accordion-header" id="<?= $this->lang->line($role['description'] . '_permissions') ? $this->lang->line($role['description'] . '_permissions') : $role['description'] . ' Permissions' ?>" >
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $role['name'] ?>-permissions" aria-expanded="false" aria-controls="collapseTwo" id="#<?= $role['name'] ?>_guide">
+                  <h2 class="accordion-header" id="<?= $this->lang->line($role['description'] . '_permissions') ? $this->lang->line($role['description'] . '_permissions') : $role['description'] . ' Permissions' ?>">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $role['name'] ?>-permissions" aria-expanded="false" aria-controls="collapseTwo">
                       <?= $this->lang->line($role['description'] . '_permissions') ? $this->lang->line($role['description'] . '_permissions') : $role['description'] . ' Permissions' ?>
                     </button>
                   </h2>
@@ -935,7 +935,7 @@
         </div>
         <?php if ($this->ion_auth->is_admin() || change_permissions('') || $this->ion_auth->in_group(3)) { ?>
           <div class="card-footer d-flex justify-content-end">
-            <button class="btn btn-primary savebtn" id="SavebtnGuide"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
+            <button class="btn btn-primary savebtn"><?= $this->lang->line('save_changes') ? $this->lang->line('save_changes') : 'Save Changes' ?></button>
           </div>
         <?php } ?>
       </form>

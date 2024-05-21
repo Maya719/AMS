@@ -11,7 +11,7 @@ class Leaves extends CI_Controller
 
 	public function index()
 	{
-		if ($this->ion_auth->logged_in() && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
@@ -82,7 +82,7 @@ class Leaves extends CI_Controller
 				$data['type'] = $this->input->post('type');
 				$data['paid'] = $this->input->post('paid');
 
-				$this->db->where('leave_id', $this->input->post('update_id'));
+				$this->db->where('leave_id',  $this->input->post('update_id'));
 				$this->db->order_by('level', 'desc');
 				$this->db->limit(1);
 				$query = $this->db->get('leave_logs');
@@ -90,10 +90,10 @@ class Leaves extends CI_Controller
 				$step = $leave->level;
 
 				/*
-				 *
-				 *	highest role??
-				 *
-				 */
+			*
+			*	highest role??
+			*
+			*/
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->order_by('step_no', 'desc');
 				$this->db->limit(1);
@@ -101,9 +101,9 @@ class Leaves extends CI_Controller
 				$heiResult = $heiQuery->row();
 				$highStep = $heiResult->step_no;
 				/*
-				 *
-				 * 	current step Approver/Recommender
-				 */
+			*
+			* 	current step Approver/Recommender
+			*/
 				$this->db->where('saas_id', $this->session->userdata('saas_id'));
 				$this->db->where('step_no', $step);
 				$this->db->limit(1);
@@ -255,9 +255,9 @@ class Leaves extends CI_Controller
 							$startDate = $value4["starting_date"];
 							$endDate = $value4["ending_date"];
 							$apply = $value4["apply"];
-							$startDateTimestamp = strtotime($startDate);
-							$endDateTimestamp = strtotime($endDate);
-							$dateToCheckTimestamp = strtotime($formatted_date);
+							$startDateTimestamp  = strtotime($startDate);
+							$endDateTimestamp  = strtotime($endDate);
+							$dateToCheckTimestamp  = strtotime($formatted_date);
 							if ($apply == '1' && $dateToCheckTimestamp >= $startDateTimestamp && $dateToCheckTimestamp <= $endDateTimestamp) {
 								$departments = json_decode($value4["department"]);
 								foreach ($departments as $department) {
@@ -335,12 +335,9 @@ class Leaves extends CI_Controller
 								'status' => $this->input->post('status'),
 								'level' => $Step + 1,
 							];
-
-							// here
-
 							$this->data['log'] = $log;
 							$this->leaves_model->createLog($log);
-							$CreateNotifications = $this->CreateNotification($Step + 1, $data['user_id']); // *
+							$CreateNotifications = $this->CreateNotification($Step + 1, $data['user_id']);
 
 							$this->data['CreateNotifications'] = $CreateNotifications;
 							$leave_emp = $data['user_id'];
@@ -383,14 +380,6 @@ class Leaves extends CI_Controller
 								}
 							}
 						}
-
-						// // // here
-
-						$user_ids = get_users_for_current_level_of_leave($leave_id, $user_id);
-						push_notifications('leave_requested', [
-							'saas_id' => $this->session->userdata('saas_id'),
-							'user_id' => $user_ids,
-						]);
 
 						$this->data['template_data'] = $notification_data;
 						$this->data['error'] = false;
@@ -665,9 +654,9 @@ class Leaves extends CI_Controller
 							$startDate = $value4["starting_date"];
 							$endDate = $value4["ending_date"];
 							$apply = $value4["apply"];
-							$startDateTimestamp = strtotime($startDate);
-							$endDateTimestamp = strtotime($endDate);
-							$dateToCheckTimestamp = strtotime($formatted_date);
+							$startDateTimestamp  = strtotime($startDate);
+							$endDateTimestamp  = strtotime($endDate);
+							$dateToCheckTimestamp  = strtotime($formatted_date);
 							if ($apply == '1' && $dateToCheckTimestamp >= $startDateTimestamp && $dateToCheckTimestamp <= $endDateTimestamp) {
 								$departments = json_decode($value4["department"]);
 								foreach ($departments as $department) {
@@ -786,16 +775,45 @@ class Leaves extends CI_Controller
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);
 						}
+            
 
-						// // for notificatoin
-						$user_ids = get_users_for_current_level_of_leave($leave_id, $user_id);
-						push_notifications('leave_requested', [
-							'saas_id' => $this->session->userdata('saas_id'),
-							'user_id' => $user_ids,
-						]);
+						$CreateNotifications = $this->CreateNotification($step, $data['user_id']);
+						$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
+						$employee_id_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
+						$employee_id_result = $employee_id_query->row_array();
+						foreach ($CreateNotifications as $system_user) {
+							$template_data = array();
+							$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
+							$template_data['NAME'] = $system_user->first_name . ' ' . $system_user->last_name;
+							$type = $this->input->post('type_add');
+							$template_data['LEAVE_TYPE'] = '';
+							$querys = $this->db->query("SELECT * FROM leaves_type");
+							$leaves = $querys->result_array();
+							if (!empty($leaves)) {
+								foreach ($leaves as $leave) {
+									if ($type == $leave['id']) {
+										$template_data['LEAVE_TYPE'] = $leave['name'];
+									}
+								}
+							}
+							$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
+							$template_data['REASON'] = $this->input->post('leave_reason');
+							$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+							$email_template = render_email_template('leave_request', $template_data);
+							send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 
-						$this->session->set_flashdata('message', $this->lang->line('created_successfully') ?
-							$this->lang->line('created_successfully') : "Created successfully.");
+							$notification_data = array(
+								'notification' => 'Leave request received',
+								'type' => 'leave_request',
+								'type_id' => $leave_id,
+								'from_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
+								'to_id' => $system_user->user_id,
+							);
+							$notification_id = $this->notifications_model->create($notification_data);
+						}
+
+						$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 						$this->session->set_flashdata('message_type', 'success');
 						$this->data['data'] = $data;
 						$this->data['error'] = false;
@@ -860,7 +878,7 @@ class Leaves extends CI_Controller
 	}
 	public function manage($id)
 	{
-		if ($this->ion_auth->logged_in() && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
@@ -910,7 +928,7 @@ class Leaves extends CI_Controller
 	public function create_leave()
 	{
 
-		if ($this->ion_auth->logged_in() && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
