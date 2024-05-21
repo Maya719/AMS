@@ -53,20 +53,20 @@
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#home1"><i class="la la-user me-2"></i> Information</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile1"><i class="la la-fingerprint me-2"></i> Attendance Configuration</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" id="colStep1" href="#profile1"><i class="la la-fingerprint me-2"></i> Attendance Configuration</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-bs-toggle="tab" href="#contact1"><i class="la la-file-contract me-2"></i> Important Documents</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
+                                                    <a class="nav-link" data-bs-toggle="tab" id="colStep2" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
                                                 <div class="tab-pane fade show active" id="home1" role="tabpanel">
                                                     <div class="pt-4">
                                                         <div class="row ms-5">
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput15">
                                                                 <label for="employee_id_create" class="col-form-label">Employee ID</label>
                                                                 <input type="number" class="form-control" name="employee_id" id="employee_id_create" readonly>
                                                             </div>
@@ -128,7 +128,7 @@
                                                                 <label for="exampleFormControlInput14" class="col-form-label">Joining Date <span class="text-danger">*</span></label>
                                                                 <input type="Date" class="form-control" name="join_date" id="exampleFormControlInput14">
                                                             </div>
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput16">
                                                                 <label for="exampleFormControlInput15" class="col-form-label">Probation</label>
                                                                 <select class="form-select select2" name="probation_period" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Probation</option>
@@ -137,7 +137,7 @@
                                                                     <option value="3">3 Months</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput17">
                                                                 <label for="exampleFormControlInput16" class="col-form-label">Designation</label>
                                                                 <input type="text" class="form-control" name="desgnation" id="exampleFormControlInput16">
                                                             </div>
@@ -162,14 +162,14 @@
                                                 <div class="tab-pane fade" id="profile1">
                                                     <div class="pt-4">
                                                         <div class="row ms-5">
-                                                            <div class="ms-3 col-12 mb-2 form-check">
+                                                            <div class="ms-3 col-12 mb-2 form-check" id="stepInput18">
                                                                 <input class="form-check-input" type="checkbox" name="finger_config" id="flexCheckDefault" checked>
                                                                 <label class="form-check-label" for="flexCheckDefault">
                                                                     Biometric
                                                                 </label>
                                                                 <a type="button" class="text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Enable Punch will checked for those emplyee who will punch in/out and it will recorded." title="Help"><i class="fas fa-circle-question"></i></a>
                                                             </div>
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput19">
                                                                 <label for="exampleFormControlInput2" class="col-form-label">Shift <span class="text-danger">*</span></label>
                                                                 <select class="form-select enable-disable-select select2" name="type" aria-label="Default select example">
                                                                     <option selected value="">Shift</option>
@@ -180,7 +180,7 @@
                                                                     <?php endforeach ?>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput20">
                                                                 <label for="exampleFormControlInput3" class="col-form-label">Device <span class="text-danger">*</span></label>
                                                                 <select class="form-select enable-disable-select select2" name="device" aria-label="Default select example">
                                                                     <option selected value="">Device</option>
@@ -215,11 +215,11 @@
                                                 <div class="tab-pane fade" id="message1">
                                                     <div class="pt-4">
                                                         <div class="row ms-3">
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput21">
                                                                 <label for="exampleFormControlInput12" class="col-form-label">Email <span class="text-danger">*</span></label>
                                                                 <input type="email" name="email" class="form-control" id="exampleFormControlInput12">
                                                             </div>
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput22">
                                                                 <label for="exampleFormControlInput13" class="col-form-label">Password <span class="text-danger">*</span></label>
                                                                 <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
                                                             </div>
@@ -228,7 +228,7 @@
                                                                 <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
                                                             </div>
 
-                                                            <div class="col-6 mb-3">
+                                                            <div class="col-6 mb-3" id="stepInput23">
                                                                 <label for="exampleFormControlInput15" class="col-form-label">Role <span class="text-danger">*</span></label>
                                                                 <select class="form-select select2" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Role</option>
@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="row card-footer">
                                         <div class="col-5">
-                                            <button type="button" class="btn btn-create btn-primary">Submit</button>
+                                            <button type="button" id="stepAddBtn" class="btn btn-create btn-primary">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -352,6 +352,115 @@
 
         $('.select2').select2()
 
+        $(document).ready(function() {
+            introJs().setOption("disableInteraction", true);
+            if (localStorage.getItem('tourStep') == 8) {
+                console.log(localStorage.getItem('tourStep'));
+                setTimeout(function() {
+                    startThriteenTutorial();
+                }, 1500);
+            }
+
+            function startThriteenTutorial() {
+                introJs().setOptions({
+                    steps: [{
+                        element: '#stepInput15',
+                        intro: "The employee id is auto generated unique key which will assign to user to synchronais the attendance From Biomatric Device",
+                        position: 'right',
+                    }, {
+                        element: '#stepInput16',
+                        intro: "The <strong>Probation</strong> period is necessary for leave settings. Select from 0, 1, 2, or 3 months.",
+                        position: 'right',
+                    }, {
+                        element: '#stepInput17',
+                        intro: "Enter the designation for the employee, such as <strong>Senior</strong>, <strong>Junior</strong>, <strong>Intern</strong>, etc",
+                        position: 'right',
+                    }, {
+                        element: '#colStep1',
+                        intro: "Shift the screen to <strong>Attendance Configuration</strong> to set the user shift and biomatric enable.",
+                        position: 'right',
+                    }],
+                    showBullets: false,
+                    tooltipClass: 'customTooltip'
+                }).start().oncomplete(function() {
+                    // localStorage.setItem('tourStep', '8');
+                    // window.location.href = base_url + 'users/create_user';
+                    document.getElementById('colStep1').click();
+                    setTimeout(function() {
+                        startFourteenTutorial();
+                    }, 1500);
+                }).onexit(function() {
+                    document.getElementById('colStep1').click();
+                    setTimeout(function() {
+                        startFourteenTutorial();
+                    }, 1500);
+                    // localStorage.setItem('tourStep', '8');
+                    // window.location.href = base_url + 'users/create_user';
+                });
+            }
+
+            function startFourteenTutorial() {
+                introJs().setOptions({
+                    steps: [{
+                        element: '#stepInput18',
+                        intro: "The employee id is auto generated unique key which will assign to user to synchronais the attendance From Biomatric Device",
+                        position: 'right',
+                    }, {
+                        element: '#stepInput19',
+                        intro: "The <strong>Probation</strong> period is necessary for leave settings. Select from 0, 1, 2, or 3 months.",
+                        position: 'right',
+                    }, {
+                        element: '#stepInput20',
+                        intro: "The <strong>Probation</strong> period is necessary for leave settings. Select from 0, 1, 2, or 3 months.",
+                        position: 'right',
+                    }, {
+                        element: '#colStep2',
+                        intro: "Enter the designation for the employee, such as <strong>Senior</strong>, <strong>Junior</strong>, <strong>Intern</strong>, etc",
+                        position: 'right',
+                    }],
+                    showBullets: false,
+                    tooltipClass: 'customTooltip'
+                }).start().oncomplete(function() {
+                    document.getElementById('colStep2').click();
+                    setTimeout(function() {
+                        startFifteenTutorial();
+                    }, 1500);
+                }).onexit(function() {
+                    document.getElementById('colStep2').click();
+                    setTimeout(function() {
+                        startFifteenTutorial();
+                    }, 1500);
+                });
+            }
+
+            function startFifteenTutorial() {
+                introJs().setOptions({
+                    steps: [{
+                        element: '#stepInput21',
+                        intro: "Enter the employee's email address. This will be used for system access after the employee is created.",
+                        position: 'right',
+                    }, {
+                        element: '#stepInput22',
+                        intro: "The <strong>Probation</strong> period is necessary for leave settings. Select from 0, 1, 2, or 3 months.",
+                        position: 'right',
+                    }, {
+                        element: '#stepInput23',
+                        intro: "The <strong>Probation</strong> period is necessary for leave settings. Select from 0, 1, 2, or 3 months.",
+                        position: 'right',
+                    }, {
+                        element: '#stepAddBtn',
+                        intro: "Enter the designation for the employee, such as <strong>Senior</strong>, <strong>Junior</strong>, <strong>Intern</strong>, etc",
+                        position: 'right',
+                    }],
+                    showBullets: false,
+                    tooltipClass: 'customTooltip'
+                }).start().oncomplete(function() {
+                    
+                }).onexit(function() {
+                   
+                });
+            }
+        });
     </script>
 </body>
 

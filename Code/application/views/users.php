@@ -221,8 +221,37 @@
       }
     });
 
-    $('.select2').select2()
+    $('.select2').select2();
 
+    $(document).ready(function() {
+      introJs().setOption("disableInteraction", true);
+      if (localStorage.getItem('tourStep') == 7) {
+        console.log(localStorage.getItem('tourStep'));
+        setTimeout(function() {
+          startThriteenTutorial();
+        }, 1500);
+      }
+
+      function startThriteenTutorial() {
+        introJs().setOptions({
+          steps: [
+            {
+              element: '#stepInput15',
+              intro: "Click <strong>Add</strong> to open the Employee adding form.",
+              position: 'right',
+            }
+          ],
+          showBullets: false,
+          tooltipClass: 'customTooltip'
+        }).start().oncomplete(function() {
+          localStorage.setItem('tourStep', '8');
+          window.location.href = base_url + 'users/create_user';
+        }).onexit(function() {
+          localStorage.setItem('tourStep', '8');
+          window.location.href = base_url + 'users/create_user';
+        });
+      }
+    });
   </script>
 </body>
 

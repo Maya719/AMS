@@ -13,9 +13,9 @@ $(document).on('click', '.btn-create-leave', function (e) {
         processData: false, // Prevent jQuery from processing the data
         contentType: false, // Prevent jQuery from setting contentType
         dataType: "json",
-        beforeSend: function () {
-            $(".btn-create-leave").prop("disabled", true).html('Creating...');
-        },
+        // beforeSend: function () {
+        //     $(".btn-create-leave").prop("disabled", true).html('Creating...');
+        // },
         success: function (result) {
             if (result['error'] == false) {
                 // console.log(result);
@@ -335,18 +335,18 @@ $(document).on('click', '.btn-delete-leave', function (e) {
     });
 });
 $(document).on('click', '.btn-edit-leave', function (e) {
-    var form = $('#modal-edit-leaves-part')[0]; 
+    var form = $('#modal-edit-leaves-part')[0];
     if (!form || form.nodeName !== 'FORM') {
         console.error('Form element not found or not a form');
         return;
     }
-    var formData = new FormData(form); 
+    var formData = new FormData(form);
     console.log(formData);
     $.ajax({
         type: 'POST',
-        url: $(form).attr('action'), 
+        url: $(form).attr('action'),
         data: formData,
-        processData: false, 
+        processData: false,
         contentType: false,
         dataType: "json",
         beforeSend: function () {
