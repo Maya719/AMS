@@ -920,18 +920,18 @@
                     <label class="form-check-label" for="projects_module_update"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="kanban_update" name="kanban">
                     <label class="form-check-label" for="kanban_update"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="agile_update" name="agile">
                     <label class="form-check-label" for="agile_update"><?= $this->lang->line('Agile') ? $this->lang->line('Agile') : 'Agile' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="tasks_module_update" name="tasks_module">
@@ -1010,12 +1010,12 @@
                     <label class="form-check-label" for="expenses_update"><?= $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses' ?></label>
                   </div>
                 </div> -->
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="calendar_update" name="calendar">
                     <label class="form-check-label" for="calendar_update"><?= $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="leaves_update" name="leaves">
@@ -1107,12 +1107,12 @@
                     <label class="form-check-label" for="notifications_update"><?= $this->lang->line('notifications') ? $this->lang->line('notifications') : 'Notifications' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="languages_update" name="languages">
                     <label class="form-check-label" for="languages_update"><?= $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="meetings_update" name="meetings">
@@ -1270,6 +1270,7 @@
         }
       });
     });
+    
     $("#plan-edit-modal").on('click', '.btn-edit-plan', function(e) {
       var modal = $('#plan-edit-modal');
       var form = $('#modal-edit-plan-part');
@@ -1298,6 +1299,7 @@
 
       e.preventDefault();
     });
+
     $(document).on('click', '.delete_plan', function(e) {
       e.preventDefault();
       var id = $(this).data("id");

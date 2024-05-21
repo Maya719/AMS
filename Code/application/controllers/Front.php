@@ -312,6 +312,8 @@ class Front extends CI_Controller
 
 	public function index()
 	{
+
+
 		if (!frontend_permissions('landing_page')) {
 			redirect('auth', 'refresh');
 		}
@@ -319,6 +321,7 @@ class Front extends CI_Controller
 			redirect('home', 'refresh');
 		} else {
 
+			
 			$meta_title = get_mata_data('meta_title');
 			$meta_description = get_mata_data('meta_description');
 			$meta_keywords = get_mata_data('meta_keywords');
@@ -351,7 +354,10 @@ class Front extends CI_Controller
 			$this->data['home'] = get_home();
 			$theme_name = frontend_permissions('theme_name');
 			if ($theme_name == 'theme_four') {
+				
 				$this->load->view('front/four/front', $this->data);
+				$this->load->view('setting-forms/pricing_table', $this->data);
+
 			}elseif ($theme_name == 'theme_three') {
 				$this->load->view('front/three/front', $this->data);
 			} elseif ($theme_name == 'theme_two') {

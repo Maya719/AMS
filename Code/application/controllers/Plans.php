@@ -75,6 +75,7 @@ class Plans extends CI_Controller
 			$this->data['plans'] = $this->plans_model->get_plans();
 			// echo json_encode($this->data['plans']);
 			$this->load->view('plans', $this->data);
+
 		} else {
 			redirect('auth', 'refresh');
 		}
@@ -1172,6 +1173,8 @@ class Plans extends CI_Controller
 
 	public function edit()
 	{
+
+
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->form_validation->set_rules('update_id', 'Plan ID', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('title', 'Title', 'trim|required|strip_tags|xss_clean');
@@ -1186,15 +1189,15 @@ class Plans extends CI_Controller
 
 				$modules['select_all'] = $this->input->post('select_all') ? 1 : 0;
 				$modules['projects'] = $this->input->post('projects_module') ? 1 : 0;
-				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
-				$modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
+				// $modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
+				// $modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
 				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
 				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 0;
 				$modules['departments'] = $this->input->post('departments') ? 1 : 0;
 				$modules['clients'] = $this->input->post('clients') ? 1 : 0;
-				$modules['calendar'] = $this->input->post('calendar') ? 1 : 0;
+				// $modules['calendar'] = $this->input->post('calendar') ? 1 : 0;
 				$modules['leaves'] = $this->input->post('leaves') ? 1 : 0;
 				$modules['leaves_types'] = $this->input->post('leaves_types') ? 1 : 0;
 				$modules['leave_hierarchy'] = $this->input->post('leave_hierarchy') ? 1 : 0;
@@ -1208,7 +1211,7 @@ class Plans extends CI_Controller
 				$modules['chat'] = $this->input->post('chat') ? 1 : 0;
 				$modules['user_permissions'] = $this->input->post('user_permissions') ? 1 : 0;
 				$modules['notifications'] = $this->input->post('notifications') ? 1 : 0;
-				$modules['languages'] = $this->input->post('languages') ? 1 : 0;
+				// $modules['languages'] = $this->input->post('languages') ? 1 : 0;
 				$modules['reports'] = $this->input->post('reports') ? 1 : 0;
 				$modules['support'] = $this->input->post('support') ? 1 : 0;
 
