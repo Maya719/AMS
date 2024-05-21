@@ -78,6 +78,37 @@ $query_builder = TRUE;
 *  Local
 *
 */
+<<<<<<< HEAD
+=======
+
+// $db['default'] = array(
+// 	'dsn'	=> '',
+// 	'hostname' => 'localhost',
+// 	'username' => 'root',
+// 	'password' => '',
+// 	'database' => 'ams',
+// 	'dbdriver' => 'mysqli',
+// 	'dbprefix' => '',
+// 	'pconnect' => FALSE,
+// 	'db_debug' => (ENVIRONMENT !== 'production'),
+// 	'cache_on' => FALSE,
+// 	'cachedir' => '',
+// 	'char_set' => 'utf8',
+// 	'dbcollat' => 'utf8_general_ci',
+// 	'swap_pre' => '',
+// 	'encrypt' => FALSE,
+// 	'compress' => FALSE,
+// 	'stricton' => FALSE,
+// 	'failover' => array(),
+// 	'save_queries' => TRUE
+// );
+
+/* 
+*
+*  shared
+*
+*/
+>>>>>>> a4799e03488dd17c0003e95b172fe0deb5164681
 
 $db['default'] = array(
 	'dsn'	=> '',
@@ -107,6 +138,7 @@ $db['default'] = array(
 *
 */
 
+<<<<<<< HEAD
 // $db['default'] = array(
 // 	'dsn'	=> '',
 // 	'hostname' => 'localhost',
@@ -140,6 +172,17 @@ $db['default'] = array(
 // $db['default'] = array(
 // 	'dsn'	=> '',
 // 	'hostname' => 'localhost',
+=======
+/* 
+*
+*  Airnet
+*
+*/
+
+// $db['default'] = array(
+// 	'dsn'	=> '',
+// 	'hostname' => 'localhost',
+>>>>>>> a4799e03488dd17c0003e95b172fe0deb5164681
 // 	'username' => 'pms',
 // 	'password' => 'kbq5lRmYU5j1Q35su0fj',
 // 	'database' => 'pms',

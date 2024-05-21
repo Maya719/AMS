@@ -707,6 +707,7 @@ class Leaves extends CI_Controller
 						foreach ($log as $value) {
 							$this->leaves_model->createLog($value);
 						}
+<<<<<<< HEAD
 						$CreateNotifications = $this->CreateNotification($step, $data['user_id']);
 						$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
 						$employee_id_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
@@ -743,6 +744,46 @@ class Leaves extends CI_Controller
 							$notification_id = $this->notifications_model->create($notification_data);
 						}
 
+=======
+            
+
+						$CreateNotifications = $this->CreateNotification($step, $data['user_id']);
+						$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
+						$employee_id_query = $this->db->query("SELECT * FROM users WHERE id = $user_id");
+						$employee_id_result = $employee_id_query->row_array();
+						foreach ($CreateNotifications as $system_user) {
+							$template_data = array();
+							$template_data['EMPLOYEE_NAME'] = $employee_id_result['first_name'] . ' ' . $employee_id_result['last_name'];
+							$template_data['NAME'] = $system_user->first_name . ' ' . $system_user->last_name;
+							$type = $this->input->post('type_add');
+							$template_data['LEAVE_TYPE'] = '';
+							$querys = $this->db->query("SELECT * FROM leaves_type");
+							$leaves = $querys->result_array();
+							if (!empty($leaves)) {
+								foreach ($leaves as $leave) {
+									if ($type == $leave['id']) {
+										$template_data['LEAVE_TYPE'] = $leave['name'];
+									}
+								}
+							}
+							$template_data['STARTING_DATE'] = $data['starting_date'] . ' ' . $data['starting_time'];
+							$template_data['REASON'] = $this->input->post('leave_reason');
+							$template_data['DUE_DATE'] = $data['ending_date'] . ' ' . $data['ending_time'];
+							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
+							$email_template = render_email_template('leave_request', $template_data);
+							send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+
+							$notification_data = array(
+								'notification' => 'Leave request received',
+								'type' => 'leave_request',
+								'type_id' => $leave_id,
+								'from_id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id'),
+								'to_id' => $system_user->user_id,
+							);
+							$notification_id = $this->notifications_model->create($notification_data);
+						}
+
+>>>>>>> a4799e03488dd17c0003e95b172fe0deb5164681
 						$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
 						$this->session->set_flashdata('message_type', 'success');
 						$this->data['template_data'] = $template_data;
