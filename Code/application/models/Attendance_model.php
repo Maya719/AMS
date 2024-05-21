@@ -716,9 +716,6 @@ class Attendance_model extends CI_Model
     }
     function connect()
     {
-        ini_set('display_errors', 1);
-		ini_set('display_startup_errors', 1);
-		error_reporting(E_ALL);
         $datetime = new DateTime();
         $timezone = new DateTimeZone('Asia/Karachi');
         $datetime->setTimezone($timezone);
@@ -734,7 +731,7 @@ class Attendance_model extends CI_Model
                 $zk->setTime($cdate);
                 $users = $zk->getUser();
                 $attendance = $zk->getAttendance();
-                // $zk->clearAttendance();
+                $zk->clearAttendance();
                 $zk->enableDevice();
                 $zk->disconnect();
                 foreach ($attendance as $key => $attendances) {

@@ -455,9 +455,12 @@
                     showBullets: false,
                     tooltipClass: 'customTooltip'
                 }).start().oncomplete(function() {
-                    
+                    localStorage.setItem('tourStep', '0');
+                    localStorage.removeItem('tourStep');
+                    window.location.href = base_url + 'home';
                 }).onexit(function() {
-                   
+                   localStorage.setItem('tourStep', '0');
+                    window.location.href = base_url + 'home';
                 });
             }
         });

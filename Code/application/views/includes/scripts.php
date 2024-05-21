@@ -236,9 +236,11 @@
 <script>
   $(document).ready(function() {
     <?php
-    if (is_null($this->session->userdata('show_demo'))) {
+    if (is_null($this->session->userdata('show_demo')) && $this->ion_auth->is_admin()) {
     ?>
-      $('#myModel').modal('show');
+      if (localStorage.getItem('tourStep') != 0) {
+        $('#myModel').modal('show');
+      }
     <?php
     }
     ?>
