@@ -14724,6 +14724,7 @@ p.checkout-coupon input[type="text"]:focus {
   width: 100%;
   border-collapse: collapse;
  
+ 
 }
 
 .resp-pricing-table th,
@@ -14731,6 +14732,8 @@ p.checkout-coupon input[type="text"]:focus {
   padding: 8px;
   text-align: center;
   border: 1px solid #ddd;
+
+  padding: 1.9rem;
 }
 
 

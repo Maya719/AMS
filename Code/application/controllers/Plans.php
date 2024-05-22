@@ -74,6 +74,7 @@ class Plans extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['plans'] = $this->plans_model->get_plans();
 			// echo json_encode($this->data['plans']);
+			// exit;
 			$this->load->view('plans', $this->data);
 
 		} else {

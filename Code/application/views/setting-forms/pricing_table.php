@@ -103,7 +103,7 @@
                 foreach ($plans as $key => $plan) {
                 ?>
                     <td data-label=<?= $plan['title'] ?>>
-                        <a href="<?= base_url('auth/register') ?>" class="tp-btn">Get Started Now <i class="fa-regular fa-arrow-right-long"></i></a>
+                        <a href="<?= base_url('auth/register') ?>" class="tp-btn">Get Started Now <span><img width="28" height="28" src=<?= base_url('assets2/images/landing_page_images/arrow.gif')?> alt="->"></span></a>
                     </td>
                 <?php
                 }
@@ -119,7 +119,7 @@
                 <td data-label="Premium">
                     <a href="<?= base_url('auth/register') ?>" class="tp-btn">Get Started Now <i class="fa-regular fa-arrow-right-long"></i></a>
                 </td> -->
-                
+
             </tr>
         </tbody>
     </table>

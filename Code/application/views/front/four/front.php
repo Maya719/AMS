@@ -442,7 +442,10 @@
                         </div>
                     </div>
                    
+                    <?php $this->load->view('front/four/previous_pricing.php'); ?>
+
                     <?php $this->load->view('setting-forms/pricing_table'); ?>
+                    <?php $this->load->view('setting-forms/compare_features'); ?>
                 </div>
             </div>
         </div>
