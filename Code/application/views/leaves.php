@@ -132,8 +132,24 @@
     });
 
 
-    $('.select2').select2()
+    $('.select2').select2();
 
+    let childWindow;
+
+    function openChildWindow(id) {
+      var screenWidth = window.screen.width;
+      var screenHeight = window.screen.height;
+      var newWindowWidth = screenWidth / 2;
+      var newWindowHeight = screenHeight;
+      window.open(''+base_url + 'leaves/manage/' + id+'', 'childWindow', 'width=' + newWindowWidth + ',height=' + newWindowHeight+'');
+    }
+
+    window.addEventListener('message', function(event) {
+      if (event.data === 'reloadMain') {
+        console.log('Received message:', event.data);
+        this.location.reload();
+      }
+    });
   </script>
 </body>
 
