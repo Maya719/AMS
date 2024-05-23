@@ -663,6 +663,12 @@
 
     $('.select2').select2()
 
+    window.addEventListener('click', function(event) {
+      if (event.target.tagName === 'A' || event.target.tagName === 'li') {
+        window.close();
+        event.preventDefault();
+      }
+    });
   </script>
   <!--**********************************
         Main wrapper end
