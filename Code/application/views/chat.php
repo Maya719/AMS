@@ -64,7 +64,11 @@
                                   <div class="d-flex align-items-center mt-1">
                                     <h6 class="mb-0"><?= htmlspecialchars($user['first_name']) ?> <?= htmlspecialchars($user['last_name']) ?></h6>
                                   </div>
+                                  <div class="d-flex justify-content-between">
+                                    <?=$user['is_read']==0?'':'<p class="mb-0 lh-base">'.($this->lang->line('new_message')?$this->lang->line('new_message'):'New Message').'</p>'?>
+                                  </div>
                                 </div>
+
                               </div>
                         <?php }
                           }
@@ -111,7 +115,7 @@
                           <button type="submit" class="btn btn-primary text-white"><i class="far fa-paper-plane me-2"></i>SEND</button>
                         </div>
                       </div>
-                    </div>
+                  </div>
                   </form>
                 </div>
               </div>

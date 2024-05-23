@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
 use PHPMailer\PHPMailer\PHPMailer;
 
 require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
@@ -9,7 +10,7 @@ require 'vendor/phpmailer/phpmailer/src/Exception.php';
 function get_notifications_live()
 {
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $new_noti = true;
     $show_beep_for_msg = false;
     $show_beep_for_support_msg = false;
@@ -83,7 +84,6 @@ function get_notifications_live()
                 </div>
             </a>';
             $count++;
-
         }
     } else {
         if ($new_noti) {
@@ -156,12 +156,19 @@ function get_notifications_live2()
     if ($show_beep_for_msg) {
         $new_noti = false;
 
-        $new_message = '<a href="' . (base_url('chat')) . '" class="dropdown-item dropdown-item-unread">
-        <figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-comment-alt"></figure>
-        <h6 class="dropdown-item-desc m-2">
-        ' . ($CI->lang->line('new_message') ? $CI->lang->line('new_message') : 'New Message') . '
-        </h6>
-        </a>';
+        // $new_message = '<a href="' . (base_url('chat')) . '" class="dropdown-item dropdown-item-unread">
+        // <figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-comment-alt"></figure>
+        // <h6 class="dropdown-item-desc m-2">
+        // ' . ($CI->lang->line('new_message') ? $CI->lang->line('new_message') : 'New Message') . '
+        // </h6>
+        // </a>';
+        $new_message = '<li>
+        <div class="timeline-panel">
+        <div class="media-body">
+            <h6 class="mb-1">' . ($CI->lang->line('new_message') ? $CI->lang->line('new_message') : 'New Message') . '
+            </div>
+        </div>
+        </li>';
     }
 
     $count = 0;
@@ -218,8 +225,6 @@ function get_notifications_live2()
     <div class="dropdown-menu dropdown-menu-end">
       <div id="DZ_W_Notification1" class="widget-media dlab-scroll p-3" style="height:380px;">
         <ul class="timeline" id="new_live_notifications">
-         ' . ($new_support_message_received) . '
-         ' . ($new_message) . '
          ' . ($whole_noti) . '
         </ul>
       </div>
@@ -230,7 +235,7 @@ function get_notifications_live2()
 
 function get_google_client_id()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'logins']);
     $query = $CI->db->get();
@@ -248,7 +253,7 @@ function get_google_client_id()
 
 function get_google_client_secret()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'logins']);
     $query = $CI->db->get();
@@ -266,7 +271,7 @@ function get_google_client_secret()
 
 function get_mata_data($type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $where_type = 'seo';
 
@@ -295,13 +300,13 @@ function get_mata_data($type = '')
 
 function get_unread_msg_count()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     return $CI->chat_model->get_unread_msg_count($CI->session->userdata('user_id'));
 }
 
 function get_chat_message_count()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $unread_msg_count = get_unread_msg_count_numeric(); // Assuming this function gets the unread chat message count
 
@@ -324,19 +329,19 @@ function get_chat_message_count()
 
 function get_unread_msg_count_numeric()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     return $CI->chat_model->get_unread_msg_count_numeric($CI->session->userdata('user_id'));
 }
 
 function get_unread_support_msg_count()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     return $CI->support_model->get_unread_support_msg_count($CI->session->userdata('user_id'));
 }
 
 function from_email()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->load->library('session');
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
@@ -368,7 +373,7 @@ function from_email()
 
 function set_expire_all_expired_plans()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     if ($CI->db->query("UPDATE users_plans SET expired=0 WHERE expired=1 AND end_date < CURDATE() ")) {
         return true;
     } else {
@@ -466,7 +471,7 @@ function send_mail($to, $subject, $message)
 
 function get_google_recaptcha_site_key()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'recaptcha']);
     $query = $CI->db->get();
@@ -483,7 +488,7 @@ function get_google_recaptcha_site_key()
 }
 function get_google_recaptcha_secret_key()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'recaptcha']);
     $query = $CI->db->get();
@@ -500,7 +505,7 @@ function get_google_recaptcha_secret_key()
 }
 function get_header_code()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'custom_code']);
     $query = $CI->db->get();
@@ -518,7 +523,7 @@ function get_header_code()
 
 function get_footer_code()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'custom_code']);
     $query = $CI->db->get();
@@ -537,7 +542,7 @@ function get_footer_code()
 function turn_off_new_user_registration()
 {
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -554,13 +559,12 @@ function turn_off_new_user_registration()
     } else {
         return 0;
     }
-
 }
 
 function theme_color()
 {
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -577,13 +581,12 @@ function theme_color()
     } else {
         return '#e52165';
     }
-
 }
 
 function email_activation()
 {
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -600,12 +603,11 @@ function email_activation()
     } else {
         return false;
     }
-
 }
 
 function is_storage_limit_exceeded($user_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     if (empty($user_id)) {
         $user_id = $CI->session->userdata('saas_id');
     }
@@ -624,7 +626,7 @@ function is_storage_limit_exceeded($user_id = '')
 
 function check_my_storage($dir = '', $user_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     if (empty($user_id)) {
         $user_id = $CI->session->userdata('saas_id');
@@ -684,7 +686,7 @@ function formatBytes($kb, $type = 'kb')
 
 function check_my_timer($task_id = '', $user_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $where = '';
     if ($task_id) {
         $where .= " AND task_id=$task_id ";
@@ -708,7 +710,7 @@ function check_my_timer($task_id = '', $user_id = '')
 
 function default_language()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -740,7 +742,7 @@ function default_language()
 
 function get_my_invoices_details()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $invoices = $CI->invoices_model->get_invoices();
     if ($invoices) {
 
@@ -825,7 +827,7 @@ function get_my_invoices_details()
 
 function company_details($type = '', $user_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     if (empty($user_id)) {
         if ($CI->ion_auth->in_group(4)) {
             $where_type = 'company_' . $CI->session->userdata('user_id');
@@ -861,7 +863,7 @@ function company_details($type = '', $user_id = '')
 
 function get_tax($tax_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('taxes');
     $CI->db->where(['saas_id' => $CI->session->userdata('saas_id')]);
     if ($tax_id) {
@@ -878,7 +880,7 @@ function get_tax($tax_id = '')
 
 function get_currency($type)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $where_type = 'general_' . $CI->session->userdata('saas_id');
 
@@ -911,7 +913,7 @@ function get_currency($type)
 
 function get_saas_currency($type)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $where_type = 'general';
 
@@ -944,7 +946,7 @@ function get_saas_currency($type)
 
 function get_home($lang = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->where(['type' => 'home']);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
@@ -965,7 +967,7 @@ function get_home($lang = '')
 
 function get_languages($language_id = '', $language_name = '', $status = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $languages = $CI->languages_model->get_languages($language_id, $language_name, $status);
     if (empty($languages)) {
         return false;
@@ -977,7 +979,7 @@ function get_languages($language_id = '', $language_name = '', $status = '')
 function get_notifications($user_id = '')
 {
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $left_join = " LEFT JOIN users u ON n.from_id=u.id ";
     $query = $CI->db->query("SELECT n.*,u.first_name,u.last_name,u.profile FROM notifications n $left_join WHERE is_read=0 AND to_id=" . $CI->session->userdata('user_id') . " ORDER BY n.created DESC LIMIT 10");
     $notifications = $query->result_array();
@@ -1217,7 +1219,6 @@ function get_notifications($user_id = '')
             $temp[$key]['first_name'] = $notification['first_name'];
             $temp[$key]['last_name'] = $notification['last_name'];
             $temp[$key]['profile'] = $notification['profile'];
-
         }
     } else {
         $temp = array();
@@ -1281,7 +1282,7 @@ function recurse_copy($src, $dst)
 
 function get_features($feature_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->where(['type' => 'features']);
     $query = $CI->db->get('settings');
     $data = $query->result_array();
@@ -1305,7 +1306,7 @@ function get_features($feature_type = '')
 
 function frontend_permissions($permissions_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where(['type' => 'frontend']);
     $query = $CI->db->get('settings');
@@ -1330,7 +1331,7 @@ function frontend_permissions($permissions_type = '')
 
 function is_module_allowed($module_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     if ($CI->session->userdata('saas_id') == '') {
         return true;
@@ -1361,7 +1362,7 @@ function is_module_allowed($module_type = '')
 
 function my_plan_features($feature_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     if ($CI->session->userdata('saas_id') == '') {
         return true;
@@ -1384,12 +1385,11 @@ function my_plan_features($feature_type = '')
         }
         return true;
     }
-
 }
 
 function get_current_plan($saas_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     if (empty($saas_id)) {
         $saas_id = $CI->session->userdata('saas_id');
@@ -1458,7 +1458,7 @@ function get_current_plan($saas_id = '')
 
 function permissions($permissions_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
     $role = $group[0]->name;
@@ -1494,7 +1494,7 @@ function permissions($permissions_type = '')
 
 function change_permissions($group_id)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
     $permissions = $group[0]->change_permissions_of;
@@ -1516,7 +1516,7 @@ function change_permissions($group_id)
 
 function get_notifications_group_id()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $groups = $CI->ion_auth->get_all_groups();
     $matchingGroupIds = [];
@@ -1556,7 +1556,7 @@ function get_notifications_group_id()
 
 function get_pms_notifications_group_id()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $groups = $CI->ion_auth->get_all_groups();
     $matchingGroupIds = [];
@@ -1599,7 +1599,7 @@ function get_pms_notifications_group_id()
 
 function get_permissions($permissions_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', $permissions_type . '_permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -1620,7 +1620,7 @@ function get_permissions($permissions_type = '')
 
 function users_permissions($permissions_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -1655,7 +1655,7 @@ function users_permissions($permissions_type = '')
 
 function is_user_client($user_id)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $saas_id = $CI->session->userdata('saas_id');
     $query = $CI->db->select('groups.name AS group_name')
         ->from('users_groups')
@@ -1673,7 +1673,7 @@ function is_user_client($user_id)
 
 function is_client()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $saas_id = $CI->session->userdata('saas_id');
     $user_id = $CI->session->userdata('user_id');
 
@@ -1692,7 +1692,7 @@ function is_client()
 }
 function is_saas_admin()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $user_id = $CI->session->userdata('user_id');
     $group = $CI->ion_auth->get_users_groups($user_id)->result();
     $role = $group[0]->name;
@@ -1704,7 +1704,7 @@ function is_saas_admin()
 }
 function selected_users()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $saas_id = $CI->session->userdata('saas_id');
     $user_id = $CI->session->userdata('user_id');
 
@@ -1733,7 +1733,7 @@ function selected_users()
 }
 function clients_permissions($permissions_type = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'clients_permissions_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -1768,7 +1768,7 @@ function clients_permissions($permissions_type = '')
 
 function project_status($field = '', $status_id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     if (!empty($field)) {
         $CI->db->select($field);
     }
@@ -1797,7 +1797,7 @@ function project_status($field = '', $status_id = '')
 
 function priorities()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('priorities');
     $query = $CI->db->get();
     $data = $query->result_array();
@@ -1820,7 +1820,7 @@ function priorities()
 
 function task_status($id = '')
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('task_status');
     if (!empty($id)) {
         $CI->db->where(['id' => $id]);
@@ -1848,7 +1848,7 @@ function task_status($id = '')
 
 function get_razorpay_key_id($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -1872,7 +1872,7 @@ function get_razorpay_key_id($is_non_saas = false)
 
 function get_paystack_public_key($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -1896,7 +1896,7 @@ function get_paystack_public_key($is_non_saas = false)
 
 function get_bank_details($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -1920,7 +1920,7 @@ function get_bank_details($is_non_saas = false)
 
 function get_offline_bank_transfer($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -1944,7 +1944,7 @@ function get_offline_bank_transfer($is_non_saas = false)
 
 function get_stripe_publishable_key($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -1967,7 +1967,7 @@ function get_stripe_publishable_key($is_non_saas = false)
 }
 function get_stripe_secret_key($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -1991,7 +1991,7 @@ function get_stripe_secret_key($is_non_saas = false)
 
 function get_paystack_secret_key($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -2015,7 +2015,7 @@ function get_paystack_secret_key($is_non_saas = false)
 
 function get_razorpay_key_secret($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -2039,7 +2039,7 @@ function get_razorpay_key_secret($is_non_saas = false)
 
 function get_paypal_secret($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -2063,7 +2063,7 @@ function get_paypal_secret($is_non_saas = false)
 
 function get_payment_paypal($is_non_saas = false)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     if ($is_non_saas) {
@@ -2087,7 +2087,7 @@ function get_payment_paypal($is_non_saas = false)
 
 function get_system_version()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->select('value');
     $CI->db->from('settings');
     $CI->db->where(['type' => 'system_version']);
@@ -2102,7 +2102,7 @@ function get_system_version()
 
 function is_my_project($id)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     if ($CI->ion_auth->in_group(4)) {
         $query = $CI->db->query("SELECT id FROM projects WHERE id=$id AND client_id=" . $CI->session->userdata('user_id'));
     } else {
@@ -2120,7 +2120,7 @@ function is_my_project($id)
 function get_earnings()
 {
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $query = $CI->db->query("SELECT sum(amount) AS amount FROM transactions WHERE status=1");
     $res = $query->result_array();
     if (!empty($res)) {
@@ -2128,7 +2128,6 @@ function get_earnings()
     } else {
         return false;
     }
-
 }
 
 function get_count($field, $table, $where = '')
@@ -2136,7 +2135,7 @@ function get_count($field, $table, $where = '')
     if (!empty($where))
         $where = "where " . $where;
 
-    $CI =& get_instance();
+    $CI = &get_instance();
     $query = $CI->db->query("SELECT $field FROM " . $table . " " . $where . " ");
     $res = $query->result_array();
     if (!empty($res)) {
@@ -2144,12 +2143,11 @@ function get_count($field, $table, $where = '')
     } else {
         return 0;
     }
-
 }
 
 function get_email_library()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2180,7 +2178,7 @@ function get_email_library()
 
 function smtp_host()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2211,7 +2209,7 @@ function smtp_host()
 
 function smtp_port()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2242,7 +2240,7 @@ function smtp_port()
 
 function smtp_email()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->load->library('session');
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
@@ -2274,7 +2272,7 @@ function smtp_email()
 
 function smtp_password()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2305,7 +2303,7 @@ function smtp_password()
 
 function smtp_encryption()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'email_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2336,7 +2334,7 @@ function smtp_encryption()
 
 function company_name()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2357,7 +2355,7 @@ function company_name()
 
 function company_email()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2378,7 +2376,7 @@ function company_email()
 
 function footer_text()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2399,7 +2397,7 @@ function footer_text()
 
 function google_analytics()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2420,7 +2418,7 @@ function google_analytics()
 
 function mysql_timezone()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2451,7 +2449,7 @@ function mysql_timezone()
 
 function alert_days()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
 
     $CI->db->from('settings');
@@ -2475,7 +2473,7 @@ function alert_days()
 
 function php_timezone()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2506,7 +2504,7 @@ function php_timezone()
 
 function system_date_format_js()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2537,7 +2535,7 @@ function system_date_format_js()
 
 function system_time_format_js()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2568,7 +2566,7 @@ function system_time_format_js()
 
 function count_days_btw_two_dates($today, $sec_date)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $today = date_create($today);
     $sec_date = date_create($sec_date);
     $diff = date_diff($today, $sec_date);
@@ -2590,7 +2588,7 @@ function format_date($date, $date_format)
 
 function system_date_format()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2621,7 +2619,7 @@ function system_date_format()
 
 function system_time_format()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2652,7 +2650,7 @@ function system_time_format()
 
 function full_logo()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2673,7 +2671,7 @@ function full_logo()
 
 function file_upload_format()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
 
     $CI->db->where('type', 'general_' . $CI->session->userdata('saas_id'));
     $count = $CI->db->get('settings');
@@ -2704,7 +2702,7 @@ function file_upload_format()
 
 function half_logo()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2725,7 +2723,7 @@ function half_logo()
 
 function favicon()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('settings');
     $CI->db->where(['type' => 'general']);
     $query = $CI->db->get();
@@ -2747,7 +2745,7 @@ function favicon()
 
 function time_formats()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('time_formats');
     $query = $CI->db->get();
     $data = $query->result_array();
@@ -2760,7 +2758,7 @@ function time_formats()
 
 function date_formats()
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $CI->db->from('date_formats');
     $query = $CI->db->get();
     $data = $query->result_array();
@@ -2828,7 +2826,7 @@ function formatOffset($offset)
 // new pms
 function get_user_id_from_employee_id($employee_id)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $employeeIdQuery = $CI->db->select('id')->get_where('users', array('employee_id' => $employee_id));
     $employeeIdRow = $employeeIdQuery->row();
     $employeeId = $employeeIdRow->id;
@@ -2836,7 +2834,7 @@ function get_user_id_from_employee_id($employee_id)
 }
 function get_employee_id_from_user_id($id)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $employeeIdQuery = $CI->db->select('employee_id')->get_where('users', array('id' => $id));
     $employeeIdRow = $employeeIdQuery->row();
     $employeeId = $employeeIdRow->employee_id;
@@ -2846,7 +2844,7 @@ function get_employee_id_from_user_id($id)
 
 function if_allowd_to_create_new($checking_for)
 {
-    $CI =& get_instance();
+    $CI = &get_instance();
     $total_number_allowed_of_what_you_are_looking_for = (int) get_current_plan()[$checking_for];
 
     if ($total_number_allowed_of_what_you_are_looking_for == -1)
@@ -2862,6 +2860,3 @@ function if_allowd_to_create_new($checking_for)
         return true;
     return false;
 }
-
-
-?>
