@@ -669,7 +669,7 @@ class Attendance_model extends CI_Model
         if ($query->num_rows() > 0) {
             $results = $query->row();
             $leaveStart = $results->starting_time;
-            if ($shiftStartTime <= $leaveStart) {
+            if ($shiftStartTime >= $leaveStart) {
                 return true;
             } else {
                 return false;
