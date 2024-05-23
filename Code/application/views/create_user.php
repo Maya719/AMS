@@ -2,6 +2,7 @@
 <style>
 
 </style>
+<link href="<?= base_url('assets2/vendor/introjs/modern.css') ?>" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -256,7 +257,7 @@
                             </form>
                         <?php } else { ?>
                             <div class="d-flex justify-content-center align-items-center">
-                                <p>User limit has exceted in your plan</p>
+                                <p>User limit has exceeded in your plan</p>
                             </div>
                         <?php } ?>
                     </div>
@@ -459,7 +460,7 @@
                     localStorage.removeItem('tourStep');
                     window.location.href = base_url + 'home';
                 }).onexit(function() {
-                   localStorage.setItem('tourStep', '0');
+                    localStorage.setItem('tourStep', '0');
                     window.location.href = base_url + 'home';
                 });
             }

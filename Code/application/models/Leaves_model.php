@@ -192,11 +192,14 @@ class Leaves_model extends CI_Model
                 if (($forword_result["is_forworded"]) && (permissions('leaves_status') || $this->ion_auth->is_admin())) {
                     $leave['btn'] = false;
                     if ($Logstatus == 1) {
-                        $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) :  $forword_result["forworded_to"]) . '</span>';
+                        // $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     } elseif ($Logstatus == 2) {
-                        $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : $forword_result["forworded_to"]) . '</span>';
+                        // $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     } else {
-                        $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                        $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : $forword_result["forworded_to"]) . '</span>';
+                        // $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     }
                 } else {
                     $leave['btn'] = true;
@@ -207,7 +210,8 @@ class Leaves_model extends CI_Model
                 $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('approved') ? htmlspecialchars($this->lang->line('approved')) : 'Approved') . '</span>';
             } elseif ($leave['status'] == 2) {
                 if ($forword_result["is_forworded"]) {
-                    $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
+                    $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : $forword_result["forworded_to"]) . '</span>';
+                    // $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     $leave['btn'] = false;
                 } else {
                     $leave['btn'] = false;

@@ -2,6 +2,7 @@
 <style>
 
 </style>
+<link href="<?= base_url('assets2/vendor/introjs/modern.css') ?>" rel="stylesheet" type="text/css" />
 </head>
 
 <body>

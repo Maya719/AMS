@@ -74,6 +74,7 @@
 <script src="<?= base_url('assets2/vendor/datatables/responsive/responsive.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/multiselect/multiselect.js') ?>"></script>
+<script src="<?= base_url('assets2/vendor/introjs/intro.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
 <script src="<?= base_url('assets2/js/stisla.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.js') ?>"></script>
@@ -232,7 +233,6 @@
   checkSprintDate();
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
 <script>
   $(document).ready(function() {
     <?php
@@ -241,6 +241,10 @@
       if (localStorage.getItem('tourStep') != 0) {
         $('#myModel').modal('show');
       }
+      $(document).on('click', '#CancelGuide', function(e) {
+        localStorage.setItem('tourStep', '0');
+        $('#myModel').modal('hide');
+      });
     <?php
     }
     ?>
