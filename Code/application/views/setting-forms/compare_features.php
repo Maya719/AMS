@@ -83,13 +83,13 @@
             // ];
 
 
-            $ams_modules = ['attendance_management_system','attendance', 'leaves', 'leaves_types', 'leave_hierarchy', 'biometric_missing', 'shifts', 'biometric_machine', 'holidays'];
-            $pms_modules = ['project_management_system','projects', 'tasks', 'team_members', 'departments'];
+            $ams_modules = ['attendance_management_system', 'attendance', 'leaves', 'leaves_types', 'leave_hierarchy', 'biometric_missing', 'shifts', 'biometric_machine', 'holidays'];
+            $pms_modules = ['project_management_system', 'projects', 'tasks', 'team_members', 'departments'];
             $other_modules = ['user_roles', 'clients', 'todo', 'notice_board', 'notes', 'chat', 'user_permissions', 'notifications', 'reports', 'support'];
 
 
 
-         
+
             $order = array_merge($other_modules, $pms_modules, $ams_modules);
 
             foreach ($order as $module) {
@@ -107,12 +107,12 @@
                         }
                         echo '</tr>';
                     }
-                 
+
                     unset($featureNames[$module]);
                 }
             }
 
-   
+
             foreach ($featureNames as $module => $displayName) {
                 if ($module != 'select_all') {
                     echo '<tr>';
