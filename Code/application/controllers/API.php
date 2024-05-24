@@ -77,10 +77,6 @@ class API extends CI_Controller
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-
-    $recipients = [8];
-    push_notifications('event', $recipients);
-
-    exit;
+    test_notification();
   }
 }

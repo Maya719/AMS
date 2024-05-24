@@ -787,6 +787,10 @@ class Leaves extends CI_Controller
 							$this->leaves_model->createLog($value);
 						}
 
+						ini_set('display_errors', 1);
+						ini_set('display_startup_errors', 1);
+						error_reporting(E_ALL);
+
 						// // for notificatoin
 						$user_ids = get_users_for_current_level_of_leave($leave_id, $user_id);
 						push_notifications('leave_requested', [

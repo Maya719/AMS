@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-require __DIR__ . '/../../../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
@@ -63,6 +63,49 @@ function get_users_for_current_level_of_leave($leave_id, $user_id, $mode = '')
   }
   $uids = implode(", ", $uids);
   return $gids;
+}
+
+function test_notification()
+{
+  $notifications = [];
+  $message = array();
+  $message['msg'] = "Incoming holiday 😀";
+  $message['title'] = ucfirst("Holiday");
+  $message['url'] = "https://pms.mobipixels.com/attendance/user_attendance";
+  $subscribers = array();
+  $subscribers[] = json_decode('{"endpoint":"https:\/\/fcm.googleapis.com\/fcm\/send\/dn1bJswZ1Kc:APA91bFrGTY9CS2Bt6dY8FeZkuuFsyQ1pWmMKNl3_aDN1rcl2LS8564hidzA1_NazwqhfBbjpSXcl3x2uC9ZOJbOlr572Bc1HvfectCDQtCL3KoB7SpYCwKdhWV3QVrALBii8lPCBPat","expirationTime":null,"keys":{"p256dh":"BIJO4AhhjLW6Ayz7oNgsRHBsq0Qdn1QyVOuSTcqSjTRO47GIb4YKQMjU3wm0utitmb23OptxFoCY6bNBn9OhYAY","auth":"cosw--jI51VJkRPx0B5POQ"}}', true);
+  foreach ($subscribers as $value) {
+    $subscription = Subscription::create($value);
+    // $subscription = Subscription::create(json_decode($value, true));
+    $notification = [
+      'title' => $message['title'],
+      'body' => $message['msg']
+    ];
+    $notifications[] = ['subscription' => $subscription, 'payload' => json_encode($notification),];
+    // $notifications[] = ['subscription' => $subscription, 'payload' => '{"message":"' . $message['msg'] . '"}',];
+  }
+
+  $auth = array(
+    'VAPID' => array(
+      'subject' => 'AMS/PMS',
+      'publicKey' => file_get_contents(__DIR__ . '/../keys/public_key.txt'),
+      'privateKey' => file_get_contents(__DIR__ . '/../keys/private_key.txt'),
+    ),
+  );
+
+  $webPush = new WebPush($auth, [], 6, ['verify' => false]);
+  foreach ($notifications as $notification)
+    $webPush->queueNotification($notification['subscription'], $notification['payload']);
+
+  foreach ($webPush->flush() as $report) {
+    $endpoint = $report->getRequest()->getUri()->__toString();
+
+    if ($report->isSuccess()) {
+      echo json_encode("[v] Message sent successfully for subscription {$endpoint}.");
+    } else {
+      echo json_encode("[x] Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
+    }
+  }
 }
 
 function save_notifications($type, $notification, $from_id = '', $to_id)
@@ -188,7 +231,8 @@ function push_notifications($type, $recipients = [], $metadata = [])
       break;
     case "leave_requested": // the type, forwarded to and user
       $ids = $recipients['user_id'];
-      $query = $CI->db->query("SELECT * FROM notification_subscribers WHERE user_id in ($ids)");
+      $query = $CI->db->query("SELECT * FROM notification_subscribers WHERE user_id in (96)");
+      // $query = $CI->db->query("SELECT * FROM notification_subscribers WHERE user_id in ($ids)");
       $subscribers = $query->result_array();
       break;
     case "leave_forwarded_to": // the type, forwarded to and user
@@ -243,13 +287,14 @@ function push_notifications($type, $recipients = [], $metadata = [])
     // comment this 
     // comment this 
 
-    // if ($report->isSuccess()) {
-    //   echo json_encode("[v] Message sent successfully for subscription {$endpoint}.");
-    // } else {
-    //   echo json_encode("[x] Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
-    // }
+    if ($report->isSuccess()) {
+      echo json_encode("[v] Message sent successfully for subscription {$endpoint}.");
+    } else {
+      echo json_encode("[x] Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
+    }
   }
 
 }
+
 
 
