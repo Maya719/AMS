@@ -146,7 +146,9 @@
           var $new_message = '';
           if ($show_beep_for_msg) {
             $new_noti = false;
-            $new_message = '<a href="<?= base_url('chat') ?>" class="dropdown-item dropdown-item-unread"><figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-comment-alt"></figure><h6 class="dropdown-item-desc m-2"><?= $this->lang->line('new_message') ? $this->lang->line('new_message') : 'New Message' ?></h6></a>';
+            $new_message = '<li><div class="timeline-panel"><div class="media me-2 media-primary"><i class="fa-solid fa-comment"></i></div><div class="media-body"><h6 class="mb-1"><?= $this->lang->line('new_message') ? $this->lang->line('new_message') : 'New Message' ?></h6> </div> </div>  </li>';
+
+            // $new_message = '<a href="<?= base_url('chat') ?>" class="dropdown-item dropdown-item-unread"><h6 class="dropdown-item-desc m-2"></h6></a>';
           }
 
           if ($notifications.length) {

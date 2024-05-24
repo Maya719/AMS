@@ -791,6 +791,15 @@
           </a>
         </li>
       <?php } ?>
+
+      <?php if (($this->ion_auth->is_admin() || permissions('chat_view')) && !is_saas_admin() && is_module_allowed('chat')) { ?>
+        <li><a href="<?= base_url('chat') ?>" aria-expanded="false">
+            <i class="fa-solid fa-message"></i>
+            <span class="nav-text">Chat</span>
+          </a>
+        </li>
+      <?php } ?>
+
       <?php if (($this->ion_auth->is_admin() || permissions('todo_view')) && !is_saas_admin() && is_module_allowed('todo')) { ?>
         <li><a href="<?= base_url('todo') ?>" aria-expanded="false">
             <i class="fa-solid fa-list-check"></i>
