@@ -791,6 +791,15 @@
           </a>
         </li>
       <?php } ?>
+
+      <?php if (($this->ion_auth->is_admin() || permissions('chat_view')) && !is_saas_admin() && is_module_allowed('chat')) { ?>
+        <li><a href="<?= base_url('chat') ?>" aria-expanded="false">
+            <i class="fa-solid fa-message"></i>
+            <span class="nav-text">Chat</span>
+          </a>
+        </li>
+      <?php } ?>
+
       <?php if (($this->ion_auth->is_admin() || permissions('todo_view')) && !is_saas_admin() && is_module_allowed('todo')) { ?>
         <li><a href="<?= base_url('todo') ?>" aria-expanded="false">
             <i class="fa-solid fa-list-check"></i>
@@ -826,16 +835,9 @@
           </ul>
         </li>
       <?php } ?>
-      <?php if (is_module_allowed('support') && ($this->ion_auth->is_admin() || is_saas_admin() || permissions('support_view'))) { ?>
-        <li><a href="<?= base_url('support') ?>" aria-expanded="false">
-            <i class="fa-solid fa-circle-info"></i>
-            <span class="nav-text">Support</span>
-          </a>
-        </li>
-      <?php } ?>
       <?php
       if ($this->ion_auth->is_admin() || is_saas_admin() || permissions('general_view') || permissions('company_view') || permissions('leave_type_view') || permissions('device_view') || permissions('departments_view') || permissions('shift_view') || permissions('time_schedule_view')) { ?>
-        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+        <li id=""><a class="has-arrow " href="javascript:void()" aria-expanded="false" id="GuideStep1">
             <i class="fa-solid fa-gear"></i>
             <span class="nav-text">Settings</span>
           </a>
@@ -856,6 +858,14 @@
             ?>
               <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
                 <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
+              <?php } ?>
+
+              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
+                <li><a id="GuideStep2" href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
+              <?php } ?>
+
+              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
+                <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
               <?php } ?>
 
               <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) && is_module_allowed('leaves')) { ?>
@@ -881,19 +891,21 @@
                 <li><a class="nav-link" href="<?= base_url('settings/policies') ?>"><?= $this->lang->line('applied_policy') ? $this->lang->line('applied_policy') : 'Applied Policy' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
-                <li><a href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
-              <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
-                <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
-              <?php } ?>
             <?php } ?>
           </ul>
         </li>
       <?php
       }
       ?>
+      <?php if (is_module_allowed('support') && ($this->ion_auth->is_admin() || is_saas_admin() || permissions('support_view'))) { ?>
+        <li><a href="<?= base_url('support') ?>" aria-expanded="false">
+            <i class="fa-solid fa-circle-info"></i>
+            <span class="nav-text">Support</span>
+          </a>
+        </li>
+      <?php } ?>
+
     </ul>
     <div class="copyright">
       <p class="fs-12 text-center">Made with <span class="heart"></span> by Airnet Technologies</p>

@@ -44,7 +44,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
-                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('leaves') ?>"><?= $main_page ?></a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="#" onclick="closeChildAndReloadMain();"><?= $main_page ?></a></li>
                         <li class="breadcrumb-item active" aria-current="page">Edit Leave</li>
                     </ol>
                 </nav>
@@ -340,6 +340,42 @@
         }
     }
     ?>
+    <script>
+        function closeChildAndReloadMain() {
+            window.opener.postMessage('reloadMain', window.location.origin);
+            window.close();
+        }
+
+        $(document).on('click', '.btn-edit-leave', function(e) {
+            var form = $('#modal-edit-leaves-part')[0];
+            if (!form || form.nodeName !== 'FORM') {
+                console.error('Form element not found or not a form');
+                return;
+            }
+            var formData = new FormData(form);
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: $(form).attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                beforeSend: function() {
+                    $(".btn-edit-leave").prop("disabled", true);
+                },
+                success: function(result) {
+                    closeChildAndReloadMain();
+                },
+                complete: function() {
+                    $(".btn-edit-leave").prop("disabled", false);
+                }
+            });
+
+            e.preventDefault();
+        });
+    </script>
+
 </body>
 
 </html>

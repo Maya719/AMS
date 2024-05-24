@@ -278,10 +278,10 @@
             var count = 1;
             data.data.forEach(user => {
                 var userRow = '<tr>';
-                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '" target="_blank">' + count + '</a></td>';
+                userRow += '<td style="font-size:10px;"><a href="#" onclick="openChildWindow(' + user.user_id + ')">' + count + '</a></td>';
                 userRow += '<td style="font-size:10px;">' + user.user + '</td>';
                 userRow += '<td style="font-size:10px;">' + user.name + '</td>';
-                userRow += '<td style="font-size:10px;"><a href="' + base_url + 'attendance/user_attendance/' + user.user_id + '" target="_blank">' + user.summery + '</a></td>';
+                userRow += '<td style="font-size:10px;"><a href="#" onclick="openChildWindow(' + user.user_id + ')">' + user.summery + '</a></td>';
 
                 uniqueDates.forEach(date => {
                     if (user.dates[date]) {
@@ -329,6 +329,14 @@
         function emptyDataTable(table) {
             table.find('thead').empty();
             table.find('tbody').empty();
+        }
+
+        let childWindow;
+
+        function openChildWindow(id) {
+            var screenWidth = window.screen.width;
+            var screenHeight = window.screen.height;
+            window.open('' + base_url + 'attendance/user_attendance/' + id + '', 'childWindow', 'width=' + screenWidth + ',height=' + screenHeight + '');
         }
 
         function getUniqueDates(data) {

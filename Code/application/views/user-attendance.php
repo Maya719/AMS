@@ -63,7 +63,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
-            <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('attendance') ?>">Attendance</a></li>
+            <?php if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) : ?>
+              <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('attendance') ?>">Attendance</a></li>
+            <?php endif ?>
             <li class="breadcrumb-item active" aria-current="page"><?= $name ?></li>
           </ol>
         </nav>
@@ -662,7 +664,14 @@
     }
 
     $('.select2').select2()
-
+    <?php if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) : ?>
+    window.addEventListener('click', function(event) {
+      if (event.target.tagName === 'A' || event.target.tagName === 'li') {
+        window.close();
+        event.preventDefault();
+      }
+    });
+    <?php endif ?>
   </script>
   <!--**********************************
         Main wrapper end

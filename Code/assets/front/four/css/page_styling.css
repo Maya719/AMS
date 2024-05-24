@@ -47,7 +47,7 @@
 
 .list_style{
     list-style: disc;
-    line-height: 2.5rem;
+    line-height: 2.7rem;
 
 }
 
@@ -79,6 +79,11 @@
     }
     .list_style{
         line-height: 1.5rem;
+    }
+    .list_style{
+        list-style: disc;
+        line-height: 3.1rem;
+    
     }
 }
 
