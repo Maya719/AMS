@@ -8,7 +8,7 @@
         $modules[$i] = json_decode($plans[$i]['modules'], true);
     }
 
-   
+
 
 
     ?>
@@ -94,7 +94,7 @@
                 <th>Leave Hierarchy</th>
                 <?php for ($i = 0; $i < count($modules); $i++) : ?>
                     <td>
-                        <?= isset($modules[$i]['leave_hierarchy']) && $modules[$i]['leave_hierarchy'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' :'<i class="fas fa-check-circle text-success fs-4"></i>' ; ?>
+                        <?= isset($modules[$i]['leave_hierarchy']) && $modules[$i]['leave_hierarchy'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
                     </td>
                 <?php endfor; ?>
             </tr>
@@ -103,7 +103,7 @@
                 <th>Leaves Requests</th>
                 <?php foreach ($plans as $plan) : ?>
                     <td>
-                        <?= $plan['leave_requests']  == -1 ? 'Unlimited'  : $plan['leave_requests'] .'<span> /user</span>' ; ?>
+                        <?= $plan['leave_requests']  == -1 ? 'Unlimited'  : $plan['leave_requests'] . '<span> /user</span>'; ?>
                     </td>
                 <?php endforeach; ?>
             </tr>
@@ -221,6 +221,20 @@
                 <?php endforeach; ?>
             </tr>
 
+            <tr>
+
+                <td data-label="Actions">Actions</td>
+
+                <?php
+                foreach ($plans as $key => $plan) {
+                ?>
+                    <td data-label=<?= $plan['title'] ?>>
+                        <a href="<?= base_url('auth/register') ?>" class="tp-btn">Get Started Now <span><img width="28" height="28" src=<?= base_url('assets2/images/landing_page_images/arrow.gif') ?> alt="->"></span></a>
+                    </td>
+                <?php
+                }
+                ?>
+            </tr>
 
 
 

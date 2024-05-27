@@ -236,18 +236,18 @@
                             </div>
                             <div class="tp-brands-2-top-img">
 
-                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-3.png") ?>' alt="img-3"></a>
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-5.png") ?>' alt="img-3"></a>
 
                             </div>
                             <div class="tp-brands-2-top-img">
 
-                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-4.png") ?>' alt="img-4"></a>
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-11.png") ?>' alt="img-4"></a>
 
                             </div>
 
                         </div>
 
-                        <div class="tp-brands-2-bottom d-flex d-flex justify-content-center align-items-center">
+                        <!-- <div class="tp-brands-2-bottom d-flex d-flex justify-content-center align-items-center">
                             <div class="tp-brands-2-bottom-img">
 
                                 <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-5.png") ?>' alt="img-5"></a>
@@ -268,9 +268,9 @@
                                 <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-8.png") ?>' alt="img-7"></a>
 
                             </div>
-                        </div>
+                        </div> -->
                         <br>
-                        <div class="tp-brands-2-bottom d-flex d-flex justify-content-center align-items-center">
+                        <!-- <div class="tp-brands-2-bottom d-flex d-flex justify-content-center align-items-center">
                             <div class="tp-brands-2-bottom-img">
 
                                 <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-9.png") ?>' alt="img-7"></a>
@@ -281,7 +281,7 @@
                                 <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-10.png") ?>' alt="img-7"></a>
 
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
@@ -443,8 +443,7 @@
 
 
                     <?php $this->load->view('setting-forms/pricing_features'); ?>
-                    <!-- <?php $this->load->view('setting-forms/pricing_features'); ?> -->
-
+                   
 
                 </div>
             </div>
