@@ -141,6 +141,8 @@ class Plans_model extends CI_Model
     }
 
     function edit($id, $data){
+
+
         $this->db->where('id', $id);
         if($this->db->update('plans', $data))
             return true;

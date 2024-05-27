@@ -186,18 +186,21 @@
                                 case 'agile':
                                   $mod_name = $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile';
                                   break;
+                                case 'scrum':
+                                  $mod_name = $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum';
+                                  break;
                                 case 'tasks':
                                   $mod_name = $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks';
                                   break;
                                 case 'team_members':
                                   $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
                                   break;
-                                case 'user_permissions':
-                                  $mod_name = $this->lang->line('employee_permissions') ? $this->lang->line('employee_permissions') : 'Employees Permissions';
-                                  break;
-                                case 'user_roles':
-                                  $mod_name = $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employees Roles';
-                                  break;
+                                  // case 'user_permissions':
+                                  //   $mod_name = $this->lang->line('employee_permissions') ? $this->lang->line('employee_permissions') : 'Employees Permissions';
+                                  //   break;
+                                  // case 'user_roles':
+                                  //   $mod_name = $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employees Roles';
+                                  //   break;
                                 case 'clients':
                                   $mod_name = $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients';
                                   break;
@@ -216,12 +219,12 @@
                                 case 'biometric_missing':
                                   $mod_name = $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'biometric Missing';
                                   break;
-                                case 'biometric_machine':
-                                  $mod_name = $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines';
-                                  break;
-                                case 'departments':
-                                  $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
-                                  break;
+                                  // case 'biometric_machine':
+                                  //   $mod_name = $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines';
+                                  //   break;
+                                  // case 'departments':
+                                  //   $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
+                                  // break;
                                 case 'holidays':
                                   $mod_name = $this->lang->line('holidays') ? $this->lang->line('holidays') : 'Holidays';
                                   break;
@@ -232,7 +235,7 @@
                                   $mod_name = $this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts';
                                   break;
                                 case 'notice_board':
-                                  $mod_name = $this->lang->line('notice_board') ? $this->lang->line('notice_board') : 'Notice Board';
+                                  $mod_name = $this->lang->line('notice_board') ? $this->lang->line('notice_board') : 'Events Board';
                                   break;
                                 case 'calendar':
                                   $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
@@ -246,6 +249,9 @@
                                 case 'attendance':
                                   $mod_name = $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance';
                                   break;
+                                case 'attendance_leave_policy':
+                                  $mod_name = $this->lang->line('attendance_leave_policy') ? htmlspecialchars($this->lang->line('attendance_leave_policy')) : 'Attendance & Leave policy';
+                                  break;
                                 case 'support':
                                   $mod_name = $this->lang->line('support') ? htmlspecialchars($this->lang->line('support')) : 'Support';
                                   break;
@@ -255,9 +261,9 @@
                                 case 'languages':
                                   $mod_name = $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages';
                                   break;
-                                case 'reports':
-                                  $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
-                                  break;
+                                  // case 'reports':
+                                  //   $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
+                                  //   break;
                                 default:
                                   break;
                               }
@@ -284,9 +290,48 @@
                           </div>';
                           $tempFeatures = '
 					                  <strong>' . ($this->lang->line('storage') ? $this->lang->line('storage') : "Storage") . ': </strong>' . (($plan["storage"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["storage"] . 'GB') . '<br>
+					                  <strong>' . ($this->lang->line('additional_storage') ? $this->lang->line('additional_storage') : "Additional Storage") . ': </strong>' . (($plan["additional_storage"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : ' $' . $plan["additional_storage"] . '/GB') . '<br>
+					                  <strong>' . ($this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : "Biometric Machine") . ': </strong>' . (($plan["biometric_machine"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["biometric_machine"]) . '<br>
+					                  <strong>' . ($this->lang->line('leave_requests') ? $this->lang->line('leave_requests') : "Leave Requests") . ': </strong>' . (($plan["leave_requests"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["leave_requests"]) . '<br>
+					                  <strong>' . ($this->lang->line('office_shifts') ? $this->lang->line('office_shifts') : "Office Shifts") . ': </strong>' . (($plan["office_shifts"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["office_shifts"]) . '<br>
+					                  
+                            <strong>' . ($this->lang->line('email_push_notif') ?: "Email/Push Notifications") . ': </strong>' .
+                            (($plan["email_push_notif"] < 0) ?
+                              ($this->lang->line('limited') ?: 'Limited') : (($plan["email_push_notif"] == 1) ?
+                                ($this->lang->line('yes') ?: 'Yes') : (($plan["email_push_notif"] == 0) ?
+                                  ($this->lang->line('no') ?: 'No') : $plan["email_push_notif"])
+                              )
+                            ) . '<br>
+
+                            <strong>' . ($this->lang->line('reports') ?: "Reports") . ': </strong>' .
+                            (($plan["reports"] < 0) ?
+                              ($this->lang->line('limited') ?: 'Limited') : (($plan["reports"] == 1) ?
+                                ($this->lang->line('yes') ?: 'Yes') : (($plan["reports"] == 0) ?
+                                  ($this->lang->line('no') ?: 'No') : $plan["reports"])
+                              )
+                            ) . '<br>
+
+                            <strong>' . ($this->lang->line('departments') ? $this->lang->line('departments') : "Departments") . ': </strong>' . (($plan["departments"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["departments"]) . '<br>
+                           
                             <strong>' . ($this->lang->line('projects') ? $this->lang->line('projects') : "Projects") . ': </strong>' . (($plan["projects"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["projects"]) . '<br>
                             <strong>' . ($this->lang->line('tasks') ? $this->lang->line('tasks') : "Tasks") . ': </strong>' . (($plan["tasks"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["tasks"]) . '<br>
-                            <strong>' . ($this->lang->line('users') ? $this->lang->line('users') : "Users") . ': </strong>' . (($plan["users"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["users"]);
+                      
+                            <strong>' . ($this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : "Roles & Permissions") . ': </strong>' .
+                            (($plan["roles_permissions"] < 0) ?
+                              ($this->lang->line('unlimited') ?: 'Unlimited') : (($plan["roles_permissions"] == 4) ?
+                                "Admin & Standard User" : (($plan["roles_permissions"] == 5) ?
+                                  "5 including Admin & Clients" :
+                                  $plan["roles_permissions"]
+                                )
+                              )
+                            ) . '<br>
+                          
+                            <strong>' . ($this->lang->line('users') ? $this->lang->line('users') : "Users") . ': </strong>' . (($plan["users"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["users"]) . '<br>
+
+                            <strong>' . ($this->lang->line('additional_users') ? $this->lang->line('additional_users') : "Additional Users") . ': </strong>' . (($plan["additional_users"] == 0) ? ('Nill') : ' $'.$plan["additional_users"] .'/user' ) . '<br>';
+                            
+
+
 
                           $tempAction = '<div class="d-flex">
 					<span class="badge light badge-primary"><a href="#" data-id="' . $plan["id"] . '" class="text-primary btn-success modal-edit-plan mr-1" data-placement="top" title="' . ($this->lang->line('edit') ? htmlspecialchars($this->lang->line('edit')) : 'Edit') . '" data-bs-toggle="modal" data-bs-target="#plan-edit-modal"><i class="fas fa-pen"></i></a></span>
@@ -424,14 +469,19 @@
                             } elseif ($mod_key == 'agile') {
                               $mod_name = $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile';
                             } elseif ($mod_key == 'team_members') {
+                            } elseif ($mod_key == 'scrum') {
+                              $mod_name = $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum';
+                            } elseif ($mod_key == 'team_members') {
                               $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
                             } elseif ($mod_key == 'clients') {
                               $mod_name = $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients';
                             } elseif ($mod_key == 'user_roles') {
                               $mod_name = $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employee Roles';
-                            } elseif ($mod_key == 'departments') {
-                              $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
-                            } elseif ($mod_key == 'expenses') {
+                            }
+                            // elseif ($mod_key == 'departments') {
+                            //   $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
+                            // } 
+                            elseif ($mod_key == 'expenses') {
                               $mod_name = $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses';
                             } elseif ($mod_key == 'calendar') {
                               $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
@@ -467,10 +517,14 @@
                               $mod_name = $this->lang->line('video_meetings') ? $this->lang->line('video_meetings') : 'Video Meetings';
                             } elseif ($mod_key == 'estimates') {
                               $mod_name = $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates';
-                            } elseif ($mod_key == 'reports') {
-                              $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
-                            } elseif ($mod_key == 'attendance') {
+                            }
+                            // elseif ($mod_key == 'reports') {
+                            //   $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
+                            // } 
+                            elseif ($mod_key == 'attendance') {
                               $mod_name = $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance';
+                            } elseif ($mod_key == 'attendance_leave_policy') {
+                              $mod_name = $this->lang->line('attendance_leave_policy') ? htmlspecialchars($this->lang->line('attendance_leave_policy')) : 'Attendance & Leave policy';
                             } elseif ($mod_key == 'support') {
                               $mod_name = $this->lang->line('support') ? htmlspecialchars($this->lang->line('support')) : 'Support';
                             }
@@ -596,10 +650,28 @@
                   <label class="col-form-label"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?><span class="text-danger">*</span></label>
                   <input type="number" name="tasks" class="form-control">
                 </div>
+
                 <div class="form-group col-md-6 mb-3">
                   <label class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?><span class="text-danger">*</span></label>
                   <input type="number" name="users" class="form-control">
                 </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'Biometric Machine' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="biometric_machine" id="biometric_machine" class="form-control">
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('leave_requests') ? $this->lang->line('leave_requests') : 'Leave Requests' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="leave_requests" id="leave_requests" class="form-control">
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('office_shifts') ? $this->lang->line('office_shifts') : 'Office Shifts' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="office_shifts" id="office_shifts" class="form-control">
+                </div>
+
+
                 <div class="form-group col-md-12 mb-3">
                   <small class="form-text text-muted">
                     <?= $this->lang->line('set_value_in_minus_to_make_it_unlimited') ? $this->lang->line('set_value_in_minus_to_make_it_unlimited') : 'Set value in minus (-1) to make it Unlimited.' ?>
@@ -626,10 +698,16 @@
                     <label class="form-check-label" for="kanban"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="agile" name="agile">
                     <label class="form-check-label" for="agile"><?= $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile' ?></label>
+                  </div>
+                </div> -->
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="scrum" name="scrum">
+                    <label class="form-check-label" for="scrum"><?= $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -674,12 +752,12 @@
                     <label class="form-check-label" for="user_permissions"><?= $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'Employees Permissions' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="departments" name="departments">
                     <label class="form-check-label" for="departments"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="shifts" name="shifts">
@@ -740,12 +818,12 @@
                     <label class="form-check-label" for="biometric_missing"><?= $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'biometric Missing' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="biometric_machine" name="biometric_machine">
                     <label class="form-check-label" for="biometric_machine"><?= $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="holidays" name="holidays">
@@ -767,7 +845,7 @@
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="notice_board" name="notice_board">
-                    <label class="form-check-label" for="notice_board"><?= $this->lang->line('notice_board') ? $this->lang->line('notice_board') : 'Notice Board' ?></label>
+                    <label class="form-check-label" for="notice_board"><?= $this->lang->line('notice_board') ? $this->lang->line('notice_board') : 'Events Board' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -826,12 +904,12 @@
                     <label class="form-check-label" for="estimates"><?= $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates' ?></label>
                   </div>
                 </div> -->
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="reports" name="reports">
                     <label class="form-check-label" for="reports"><?= $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="support" name="support">
@@ -886,6 +964,12 @@
                   <label class="col-form-label"><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?> (GB)<span class="text-danger">*</span></label>
                   <input type="number" name="storage" id="storage" class="form-control">
                 </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('additional_storage') ? $this->lang->line('additional_storage') : 'Additional Storage Charges' ?> $ /(GB) <span class="text-danger">*</span> </label>
+                  <input type="number" name="additional_storage" id="additional_storage" class="form-control" placeholder="Additional Storage Charges $ per GB">
+                </div>
+
                 <div class="form-group col-md-6 mb-3">
                   <label class="col-form-label"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?><span class="text-danger">*</span></label>
                   <input type="number" name="projects" id="projects" class="form-control">
@@ -898,12 +982,65 @@
                   <label class="col-form-label"><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?><span class="text-danger">*</span></label>
                   <input type="number" name="users" id="users" class="form-control">
                 </div>
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('additional_users') ? $this->lang->line('additional_users') : 'Additional Users Charges' ?> $ /(user) <span class="text-danger">*</span> </label>
+                  <input type="number" name="additional_users" id="additional_users" class="form-control" placeholder="Additional User Charges $ per user">
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label">
+                    <?= $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'Biometric Machine' ?><span class="text-danger">*</span>
+                  </label>
+                  <input type="number" name="biometric_machine" id="biometric_machine_2" class="form-control">
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('leave_requests') ? $this->lang->line('leave_requests') : 'Leave Requests' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="leave_requests" id="leave_requests_2" class="form-control">
+                </div>
+
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('office_shifts') ? $this->lang->line('office_shifts') : 'Office Shifts' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="office_shifts" id="office_shifts_2" class="form-control">
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="departments" id="departments_2" class="form-control">
+                </div>
+
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('email_push_notif') ? $this->lang->line('email_push_notif') : 'Email/Push Notifications' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="email_push_notif" id="email_push_notif" class="form-control" placeholder="enter -1 for Limited">
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports' ?><span class="text-danger">*</span></label>
+                  <input type="number" name="reports" id="reports_2" class="form-control" placeholder="enter -1 for Limited">
+                </div>
+
+
+                <div class="form-group col-md-6 mb-3">
+                  <label class="col-form-label"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Roles & Permissions' ?><span class="text-danger">*</span></label>
+                  <select name="roles_permissions" id="roles_permissions" class="form-control select2">
+                    <option value="4"><?= 'Admin and Standard Users' ?></option>
+                    <option value="5"><?= '5 including admin & client' ?></option>
+                    <option value="-1"><?= 'Unlimited' ?></option>
+                  </select>
+                </div>
+
+
+
+
                 <div class="form-group col-md-12 mb-3">
                   <small class="form-text text-muted">
                     <?= $this->lang->line('set_value_in_minus_to_make_it_unlimited') ? $this->lang->line('set_value_in_minus_to_make_it_unlimited') : 'Set value in minus (-1) to make it Unlimited.' ?>
                   </small>
                 </div>
 
+                <!-- Modules -->
 
                 <div class="form-group col-md-12 mb-3">
                   <h6><?= $this->lang->line('modules') ? $this->lang->line('modules') : 'Modules' ?></h6>
@@ -926,12 +1063,24 @@
                     <label class="form-check-label" for="kanban_update"><?= $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="agile_update" name="agile">
                     <label class="form-check-label" for="agile_update"><?= $this->lang->line('Agile') ? $this->lang->line('Agile') : 'Agile' ?></label>
                   </div>
+                </div> -->
+                <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="scrum_update" name="scrum">
+                    <label class="form-check-label" for="scrum_update"><?= $this->lang->line('Scrum') ? $this->lang->line('Scrum') : 'Scrum' ?></label>
+                  </div>
                 </div>
+                <!-- <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="agile_update" name="agile">
+                    <label class="form-check-label" for="agile_update"><?= $this->lang->line('Agile') ? $this->lang->line('Agile') : 'Agile' ?></label>
+                  </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="tasks_module_update" name="tasks_module">
@@ -962,30 +1111,43 @@
                     <label class="form-check-label" for="team_members_update"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Employees' ?></label>
                   </div>
                 </div>
+
+
                 <div class="form-group col-md-4 mb-3">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="attendance_leave_policy_update" name="attendance_leave_policy">
+                    <label class="form-check-label" for="attendance_leave_policy"><?= $this->lang->line('attendance_leave_policy') ? $this->lang->line('attendance_leave_policy') : 'Attendance/Leave Policy ' ?></label>
+                  </div>
+                </div>
+
+
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="user_roles_update" name="user_roles">
                     <label class="form-check-label" for="user_roles_update"><?= $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employee Roles' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="user_permissions_update" name="user_permissions">
                     <label class="form-check-label" for="user_permissions_update"><?= $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'Employee Permissions' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+
+
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="departments_update" name="departments">
                     <label class="form-check-label" for="departments_update"><?= $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments' ?></label>
                   </div>
-                </div>
-                <div class="form-group col-md-4 mb-3">
+                </div> -->
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="shifts_update" name="shifts">
                     <label class="form-check-label" for="shifts_update"><?= $this->lang->line('shifts') ? $this->lang->line('shifts') : 'Shifts' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="clients_update" name="clients">
@@ -1010,12 +1172,12 @@
                     <label class="form-check-label" for="expenses_update"><?= $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses' ?></label>
                   </div>
                 </div> -->
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="calendar_update" name="calendar">
                     <label class="form-check-label" for="calendar_update"><?= $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="leaves_update" name="leaves">
@@ -1040,12 +1202,12 @@
                     <label class="form-check-label" for="biometric_missing_update"><?= $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'Biometric Missing' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="biometric_machine_update" name="biometric_machine">
                     <label class="form-check-label" for="biometric_machine_update"><?= $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'Biometric Machine' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="holidays_update" name="holidays">
@@ -1067,7 +1229,7 @@
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="notice_board_update" name="notice_board">
-                    <label class="form-check-label" for="notice_board_update"><?= $this->lang->line('notice_board') ? htmlspecialchars($this->lang->line('notice_board')) : 'Notice Board' ?></label>
+                    <label class="form-check-label" for="notice_board_update"><?= $this->lang->line('notice_board') ? htmlspecialchars($this->lang->line('notice_board')) : 'Events Board' ?></label>
                   </div>
                 </div>
                 <div class="form-group col-md-4 mb-3">
@@ -1107,12 +1269,12 @@
                     <label class="form-check-label" for="notifications_update"><?= $this->lang->line('notifications') ? $this->lang->line('notifications') : 'Notifications' ?></label>
                   </div>
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="languages_update" name="languages">
                     <label class="form-check-label" for="languages_update"><?= $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages' ?></label>
                   </div>
-                </div>
+                </div> -->
                 <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="meetings_update" name="meetings">
@@ -1125,12 +1287,12 @@
                     <label class="form-check-label" for="estimates_update"><?= $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates' ?></label>
                   </div>
                 </div> -->
-                <div class="form-group col-md-4 mb-3">
+                <!-- <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="reports_update" name="reports">
                     <label class="form-check-label" for="reports_update"><?= $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports' ?></label>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="form-group col-md-4 mb-3">
                   <div class="form-check form-check-inline">
@@ -1241,9 +1403,11 @@
           if (result['error'] == false) {
             $('input:checkbox').prop("checked", false);
             if (result['data'][0].modules != '') {
+
+
               $.each(JSON.parse(result['data'][0].modules), function(key, val) {
                 if (val == 1) {
-                  console.log(key);
+                  // console.log(key, val);
                   $('#' + key + '_update').prop("checked", true).val(val);
                   $('#' + key + '_module_update').prop("checked", true).val(val);
                 }
@@ -1257,8 +1421,18 @@
             $("#billing_type").trigger("change");
             $("#projects").val(result['data'][0].projects);
             $("#tasks").val(result['data'][0].tasks);
-            $("#users").val(result['data'][0].users);
+            $("#biometric_machine_2").val(result['data'][0].biometric_machine);
+            $("#leave_requests_2").val(result['data'][0].leave_requests);
+            $("#office_shifts_2").val(result['data'][0].leave_requests);
+            $("#departments_2").val(result['data'][0].departments);
+            $("#email_push_notif").val(result['data'][0].email_push_notif);
+            $("#reports_2").val(result['data'][0].reports);
             $("#storage").val(result['data'][0].storage);
+            $("#additional_storage").val(result['data'][0].additional_storage);
+            $("#roles_permissions").val(result['data'][0].roles_permissions);
+            $("#roles_permissions").trigger("change");
+            $("#users").val(result['data'][0].users);
+            $("#additional_users").val(result['data'][0].additional_users);
             $("#modal-edit-plan").trigger("click");
           } else {
             iziToast.error({
@@ -1270,6 +1444,7 @@
         }
       });
     });
+
     $("#plan-edit-modal").on('click', '.btn-edit-plan', function(e) {
       var modal = $('#plan-edit-modal');
       var form = $('#modal-edit-plan-part');
@@ -1286,8 +1461,10 @@
         },
         success: function(result) {
           if (result['error'] == false) {
+
             location.reload();
           } else {
+
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
         },
@@ -1298,6 +1475,7 @@
 
       e.preventDefault();
     });
+
     $(document).on('click', '.delete_plan', function(e) {
       e.preventDefault();
       var id = $(this).data("id");
