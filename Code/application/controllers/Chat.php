@@ -94,6 +94,16 @@ class Chat extends CI_Controller
 
 				$this->data['error'] = false;
 				$this->data['data'] = $Chat;
+				$opposite_user = $this->ion_auth->user($this->input->post('opposite_user_id'))->row();
+				if($opposite_user->profile){
+					if(file_exists('assets/uploads/profiles/'.$opposite_user->profile)){
+						$file_upload_path = 'assets/uploads/profiles/'.$opposite_user->profile;
+					  }else{
+						$file_upload_path = 'assets/uploads/f'.$this->session->userdata('saas_id').'/profiles/'.$opposite_user->profile;
+					}
+					$opposite_user->profile = base_url($file_upload_path);
+				}
+				$this->data['opposite_user'] = $opposite_user;
 				$this->data['message'] = 'Successful';
 				echo json_encode($this->data);
 			}else{
