@@ -76,7 +76,6 @@ class Plans extends CI_Controller
 			// echo json_encode($this->data['plans']);
 			// exit;
 			$this->load->view('plans', $this->data);
-
 		} else {
 			redirect('auth', 'refresh');
 		}
@@ -1175,7 +1174,6 @@ class Plans extends CI_Controller
 	public function edit()
 	{
 
-
 		if ($this->ion_auth->logged_in() && $this->ion_auth->in_group(3)) {
 			$this->form_validation->set_rules('update_id', 'Plan ID', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('title', 'Title', 'trim|required|strip_tags|xss_clean');
@@ -1184,15 +1182,20 @@ class Plans extends CI_Controller
 			$this->form_validation->set_rules('projects', 'Projects', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('tasks', 'Tasks', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('users', 'Users', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('biometric_machine', 'biometric_machine', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('leave_requests', 'leave_requests', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('office_shifts', 'office_shifts', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('departments', 'departments', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('storage', 'Storage', 'trim|required|strip_tags|xss_clean|is_numeric');
 
 			if ($this->form_validation->run() == TRUE) {
 
 				$modules['select_all'] = $this->input->post('select_all') ? 1 : 0;
 				$modules['projects'] = $this->input->post('projects_module') ? 1 : 0;
-				// $modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
-				// $modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
+				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
+				$modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
 				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
+				$modules['attendance_leave_policy'] = $this->input->post('attendance_leave_policy') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
 				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 0;
@@ -1203,11 +1206,11 @@ class Plans extends CI_Controller
 				$modules['leaves_types'] = $this->input->post('leaves_types') ? 1 : 0;
 				$modules['leave_hierarchy'] = $this->input->post('leave_hierarchy') ? 1 : 0;
 				$modules['biometric_missing'] = $this->input->post('biometric_missing') ? 1 : 0;
-				$modules['biometric_machine'] = $this->input->post('biometric_machine') ? 1 : 0;
+				//  $modules['biometric_machine'] = $this->input->post('biometric_machine') ? 1 : 0;
 				$modules['holidays'] = $this->input->post('holidays') ? 1 : 0;
 				$modules['todo'] = $this->input->post('todo') ? 1 : 0;
 				$modules['notice_board'] = $this->input->post('notice_board') ? 1 : 0;
-				$modules['shifts'] = $this->input->post('shifts') ? 1 : 0;
+				// $modules['shifts'] = $this->input->post('shifts') ? 1 : 0;
 				$modules['notes'] = $this->input->post('notes') ? 1 : 0;
 				$modules['chat'] = $this->input->post('chat') ? 1 : 0;
 				$modules['user_permissions'] = $this->input->post('user_permissions') ? 1 : 0;
@@ -1223,9 +1226,19 @@ class Plans extends CI_Controller
 					'projects' => $this->input->post('projects'),
 					'tasks' => $this->input->post('tasks'),
 					'users' => $this->input->post('users'),
+					'additional_users' => $this->input->post('additional_users'),
 					'storage' => $this->input->post('storage'),
+					'additional_storage' => $this->input->post('additional_storage'),
+					'biometric_machine' => $this->input->post('biometric_machine'),
+					'leave_requests' => $this->input->post('leave_requests'),
+					'office_shifts' => $this->input->post('office_shifts'),
+					'email_push_notif' => $this->input->post('email_push_notif'),
+					'reports' => $this->input->post('reports'),
+					'roles_permissions' => $this->input->post('roles_permissions'),
+					'departments'=> $this->input->post('departments'),
 					'modules' => json_encode($modules),
 				);
+
 
 				if ($this->plans_model->edit($this->input->post('update_id'), $data)) {
 					$this->session->set_flashdata('message', $this->lang->line('plan_updated_successfully') ? $this->lang->line('plan_updated_successfully') : "Plan updated successfully.");
@@ -1260,6 +1273,9 @@ class Plans extends CI_Controller
 			$this->form_validation->set_rules('projects', 'Projects', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('tasks', 'Tasks', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('users', 'Users', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('biometric_machine', 'biometric_machine', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('leave_requests', 'leave_requests', 'trim|required|strip_tags|xss_clean|is_numeric');
+			$this->form_validation->set_rules('departments', 'departments', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('storage', 'Storage', 'trim|required|strip_tags|xss_clean|is_numeric');
 
 			if ($this->form_validation->run() == TRUE) {
@@ -1269,6 +1285,7 @@ class Plans extends CI_Controller
 				$modules['kanban'] = $this->input->post('kanban') ? 1 : 0;
 				$modules['scrum'] = $this->input->post('scrum') ? 1 : 0;
 				$modules['attendance'] = $this->input->post('attendance') ? 1 : 0;
+				$modules['attendance_leave_policy'] = $this->input->post('attendance_leave_policy') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
 				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 0;
@@ -1300,6 +1317,8 @@ class Plans extends CI_Controller
 					'tasks' => $this->input->post('tasks'),
 					'users' => $this->input->post('users'),
 					'storage' => $this->input->post('storage'),
+					'biometric_machine' => $this->input->post('biometric_machine'),
+					'leave_requests' => $this->input->post('leave_requests'),
 					'modules' => json_encode($modules),
 				);
 
