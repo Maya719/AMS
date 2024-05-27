@@ -41159,3 +41159,91 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+
+
+.resp-pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+ 
+ 
+}
+
+.resp-pricing-table th,
+.resp-pricing-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+
+  padding: 1.9rem;
+}
+
+
+.resp-pricing-table td[data-label="Actions"] {
+  visibility: hidden;
+}
+
+.plans_btn{
+  background-color: var(--tp-theme-primary);
+  color:white;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+
+
+@media screen and (max-width: 600px) {
+  .resp-pricing-table thead {
+    display: none;
+  }
+  .resp-pricing-table,
+  .resp-pricing-table tbody,
+  .resp-pricing-table th,
+  .resp-pricing-table td,
+  .resp-pricing-table tr {
+    display: block;
+    width: 100%;
+  }
+  .resp-pricing-table tr {
+    margin-bottom: 1rem;
+    padding: 0.9rem;
+    background: #FFFFFF;
+    box-shadow:  -5px -5px 11px #f2f2f2,5px 5px 11px #ffffff;
+    border-radius: 11px;
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
+    -ms-border-radius: 11px;
+    -o-border-radius: 11px;
+}
+  .resp-pricing-table td {
+    text-align: left;
+    padding-left: 50%;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+  .resp-pricing-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+ 
+  }
+  .resp-pricing-table td:first-child {
+    text-align: left;
+    padding-left: 10px;
+    
+  }
+  .resp-pricing-table td[data-label="Features"] {
+    display: none;
+  }
+  .resp-pricing-table td[data-label="Actions"] {
+    visibility:visible;
+  }
+}
