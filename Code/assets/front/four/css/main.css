@@ -7030,14 +7030,10 @@ div.demo img {
   }
 }
 .tp-brands-2-top-img img {
-  opacity: 65%;
+  opacity:1;
+  filter: none;
   transition: all 0.3s ease-in-out;
-  filter: grayscale(100%);
-  -webkit-filter: grayscale(100%);
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
+
 }
 .tp-brands-2-top-img img:hover {
   filter: none;
