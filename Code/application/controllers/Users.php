@@ -201,12 +201,14 @@ class Users extends CI_Controller
 			$this->data['main_page'] = 'Employee';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 
-			$query = $this->db->get('shift');
+			$saas_id = $this->session->userdata('saas_id');
+			$query = $this->db->where('saas_id', $saas_id)->get('shift');
 			$this->data['shift_types'] = $query->result_array();
 
-			$query3 = $this->db->get('departments');
+			$query3 = $this->db->where('saas_id', $saas_id)->get('departments');
 			$this->data['departments'] = $query3->result_array();
-			$query = $this->db->get('devices');
+
+			$query = $this->db->where('saas_id', $saas_id)->get('devices');
 			$this->data['devices'] = $query->result_array();
 			if (is_saas_admin()) {
 				$system_users = $this->ion_auth->users(array(3))->result();

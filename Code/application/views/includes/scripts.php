@@ -74,6 +74,7 @@
 <script src="<?= base_url('assets2/vendor/datatables/responsive/responsive.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/multiselect/multiselect.js') ?>"></script>
+<script src="<?= base_url('assets2/vendor/introjs/intro.min.js') ?>"></script>
 <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
 <script src="<?= base_url('assets2/js/stisla.js') ?>"></script>
 <script src="<?= base_url('assets2/js/custom.js') ?>"></script>
@@ -123,6 +124,7 @@
       url: base_url + 'notifications/get_live_notifications',
       dataType: "json",
       success: function(result) {
+        console.log(result);
         if (result['error'] == false) {
           $notifications = result['data']['notifications'];
           $unread_msg_count = result['data']['unread_msg_count'];
@@ -145,7 +147,9 @@
           var $new_message = '';
           if ($show_beep_for_msg) {
             $new_noti = false;
-            $new_message = '<a href="<?= base_url('chat') ?>" class="dropdown-item dropdown-item-unread"><figure class="dropdown-item-icon avatar avatar-m bg-primary text-white fa fa-comment-alt"></figure><h6 class="dropdown-item-desc m-2"><?= $this->lang->line('new_message') ? $this->lang->line('new_message') : 'New Message' ?></h6></a>';
+            $new_message = '<li><a href="'+base_url+'chat'+'"><div class="timeline-panel"><div class="media me-2 media-primary"><i class="fa-solid fa-comment"></i></div><div class="media-body"><h6 class="mb-1"><?= $this->lang->line('new_message') ? $this->lang->line('new_message') : 'New Message' ?></h6> </div> </div></a></li>';
+
+            // $new_message = '<a href="<?= base_url('chat') ?>" class="dropdown-item dropdown-item-unread"><h6 class="dropdown-item-desc m-2"></h6></a>';
           }
 
           if ($notifications.length) {
@@ -166,7 +170,7 @@
               } else {
                 $profile = '<div class="media me-2 media-primary">' + notification['first_name'].substr(0, 1) + '' + notification['last_name'].substr(0, 1) + '</div>';
               }
-              $whole_noti += '<li><div class="timeline-panel"> ' + $profile + ' <div class="media-body"> <h6 class="mb-1">' + notification['notification'] + '</h6><small class="d-block">' + notification['created'] + '</small> </div> </div>  </li>';
+              $whole_noti += '<li><a href="'+notification["notification_url"]+'"><div class="timeline-panel"> ' + $profile + ' <div class="media-body"> <h6 class="mb-1">' + notification['notification'] + '</h6><small class="d-block">' + notification['created'] + '</small> </div> </div></a></li>';
             });
 
           } else {
@@ -232,13 +236,18 @@
   checkSprintDate();
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
 <script>
   $(document).ready(function() {
     <?php
-    if (is_null($this->session->userdata('show_demo'))) {
+    if (is_null($this->session->userdata('show_demo')) && $this->ion_auth->is_admin()) {
     ?>
-      $('#myModel').modal('show');
+      if (localStorage.getItem('tourStep') != 0) {
+        $('#myModel').modal('show');
+      }
+      $(document).on('click', '#CancelGuide', function(e) {
+        localStorage.setItem('tourStep', '0');
+        $('#myModel').modal('hide');
+      });
     <?php
     }
     ?>

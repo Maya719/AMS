@@ -37356,6 +37356,7 @@ table.dataTable>tbody>tr.child span.dtr-title {
 }
 
 .chat-bx {
+  cursor: pointer;
   padding: 12px 20px;
 }
 
@@ -37381,8 +37382,8 @@ table.dataTable>tbody>tr.child span.dtr-title {
 }
 
 .chat-img img {
-  height: 2.813rem;
-  width: 2.813rem;
+  height: 2.313rem;
+  width: 2.313rem;
   border-radius: 50%;
   margin-right: 10px;
 }
