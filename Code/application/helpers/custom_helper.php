@@ -1352,7 +1352,7 @@ function is_module_allowed($module_type = '')
         $data = json_decode($current_plan['modules']);
         if (isset($data->{$module_type}) && $data->{$module_type} == 1) {
             return true;
-        } else {
+        }else {
             return false;
         }
     } else {
@@ -2341,7 +2341,7 @@ function company_name()
     $query = $CI->db->get();
     if ($query->num_rows() > 0) {
         $data = $query->result_array();
-    }else{
+    } else {
         $CI->db->from('settings');
         $CI->db->where(['type' => 'general']);
         $query = $CI->db->get();

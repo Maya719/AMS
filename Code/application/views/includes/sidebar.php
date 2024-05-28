@@ -315,7 +315,7 @@
                 <li><a id="GuideStep2" href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_permissions')) { ?>
+              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
                 <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
               <?php } ?>
 
@@ -327,11 +327,11 @@
                 <li><a href="<?= base_url('settings/hierarchy') ?>"><?= $this->lang->line('hierarchy') ? $this->lang->line('hierarchy') : 'Leave Approval Hierarchy' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || permissions('shift_view')) && is_module_allowed('shifts')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('shift_view'))) { ?>
                 <li><a href="<?= base_url('settings/shift') ?>">Shifts</a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || permissions('device_view')) && is_module_allowed('biometric_machine')) { ?>
+              <?php if (($this->ion_auth->is_admin() || permissions('device_view'))) { ?>
                 <li><a href="<?= base_url('settings/device_config') ?>"><?= $this->lang->line('device_config') ? $this->lang->line('device_config') : 'Device Configuration' ?></a></li>
               <?php } ?>
 
