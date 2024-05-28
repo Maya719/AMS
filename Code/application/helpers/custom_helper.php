@@ -2335,11 +2335,18 @@ function smtp_encryption()
 function company_name()
 {
     $CI = &get_instance();
+    $CI->load->library('session');
     $CI->db->from('settings');
-    $CI->db->where(['type' => 'general']);
+    $CI->db->where('type', 'company_' . $CI->session->userdata('saas_id'));
     $query = $CI->db->get();
-    $data = $query->result_array();
-
+    if ($query->num_rows() > 0) {
+        $data = $query->result_array();
+    }else{
+        $CI->db->from('settings');
+        $CI->db->where(['type' => 'general']);
+        $query = $CI->db->get();
+        $data = $query->result_array();
+    }
     if (!$data) {
         return false;
     }
@@ -2349,7 +2356,7 @@ function company_name()
     if (!empty($data->company_name)) {
         return $data->company_name;
     } else {
-        return 'Your Company';
+        return $CI->session->userdata('saas_id');
     }
 }
 
