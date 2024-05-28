@@ -3,9 +3,9 @@
 ***********************************-->
 <div class="nav-header">
   <a href="<?= base_url() ?>" class="brand-logo">
-    <img width="60" height="50" src="<?= base_url('assets/uploads/logos/'.favicon()) ?>" alt="">
+    <img width="50" height="50" src="<?= base_url('assets/uploads/logos/'.favicon()) ?>" alt="">
     <div class="brand-title">
-      <img width="180" height="50" src="<?= base_url('assets/uploads/logos/'.half_logo()) ?>" alt="">
+      <img width="190" height="50" src="<?= base_url('assets/uploads/logos/'.half_logo()) ?>" alt="">
     </div>
   </a>
   <div class="nav-control">
