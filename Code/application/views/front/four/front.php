@@ -780,7 +780,7 @@
                                         <div class="tp-brands-from-input contact-mb">
                                             <input name="email" type="email" placeholder="Email Address:">
                                         </div>
-                                    </div>
+                                    </div>       
                                     <div class="col-12 col-sm-6">
                                         <div class="tp-brands-from-input contact-mb">
                                             <input name="organization_name" type="text" placeholder="Organization Name">
