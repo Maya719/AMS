@@ -454,9 +454,14 @@ class Front extends CI_Controller
 
 	public function send_mail()
 	{
+	
 		$this->form_validation->set_rules('name', 'Name', 'trim|required|strip_tags|xss_clean');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|strip_tags|xss_clean|valid_email');
 		$this->form_validation->set_rules('msg', 'Message', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('organization_name', 'Organization Name', 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('enquiry_related_to', 'Enquiry Related to', 'trim|required|strip_tags|xss_clean');
+
+
 		if ($this->form_validation->run() == TRUE) {
 
 			$recaptcha_secret_key = get_google_recaptcha_secret_key();
@@ -472,7 +477,7 @@ class Front extends CI_Controller
 				$response = curl_exec($ch);
 				curl_close($ch);
 				$arrResponse = json_decode($response, true);
-
+				
 				if ($arrResponse["success"] != '1' || $arrResponse["action"] != $action || $arrResponse["score"] <= 0.6) {
 					$this->data['error'] = true;
 					$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
@@ -486,6 +491,8 @@ class Front extends CI_Controller
 				$template_data = array();
 				$template_data['NAME'] = $this->input->post('name');
 				$template_data['EMAIL'] = $this->input->post('email');
+				$template_data['ORGANIZATION'] = $this->input->post('organization_name');
+				$template_data['ENQUIRY'] = $this->input->post('enquiry_related_to');
 				$template_data['MESSAGE'] = $this->input->post('msg');
 				$email_template = render_email_template('front_enquiry_form', $template_data);
 				send_mail(from_email(), $email_template[0]['subject'], $email_template[0]['message']);
