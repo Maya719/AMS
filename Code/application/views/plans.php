@@ -328,8 +328,8 @@
                           
                             <strong>' . ($this->lang->line('users') ? $this->lang->line('users') : "Users") . ': </strong>' . (($plan["users"] < 0) ? ($this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited') : $plan["users"]) . '<br>
 
-                            <strong>' . ($this->lang->line('additional_users') ? $this->lang->line('additional_users') : "Additional Users") . ': </strong>' . (($plan["additional_users"] == 0) ? ('Nill') : ' $'.$plan["additional_users"] .'/user' ) . '<br>';
-                            
+                            <strong>' . ($this->lang->line('additional_users') ? $this->lang->line('additional_users') : "Additional Users") . ': </strong>' . (($plan["additional_users"] == 0) ? ('Nill') : ' $' . $plan["additional_users"] . '/user') . '<br>';
+
 
 
 
@@ -357,6 +357,7 @@
 
             <?php
           } else {
+            unset($plans[0]);
             $my_plan = get_current_plan();
             if ($this->ion_auth->is_admin()) {
               if ($my_plan &&  !is_null($my_plan['end_date']) && (($my_plan['expired'] == 0 || $my_plan['end_date'] <= date('Y-m-d', date(strtotime("+" . alert_days() . " day", strtotime(date('Y-m-d')))))) || ($my_plan['billing_type'] == 'three_days_trial_plan' || $my_plan['billing_type'] == 'seven_days_trial_plan' || $my_plan['billing_type'] == 'fifteen_days_trial_plan' || $my_plan['billing_type'] == 'thirty_days_trial_plan'))) {
@@ -388,171 +389,244 @@
                     </div>
                   </div>
                 </div>
-              <?php }
-            }
-            foreach ($plans as $plan) {
-              if ($plan['billing_type'] != 'three_days_trial_plan' && $plan['billing_type'] != 'seven_days_trial_plan' && $plan['billing_type'] != 'fifteen_days_trial_plan' && $plan['billing_type'] != 'thirty_days_trial_plan') {
+            <?php }
+            } ?>
+            <main>
+              <?php
 
+              $modules = array();
+              for ($i = 1; $i < 3; $i++) {
+                $modules[$i] = json_decode($plans[$i]['modules'], true);
+              }
               ?>
-                <div class="col-md-4">
-                  <div class="pricing card <?= $my_plan['plan_id'] == $plan['id'] ? 'pricing-highlight' : '' ?>">
-                    <div class="pricing-title">
-                      <?= htmlspecialchars($plan['title']) ?>
+              <table class="table table-striped resp-pricing-table">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <th scope="col"><?= $plan['title'] ?>
+                        <?php if ($my_plan['plan_id'] == $plan['id'] && !is_null($my_plan['end_date'])) { ?>
+                          <i class="fas fa-question-circle text-success fs-5" data-bs-container="body" data-bs-toggle="popover" title="Current Plan" data-bs-placement="top" data-bs-content="<?= $this->lang->line('this_is_your_current_active_plan_and_expiring_on_date') ? $this->lang->line('this_is_your_current_active_plan_and_expiring_on_date') : 'This is your current active plan and expiring on date' ?> <?= htmlspecialchars(format_date($my_plan["end_date"], system_date_format())) ?>."></i>
+                        <?php } elseif ($my_plan['plan_id'] == $plan['id']) { ?>
+                          <i class="fas fa-question-circle text-success fs-5" data-bs-container="body" data-bs-toggle="popover" title="Current Plan" data-bs-placement="top" data-bs-content="<?= $this->lang->line('this_is_your_current_active_plan') ? $this->lang->line('this_is_your_current_active_plan') : 'This is your current active plan, No Expiry Date.' ?>"></i>
+                        <?php } ?>
+                      </th>
+                    <?php endforeach; ?>
+                  </tr>
+                </thead>
+                <tbody>
 
-                      <?php if ($my_plan['plan_id'] == $plan['id'] && !is_null($my_plan['end_date'])) { ?>
-                        <i class="fas fa-question-circle text-success" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('this_is_your_current_active_plan_and_expiring_on_date') ? $this->lang->line('this_is_your_current_active_plan_and_expiring_on_date') : 'This is your current active plan and expiring on date' ?> <?= htmlspecialchars(format_date($my_plan["end_date"], system_date_format())) ?>."></i>
-                      <?php } elseif ($my_plan['plan_id'] == $plan['id']) { ?>
-                        <i class="fas fa-question-circle text-success" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('this_is_your_current_active_plan') ? $this->lang->line('this_is_your_current_active_plan') : 'This is your current active plan, No Expiry Date.' ?>"></i>
-                      <?php } ?>
-
-                    </div>
-                    <div class="pricing-padding">
-                      <div class="pricing-price">
-                        <div><?= htmlspecialchars(get_saas_currency('currency_symbol')) ?> <?= htmlspecialchars($plan['price']) ?></div>
-                        <div>
+                  <?php $attributes = ['price', 'users', 'additional_users', 'projects', 'tasks', 'storage', 'additional_storage']; ?>
+                  <?php foreach ($attributes as $attribute) : ?>
+                    <tr>
+                      <th scope="row">
+                        <h4><?= ucwords(str_replace('_', ' ', $attribute)) ?></h4>
+                      </th>
+                      <?php foreach ($plans as $plan) : ?>
+                        <td>
                           <?php
-                          if ($plan["billing_type"] == 'One Time') {
-                            echo $this->lang->line('one_time') ? $this->lang->line('one_time') : 'One Time';
-                          } elseif ($plan["billing_type"] == 'Monthly') {
-                            echo $this->lang->line('monthly') ? $this->lang->line('monthly') : 'Monthly';
-                          } elseif ($plan["billing_type"] == 'three_days_trial_plan') {
-                            echo $this->lang->line('three_days_trial_plan') ? htmlspecialchars($this->lang->line('three_days_trial_plan')) : '3 days trial plan';
-                          } elseif ($plan["billing_type"] == 'seven_days_trial_plan') {
-                            echo $this->lang->line('seven_days_trial_plan') ? htmlspecialchars($this->lang->line('seven_days_trial_plan')) : '7 days trial plan';
-                          } elseif ($plan["billing_type"] == 'fifteen_days_trial_plan') {
-                            echo $this->lang->line('fifteen_days_trial_plan') ? htmlspecialchars($this->lang->line('fifteen_days_trial_plan')) : '15 days trial plan';
-                          } elseif ($plan["billing_type"] == 'thirty_days_trial_plan') {
-                            echo $this->lang->line('thirty_days_trial_plan') ? htmlspecialchars($this->lang->line('thirty_days_trial_plan')) : '30 days trial plan';
+                          if ($attribute === 'price') {
+                            echo '$' . $plan[$attribute] . ' / month';
+                          } elseif ($attribute === 'additional_users') {
+                            echo $plan[$attribute] == 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : ($plan[$attribute] == -1 ? 'Unlimited' : '$' . $plan[$attribute] . ' / user');
+                          } elseif ($attribute === 'additional_storage') {
+                            echo $plan[$attribute] == 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : ($plan[$attribute] == -1 ? 'Unlimited' : '$' . $plan[$attribute] . ' / GB');
+                          } elseif ($attribute === 'tasks') {
+                            echo $plan[$attribute] == -1 ? 'Unlimited' : $plan[$attribute] . ' / projects';
+                          } elseif ($attribute === 'storage') {
+                            echo $plan[$attribute] == -1 ? 'Unlimited' : $plan[$attribute] . ' GB';
                           } else {
-                            echo $this->lang->line('yearly') ? $this->lang->line('yearly') : 'Yearly';
+                            echo $plan[$attribute] == -1 ? 'Unlimited' : $plan[$attribute];
                           }
                           ?>
-                        </div>
-                      </div>
-                      <div class="pricing-details">
-                        <div class="pricing-item">
-                          <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('storage') ? $this->lang->line('storage') : 'Storage' ?></div>
-                          <div class="badge badge-primary">
-                            <?= $my_plan['plan_id'] == $plan['id'] ? formatBytes(check_my_storage(), 'bytes') . ' / ' : '' ?>
-                            <?= $plan['storage'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['storage'] . 'GB') ?></div>
-                        </div>
-                        <div class="pricing-item">
-                          <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></div>
-                          <div class="badge badge-primary">
-                            <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'projects', 'saas_id=' . $this->session->userdata('saas_id')) . ' / ' : '' ?>
-                            <?= $plan['projects'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['projects']) ?></div>
-                        </div>
-                        <div class="pricing-item">
-                          <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></div>
-                          <div class="badge badge-primary">
-                            <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'tasks', 'saas_id=' . $this->session->userdata('saas_id')) . ' / ' : '' ?>
-                            <?= $plan['tasks'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['tasks']) ?></div>
-                        </div>
-                        <div class="pricing-item">
-                          <div class="pricing-item-label mr-1 font-weight-bold"><?= $this->lang->line('users') ? $this->lang->line('users') : 'Users' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('including_admins_clients_and_users') ? $this->lang->line('including_admins_clients_and_users') : 'Including Admins, Clients and Users.' ?>"></i></div>
-                          <div class="badge badge-primary">
-                            <?= $my_plan['plan_id'] == $plan['id'] ? get_count('id', 'users', 'saas_id=' . $this->session->userdata('saas_id')) . ' / ' : '' ?>
-                            <?= $plan['users'] < 0 ? $this->lang->line('unlimited') ? $this->lang->line('unlimited') : 'Unlimited' : htmlspecialchars($plan['users']) ?></div>
-                        </div>
-                        <?php
-                        $modules = '';
-                        if ($plan["modules"] != '') {
-                          echo '<hr>';
-                          foreach (json_decode($plan["modules"]) as $mod_key => $mod) {
-                            $mod_name = '';
-                            if ($mod_key == 'projects') {
-                              $mod_name = $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects';
-                            } elseif ($mod_key == 'tasks') {
-                              $mod_name = $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks';
-                            } elseif ($mod_key == 'kanban') {
-                              $mod_name = $this->lang->line('kanban') ? $this->lang->line('kanban') : 'Kanban';
-                            } elseif ($mod_key == 'agile') {
-                              $mod_name = $this->lang->line('agile') ? $this->lang->line('agile') : 'Agile';
-                            } elseif ($mod_key == 'team_members') {
-                            } elseif ($mod_key == 'scrum') {
-                              $mod_name = $this->lang->line('scrum') ? $this->lang->line('scrum') : 'Scrum';
-                            } elseif ($mod_key == 'team_members') {
-                              $mod_name = $this->lang->line('team_members') ? $this->lang->line('team_members') : 'Team Members';
-                            } elseif ($mod_key == 'clients') {
-                              $mod_name = $this->lang->line('clients') ? $this->lang->line('clients') : 'Clients';
-                            } elseif ($mod_key == 'user_roles') {
-                              $mod_name = $this->lang->line('user_roles') ? $this->lang->line('user_roles') : 'Employee Roles';
-                            }
-                            // elseif ($mod_key == 'departments') {
-                            //   $mod_name = $this->lang->line('departments') ? $this->lang->line('departments') : 'Departments';
-                            // } 
-                            elseif ($mod_key == 'expenses') {
-                              $mod_name = $this->lang->line('expenses') ? $this->lang->line('expenses') : 'Expenses';
-                            } elseif ($mod_key == 'calendar') {
-                              $mod_name = $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar';
-                            } elseif ($mod_key == 'leaves') {
-                              $mod_name = $this->lang->line('leaves') ? $this->lang->line('leaves') : 'Leaves';
-                            } elseif ($mod_key == 'leave_hierarchy') {
-                              $mod_name = $this->lang->line('leave_hierarchy') ? $this->lang->line('leave_hierarchy') : 'Leave Hierarchy';
-                            } elseif ($mod_key == 'leaves_types') {
-                              $mod_name = $this->lang->line('leaves_types') ? $this->lang->line('leaves_types') : 'Leaves Types';
-                            } elseif ($mod_key == 'biometric_missing') {
-                              $mod_name = $this->lang->line('biometric_missing') ? $this->lang->line('biometric_missing') : 'Biometric Missing';
-                            } elseif ($mod_key == 'todo') {
-                              $mod_name = $this->lang->line('todo') ? $this->lang->line('todo') : 'Todo';
-                            } elseif ($mod_key == 'notes') {
-                              $mod_name = $this->lang->line('notes') ? $this->lang->line('notes') : 'Notes';
-                            } elseif ($mod_key == 'chat') {
-                              $mod_name = $this->lang->line('chat') ? $this->lang->line('chat') : 'Chat';
-                            } elseif ($mod_key == 'biometric_machine') {
-                              $mod_name = $this->lang->line('biometric_machine') ? $this->lang->line('biometric_machine') : 'biometric Machines';
-                            } elseif ($mod_key == 'payment_gateway') {
-                              $mod_name = $this->lang->line('payment_gateway') ? $this->lang->line('payment_gateway') : 'Payment Gateway';
-                            } elseif ($mod_key == 'taxes') {
-                              $mod_name = $this->lang->line('taxes') ? $this->lang->line('taxes') : 'Taxes';
-                            } elseif ($mod_key == 'custom_currency') {
-                              $mod_name = $this->lang->line('custom_currency') ? $this->lang->line('custom_currency') : 'Custom Currency';
-                            } elseif ($mod_key == 'user_permissions') {
-                              $mod_name = $this->lang->line('user_permissions') ? $this->lang->line('user_permissions') : 'User Permissions';
-                            } elseif ($mod_key == 'notifications') {
-                              $mod_name = $this->lang->line('notifications') ? $this->lang->line('notifications') : 'Notifications';
-                            } elseif ($mod_key == 'languages') {
-                              $mod_name = $this->lang->line('languages') ? $this->lang->line('languages') : 'Languages';
-                            } elseif ($mod_key == 'meetings') {
-                              $mod_name = $this->lang->line('video_meetings') ? $this->lang->line('video_meetings') : 'Video Meetings';
-                            } elseif ($mod_key == 'estimates') {
-                              $mod_name = $this->lang->line('estimates') ? $this->lang->line('estimates') : 'Estimates';
-                            }
-                            // elseif ($mod_key == 'reports') {
-                            //   $mod_name = $this->lang->line('reports') ? $this->lang->line('reports') : 'Reports';
-                            // } 
-                            elseif ($mod_key == 'attendance') {
-                              $mod_name = $this->lang->line('attendance') ? htmlspecialchars($this->lang->line('attendance')) : 'Attendance';
-                            } elseif ($mod_key == 'attendance_leave_policy') {
-                              $mod_name = $this->lang->line('attendance_leave_policy') ? htmlspecialchars($this->lang->line('attendance_leave_policy')) : 'Attendance & Leave policy';
-                            } elseif ($mod_key == 'support') {
-                              $mod_name = $this->lang->line('support') ? htmlspecialchars($this->lang->line('support')) : 'Support';
-                            }
+                        </td>
+                      <?php endforeach; ?>
+                    </tr>
+                  <?php endforeach; ?>
 
-                            if ($mod_name && $mod == 1) {
-                              $modules .= '<div class="pricing-item mb-1">
-                                      <div class="pricing-item-icon"><i class="fas fa-check"></i></div>
-                                      <div class="pricing-item-label">' . $mod_name . '</div>
-                                    </div>';
-                            } elseif ($mod_name) {
-                              $modules .= '<div class="pricing-item mb-1">
-                                      <div class="pricing-item-icon bg-danger text-white"><i class="fas fa-times"></i></div>
-                                      <div class="pricing-item-label">' . $mod_name . '</div>
-                                    </div>';
-                            }
-                          }
-                        }
-                        echo $modules;
-                        ?>
-                      </div>
-                    </div>
-                    <div class="pricing-cta">
-                      <a href="#" class="payment-button" data-amount="<?= htmlspecialchars($plan['price']) ?>" data-id="<?= htmlspecialchars($plan['id']) ?>"><?= $my_plan['plan_id'] == $plan['id'] ? ($this->lang->line('renew_plan') ? $this->lang->line('renew_plan') : 'Renew Plan.') : ($this->lang->line('subscribe') ? $this->lang->line('subscribe') : 'Upgrade') ?> <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                  </div>
-                </div>
-          <?php }
-            }
+                  <tr>
+                    <th colspan="<?= count($plans) + 1 ?>">
+                      <h3>Project Types</h3>
+                    </th>
+                  </tr>
+
+                  <?php $projectTypes = ['kanban', 'scrum', 'clients']; ?>
+                  <?php foreach ($projectTypes as $type) : ?>
+                    <tr>
+                      <th scope="row"><?= ucwords($type) ?></th>
+                      <?php foreach ($modules as $module) : ?>
+                        <td><?= isset($module[$type]) && $module[$type] !== 0 ? '<i class="fas fa-check-circle text-success fs-4"></i>' : '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>'; ?></td>
+                      <?php endforeach; ?>
+                    </tr>
+                  <?php endforeach; ?>
+
+                  <tr>
+                    <th colspan="<?= count($plans) + 1 ?>">
+                      <h3>Attendance</h3>
+                    </th>
+                  </tr>
+
+                  <tr>
+                    <th>Biometric Machine</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td><?= $plan['biometric_machine'] == 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : ($plan['biometric_machine'] == -1 ? 'Unlimited' : $plan['biometric_machine']); ?></td>
+                    <?php endforeach; ?>
+                  </tr>
+                  <tr>
+                    <th>Leave Types</th>
+                    <?php for ($i = 0; $i < count($modules); $i++) : ?>
+                      <td>
+                        <?= isset($modules[$i]['leaves_types']) && $modules[$i]['leaves_types'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endfor; ?>
+                  </tr>
+                  <tr>
+                    <th>Leave Hierarchy</th>
+                    <?php for ($i = 0; $i < count($modules); $i++) : ?>
+                      <td>
+                        <?= isset($modules[$i]['leave_hierarchy']) && $modules[$i]['leave_hierarchy'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endfor; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Leaves Requests</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td>
+                        <?= $plan['leave_requests']  == -1 ? 'Unlimited'  : $plan['leave_requests'] . '<span> /user</span>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+
+                  <tr>
+                    <th>Missing Biometric Requests</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td><?= isset($module['biometric_missing']) && $module['biometric_missing'] !== 0 ? '<i class="fas fa-check-circle text-success fs-4"></i>' : '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>'; ?></td>
+                    <?php endforeach; ?>
+                  </tr>
+
+
+                  <tr>
+                    <th>Roles & Permissions</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td>
+                        <?= $plan['roles_permissions']  == -1 ? 'Unlimited'  : ($plan['roles_permissions'] == 4 ? 'Admin and Standard Users' : ($plan['roles_permissions'] == 5 ? '5 including admin & client' : '-')); ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Office Shifts</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td>
+                        <?= $plan['office_shifts']  == -1 ? 'Unlimited'  : $plan['office_shifts']; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Events Board</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['notice_board']) && $module['notice_board'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Plan Holidays</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['holidays']) && $module['holidays'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Attendance & Leave policy</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['attendance_leave_policy']) && $module['attendance_leave_policy'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Departments</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td>
+                        <?= $plan['departments']  == -1 ? 'Unlimited'  : $plan['departments']; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Email/Push Notifications</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td><?= $plan['email_push_notif']  == -1 ? 'Limited'  : ($plan['email_push_notif'] == 1 ? '<i class="fas fa-check-circle text-success fs-4"></i>' : $plan['email_push_notif']); ?></td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Reports</th>
+                    <?php foreach ($plans as $plan) : ?>
+                      <td><?= $plan['reports']  == -1 ? 'Limited'  : ($plan['reports'] == 1 ? '<i class="fas fa-check-circle text-success fs-4"></i>' : $plan['reports']); ?></td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Support</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['support']) && $module['support'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>To Do</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['todo']) && $module['todo'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Chat</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['chat']) && $module['chat'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <th>Notes</th>
+                    <?php foreach ($modules as $module) : ?>
+                      <td>
+                        <?= isset($module['notes']) && $module['notes'] === 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : '<i class="fas fa-check-circle text-success fs-4"></i>'; ?>
+                      </td>
+                    <?php endforeach; ?>
+                  </tr>
+
+                  <tr>
+                    <td data-label="Actions">Actions</td>
+                    <?php
+                    foreach ($plans as $key => $plan) {
+                    ?>
+                      <td data-label=<?= $plan['title'] ?> class="pricing-cta">
+                        <a href="#" class="btn btn-warning btn-block btn-lg payment-button text-dark" data-amount="<?= htmlspecialchars($plan['price']) ?>" data-id="<?= htmlspecialchars($plan['id']) ?>"><?= $my_plan['plan_id'] == $plan['id'] ? ($this->lang->line('renew_plan') ? $this->lang->line('renew_plan') : 'Renew Plan.') : ($this->lang->line('subscribe') ? $this->lang->line('subscribe') : 'Upgrade') ?> <span><img width="28" height="28" src=<?= base_url('assets2/images/landing_page_images/arrow.gif') ?> alt="->"></span></a>
+                      </td>
+                    <?php
+                    }
+                    ?>
+                  </tr>
+                </tbody>
+              </table>
+            </main>
+          <?php
           } ?>
         </div>
         <div class="row d-none" id="payment-div">

@@ -44,7 +44,7 @@
     cursor: move;
   }
 </style>
-
+<link href="<?= base_url('assets2/vendor/introjs/modern.css') ?>" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -64,9 +64,11 @@
       <div></div>
     </div>
   </div>
+  
   <!--*******************
         Preloader end
     ********************-->
+
   <!--**********************************
         Main wrapper start
     ***********************************-->
@@ -1149,6 +1151,12 @@
           startNineTutorial();
         }, 1500);
       }
+      if (localStorage.getItem('tourStep') == 6) {
+        console.log(localStorage.getItem('tourStep'));
+        setTimeout(function() {
+          startElevenTutorial();
+        }, 1500);
+      }
 
       function startthreeTutorial() {
         introJs().setOptions({
@@ -1320,12 +1328,88 @@
           tooltipClass: 'customTooltip'
         }).start().oncomplete(function() {
           setTimeout(function() {
-            // startTenTutorial();
+            localStorage.setItem('tourStep', '6');
+            window.location.href = base_url + 'settings/shift';
           }, 1500);
         }).onexit(function() {
           setTimeout(function() {
-            // startTenTutorial();
+            localStorage.setItem('tourStep', '6');
+            window.location.href = base_url + 'settings/shift';
           }, 1500);
+        });
+      }
+
+      function startElevenTutorial() {
+        introJs().setOptions({
+          steps: [{
+              intro: "Provide the IP address and port number of the device. These details are necessary to establish a connection with the device. The IP address acts as the identifier for the device on the network, while the port number specifies the communication endpoint on the device.",
+              position: 'right',
+            },
+            {
+              element: '#stepShiftBtn',
+              intro: "Click <strong>Add</strong> to open the device adding form.",
+              position: 'right',
+            }
+          ],
+          showBullets: false,
+          tooltipClass: 'customTooltip'
+        }).start().oncomplete(function() {
+          document.getElementById('stepShiftBtn').click();
+          setTimeout(function() {
+            setValue($("#stepInput14"), 'Regular');
+            startTwelveTutorial();
+          }, 1500);
+        }).onexit(function() {
+          document.getElementById('stepShiftBtn').click();
+          setTimeout(function() {
+            startTwelveTutorial();
+          }, 1500);
+        });
+      }
+
+      function startTwelveTutorial() {
+        introJs().setOptions({
+          steps: [{
+            element: '#stepInput14',
+            intro: "Enter the name for the new shift.",
+            position: 'right',
+          }, {
+            element: '#stepInput8',
+            intro: "Specify the starting time for the shift.",
+            position: 'right',
+          }, {
+            element: '#stepInput9',
+            intro: "Specify the ending time for the shift.",
+            position: 'right',
+          }, {
+            element: '#stepInput10',
+            intro: "Enter the start time for the break.",
+            position: 'right',
+          }, {
+            element: '#stepInput11',
+            intro: "Enter the end time for the break.",
+            position: 'right',
+          }, {
+            element: '#stepInput12',
+            intro: "Specify the check-in time for half-day shifts.",
+            position: 'right',
+          }, {
+            element: '#stepInput13',
+            intro: "Specify the check-out time for half-day shifts.",
+            position: 'right',
+          }, {
+            element: '#stepShiftModelBtn',
+            intro: "Click <strong>Create</strong> to finalize the shift creation.",
+            position: 'right',
+          }],
+          showBullets: false,
+          tooltipClass: 'customTooltip'
+        }).start().oncomplete(function() {
+          localStorage.setItem('tourStep', '7');
+          window.location.href = base_url + 'users';
+        }).onexit(function() {
+          localStorage.setItem('tourStep', '7');
+          window.location.href = base_url + 'users';
         });
       }
 

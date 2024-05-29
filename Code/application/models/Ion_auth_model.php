@@ -1853,7 +1853,7 @@ class Ion_auth_model extends CI_Model
 			'saas_id'              => $user->saas_id,
 			'user_id'              => $user->id, 
 			'old_last_login'       => $user->last_login,
-			'show_demo'       	   => $user->last_login,
+			'show_demo'        	   => $user->last_login,
 			'last_check'           => time(),
 			'alerts'               => '1',
 			'reminder'               => '1',

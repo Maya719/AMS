@@ -1198,24 +1198,20 @@ class Plans extends CI_Controller
 				$modules['attendance_leave_policy'] = $this->input->post('attendance_leave_policy') ? 1 : 0;
 				$modules['tasks'] = $this->input->post('tasks_module') ? 1 : 0;
 				$modules['team_members'] = $this->input->post('team_members') ? 1 : 0;
-				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 0;
+				$modules['user_roles'] = $this->input->post('user_roles') ? 1 : 1;
 				$modules['departments'] = $this->input->post('departments') ? 1 : 0;
 				$modules['clients'] = $this->input->post('clients') ? 1 : 0;
-				// $modules['calendar'] = $this->input->post('calendar') ? 1 : 0;
 				$modules['leaves'] = $this->input->post('leaves') ? 1 : 0;
 				$modules['leaves_types'] = $this->input->post('leaves_types') ? 1 : 0;
 				$modules['leave_hierarchy'] = $this->input->post('leave_hierarchy') ? 1 : 0;
 				$modules['biometric_missing'] = $this->input->post('biometric_missing') ? 1 : 0;
-				//  $modules['biometric_machine'] = $this->input->post('biometric_machine') ? 1 : 0;
 				$modules['holidays'] = $this->input->post('holidays') ? 1 : 0;
 				$modules['todo'] = $this->input->post('todo') ? 1 : 0;
 				$modules['notice_board'] = $this->input->post('notice_board') ? 1 : 0;
-				// $modules['shifts'] = $this->input->post('shifts') ? 1 : 0;
 				$modules['notes'] = $this->input->post('notes') ? 1 : 0;
 				$modules['chat'] = $this->input->post('chat') ? 1 : 0;
-				$modules['user_permissions'] = $this->input->post('user_permissions') ? 1 : 0;
+				$modules['user_permissions'] = $this->input->post('user_permissions') ? 1 : 1;
 				$modules['notifications'] = $this->input->post('notifications') ? 1 : 0;
-				// $modules['languages'] = $this->input->post('languages') ? 1 : 0;
 				$modules['reports'] = $this->input->post('reports') ? 1 : 0;
 				$modules['support'] = $this->input->post('support') ? 1 : 0;
 
