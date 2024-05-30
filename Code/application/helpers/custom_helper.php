@@ -1988,6 +1988,53 @@ function get_stripe_secret_key($is_non_saas = false)
         return false;
     }
 }
+// my Fatoorah
+function get_myfatoorah_publishable_key($is_non_saas = false)
+{
+    $CI = &get_instance();
+    $CI->db->select('value');
+    $CI->db->from('settings');
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
+    }
+    $query = $CI->db->get();
+    $data = $query->result_array();
+    if (!empty($data)) {
+        $data = json_decode($data[0]['value']);
+        if (isset($data->myFatoorah_publishable_key)) {
+            return $data->myFatoorah_publishable_key;
+        } else {
+            return '';
+        }
+    } else {
+        return false;
+    }
+}
+function get_myfatoorah_secret_key($is_non_saas = false)
+{
+    $CI = &get_instance();
+    $CI->db->select('value');
+    $CI->db->from('settings');
+    if ($is_non_saas) {
+        $CI->db->where(['type' => 'payment_' . $CI->session->userdata('saas_id')]);
+    } else {
+        $CI->db->where(['type' => 'payment']);
+    }
+    $query = $CI->db->get();
+    $data = $query->result_array();
+    if (!empty($data)) {
+        $data = json_decode($data[0]['value']);
+        if (isset($data->myFatoorah_secret_key)) {
+            return $data->myFatoorah_secret_key;
+        } else {
+            return '';
+        }
+    } else {
+        return false;
+    }
+}
 
 function get_paystack_secret_key($is_non_saas = false)
 {
