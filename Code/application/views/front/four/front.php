@@ -443,7 +443,7 @@
 
 
                     <?php $this->load->view('setting-forms/pricing_features'); ?>
-                   
+
 
                 </div>
             </div>
@@ -779,7 +779,27 @@
                                         <div class="tp-brands-from-input contact-mb">
                                             <input name="email" type="email" placeholder="Email Address:">
                                         </div>
+                                    </div>       
+                                    <div class="col-12 col-sm-6">
+                                        <div class="tp-brands-from-input contact-mb">
+                                            <input name="organization_name" type="text" placeholder="Organization Name">
+                                        </div>
                                     </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="tp-brands-from-input contact-mb">
+                                            <select name="enquiry_related_to" id="enquiry-related-to" class="w-100">
+                                                <option value="" selected>Please select an option</option>
+                                                <option value="Pricing">Pricing</option>
+                                                <option value="Project Management System">Project Management System</option>
+                                                <option value="Attendance Management System">Attendance Management System</option>
+                                                <option value="Customization in PERI">Customization in PERI</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
                                     <div class="col-12">
                                         <div class="tp-brands-from-input contact-textarea">
                                             <textarea name="msg" placeholder="Write Message..."></textarea>
@@ -799,47 +819,6 @@
         <!-- contact input area end -->
 
 
-        <!-- contact area start -->
-        <div class="tp-contact-area pt-120 pb-120">
-            <!-- <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="tp-contact-phone d-sm-flex justify-content-xl-end">
-                            <div class="tp-contact-icon">
-                                <a href="tel:051-6102534"><i class="flaticon-telephone-call"></i></a>
-                            </div>
-                            <div class="contact-inner">
-                                <p>Phone:</p>
-                                <a href="tel:051-6102534" style="font-size: 18px;">051-6102534</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="tp-contact-mail d-sm-flex justify-content-xl-center">
-                            <div class="tp-contact-icon">
-                                <a href="mail:ag.rana@airnet-technologies.com"><i class="flaticon-mail"></i></a>
-                            </div>
-                            <div class="contact-inner">
-                                <p>E-mail:</p>
-                                <a href="mailto:ag.rana@airnet-technologies.com" style="font-size: 18px;">Click to send Mail</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="tp-contact-location d-sm-flex justify-content-xl-start">
-                            <div class="tp-contact-icon">
-                                <a href="https://www.google.com/maps/@23.8297487,90.3766346,19z"><i class="flaticon-location"></i></a>
-                            </div>
-                            <div class="contact-inner">
-                                <p>Address:</p>
-                                <a target="_blank" style="font-size: 18px;" href="https://www.google.com/maps/place/Dubai+-+United+Arab+Emirates/@25.0756569,54.8971529,10z/data=!3m1!4b1!4m6!3m5!1s0x3e5f43496ad9c645:0xbde66e5084295162!8m2!3d25.2048493!4d55.2707828!16zL20vMDFmMDhy?entry=ttu" target="_blank">Dubai</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-        </div>
-        <!-- contact area end -->
     </main>
 
     <!-- footer area start -->
@@ -977,13 +956,7 @@
         </div>
     </div>
     <script src="<?= base_url('assets/front/comman.js') ?>"></script>
-    <script>
-        function showDropdownOptions() {
-            document.getElementById("options").classList.toggle("hidden");
-            document.getElementById("arrow-up").classList.toggle("hidden");
-            document.getElementById("arrow-down").classList.toggle("hidden");
-        }
-    </script>
+
 </body>
 
 </html>

@@ -32,6 +32,17 @@
             </div>
           </div>
 
+          <!-- myFatoorah  -->
+          <div class="card-header">
+            <h4><?= $this->lang->line('Fatoorah') ? $this->lang->line('Fatoorah') : 'My Fatoorah' ?></h4>
+          </div>
+          <div class="card-body row">
+            <div class="form-group col-md-12">
+              <label class="col-form-label"><?= $this->lang->line('secret_key') ? $this->lang->line('secret_key') : 'Secret Key' ?></label>
+              <input type="text" name="fatoorah_secret_key" value="<?= (isset($fatoorah_secret_key) && !empty($fatoorah_secret_key)) ? htmlspecialchars($fatoorah_secret_key) : '' ?>" class="form-control">
+            </div>
+          </div>
+
 
           <div class="card-header">
             <h4><?= $this->lang->line('razorpay') ? $this->lang->line('razorpay') : 'Razorpay' ?></h4>

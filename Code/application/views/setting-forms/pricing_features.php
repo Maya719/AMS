@@ -61,9 +61,13 @@
             <?php $projectTypes = ['kanban', 'scrum', 'clients']; ?>
             <?php foreach ($projectTypes as $type) : ?>
                 <tr>
-                    <th scope="row"><?= ucwords($type) ?></th>
+                    <th scope="row">
+                        <?= $type === 'clients' ? 'Client Access' : ucwords($type) ?>
+                    </th>
                     <?php foreach ($modules as $module) : ?>
-                        <td><?= isset($module[$type]) && $module[$type] !== 0 ? '<i class="fas fa-check-circle text-success fs-4"></i>' : '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>'; ?></td>
+                        <td>
+                            <?= isset($module[$type]) && $module[$type] !== 0 ? '<i class="fas fa-check-circle text-success fs-4"></i>' : '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>'; ?>
+                        </td>
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
@@ -77,7 +81,7 @@
             </tr>
 
             <tr>
-                <th>Biometric Machine</th>
+                <th>Biometric Machines</th>
                 <?php foreach ($plans as $plan) : ?>
                     <td><?= $plan['biometric_machine'] == 0 ? '<i class="fa-solid fa-circle-xmark text-danger fs-4"></i>' : ($plan['biometric_machine'] == -1 ? 'Unlimited' : $plan['biometric_machine']); ?></td>
                 <?php endforeach; ?>
@@ -229,11 +233,12 @@
                 foreach ($plans as $key => $plan) {
                 ?>
                     <td data-label=<?= $plan['title'] ?>>
-                        <a href="<?= base_url('auth/register') ?>" class="tp-btn">Get Started Now <span><img width="28" height="28" src=<?= base_url('assets2/images/landing_page_images/arrow.gif') ?> alt="->"></span></a>
+                        <a href="<?= base_url('auth/register') ?>?plan_id=<?= $plan['id'] ?>" class="tp-btn">Get Started Now <span><img width="28" height="28" src="<?= base_url('assets2/images/landing_page_images/arrow.gif') ?>" alt="->"></span></a>
                     </td>
                 <?php
                 }
                 ?>
+
             </tr>
 
 

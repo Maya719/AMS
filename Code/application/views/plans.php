@@ -629,55 +629,89 @@
           <?php
           } ?>
         </div>
+
+        <!-- payments options -->
+
         <div class="row d-none" id="payment-div">
           <div id="paypal-button" class="col-md-8 mx-auto paymet-box"></div>
-          <?php if (get_stripe_secret_key() && get_stripe_publishable_key()) { ?>
-            <button id="stripe-button" class="col-md-8 btn mx-auto paymet-box">
-              <img src="<?= base_url('assets/img/stripe.png') ?>" width="14%" alt="Stripe">
-            </button>
-          <?php } ?>
+          <p>
+          <h3 class="text-center">Payment Options </h3>
+          <p class="text-center"> Select your payment options</p>
+          </p>
 
-          <?php if (get_myfatoorah_secret_key() && get_myfatoorah_publishable_key()) { ?>
-            <button id="fatoorah-button" class="col-md-8 btn mx-auto paymet-box">
-              <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="70%"><defs><style>.a{fill:#4cb4e7}</style></defs><path class="a" d="M.447 59.727l27.908-.212.038 5.083-27.908.212M.386 51.254l27.908-.212.038 5.083-27.908.212M.321 42.778l27.908-.212.039 5.083-27.908.212M.257 34.306l41.951-.318.039 5.083-41.951.318M.193 25.84l41.951-.318.038 5.083-41.951.318M.128 17.364l55.914-.424.038 5.083-55.914.424M.064 8.896l55.914-.424.038 5.083-55.914.424M0 .424L55.914 0l.039 5.083-55.914.424"/><path d="M56.167 33.916l4.926-.037.013 1.923a5.992 5.992 0 014.8-2.321 6.053 6.053 0 015.6 2.824 6.875 6.875 0 015.628-2.912c4.6-.034 6.9 2.708 6.936 7.393l.083 11.074-5.034.037-.079-10.421c-.017-2.43-.968-3.842-3.178-3.826-1.885.017-3.248 1.333-3.227 4.382l.075 9.914-5.034.037-.079-10.421c-.017-2.43-.968-3.842-3.178-3.825-1.881.017-3.248 1.333-3.223 4.382l.075 9.915-4.964.037zM91.856 51.001l-7.337-17.3 5.214-.04 4.538 11.148 4.079-11.214 5.142-.039-10.3 26.62-4.961.038z"/><g><path d="M56.525 57.928l14.954-.114.036 4.829-9.921.075.045 5.954 9.921-.075.036 4.829-9.921.075.082 10.892-5.033.038zM87.476 75.085a4.68 4.68 0 00-4.673-4.83 4.891 4.891 0 104.673 4.83m-14.338.146c-.05-6.426 4.635-9.474 8.727-9.507a7.243 7.243 0 015.412 2.1l-.013-1.778 4.959-.037.137 18.151-4.959.038-.017-2.031a7.056 7.056 0 01-5.449 2.438c-3.838.029-8.748-2.986-8.8-9.374M94.105 65.993l3.078-.021-.042-5.823 4.96-.042.046 5.827 3.4-.029.033 4.469-3.4.025.042 5.773c.021 2.829.386 3.265 3.431 3.24l.033 4.648h-.723c-5.757.046-7.655-1.9-7.7-7.821l-.046-5.807-3.078.021zM120.351 74.872a4.547 4.547 0 10-4.523 4.751 4.645 4.645 0 004.523-4.751m-13.939.1a9.379 9.379 0 119.449 9.37 9.382 9.382 0 01-9.449-9.37"/><path d="M140.454 74.72a4.651 4.651 0 00-4.6-4.685 4.725 4.725 0 00.071 9.441 4.656 4.656 0 004.527-4.756m-13.943.108a9.379 9.379 0 119.453 9.366 9.38 9.38 0 01-9.453-9.366M146.896 65.594l4.926-.038.021 2.978a5.1 5.1 0 014.976-3.016l1.811-.017.033 4.831-2.965.021c-2.646.021-3.792 1.412-3.767 4.785l.067 8.569-4.964.038zM173.724 74.428a4.679 4.679 0 00-4.673-4.825 4.889 4.889 0 104.673 4.826m-14.338.146c-.05-6.426 4.636-9.474 8.727-9.5a7.228 7.228 0 015.412 2.1l-.016-1.782 4.964-.037.137 18.155-4.959.037-.017-2.035a7.045 7.045 0 01-5.449 2.438c-3.838.029-8.752-2.983-8.8-9.375M180.312 83.496l-.2-26.5 6.367-.05.083 10.891a6.63 6.63 0 016.094-3.531c3.555-.029 6.1 2.226 6.135 6.957l.091 12.1-6.368.046-.083-10.812c-.013-2.1-.843-3.123-2.692-3.107-1.882.013-3.157 1.163-3.14 3.543l.079 10.421z"/></g><text transform="translate(55.143 94.952)" font-size="9" font-family="Graphik-Medium,Graphik" font-weight="500" fill="#4cb4e7"><tspan x="0" y="0">More than just a payment solution</tspan></text></svg>
-            </button>
-          <?php } ?>
-          <?php if (get_razorpay_key_id()) { ?>
-            <button id="razorpay-button" class="col-md-8 btn mx-auto paymet-box">
-              <img src="<?= base_url('assets/img/razorpay.png') ?>" width="27%" alt="Stripe">
-            </button>
-          <?php } ?>
-          <?php if (get_paystack_public_key()) { ?>
-            <button id="paystack-button" class="col-md-8 btn mx-auto paymet-box">
-              <img src="<?= base_url('assets/img/paystack.png') ?>" width="24%" alt="Paystack">
-            </button>
-          <?php } ?>
-          <?php if (get_offline_bank_transfer()) { ?>
-            <div id="accordion" class="col-md-8 paymet-box mx-auto">
-              <div class="accordion mb-0">
-                <div class="accordion-header text-center" role="button" data-toggle="collapse" data-target="#panel-body-3">
-                  <h4><?= $this->lang->line('offline_bank_transfer') ? $this->lang->line('offline_bank_transfer') : 'Offline / Bank Transfer' ?></h4>
-                </div>
-                <div class="accordion-body collapse" id="panel-body-3" data-parent="#accordion">
-                  <p class="mb-0"><?= get_bank_details() ?></p>
-
-                  <form action="<?= base_url('plans/create-offline-request/') ?>" method="POST" id="bank-transfer-form">
-                    <div class="card-footer bg-whitesmoke">
-                      <div class="form-group">
-                        <label class="col-form-label"><?= $this->lang->line('upload_receipt') ? htmlspecialchars($this->lang->line('upload_receipt')) : 'Upload Receipt' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>" data-original-title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>"></i> </label>
-                        <input type="file" name="receipt" class="form-control">
-                        <input type="hidden" name="plan_id" id="plan_id">
-                      </div>
-                      <button class="btn btn-primary savebtn"><?= $this->lang->line('upload_and_send_for_confirmation') ? htmlspecialchars($this->lang->line('upload_and_send_for_confirmation')) : 'Upload and Send for Confirmation' ?></button>
-                    </div>
-                    <div class="result"></div>
-                  </form>
-
-                </div>
-              </div>
+          <div class="payment_cont">
+            <div>
+              <?php if (get_stripe_secret_key() && get_stripe_publishable_key()) { ?>
+                <button id="stripe-button" class="payment_opt">
+                  <img src="<?= base_url('assets/img/stripe.png') ?>" alt="Stripe">
+                </button>
+              <?php } ?>
             </div>
-          <?php } ?>
+
+
+
+            <div>
+              <?php if (get_myfatoorah_secret_key()) { ?>
+                <button id="fatoorah-button" class="payment_opt">
+                  <img src="<?= base_url('assets/img/fatoorah.png') ?>" class="fatoorah_img" alt="Fatoorah">
+                </button>
+              <?php } ?>
+            </div>
+
+            <div>
+              <?php if (get_razorpay_key_id()) { ?>
+                <button id="razorpay-button" class="payment_opt">
+                  <img src="<?= base_url('assets/img/razorpay.png') ?>">
+                </button>
+              <?php } ?>
+            </div>
+
+            <div>
+              <?php if (get_paystack_public_key()) { ?>
+                <button id="paystack-button" class="payment_opt">
+                  <img src="<?= base_url('assets/img/paystack.png') ?>" alt="Paystack">
+                </button>
+              <?php } ?>
+            </div>
+
+            <div>
+              <?php if (get_offline_bank_transfer()) { ?>
+                <div id="accordion" class="col-md-8 paymet-box mx-auto">
+                  <div class="accordion mb-0">
+                    <div class="accordion-header text-center" role="button" data-toggle="collapse" data-target="#panel-body-3">
+                      <h4><?= $this->lang->line('offline_bank_transfer') ? $this->lang->line('offline_bank_transfer') : 'Offline / Bank Transfer' ?></h4>
+                    </div>
+                    <div class="accordion-body collapse" id="panel-body-3" data-parent="#accordion">
+                      <p class="mb-0"><?= get_bank_details() ?></p>
+
+                      <form action="<?= base_url('plans/create-offline-request/') ?>" method="POST" id="bank-transfer-form">
+                        <div class="card-footer bg-whitesmoke">
+                          <div class="form-group">
+                            <label class="col-form-label"><?= $this->lang->line('upload_receipt') ? htmlspecialchars($this->lang->line('upload_receipt')) : 'Upload Receipt' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>" data-original-title="<?= $this->lang->line('supported_formats') ? htmlspecialchars($this->lang->line('supported_formats')) : 'Supported Formats: jpg, jpeg, png' ?>"></i> </label>
+                            <input type="file" name="receipt" class="form-control">
+                            <input type="hidden" name="plan_id" id="plan_id">
+                          </div>
+                          <button class="btn btn-primary savebtn"><?= $this->lang->line('upload_and_send_for_confirmation') ? htmlspecialchars($this->lang->line('upload_and_send_for_confirmation')) : 'Upload and Send for Confirmation' ?></button>
+                        </div>
+                        <div class="result"></div>
+                      </form>
+
+                    </div>
+                  </div>
+                </div>
+              <?php } ?>
+            </div>
+          </div>
+
         </div>
+
+        <!-- ----- -->
+
+
+
+
+
+
       </div>
     </div>
     <!-- *******************************************
@@ -1617,6 +1651,95 @@
       }
     });
   </script>
+
+  <style>
+    .payment_cont {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+
+      margin: 5px;
+      height: 100%;
+    }
+
+    .payment_opt {
+
+      margin: 1.1rem 1.2rem;
+
+      height: 10rem;
+      width: 25rem;
+      border: 2px solid #FFFFFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+
+      background: #e6e7ea;
+      border-radius: 22px;
+      box-shadow: 5px 5px 10px #b8b9bb, -5px -5px 10px #ffffff;
+      -webkit-border-radius: 22px;
+      -webkit-box-shadow: 5px 5px 10px #b8b9bb, -5px -5px 10px #ffffff;
+
+
+    }
+
+    .payment_opt img {
+    
+      width: 60%;
+      height: auto;
+
+    }
+
+    .payment_opt:hover {
+      background: #e6e7ea;
+      border-radius: 14px;
+      box-shadow: 8px 8px 16px #9f9fa1, -8px -8px 16px #ffffff;
+      -webkit-border-radius: 14px;
+      -webkit-box-shadow: 8px 8px 16px #9f9fa1, -8px -8px 16px #ffffff;
+
+    }
+
+
+    .fatoorah_img {
+      width: 60%;
+      height: auto;
+    }
+
+
+
+    @media screen and (min-width: 900px) and (max-width: 1050px) {
+      .payment_cont {
+        height: auto;
+      }
+
+      .payment_opt {
+        width: 15rem;
+        height: 8rem;
+        margin: 0 2.2rem;
+      }
+
+
+
+    }
+
+
+    @media screen and (max-width:900px) {
+      .payment_cont {
+        height: auto;
+      }
+
+      .payment_opt {
+        margin: 1.2rem 0
+      }
+
+
+
+
+    }
+  </style>
+
 </body>
 
 </html>

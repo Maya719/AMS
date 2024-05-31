@@ -683,6 +683,7 @@ class Settings extends CI_Controller
 				$this->data['paypal_secret'] = get_paypal_secret();
 				$this->data['stripe_publishable_key'] = get_stripe_publishable_key();
 				$this->data['stripe_secret_key'] = get_stripe_secret_key();
+				$this->data['fatoorah_secret_key'] = get_myfatoorah_secret_key();
 				$this->data['razorpay_key_id'] = get_razorpay_key_id();
 				$this->data['razorpay_key_secret'] = get_razorpay_key_secret();
 				$this->data['paystack_public_key'] = get_paystack_public_key();
@@ -694,6 +695,7 @@ class Settings extends CI_Controller
 				$this->data['paypal_secret'] = get_paypal_secret(true);
 				$this->data['stripe_publishable_key'] = get_stripe_publishable_key(true);
 				$this->data['stripe_secret_key'] = get_stripe_secret_key(true);
+				$this->data['fatoorah_secret_key'] = get_myfatoorah_secret_key(true);
 				$this->data['razorpay_key_id'] = get_razorpay_key_id(true);
 				$this->data['razorpay_key_secret'] = get_razorpay_key_secret(true);
 				$this->data['paystack_public_key'] = get_paystack_public_key(true);
@@ -718,6 +720,7 @@ class Settings extends CI_Controller
 			$data_json['paypal_secret'] = $this->input->post('paypal_secret') ? $this->input->post('paypal_secret') : '';
 			$data_json['stripe_publishable_key'] = $this->input->post('stripe_publishable_key') ? $this->input->post('stripe_publishable_key') : '';
 			$data_json['stripe_secret_key'] = $this->input->post('stripe_secret_key') ? $this->input->post('stripe_secret_key') : '';
+			$data_json['fatoorah_secret_key'] = $this->input->post('fatoorah_secret_key') ? $this->input->post('fatoorah_secret_key') : '';
 			$data_json['razorpay_key_id'] = $this->input->post('razorpay_key_id') ? $this->input->post('razorpay_key_id') : '';
 			$data_json['razorpay_key_secret'] = $this->input->post('razorpay_key_secret') ? $this->input->post('razorpay_key_secret') : '';
 			$data_json['paystack_public_key'] = $this->input->post('paystack_public_key') ? $this->input->post('paystack_public_key') : '';

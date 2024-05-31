@@ -305,6 +305,11 @@
                             <img src="<?= base_url('assets/img/stripe.png') ?>" width="14%" alt="Stripe">
                         </button>
                     <?php } ?>
+                    <?php if (get_myfatoorah_publishable_key()) { ?>
+                        <button id="fatoorah-button" class="col-md-8 btn mx-auto paymet-box">
+                            <img src="<?= base_url('assets/img/fatoorah.png') ?>" width="14%" alt="My Fatoorah">
+                        </button>
+                    <?php } ?>
                     <?php if (get_razorpay_key_id()) { ?>
                         <button id="razorpay-button" class="col-md-8 btn mx-auto paymet-box">
                             <img src="<?= base_url('assets/img/razorpay.png') ?>" width="27%" alt="Stripe">
