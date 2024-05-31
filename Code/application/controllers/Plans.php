@@ -1,12 +1,17 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-
+require_once(APPPATH . 'libraries/myFatoorah/PaymentMyfatoorahApiV2.php');
 class Plans extends CI_Controller
 {
-	public $data = [];
 
+	public $data = [];
+	public $mf;
+	public $apiKey;
 	public function __construct()
 	{
 		parent::__construct();
+		$this->apiKey = get_myfatoorah_secret_key();
+		$testMode = 'yes';
+		$this->mf = new PaymentMyfatoorahApiV2($this->apiKey, ($testMode === 'yes'));
 	}
 
 	public function create_session($plan_id = '', $saas_id = '')
@@ -80,6 +85,7 @@ class Plans extends CI_Controller
 			redirect('auth', 'refresh');
 		}
 	}
+
 
 	public function soc()
 	{
@@ -1231,7 +1237,7 @@ class Plans extends CI_Controller
 					'email_push_notif' => $this->input->post('email_push_notif'),
 					'reports' => $this->input->post('reports'),
 					'roles_permissions' => $this->input->post('roles_permissions'),
-					'departments'=> $this->input->post('departments'),
+					'departments' => $this->input->post('departments'),
 					'modules' => json_encode($modules),
 				);
 
