@@ -731,7 +731,7 @@ class Attendance_model extends CI_Model
                 $zk->setTime($cdate);
                 $users = $zk->getUser();
                 $attendance = $zk->getAttendance();
-                $zk->clearAttendance();
+                // $zk->clearAttendance();
                 $zk->enableDevice();
                 $zk->disconnect();
                 foreach ($attendance as $key => $attendances) {
@@ -766,7 +766,7 @@ class Attendance_model extends CI_Model
                             $template_data['TIME'] = $time;
                             $template_data['DASHBOARD_URL'] = 'https://pms.mobipixels.com';
                             $email_template = render_email_template('biometric', $template_data);
-                            send_mail($email, $email_template[0]['subject'], $email_template[0]['message']);
+                            // send_mail($email, $email_template[0]['subject'], $email_template[0]['message']);
                         }
                     }
                 }
