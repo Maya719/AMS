@@ -1352,7 +1352,7 @@ function is_module_allowed($module_type = '')
         $data = json_decode($current_plan['modules']);
         if (isset($data->{$module_type}) && $data->{$module_type} == 1) {
             return true;
-        }else {
+        } else {
             return false;
         }
     } else {
@@ -1846,6 +1846,7 @@ function task_status($id = '')
     }
 }
 
+// ============================| Payment Methods   |=============================================
 function get_razorpay_key_id($is_non_saas = false)
 {
     $CI = &get_instance();
@@ -2005,7 +2006,8 @@ function get_myfatoorah_publishable_key($is_non_saas = false)
         $data = json_decode($data[0]['value']);
         if (isset($data->myFatoorah_publishable_key)) {
             return $data->myFatoorah_publishable_key;
-        } else {
+        } 
+        else {
             return '';
         }
     } else {
@@ -2026,8 +2028,8 @@ function get_myfatoorah_secret_key($is_non_saas = false)
     $data = $query->result_array();
     if (!empty($data)) {
         $data = json_decode($data[0]['value']);
-        if (isset($data->myFatoorah_secret_key)) {
-            return $data->myFatoorah_secret_key;
+        if (isset($data->fatoorah_secret_key)) {
+            return $data->fatoorah_secret_key;
         } else {
             return '';
         }
@@ -2131,6 +2133,8 @@ function get_payment_paypal($is_non_saas = false)
         return false;
     }
 }
+
+// --------------------------------------------------------------------------------------------------
 
 function get_system_version()
 {
