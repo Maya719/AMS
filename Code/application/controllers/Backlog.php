@@ -5,7 +5,7 @@ class Backlog extends CI_Controller
     {
         parent::__construct();
     }
-    public $data = [];
+    public $data = []; 
     public $ion_auth;
     public function project($id = '')
     {
