@@ -51,6 +51,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" data-bs-toggle="tab" href="#message1"><i class="la la-home me-2"></i> Account Setting</a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword"><i class="la la-key me-2"></i> Change Password</a>
+                                            </li>
                                             <?php
                                             if ((permissions('user_edit') && permissions('user_view')) || $this->ion_auth->is_admin()) {
                                             ?>
@@ -229,14 +232,6 @@
                                                             <label for="exampleFormControlInput12" class="form-label">Email <span class="text-danger">*</span></label>
                                                             <input type="email" name="email" class="form-control" value="<?= $data->email ?>" id="exampleFormControlInput12" readonly>
                                                         </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label for="exampleFormControlInput13" class="form-label">Password <span class="text-danger">*</span></label>
-                                                            <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
-                                                        </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label for="exampleFormControlInput14" class="form-label">Confirm Password <span class="text-danger">*</span></label>
-                                                            <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
-                                                        </div>
 
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput15" class="form-label">Role <span class="text-danger">*</span></label>
@@ -253,6 +248,24 @@
                                                                     <?php endif ?>
                                                                 <?php } ?>
                                                             </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="changePassword">
+                                                <div class="pt-4">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="col-8 mb-3">
+                                                            <label for="exampleFormControlInput13" class="form-label">Current Password <span class="text-danger">*</span></label>
+                                                            <input type="password" name="old_password" class="form-control" id="exampleFormControlInput13">
+                                                        </div>
+                                                        <div class="col-8 mb-3">
+                                                            <label for="exampleFormControlInput13" class="form-label">New Password <span class="text-danger">*</span></label>
+                                                            <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
+                                                        </div>
+                                                        <div class="col-8 mb-3">
+                                                            <label for="exampleFormControlInput14" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                                            <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
                                                         </div>
                                                     </div>
                                                 </div>

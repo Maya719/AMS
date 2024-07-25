@@ -411,7 +411,7 @@ class Auth extends CI_Controller
 				$this->session->set_flashdata('message_type', 'success');
 			}
 			$saas_id = $this->ion_auth->encryptId($id, 'GeekForGeek');
-			redirect("auth/create_profile/".$saas_id, 'refresh');
+			redirect("auth/create_profile/" . $saas_id, 'refresh');
 		}
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !permissions('user_edit') && !permissions('client_edit') && !$this->ion_auth->in_group(3))) {
@@ -1149,28 +1149,70 @@ class Auth extends CI_Controller
 	 */
 	public function edit_user()
 	{
-
 		$id = $this->input->post('update_id');
 
-		if (empty($id) || !is_numeric($id)) {
-
-			$this->data['error'] = true;
-			$this->data['message'] = $this->lang->line('invalid_user_id') ? $this->lang->line('invalid_user_id') : "Invalid User ID";
-			echo json_encode($this->data);
-			return false;
-		}
-
-		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !permissions('user_edit') && !permissions('client_edit') && !$this->ion_auth->in_group(3) && !$this->ion_auth->user()->row()->id == $id)) {
-			$this->data['error'] = true;
-			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
-			echo json_encode($this->data);
+		if (!$this->is_valid_user_id($id) || !$this->has_permission($id)) {
+			$this->send_error_message('invalid_user_id');
 			return false;
 		}
 
 		$user = $this->ion_auth->user($id)->row();
-		$groups = $this->ion_auth->groups()->result_array();
 		$currentGroups = $this->ion_auth->get_users_groups($id)->result();
 
+		$this->set_form_validation_rules();
+
+		if ($this->form_validation->run() === TRUE) {
+			if ($this->input->post('password') && !$this->validate_old_password($user->password)) {
+				$this->send_error_message('Old password incorrect.');
+				return false;
+			}
+
+			$profile_pic = $this->handle_file_upload('profile', 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/');
+			$document_paths = $this->handle_multiple_file_upload('files', 'assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/');
+			$this->delete_old_documents();
+
+			$data = $this->prepare_user_data($user, $profile_pic, $document_paths);
+
+			if ($this->update_user($user->id, $data, $currentGroups)) {
+				$this->update_company_details($user->id);
+				$this->update_user_plan($user->id);
+
+				$this->send_success_message();
+				return false;
+			} else {
+				$this->send_error_message($this->ion_auth->errors());
+				return false;
+			}
+		}
+
+		$this->send_error_message(validation_errors() ?: $this->ion_auth->errors() ?: $this->session->flashdata('message'));
+		return false;
+	}
+
+	private function is_valid_user_id($id)
+	{
+		return !empty($id) && is_numeric($id);
+	}
+
+	private function has_permission($id)
+	{
+		return $this->ion_auth->logged_in() &&
+			($this->ion_auth->is_admin() ||
+				permissions('user_edit') ||
+				permissions('client_edit') ||
+				$this->ion_auth->in_group(3) ||
+				$this->ion_auth->user()->row()->id == $id);
+	}
+
+	private function send_error_message($message_key)
+	{
+		$this->data['error'] = true;
+		$this->data['message'] = $this->lang->line($message_key) ?: $message_key;
+		echo json_encode($this->data);
+	}
+
+	private function set_form_validation_rules()
+	{
 		$this->form_validation->set_rules('update_id', 'User ID', 'trim|required|strip_tags|xss_clean|is_numeric');
 		$this->form_validation->set_rules('plan_id', 'Plan ID', 'trim|strip_tags|xss_clean|is_numeric');
 		$this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'trim|required|strip_tags|xss_clean');
@@ -1178,229 +1220,199 @@ class Auth extends CI_Controller
 		$this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'trim|strip_tags|xss_clean');
 
-		if (isset($_POST) && !empty($_POST)) {
-			if ($this->input->post('password')) {
-				$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
-				$this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
+		if ($this->input->post('password')) {
+			$this->form_validation->set_rules('old_password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
+			$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
+			$this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
+		}
+	}
+
+	private function validate_old_password($hash_password_db)
+	{
+		$old_password = $this->input->post('old_password');
+		return $this->ion_auth->verify_password($old_password, $hash_password_db);
+	}
+
+	private function handle_file_upload($field_name, $upload_path)
+	{
+		$profile_pic = '';
+
+		if (!empty($_FILES[$field_name]['name'])) {
+			if (!is_dir($upload_path)) {
+				mkdir($upload_path, 0775, true);
 			}
 
-			if ($this->form_validation->run() === TRUE) {
-				$profile_pic = '';
-				if (!empty($_FILES['profile']['name'])) {
+			$config = [
+				'upload_path'   => $upload_path,
+				'allowed_types' => 'jpg|png|',
+				'overwrite'     => false,
+				'max_size'      => 0,
+				'max_width'     => 0,
+				'max_height'    => 0
+			];
 
-					$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/';
-					if (!is_dir($upload_path)) {
-						mkdir($upload_path, 0775, true);
-					}
+			$this->load->library('upload', $config);
 
-					$config['upload_path']          = $upload_path;
-					$config['allowed_types']        = 'jpg|png|';
-					$config['overwrite']             = false;
-					$config['max_size']             = 0;
-					$config['max_width']            = 0;
-					$config['max_height']           = 0;
-					$this->load->library('upload', $config);
-					if ($this->upload->do_upload('profile')) {
-						$profile_pic = $this->upload->data('file_name');
-						if ($this->input->post('old_profile_pic')) {
-							$unlink_path = $upload_path . '' . $this->input->post('old_profile_pic');
-							unlink($unlink_path);
-						}
-					}
-				}
-
-				if ($this->input->post('finger_config')) {
-					$finger_config = '1';
-					$devices = $this->input->post('device') ? $this->input->post('device') : '';
-					$device_ids_str = '["' . $devices . '"]';
-				} else {
-					$finger_config = '0';
-					$device_ids_str = '[]';
-				}
-
-
-				$document_paths = array();
-				if (!empty($_FILES['files']['name'])) {
-					$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/';
-					if (!is_dir($upload_path)) {
-						mkdir($upload_path, 0775, true);
-					}
-					foreach ($this->input->post('documents') as $value) {
-						$unlink_path = $upload_path . '' . $value;
-						unlink($unlink_path);
-					}
-					$config['upload_path'] = $upload_path;
-					$config['allowed_types'] = '*';
-					$config['overwrite'] = false;
-					$config['max_size'] = 0;
-					$config['max_width'] = 0;
-					$config['max_height'] = 0;
-					$this->load->library('upload', $config);
-
-					foreach ($_FILES['files']['name'] as $key => $document_name) {
-						if (!empty($document_name)) {
-							$field_name = 'files[' . $key . ']';
-							$_FILES[$field_name] = array(
-								'name' => $_FILES['files']['name'][$key],
-								'type' => $_FILES['files']['type'][$key],
-								'tmp_name' => $_FILES['files']['tmp_name'][$key],
-								'error' => $_FILES['files']['error'][$key],
-								'size' => $_FILES['files']['size'][$key]
-							);
-							if ($this->upload->do_upload($field_name)) {
-								$uploaded_data = $this->upload->data('file_name');
-								$document_paths[] = $uploaded_data;
-							}
-						}
-					}
-				}
-
-				foreach ($this->input->post('file_names') as $value) {
-					$document_paths[] = $value;
-				}
-				if ($this->input->post('resigned') == 'on') {
-					$remarks = $this->input->post('remarks') ? $this->input->post('remarks') : '';
-					$resign_date =  $this->input->post('resign_date') ? date("Y-m-d", strtotime($this->input->post('resign_date'))) : '';
-				} else {
-					$remarks = '';
-					$resign_date = null;
-				}
-
-				$probition_period = $this->input->post('probation_period');
-				$joinDate = date("Y-m-d", strtotime($this->input->post('join_date')));
-
-				if ($probition_period >= 1 && $probition_period <= 3) {
-					$joinDate = new DateTime($joinDate);
-					$joinDate->modify("+$probition_period months");
-					$period = $joinDate->format('Y-m-d');
-				}
-
-				if ($this->input->post('join_date')) {
-					$join_date = date("Y-m-d", strtotime($this->input->post('join_date')));
-				}else{
-					$join_date = $user->join_date;
-				}
-				$data = [
-					'first_name' => $this->input->post('first_name'),
-					'last_name' => $this->input->post('last_name'),
-					'company' => $this->input->post('company'),
-					'father_name' => $this->input->post('father_name') ? $this->input->post('father_name') : '',
-					'phone' => $this->input->post('phone'),
-					'gender' => $this->input->post('gender') ? $this->input->post('gender') : '',
-					'martial_status' => $this->input->post('martial_status'),
-					'cnic' => $this->input->post('cnic') ? $this->input->post('cnic') : '',
-					'desgnation' => $this->input->post('desgnation') ? $this->input->post('desgnation') : '',
-					'department' => $this->input->post('department') ? $this->input->post('department') : '',
-					'join_date' => $join_date,
-					'emg_person' => $this->input->post('emg_person') ? $this->input->post('emg_person') : '',
-					'emg_number' => $this->input->post('emg_number') ? $this->input->post('emg_number') : '',
-					'employee_id' => $this->input->post('employee_id') ? $this->input->post('employee_id') : '',
-					'blood_group' => $this->input->post('blood_group') ? $this->input->post('blood_group') : '',
-					'device_id' => $device_ids_str,
-					'remarks' => $remarks,
-					'probation' => $period,
-					'resign_date' => $resign_date,
-					'address' => $this->input->post('address') ? $this->input->post('address') : '',
-					'DOB' => $this->input->post('date_of_birth') ? date("Y-m-d", strtotime($this->input->post('date_of_birth'))) : '',
-					'finger_config' => $finger_config,
-					'documents' => json_encode($document_paths),
-					'shift_id' => $this->input->post('type') ? $this->input->post('type') : '1',
-				];
-
-
-				if (!empty($profile_pic)) {
-					$data["profile"] = $profile_pic;
-				}
-				if ($this->input->post('password')) {
-					$data['password'] = $this->input->post('password');
-				}
-
-				if ($this->ion_auth->is_admin() || $this->ion_auth->in_group(3)) {
-					$groupData = array($this->input->post('groups'));
-					if (isset($groupData) && !empty($groupData) && $currentGroups[0]->id != $this->input->post('groups')) {
-						$this->ion_auth->remove_from_group('', $id);
-						foreach ($groupData as $grp) {
-							$this->ion_auth->add_to_group($grp, $id);
-						}
-					}
-				}
-
-				// ANCHOR  check to see if we are updating the user
-				if ($this->ion_auth->update($user->id, $data)) {
-					if ($this->input->post('company')) {
-						$company_details = company_details('', $user->id);
-						if ($company_details) {
-							$cdata_json = array(
-								'company_name' => $this->input->post('company') == '' ? (isset($company_details->company_name) ? htmlspecialchars($company_details->company_name) : '') : $this->input->post('company'),
-								'address' => isset($company_details->address) ? htmlspecialchars($company_details->address) : '',
-								'city' => isset($company_details->city) ? htmlspecialchars($company_details->city) : '',
-								'state' => isset($company_details->state) ? htmlspecialchars($company_details->state) : '',
-								'country' => isset($company_details->country) ? htmlspecialchars($company_details->country) : '',
-								'zip_code' => isset($company_details->zip_code) ? htmlspecialchars($company_details->zip_code) : '',
-							);
-						} else {
-							$cdata_json = array(
-								'company_name' => $this->input->post('company'),
-								'address' => '',
-								'city' => '',
-								'state' => '',
-								'country' => '',
-								'zip_code' => '',
-							);
-						}
-						$cdata = array(
-							'value' => json_encode($cdata_json)
-						);
-
-						$csetting_type = 'company_' . $user->id;
-
-						$this->settings_model->save_settings($csetting_type, $cdata);
-					}
-
-					if ($this->input->post('plan_id')) {
-						$plan = $this->plans_model->get_plans($this->input->post('plan_id'));
-
-						$users_plans_data['plan_id'] = $this->input->post('plan_id');
-
-						$date = 'date';
-
-						if ($plan[0]['billing_type'] == "One Time") {
-							$date = NULL;
-							$users_plans_data['end_date'] = $date;
-							$users_plans_data['expired'] = 1;
-						}
-
-						if ($this->input->post('end_date') != '' && $date != NULL) {
-							$date = format_date($this->input->post('end_date'), "Y-m-d");
-							$users_plans_data['end_date'] = $date;
-							$users_plans_data['expired'] = date("Y-m-d") > format_date($this->input->post('end_date'), "Y-m-d") ? 0 : 1;
-						}
-
-						$users_plans_id = $this->plans_model->update_users_plans($user->id, $users_plans_data);
-					}
-
-					$this->session->set_flashdata('message', $this->ion_auth->messages());
-					$this->session->set_flashdata('message_type', 'success');
-
-
-					$this->data['error'] = false;
-					$this->data['message'] = $this->ion_auth->messages();
-					echo json_encode($this->data);
-					return false;
-				} else {
-					$this->data['error'] = true;
-					$this->data['message'] = $this->ion_auth->errors();
-					echo json_encode($this->data);
-					return false;
+			if ($this->upload->do_upload($field_name)) {
+				$profile_pic = $this->upload->data('file_name');
+				if ($this->input->post('old_profile_pic')) {
+					$unlink_path = $upload_path . $this->input->post('old_profile_pic');
+					unlink($unlink_path);
 				}
 			}
 		}
 
-		$this->data['error'] = true;
-		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-		echo json_encode($this->data);
+		return $profile_pic;
+	}
+
+	private function handle_multiple_file_upload($field_name, $upload_path)
+	{
+		$document_paths = [];
+
+		if (!empty($_FILES[$field_name]['name'])) {
+			if (!is_dir($upload_path)) {
+				mkdir($upload_path, 0775, true);
+			}
+
+			$config = [
+				'upload_path'   => $upload_path,
+				'allowed_types' => '*',
+				'overwrite'     => false,
+				'max_size'      => 0,
+				'max_width'     => 0,
+				'max_height'    => 0
+			];
+
+			$this->load->library('upload', $config);
+
+			foreach ($_FILES[$field_name]['name'] as $key => $document_name) {
+				if (!empty($document_name)) {
+					$field_name = "{$field_name}[{$key}]";
+					$_FILES[$field_name] = [
+						'name'     => $_FILES[$field_name]['name'],
+						'type'     => $_FILES[$field_name]['type'],
+						'tmp_name' => $_FILES[$field_name]['tmp_name'],
+						'error'    => $_FILES[$field_name]['error'],
+						'size'     => $_FILES[$field_name]['size']
+					];
+
+					if ($this->upload->do_upload($field_name)) {
+						$document_paths[] = $this->upload->data('file_name');
+					}
+				}
+			}
+		}
+
+		return $document_paths;
+	}
+
+	private function delete_old_documents()
+	{
+		$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/';
+		foreach ($this->input->post('documents') as $value) {
+			$unlink_path = $upload_path . $value;
+			unlink($unlink_path);
+		}
+	}
+
+	private function prepare_user_data($user, $profile_pic, $document_paths)
+	{
+		$probation_period = $this->input->post('probation_period');
+		$joinDate = date("Y-m-d", strtotime($this->input->post('join_date')));
+		if ($probation_period >= 1 && $probation_period <= 3) {
+			$joinDate = (new DateTime($joinDate))->modify("+$probation_period months")->format('Y-m-d');
+		}
+
+		$resigned = $this->input->post('resigned') == 'on';
+		$resign_date = $resigned ? date("Y-m-d", strtotime($this->input->post('resign_date'))) : null;
+
+		return [
+			'first_name'      => $this->input->post('first_name'),
+			'last_name'       => $this->input->post('last_name'),
+			'company'         => $this->input->post('company'),
+			'father_name'     => $this->input->post('father_name') ?: '',
+			'phone'           => $this->input->post('phone'),
+			'gender'          => $this->input->post('gender') ?: '',
+			'martial_status'  => $this->input->post('martial_status'),
+			'cnic'            => $this->input->post('cnic') ?: '',
+			'desgnation'      => $this->input->post('desgnation') ?: '',
+			'department'      => $this->input->post('department') ?: '',
+			'join_date'       => $this->input->post('join_date') ?: $user->join_date,
+			'emg_person'      => $this->input->post('emg_person') ?: '',
+			'emg_number'      => $this->input->post('emg_number') ?: '',
+			'employee_id'     => $this->input->post('employee_id') ?: '',
+			'blood_group'     => $this->input->post('blood_group') ?: '',
+			'device_id'       => $this->input->post('device') ? json_encode([$this->input->post('device')]) : '[]',
+			'remarks'         => $resigned ? ($this->input->post('remarks') ?: '') : '',
+			'probation'       => $probation_period >= 1 && $probation_period <= 3 ? $joinDate : '',
+			'resign_date'     => $resign_date,
+			'address'         => $this->input->post('address') ?: '',
+			'DOB'             => $this->input->post('date_of_birth') ? date("Y-m-d", strtotime($this->input->post('date_of_birth'))) : '',
+			'finger_config'   => $this->input->post('finger_config') ? '1' : '0',
+			'documents'       => json_encode($document_paths),
+			'shift_id'        => $this->input->post('type') ?: '1',
+			'profile'         => $profile_pic,
+			'password'        => $this->input->post('password')
+		];
+	}
+
+	private function update_user($user_id, $data, $currentGroups)
+	{
+		if ($this->ion_auth->update($user_id, $data)) {
+			$groupData = $this->input->post('groups');
+			if ($this->ion_auth->is_admin() || $this->ion_auth->in_group(3)) {
+				if (!empty($groupData) && $currentGroups[0]->id != $groupData) {
+					$this->ion_auth->remove_from_group('', $user_id);
+					$this->ion_auth->add_to_group($groupData, $user_id);
+				}
+			}
+			return true;
+		}
 		return false;
 	}
+
+	private function update_company_details($user_id)
+	{
+		if ($this->input->post('company')) {
+			$company_details = company_details('', $user_id);
+			$cdata_json = [
+				'company_name' => $this->input->post('company') ?: ($company_details->company_name ?? ''),
+				'address'      => $company_details->address ?? '',
+				'city'         => $company_details->city ?? '',
+				'state'        => $company_details->state ?? '',
+				'country'      => $company_details->country ?? '',
+				'zip_code'     => $company_details->zip_code ?? ''
+			];
+
+			$this->settings_model->save_settings('company_' . $user_id, ['value' => json_encode($cdata_json)]);
+		}
+	}
+
+	private function update_user_plan($user_id)
+	{
+		if ($this->input->post('plan_id')) {
+			$plan = $this->plans_model->get_plans($this->input->post('plan_id'));
+
+			$users_plans_data = [
+				'plan_id' => $this->input->post('plan_id'),
+				'end_date' => $plan[0]['billing_type'] == "One Time" ? NULL : format_date($this->input->post('end_date'), "Y-m-d"),
+				'expired' => $plan[0]['billing_type'] == "One Time" ? 1 : (date("Y-m-d") > format_date($this->input->post('end_date'), "Y-m-d") ? 0 : 1)
+			];
+
+			$this->plans_model->update_users_plans($user_id, $users_plans_data);
+		}
+	}
+
+	private function send_success_message()
+	{
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		$this->session->set_flashdata('message_type', 'success');
+
+		$this->data['error'] = false;
+		$this->data['message'] = $this->ion_auth->messages();
+		echo json_encode($this->data);
+	}
+
 
 	/**
 	 * Create a new group
