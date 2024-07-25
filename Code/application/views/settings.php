@@ -89,6 +89,29 @@
   <?php $this->load->view('includes/scripts'); ?>
   <script src="<?= base_url('assets2/vendor/nestable2/js/jquery.nestable.min.js') ?>"></script>
   <script src="<?= base_url('assets2/js/plugins-init/nestable-init.js') ?>"></script>
+  <script>
+    paypal_client_id = "<?= get_payment_paypal() ?>";
+    get_stripe_publishable_key = "<?= get_stripe_publishable_key() ?>";
+    get_myfatoorah_secret_key = "<?= get_myfatoorah_secret_key() ?>";
+    razorpay_key_id = "<?= get_razorpay_key_id() ?>";
+    offline_bank_transfer = "<?= get_offline_bank_transfer() ?>";
+    paystack_user_email_id = "<?= $this->session->userdata('email') ?>";
+    paystack_public_key = "<?= get_paystack_public_key() ?>";
+  </script>
+
+  <?php if (get_payment_paypal()) { ?>
+    <script src="https://www.paypal.com/sdk/js?client-id=<?= get_payment_paypal() ?>&currency=<?= get_saas_currency('currency_code') ?>"></script>
+  <?php } ?>
+
+  <?php if (get_stripe_publishable_key()) { ?>
+    <script src="https://js.stripe.com/v3/"></script>
+  <?php } ?>
+
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script src="<?= base_url('assets2/payment/payments.js'); ?>"></script>
 
   <script>
     /*

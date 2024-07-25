@@ -1497,12 +1497,6 @@ class Projects extends CI_Controller
 
 	public function index()
 	{
-
-		// ini_set('display_errors', 1);
-		// ini_set('display_startup_errors', 1);
-		// error_reporting(E_ALL);
-
-
 		if ($this->ion_auth->logged_in() && is_module_allowed('projects') && !$this->ion_auth->in_group(3) && ($this->ion_auth->is_admin() || permissions('project_view'))) {
 			$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
 			$this->data['page_title'] = 'Projects - ' . company_name();

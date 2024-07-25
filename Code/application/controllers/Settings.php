@@ -253,12 +253,41 @@ class Settings extends CI_Controller
 			$this->data['main_page'] = 'Company';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['company_details'] = company_details();
+			$my_plan = get_current_plan();
+			$plan_id = $my_plan["plan_id"];
+			$this->data['plans'] = $this->plans_model->get_plans();
+			$this->data['recomended_plans'] = $this->getNextPlan($plan_id, $this->data['plans']);
 			$this->load->view('settings', $this->data);
 		} else {
 			redirect('auth', 'refresh');
 		}
 	}
-
+	private function getNextPlan($currentPlanId, $plans) {
+		$currentPlan = null;
+		foreach ($plans as $plan) {
+			if ($plan['id'] == $currentPlanId) {
+				$currentPlan = $plan;
+				break;
+			}
+		}
+		
+		if ($currentPlan === null) {
+			return null;
+		}
+	
+		$currentPrice = (float)$currentPlan['price'];
+		$nextPlan = null;
+	
+		foreach ($plans as $plan) {
+			if ((float)$plan['price'] > $currentPrice) {
+				if ($nextPlan === null || (float)$plan['price'] < (float)$nextPlan['price']) {
+					$nextPlan = $plan;
+				}
+			}
+		}
+	
+		return $nextPlan;
+	}
 
 	public function save_company_setting()
 	{
