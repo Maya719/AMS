@@ -195,7 +195,7 @@ class Todo extends CI_Controller
 			$this->data['todo'] = $this->todo_model->get_todo($this->session->userdata('user_id'), '',$filter);
 			$this->load->view('todo',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

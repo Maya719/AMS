@@ -69,7 +69,7 @@ class Issues extends CI_Controller
             $this->data["project_id"] = $project_id;
             $this->load->view('pages/pms/issues-create', $this->data);
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function edit($id = '')
@@ -166,7 +166,7 @@ class Issues extends CI_Controller
             }
             $this->load->view('pages/pms/issues-edit', $this->data);
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function create_issue()

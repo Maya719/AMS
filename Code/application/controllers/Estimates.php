@@ -147,7 +147,7 @@ class Estimates extends CI_Controller
             $this->data['taxes'] = get_tax();
 			$this->load->view('estimates',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -244,7 +244,7 @@ class Estimates extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('estimates-view',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -356,7 +356,7 @@ class Estimates extends CI_Controller
 			$this->dompdf->render();
 			$this->dompdf->stream($estimates[0]['estimate_id'].".pdf", array("Attachment"=>0));
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

@@ -153,7 +153,7 @@ class Attendance extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('pages/attendance/attendance', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -375,7 +375,7 @@ class Attendance extends CI_Controller
 			$this->data['system_users'] = $this->ion_auth->users(array(1, 2))->result();
 			$this->load->view('pages/attendance/user-attendance', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function get_single_user_attendance()
@@ -498,7 +498,7 @@ class Attendance extends CI_Controller
 			// echo json_encode($result);
 			$this->load->view('pages/attendance/offclock', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function create_offclock()

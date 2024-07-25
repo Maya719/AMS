@@ -243,7 +243,7 @@ class Invoices extends CI_Controller
 			}
 			redirect('invoices/view/'.$payment_details->metadata->invoice_id, 'refresh');
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -384,7 +384,7 @@ class Invoices extends CI_Controller
             $this->data['taxes'] = get_tax();
 			$this->load->view('invoices',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -406,7 +406,7 @@ class Invoices extends CI_Controller
             $this->data['invoices'] = $this->invoices_model->get_invoices();
 			$this->load->view('payments',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -522,7 +522,7 @@ class Invoices extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('invoices-view',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -648,7 +648,7 @@ class Invoices extends CI_Controller
 			$this->dompdf->render();
 			$this->dompdf->stream($invoices[0]['invoice_id'].".pdf", array("Attachment"=>0));
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

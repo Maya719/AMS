@@ -151,7 +151,7 @@ class Notes extends CI_Controller
 			$this->data['notes'] = $this->notes_model->get_notes($this->session->userdata('user_id'));
 			$this->load->view('notes',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

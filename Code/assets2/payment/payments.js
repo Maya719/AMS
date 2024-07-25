@@ -184,38 +184,42 @@ if (get_stripe_publishable_key != "") {
     var stripe = Stripe(get_stripe_publishable_key);
     var stripeButton = document.getElementById('stripe-button');
     stripeButton.addEventListener('click', function () {
-        $('#stripe-button').addClass('disabled');
-        plan_id = $('#plan').val();
-        duration = $('#duration').val();
+        var dataOption = $("#option").val();
+        var plan_id = $('#plan').val();
+        var duration = $('#duration').val();
+        var upgradePlan = $('#upgradePlan').val();
+        console.log(dataOption);
 
-        fetch(base_url + 'plans/create-session/' + plan_id + '/' + saas_id + '/' + duration, {
+        const requestData = {
+            plan_id: plan_id,
+            saas_id: saas_id,
+            duration: duration,
+            dataOption: dataOption,
+            upgradePlan: upgradePlan
+        };
+
+        fetch(`${base_url}plans/create-session/`, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
         })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (session) {
-                if (session.error != true) {
+            .then(response => response.json())
+            .then(session => {
+                if (!session.error) {
                     console.log(session);
                     return stripe.redirectToCheckout({ sessionId: session.id });
                 }
             })
-            .then(function (result) {
+            .then(result => {
                 $('#stripe-button').removeClass('disabled');
-                iziToast.error({
-                    title: something_wrong_try_again,
-                    message: "",
-                    position: 'topRight'
-                });
             })
-            .catch(function (error) {
+            .catch(error => {
                 $('#stripe-button').removeClass('disabled');
-                iziToast.error({
-                    title: something_wrong_try_again,
-                    message: "",
-                    position: 'topRight'
-                });
             });
+
+
     });
 }
 

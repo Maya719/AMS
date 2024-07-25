@@ -301,7 +301,7 @@ class Chat extends CI_Controller
 
 			$this->load->view('chat',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

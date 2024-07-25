@@ -32,7 +32,7 @@ class Leaves extends CI_Controller
 			// echo json_encode($this->data["leaves_types"]);
 			$this->load->view('pages/leave/leaves', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -752,7 +752,7 @@ class Leaves extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('pages/leave/leaves-edit', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function create_leave()
@@ -778,7 +778,7 @@ class Leaves extends CI_Controller
 			$this->data['leaves_types'] = $query->result_array();
 			$this->load->view('pages/leave/leaves-create', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function getTimeAgo($timestamp)

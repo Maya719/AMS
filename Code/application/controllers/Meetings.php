@@ -20,7 +20,7 @@ class Meetings extends CI_Controller
 			$this->notifications_model->edit('', 'new_estimate', '', '', '');
 			$this->load->view('meetings',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

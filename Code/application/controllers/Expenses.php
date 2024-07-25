@@ -233,7 +233,7 @@ class Expenses extends CI_Controller
 			$this->data['projects'] = $this->projects_model->get_projects();
 			$this->load->view('expenses',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

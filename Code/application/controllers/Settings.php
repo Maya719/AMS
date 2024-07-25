@@ -21,7 +21,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -78,7 +78,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -129,7 +129,7 @@ class Settings extends CI_Controller
 		$cache_path = 'install';
 		delete_files($cache_path, true);
 		rmdir($cache_path);
-		redirect('auth', 'refresh');
+		redirect_to_index();
 	}
 
 	public function taxes()
@@ -141,7 +141,7 @@ class Settings extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -259,7 +259,7 @@ class Settings extends CI_Controller
 			$this->data['recomended_plans'] = $this->getNextPlan($plan_id, $this->data['plans']);
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	private function getNextPlan($currentPlanId, $plans) {
@@ -364,7 +364,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -388,7 +388,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -406,7 +406,7 @@ class Settings extends CI_Controller
 			$this->data['devices'] = $query->result_array();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -429,7 +429,7 @@ class Settings extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -614,7 +614,7 @@ class Settings extends CI_Controller
 			$this->data['turn_off_new_user_registration'] = turn_off_new_user_registration();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -625,7 +625,7 @@ class Settings extends CI_Controller
 			$this->migration->latest();
 			redirect('settings/update', 'refresh');
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -638,7 +638,7 @@ class Settings extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -655,7 +655,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -733,7 +733,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -942,7 +942,7 @@ class Settings extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function user_permissions()
@@ -956,7 +956,7 @@ class Settings extends CI_Controller
 			$this->data['clients_permissions'] = clients_permissions();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -971,7 +971,7 @@ class Settings extends CI_Controller
 			$this->data['footer_code'] = get_footer_code();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1024,7 +1024,7 @@ class Settings extends CI_Controller
 
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1114,7 +1114,7 @@ class Settings extends CI_Controller
 			$this->data['from_email'] = from_email();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1615,7 +1615,7 @@ class Settings extends CI_Controller
 			$this->data['clients_permissions'] = clients_permissions();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function get_user_by_shift_and_department()
@@ -1654,7 +1654,7 @@ class Settings extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1876,7 +1876,7 @@ class Settings extends CI_Controller
 			$this->data['leaves_type'] = $query->result_array();
 			$this->load->view('settings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

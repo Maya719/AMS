@@ -20,7 +20,7 @@ class Department extends CI_Controller
 			$this->data['system_users'] = $this->ion_auth->users(array(1,2))->result();
 			$this->load->view('department',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

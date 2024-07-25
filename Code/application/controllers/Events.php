@@ -15,7 +15,7 @@ class Events extends CI_Controller
             $this->data['current_user'] = $this->ion_auth->user()->row();
             $this->load->view('events', $this->data);
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function get_events()

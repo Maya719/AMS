@@ -314,7 +314,7 @@ class Front extends CI_Controller
 	{
 		
 		if (!frontend_permissions('landing_page')) {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 		if ($this->ion_auth->logged_in()) {
 			redirect('home', 'refresh');
@@ -378,7 +378,7 @@ class Front extends CI_Controller
 			$this->data['home'] = get_home();
 			$this->load->view('saas-front', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -392,7 +392,7 @@ class Front extends CI_Controller
 			$this->data['features'] = $this->front_model->get_feature($this->uri->segment(3));
 			$this->load->view('saas-features', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function about()
@@ -404,7 +404,7 @@ class Front extends CI_Controller
 			$this->data['data'] = $this->front_model->get_pages(1);
 			$this->load->view('saas-about', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function saas_terms_and_conditions()
@@ -416,7 +416,7 @@ class Front extends CI_Controller
 			$this->data['data'] = $this->front_model->get_pages(3);
 			$this->load->view('saas-terms', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function saas_privacy_policy()
@@ -428,7 +428,7 @@ class Front extends CI_Controller
 			$this->data['data'] = $this->front_model->get_pages(2);
 			$this->load->view('saas-privacy', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -445,7 +445,7 @@ class Front extends CI_Controller
 	
 			$this->load->view('saas-guide', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

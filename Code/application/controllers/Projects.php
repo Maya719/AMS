@@ -258,7 +258,7 @@ class Projects extends CI_Controller
 
 			$this->load->view('timesheet', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -356,7 +356,7 @@ class Projects extends CI_Controller
 
 			$this->load->view('calendar', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -505,7 +505,7 @@ class Projects extends CI_Controller
 
 			$this->load->view('gantt', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1432,7 +1432,7 @@ class Projects extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('pages/pms/projects-detail', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1480,7 +1480,7 @@ class Projects extends CI_Controller
 
 			$this->load->view('tasks-list', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1521,7 +1521,7 @@ class Projects extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('projects-list', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -1610,7 +1610,7 @@ class Projects extends CI_Controller
 			}
 			$this->load->view('projects', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -2055,7 +2055,7 @@ class Projects extends CI_Controller
 
 			$this->load->view('tasks', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

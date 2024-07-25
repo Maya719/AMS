@@ -23,7 +23,7 @@ class Device_config extends CI_Controller
 			$this->data['system_users'] = $userRow;
 			$this->load->view('device_config',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function create()

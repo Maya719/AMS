@@ -23,7 +23,7 @@ class Holiday extends CI_Controller
 			$this->data['departments'] = $query3->result_array();
 			$this->load->view('pages/holiday/holiday', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

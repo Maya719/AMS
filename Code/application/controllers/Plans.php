@@ -14,52 +14,27 @@ class Plans extends CI_Controller
 		$this->mf = new PaymentMyfatoorahApiV2($this->apiKey, ($testMode === 'yes'));
 	}
 
-	public function create_session($plan_id = '', $saas_id = '', $duration = '')
+	public function create_session()
 	{
-		$stripeSecret = get_stripe_secret_key();
-		if ($stripeSecret) {
-			if (empty($plan_id)) {
-				$plan_id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
-			}
-			if (!empty($plan_id) || is_numeric($plan_id)) {
-				if (empty($sass_id) || !is_numeric($plan_id)) {
-					$sass_id = $this->session->userdata("saas_id");
-				}
-				$plan = $this->plans_model->get_plans($plan_id);
-				if ($plan) {
-					require_once('vendor/stripe/stripe-php/init.php');
+		$rawData = file_get_contents('php://input');
+		$data = json_decode($rawData, true);
+		$plan_id = isset($data['plan_id']) ? $data['plan_id'] : '';
+		$saas_id = isset($data['saas_id']) ? $data['saas_id'] : '';
+		$duration = isset($data['duration']) ? $data['duration'] : '';
+		$dataOption = isset($data['dataOption']) ? $data['dataOption'] : '';
+		$upgrade_plan = isset($data['upgradePlan']) ? $data['upgradePlan'] : '';
 
-					\Stripe\Stripe::setApiKey($stripeSecret);
-					$session = \Stripe\Checkout\Session::create([
-						'payment_method_types' => ['card'],
-						'line_items' => [[
-							'price_data' => [
-								'currency' => get_saas_currency('currency_code'),
-								'product_data' => [
-									'name' => $plan[0]['title'],
-								],
-								'unit_amount' => $plan[0]['price'] * 100 * $duration,
-							],
-							'quantity' => 1,
-						]],
-						'metadata' => [
-							'plan_id' => $plan_id,
-						],
-						'mode' => 'payment',
-						'success_url' => base_url() . 'plans/soc?sid={CHECKOUT_SESSION_ID}&saas_id=' . $saas_id . '&duration=' . $duration,
-						'cancel_url' => base_url() . 'plans/soc?sid={CHECKOUT_SESSION_ID}&saas_id=' . $saas_id . '&duration=' . $duration,
-					]);
-					$data = array('id' => $session->id, 'data' => $session);
-					echo json_encode($data);
-				} else {
-					$this->data['error'] = true;
-					$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-					echo json_encode($this->data);
-				}
+		$stripeSecret = get_stripe_secret_key();
+
+		if ($stripeSecret) {
+			if ($dataOption == 'upgrade') {
+				$upgrade = $this->upgrade_session($upgrade_plan, $saas_id);
+				echo json_encode($upgrade);
+			} elseif ($dataOption == 'renew') {
+				$renew_plan = $this->renew_plan($plan_id, $saas_id, $duration);
+				echo json_encode($renew_plan);
 			} else {
-				$this->data['error'] = true;
-				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-				echo json_encode($this->data);
+				echo json_encode(['dataOption' => $dataOption]);
 			}
 		} else {
 			$this->data['error'] = true;
@@ -68,6 +43,87 @@ class Plans extends CI_Controller
 		}
 	}
 
+
+	private function renew_plan($plan_id, $saas_id, $duration)
+	{
+		if (!empty($plan_id) || is_numeric($plan_id)) {
+			$plan = $this->plans_model->get_plans($plan_id);
+			if ($plan) {
+				require_once('vendor/stripe/stripe-php/init.php');
+				$stripeSecret = get_stripe_secret_key();
+				\Stripe\Stripe::setApiKey($stripeSecret);
+				$session = \Stripe\Checkout\Session::create([
+					'payment_method_types' => ['card'],
+					'line_items' => [[
+						'price_data' => [
+							'currency' => get_saas_currency('currency_code'),
+							'product_data' => [
+								'name' => $duration . ' month service of ' . $plan[0]['title'],
+							],
+							'unit_amount' => $plan[0]['price'] * 100 * $duration,
+						],
+						'quantity' => 1,
+					]],
+					'metadata' => [
+						'plan_id' => $plan_id,
+					],
+					'mode' => 'payment',
+					'success_url' => base_url() . 'plans/soc2?sid={CHECKOUT_SESSION_ID}&saas_id=' . $saas_id . '&duration=' . $duration,
+					'cancel_url' => base_url() . 'plans/soc2?sid={CHECKOUT_SESSION_ID}&saas_id=' . $saas_id . '&duration=' . $duration,
+				]);
+				$data = array('id' => $session->id, 'data' => $session);
+				return $data;
+			} else {
+				$this->data['error'] = true;
+				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+				return $this->data;
+			}
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+			return $this->data;
+		}
+	}
+	private function upgrade_session($upgrade_plan, $saas_id)
+	{
+		if (!empty($upgrade_plan) || is_numeric($upgrade_plan)) {
+			$plan = $this->plans_model->get_plans($upgrade_plan);
+			if ($plan) {
+				require_once('vendor/stripe/stripe-php/init.php');
+				$stripeSecret = get_stripe_secret_key();
+				\Stripe\Stripe::setApiKey($stripeSecret);
+				$session = \Stripe\Checkout\Session::create([
+					'payment_method_types' => ['card'],
+					'line_items' => [[
+						'price_data' => [
+							'currency' => get_saas_currency('currency_code'),
+							'product_data' => [
+								'name' => 'Upgrading plan to ' . $plan[0]['title'],
+							],
+							'unit_amount' => $plan[0]['price'] * 100,
+						],
+						'quantity' => 1,
+					]],
+					'metadata' => [
+						'plan_id' => $upgrade_plan,
+					],
+					'mode' => 'payment',
+					'success_url' => base_url() . 'plans/soc?sid={CHECKOUT_SESSION_ID}&saas_id=' . $saas_id,
+					'cancel_url' => base_url() . 'plans/soc?sid={CHECKOUT_SESSION_ID}&saas_id=' . $saas_id,
+				]);
+				$data = array('id' => $session->id, 'data' => $session);
+				return $data;
+			} else {
+				$this->data['error'] = true;
+				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+				return $this->data;
+			}
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+			return $this->data;
+		}
+	}
 	public function index()
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_saas_admin())) {
@@ -82,12 +138,148 @@ class Plans extends CI_Controller
 			// exit;
 			$this->load->view('plans', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
 
 	public function soc()
+	{
+		$stripeSecret = get_stripe_secret_key();
+		if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin() && $stripeSecret) {
+			if (isset($_GET['sid']) && $_GET['sid'] != '') {
+				require_once('vendor/stripe/stripe-php/init.php');
+				$stripe = new \Stripe\StripeClient($stripeSecret);
+				try {
+					$payment_details = $stripe->checkout->sessions->retrieve($_GET['sid']);
+					if ($payment_details->payment_status == 'paid') {
+						$plan = $this->plans_model->get_plans($payment_details->metadata->plan_id);
+						if ($plan) {
+							if ($plan[0]['price'] > 0) {
+								$transaction_data = array(
+									'saas_id' => $this->session->userdata('saas_id'),
+									'amount' => $plan[0]['price'],
+									'status' => 1,
+								);
+
+								$transaction_id = $this->plans_model->create_transaction($transaction_data);
+
+								$order_data = array(
+									'saas_id' => $this->session->userdata('saas_id'),
+									'plan_id' => $payment_details->metadata->plan_id,
+									'transaction_id' => $transaction_id,
+								);
+								$order_id = $this->plans_model->create_order($order_data);
+							}
+
+							$dt = strtotime(date("Y-m-d"));
+							if ($plan[0]['billing_type'] == "One Time") {
+								$date = NULL;
+							} elseif ($plan[0]['billing_type'] == "Monthly") {
+								$date = date("Y-m-d", strtotime("+1 month", $dt));
+							} elseif ($plan[0]['billing_type'] == "Yearly") {
+								$date = date("Y-m-d", strtotime("+1 year", $dt));
+							} elseif ($plan[0]['billing_type'] == "three_days_trial_plan") {
+								$date = date("Y-m-d", strtotime("+3 days", $dt));
+							} elseif ($plan[0]['billing_type'] == "seven_days_trial_plan") {
+								$date = date("Y-m-d", strtotime("+7 days", $dt));
+							} elseif ($plan[0]['billing_type'] == "fifteen_days_trial_plan") {
+								$date = date("Y-m-d", strtotime("+15 days", $dt));
+							} elseif ($plan[0]['billing_type'] == "thirty_days_trial_plan") {
+								$date = date("Y-m-d", strtotime("+1 month", $dt));
+							} else {
+								$date = date("Y-m-d", strtotime("+3 days", $dt));
+							}
+
+							$my_plan = get_current_plan();
+							if ($my_plan) {
+								if ($my_plan['expired'] == 1) {
+									if ($my_plan['plan_id'] == 1 && $my_plan['plan_id'] == $payment_details->metadata->plan_id) {
+										$date = date("Y-m-d", strtotime("+3 days", $dt));
+										if ($plan[0]['billing_type'] == "One Time") {
+											$date = NULL;
+										}
+									} else {
+										if (empty($my_plan['end_date'])) {
+											$dt = strtotime(date("Y-m-d"));
+										} else {
+											$dt = strtotime($my_plan['end_date']);
+										}
+
+										if ($plan[0]['billing_type'] == "One Time") {
+											$date = NULL;
+										} elseif ($plan[0]['billing_type'] == "Monthly") {
+											$date = date("Y-m-d", strtotime("+1 month", $dt));
+										} elseif ($plan[0]['billing_type'] == "Yearly") {
+											$date = date("Y-m-d", strtotime("+1 year", $dt));
+										} elseif ($plan[0]['billing_type'] == "three_days_trial_plan") {
+											$date = date("Y-m-d", strtotime("+3 days", $dt));
+										} elseif ($plan[0]['billing_type'] == "seven_days_trial_plan") {
+											$date = date("Y-m-d", strtotime("+7 days", $dt));
+										} elseif ($plan[0]['billing_type'] == "fifteen_days_trial_plan") {
+											$date = date("Y-m-d", strtotime("+15 days", $dt));
+										} elseif ($plan[0]['billing_type'] == "thirty_days_trial_plan") {
+											$date = date("Y-m-d", strtotime("+1 month", $dt));
+										} else {
+											$date = date("Y-m-d", strtotime("+3 days", $dt));
+										}
+									}
+								}
+								$users_plans_data = array(
+									'plan_id' => $payment_details->metadata->plan_id,
+									'expired' => 1,
+									'start_date' => date("Y-m-d"),
+									'end_date' => $date,
+								);
+								$users_plans_id = $this->plans_model->update_users_plans($this->session->userdata('saas_id'), $users_plans_data);
+								if ($users_plans_id) {
+									$saas_admins = $this->ion_auth->users(array(3))->result();
+									foreach ($saas_admins as $saas_admin) {
+										$data = array(
+											'notification' => '<span class="text-primary">' . $plan[0]['title'] . '</span>',
+											'type' => 'new_plan',
+											'type_id' => $payment_details->metadata->plan_id,
+											'from_id' => $this->session->userdata('saas_id'),
+											'to_id' => $saas_admin->user_id,
+										);
+										$notification_id = $this->notifications_model->create($data);
+									}
+
+									$this->session->set_flashdata('message', $this->lang->line('plan_subscribed_successfully') ? $this->lang->line('plan_subscribed_successfully') : "Plan subscribed successfully.");
+									$this->session->set_flashdata('message_type', 'success');
+								} else {
+									$this->session->set_flashdata('message', $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.");
+									$this->session->set_flashdata('message_type', 'success');
+								}
+							} else {
+								$users_plans_data = array(
+									'expired' => 1,
+									'plan_id' => $payment_details->metadata->plan_id,
+									'start_date' => date("Y-m-d"),
+									'end_date' => $date,
+								);
+								$users_plans_id = $this->plans_model->update_users_plans($this->session->userdata('saas_id'), $users_plans_data);
+							}
+						} else {
+							$this->session->set_flashdata('message', $this->lang->line('choose_valid_subscription_plan') ? $this->lang->line('choose_valid_subscription_plan') : "Choose valid subscription plan.");
+							$this->session->set_flashdata('message_type', 'success');
+						}
+					} else {
+						$this->session->set_flashdata('message', $this->lang->line('payment_unsuccessful_please_try_again_later') ? $this->lang->line('payment_unsuccessful_please_try_again_later') : "Payment unsuccessful. Please Try again later.");
+						$this->session->set_flashdata('message_type', 'success');
+					}
+					redirect('settings/company', 'refresh');
+				} catch (Exception $e) {
+					$this->session->set_flashdata('message', $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.");
+					$this->session->set_flashdata('message_type', 'success');
+				}
+			} else {
+				$this->session->set_flashdata('message', $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.");
+				$this->session->set_flashdata('message_type', 'success');
+			}
+		}
+	}
+	public function soc2()
 	{
 		$stripeSecret = get_stripe_secret_key();
 		if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin() && $stripeSecret) {
@@ -266,7 +458,7 @@ class Plans extends CI_Controller
 			}
 			$this->load->view('orders', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -278,7 +470,7 @@ class Plans extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('transactions', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function get_transactions($transaction_id = '')
@@ -473,7 +665,7 @@ class Plans extends CI_Controller
 			$this->data['offline_requests'] = $this->get_offline_requests2();
 			$this->load->view('offline_requests', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

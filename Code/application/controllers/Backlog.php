@@ -125,7 +125,7 @@ class Backlog extends CI_Controller
             }
             $this->load->view('pages/pms/backlog', $this->data);
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function start_sprint($id = '')

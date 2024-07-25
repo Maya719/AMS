@@ -62,7 +62,7 @@ class Languages extends CI_Controller
 			$this->data['languages'] = $this->languages_model->get_languages();
 			$this->load->view('languages',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 		
 	}
@@ -250,7 +250,7 @@ class Languages extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('settings',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

@@ -2881,3 +2881,7 @@ function if_allowd_to_create_new($checking_for)
         return true;
     return false;
 }
+
+function redirect_to_index(){
+    redirect('/', 'refresh');
+}

@@ -46,7 +46,7 @@ class Reports extends CI_Controller
 			}
 			$this->load->view('report-attendance', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -73,7 +73,7 @@ class Reports extends CI_Controller
 			// echo json_encode($this->data["leaves_types"]);
 			$this->load->view('leaves', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -118,7 +118,7 @@ class Reports extends CI_Controller
 
 			$this->load->view('report-timesheet', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -132,7 +132,7 @@ class Reports extends CI_Controller
 			$this->data['system_clients'] = $this->ion_auth->users(4)->result();
 			$this->load->view('report-estimates', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -146,7 +146,7 @@ class Reports extends CI_Controller
 			$this->data['system_users'] = $this->ion_auth->members()->result();
 			$this->load->view('report-leads', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -158,7 +158,7 @@ class Reports extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('report-meetings', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -171,7 +171,7 @@ class Reports extends CI_Controller
 
 			$this->load->view('report-clients', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -184,7 +184,7 @@ class Reports extends CI_Controller
 
 			$this->load->view('report-team', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -216,7 +216,7 @@ class Reports extends CI_Controller
 
 			$this->load->view('report-tasks', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -244,7 +244,7 @@ class Reports extends CI_Controller
 
 			$this->load->view('report-projects', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -533,7 +533,7 @@ class Reports extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('report-income-vs-expenses', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

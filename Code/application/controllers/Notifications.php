@@ -524,7 +524,7 @@ class Notifications extends CI_Controller
 			$this->data['temp'] = $temp;
 			$this->load->view('notifications', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 }

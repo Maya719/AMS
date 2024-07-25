@@ -126,7 +126,7 @@ class Users extends CI_Controller
 			$this->data['user_groups'] = $this->ion_auth->groups(array(1, 2, 4))->result();
 			$this->load->view('clients', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function create_user()
@@ -152,7 +152,7 @@ class Users extends CI_Controller
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->load->view('create_user', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function edit_user($id)
@@ -195,7 +195,7 @@ class Users extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('edit_user', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function index()
@@ -299,7 +299,7 @@ class Users extends CI_Controller
 				$this->load->view('users', $this->data);
 			}
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -325,7 +325,7 @@ class Users extends CI_Controller
 			// echo json_encode($this->data);
 			$this->load->view('saas-users', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -337,7 +337,7 @@ class Users extends CI_Controller
 			$this->data['company_details'] = company_details();
 			$this->load->view('company', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -433,7 +433,7 @@ class Users extends CI_Controller
 			$this->data['user_groups'] = $this->ion_auth->groups(array(1, 2))->result();
 			$this->load->view('profile', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -529,7 +529,7 @@ class Users extends CI_Controller
 			$this->data['user_groups'] = $this->ion_auth->get_all_groups();
 			$this->load->view('detail', $this->data);
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

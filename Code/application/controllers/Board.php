@@ -66,7 +66,7 @@ class Board extends CI_Controller
             $this->data["select_user"] = $select_user;
             $this->load->view('pages/pms/board', $this->data);
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function create_sprint()
@@ -110,7 +110,7 @@ class Board extends CI_Controller
                 echo json_encode($this->data);
             }
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function edit_sprint()
@@ -155,7 +155,7 @@ class Board extends CI_Controller
                 echo json_encode($this->data);
             }
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
     public function filter_board()
@@ -441,7 +441,7 @@ $html .= '
                 echo json_encode($this->data);
             }
         } else {
-            redirect('auth', 'refresh');
+            redirect_to_index();
         }
     }
 }

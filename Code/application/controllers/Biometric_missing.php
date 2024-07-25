@@ -213,7 +213,7 @@ class Biometric_missing extends CI_Controller
 			}
 			$this->load->view('pages/biometric/biometric_missing',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

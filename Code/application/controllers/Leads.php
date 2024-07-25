@@ -203,7 +203,7 @@ class Leads extends CI_Controller
 
 			$this->load->view('leads',$this->data);
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 

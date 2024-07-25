@@ -32,7 +32,7 @@ class Home extends CI_Controller
 				// echo json_encode($this->data);
 			}
 		} else {
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 	public function get_home_attendance()

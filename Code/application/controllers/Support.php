@@ -70,7 +70,7 @@ class Support extends CI_Controller
 				redirect('support', 'refresh');
 			}
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
@@ -149,7 +149,7 @@ class Support extends CI_Controller
 			$this->load->view('support',$this->data);
 
 		}else{
-			redirect('auth', 'refresh');
+			redirect_to_index();
 		}
 	}
 
