@@ -27,15 +27,19 @@ if ($google_client_id) { ?>
               </div>
 
               <div class="card-body">
-                <form id="login" method="POST" action="<?= base_url('auth/login') ?>" class="needs-validation" novalidate="">
+                <form id="login" method="POST" action="<?= base_url('auth/login') ?>" class="needs-validation"
+                  novalidate="">
                   <div class="form-group">
-                    <label for="identity"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
-                    <input id="identity" type="email" class="form-control" name="identity" tabindex="1" required autofocus>
+                    <label
+                      for="identity"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
+                    <input id="identity" type="email" class="form-control" name="identity" tabindex="1" required
+                      autofocus>
                   </div>
 
                   <div class="form-group">
                     <div class="d-block">
-                      <label for="password" class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
+                      <label for="password"
+                        class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                       <div class="float-right">
                         <a href="#" id="modal-forgot-password" class="text-small">
                           <?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>
@@ -44,14 +48,16 @@ if ($google_client_id) { ?>
                     </div>
                     <div class="password-wrapper" style="position: relative;">
                       <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
-                      <i class="fa fa-eye password-toggle" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                      <i class="fa fa-eye password-toggle"
+                        style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
-                      <label class="custom-control-label" for="remember-me"><?= $this->lang->line('remember_me') ? $this->lang->line('remember_me') : 'Remember Me' ?></label>
+                      <label class="custom-control-label"
+                        for="remember-me"><?= $this->lang->line('remember_me') ? $this->lang->line('remember_me') : 'Remember Me' ?></label>
                     </div>
                   </div>
 
@@ -63,13 +69,16 @@ if ($google_client_id) { ?>
 
                   <?php if ($google_client_id) { ?>
                     <div class="form-group row">
-                      <div class="g-signin2 col-md-12 d-flex justify-content-center" data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
+                      <div class="g-signin2 col-md-12 d-flex justify-content-center" data-width="300" data-height="43.59"
+                        data-onsuccess="onSignIn" data-theme="dark"></div>
                     </div>
                   <?php } ?>
 
                   <?php if (!turn_off_new_user_registration()) { ?>
                     <div class="text-muted text-center">
-                      <?= $this->lang->line('dont_have_an_account') ? $this->lang->line('dont_have_an_account') : "Don't have an account?" ?> <a href="<?= base_url('auth/register'); ?>"><?= $this->lang->line('create_one') ? $this->lang->line('create_one') : 'Create One' ?></a>
+                      <?= $this->lang->line('dont_have_an_account') ? $this->lang->line('dont_have_an_account') : "Don't have an account?" ?>
+                      <a
+                        href="<?= base_url('auth/register'); ?>"><?= $this->lang->line('create_one') ? $this->lang->line('create_one') : 'Create One' ?></a>
                     </div>
                   <?php } ?>
 
@@ -92,8 +101,13 @@ if ($google_client_id) { ?>
     </section>
   </div>
 
-  <form class="modal-part" id="modal-forgot-password-part" action="<?= base_url('auth/forgot-password') ?>" class="needs-validation" novalidate="" data-title="<?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>" data-btn="<?= $this->lang->line('send') ? $this->lang->line('send') : 'Send' ?>">
-    <p><?= $this->lang->line('we_will_send_a_link_to_reset_your_password') ? $this->lang->line('we_will_send_a_link_to_reset_your_password') : 'We will send a link to reset your password.' ?></p>
+  <form class="modal-part" id="modal-forgot-password-part" action="<?= base_url('auth/forgot-password') ?>"
+    class="needs-validation" novalidate=""
+    data-title="<?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>"
+    data-btn="<?= $this->lang->line('send') ? $this->lang->line('send') : 'Send' ?>">
+    <p>
+      <?= $this->lang->line('we_will_send_a_link_to_reset_your_password') ? $this->lang->line('we_will_send_a_link_to_reset_your_password') : 'We will send a link to reset your password.' ?>
+    </p>
     <div class="form-group">
       <label class="col-form-label"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
       <div class="input-group">
@@ -102,7 +116,8 @@ if ($google_client_id) { ?>
             <i class="fas fa-envelope"></i>
           </div>
         </div>
-        <input type="text" class="form-control" placeholder="<?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?>" name="identity">
+        <input type="text" class="form-control"
+          placeholder="<?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?>" name="identity">
       </div>
     </div>
   </form>
@@ -122,11 +137,11 @@ if ($google_client_id) { ?>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
       function onSignIn(googleUser) {
-        gapi.load('auth2', function() {
+        gapi.load('auth2', function () {
           gapi.auth2.init().then(() => {
             var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function() {
-              auth2.disconnect().then(function() {
+            auth2.signOut().then(function () {
+              auth2.disconnect().then(function () {
                 // do nothing
               });
             });
@@ -135,16 +150,16 @@ if ($google_client_id) { ?>
         var profile = googleUser.getBasicProfile();
         if (profile && profile.getEmail() && profile.getGivenName() && profile.getFamilyName()) {
           if (site_key) {
-            grecaptcha.ready(function() {
+            grecaptcha.ready(function () {
               grecaptcha.execute(site_key, {
                 action: 'register_form'
-              }).then(function(token) {
+              }).then(function (token) {
                 $.ajax({
                   type: "POST",
                   url: base_url + 'auth/social_auth',
                   data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName() + "&token=" + token + "&action=register_form",
                   dataType: "json",
-                  success: function(result) {
+                  success: function (result) {
                     if (result['error'] == false) {
                       location.reload();
                     } else {
@@ -164,7 +179,7 @@ if ($google_client_id) { ?>
               url: base_url + 'auth/social_auth',
               data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName(),
               dataType: "json",
-              success: function(result) {
+              success: function (result) {
                 if (result['error'] == false) {
                   location.reload();
                 } else {
@@ -188,8 +203,8 @@ if ($google_client_id) { ?>
     </script>
   <?php } ?>
   <script>
-    $(document).ready(function() {
-      $('.password-toggle').click(function() {
+    $(document).ready(function () {
+      $('.password-toggle').click(function () {
         var input = $('#password');
         if (input.attr('type') === 'password') {
           input.attr('type', 'text');

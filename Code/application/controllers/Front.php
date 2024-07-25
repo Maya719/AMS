@@ -312,8 +312,7 @@ class Front extends CI_Controller
 
 	public function index()
 	{
-
-
+		
 		if (!frontend_permissions('landing_page')) {
 			redirect('auth', 'refresh');
 		}
