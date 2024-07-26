@@ -1,7 +1,7 @@
 #authenticationModal .modal-dialog {
   color: black;
-  max-width: 1100px !important;
-  max-height: 600px !important;
+  max-width: 900px !important;
+  max-height: 500px !important;
 }
 
 #authenticationModal .modal-dialog {
@@ -48,12 +48,12 @@
 #authenticationModal .wrapper .slide-controls {
   position: relative;
   display: flex;
-  width: 50%;
-  height: 30px;
+  width: 70%;
+  height: 45px;
   overflow: hidden;
   margin: 30px 0 10px 0;
   justify-content: space-between;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: #e1e1e1;
 }
 
@@ -92,7 +92,7 @@
   width: 50%;
   left: 0;
   z-index: 0;
-  border-radius: 15px;
+  border-radius: 20px;
   background: var(--tp-theme-primary);
   transition: all 0.3s linear;
 }
@@ -133,19 +133,38 @@
   display: flex;
   width: 200%;
 }
+
 #authenticationModal .form-container .login,
 #authenticationModal .form-container .signup {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
 }
 
 #authenticationModal .authentication-modal-single-side-content {
   padding: 20px 20px;
   display: flex;
-  height: 50%;
+  max-height: 550px;
   align-items: stretch;
   flex-direction: column;
   justify-content: space-between;
+}
+
+#authenticationModal .authentication-modal-single-side-content form * {
+  z-index: 10;
+}
+
+#authenticationModal .authentication-modal-single-side-content form#login {
+  height: 390px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+#authenticationModal .authentication-modal-single-side-content form#register {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 #authenticationModal .form-container .form-inner form {
@@ -163,10 +182,10 @@
   height: 100%;
   width: 100%;
   outline: none;
-  padding-left: 15px;
+  padding-left: 7px;
   border-radius: 15px;
   border-bottom-width: 2px;
-  font-size: 17px;
+  font-size: 16px;
   transition: all 0.3s ease;
 }
 
@@ -263,6 +282,24 @@
   width: 100%;
   object-fit: cover;
   overflow: hidden;
+}
+
+#authenticationModal form input {
+  padding: 10px 15px;
+  line-height: 1;
+}
+
+@media (min-height: 768px) {
+  #authenticationModal .form-container .login,
+  #authenticationModal .form-container .signup {
+    height: 100%;
+  }
+}
+
+@media (max-height: 767px) {
+  #authenticationModal .login-form {
+    height: 400px !important;
+  }
 }
 
 /* modal based css ends here  */
