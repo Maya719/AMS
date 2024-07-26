@@ -115,11 +115,11 @@
   color: #000;
 }
 
-#authenticationModal #login:checked ~ label.signup {
+#authenticationModal #authenticationModalLogin:checked ~ label.signup {
   color: #000;
 }
 
-#authenticationModal #login:checked ~ label.login {
+#authenticationModal #authenticationModalLogin:checked ~ label.login {
   cursor: default;
   user-select: none;
 }
@@ -153,7 +153,7 @@
   z-index: 10;
 }
 
-#authenticationModal .authentication-modal-single-side-content form#login {
+#authenticationModal .authentication-modal-single-side-content form#authenticationModalLogin {
   height: 390px;
   display: flex;
   flex-direction: column;

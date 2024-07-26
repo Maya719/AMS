@@ -25,7 +25,7 @@ $(document).ready(function () {
     });
   });
 
-  const loginRadio = $('#login');
+  const loginRadio = $('#authenticationModalLogin');
   const signupRadio = $('#signup');
   const loginContent = $('.modal-body-login');
   const signupContent = $('.modal-body-signup');

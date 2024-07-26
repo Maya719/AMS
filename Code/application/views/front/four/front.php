@@ -976,8 +976,10 @@
                                 </div>
                                 <div class="login login-form">
                                     <div class="modal-body-login authentication-modal-single-side-content">
-                                        <form id="login" method="POST" action="<?= base_url('auth/login') ?>"
-                                            class="needs-validation" novalidate="">
+
+                                        <form id="authenticationModalLogin" method="POST"
+                                            action="<?= base_url('auth/login') ?>" class="needs-validation"
+                                            novalidate="">
 
                                             <div class="form-group" style="position: relative;">
                                                 <label
@@ -1312,6 +1314,44 @@
             document.getElementById("arrow-down").classList.toggle("hidden");
         }
     </script>
+
+    <script>
+        $("#authenticationModalLogin").submit(function (e) {
+            e.preventDefault();
+            let save_button = $(this).find('.savebtn');
+            let output_status = $(this).find('.result')
+            save_button.addClass('btn-progress');
+            var formData = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result['error'] == false) {
+                        // window.location.replace(<?php echo base_url('/'); ?>);
+                        location.reload();
+                    } else {
+                        output_status.prepend('<div class="alert alert-danger">' + result['message'] + '</div>');
+                    }
+                    // card_progress.dismiss(function () {
+                    //     output_status.find('.alert').delay(4000).fadeOut();
+                    //     save_button.removeClass('btn-progress');
+                    //     $('html, body').animate({
+                    //         scrollTop: output_status.offset().top
+                    //     }, 1000);
+                    // });
+                }
+            });
+
+            return false;
+        });
+    </script>
+
 </body>
 
 </html>
