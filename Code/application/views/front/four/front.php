@@ -123,7 +123,7 @@
                                     <div class="tp-header-btn d-none d-xl-block">
                                         <!-- <a class="tp-btn" href="<?= base_url('auth/register') ?>">
                                             Get it free</a> -->
-                                        <a class="tp-btn" type="button" data-bs-toggle="modal"
+                                        <a class="tp-btn x8oe2yx" type="button" data-bs-toggle="modal"
                                             data-bs-target="#authenticationModal">
                                             Get it free</a>
                                     </div>
@@ -191,7 +191,6 @@
 
 
     <!-- mobile menu style end -->
-
     <main>
         <!-- hero area start -->
         <section class="tp-hero-2-area p-relative">
@@ -213,12 +212,12 @@
                                                     </div>
                                                     <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our solution fosters your work productivity through simplicity, collaboration and agile methodologies. Our one stop solution helps to organize and improve efficiency of your work management.' ?>
                                                     </p>
-
-                                                    <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">
-                                                        <a class="tp-btn" href="<?= base_url('auth/register') ?>"
-                                                            target="_blank">Get Started <i
-                                                                class="fa-regular fa-arrow-right-long"></i></a>
-
+                                                    <div class="tp-hero-2-btn d-flex flex-wrap align-items-center "
+                                                        style="z-index:10;">
+                                                        <a class="tp-btn x8oe2yx" type="button" href="#"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#authenticationModal">Get Started
+                                                            <i class="fa-regular fa-arrow-right-long"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -954,13 +953,14 @@
         <div class="modal-dialog ">
             <div class="modal-content ">
                 <div class="row " style="height: 100% !important; ">
-                    <div class="col-6" style="padding: 0px;margin: 0px;">
+                    <div class="col-6 d-none d-md-block" style="padding: 0px; margin: 0px;">
                         <div class="auth-modal-imgae">
                             <img src="https://images.unsplash.com/photo-1721804980240-4b8adc442fc4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                                 alt="">
                         </div>
                     </div>
-                    <div class="col-6" style="overflow: hidden !important;position: relative;left: -13px;">
+                    <div class="col-sm-12  col-md-6"
+                        style="overflow: hidden !important;position: relative;left: -13px;">
                         <div class="wrapper">
                             <!-- <div class="title-text">
                                 <div class="title login">Login Form</div>
@@ -974,11 +974,12 @@
                                     <label for="signup" class="slide signup">Signup</label>
                                     <div class="slider-tab"></div>
                                 </div>
-                                <div class="login">
+                                <div class="login login-form">
                                     <div class="modal-body-login authentication-modal-single-side-content">
 
-                                        <form id="login" method="POST" action="<?= base_url('auth/login') ?>"
-                                            class="needs-validation" novalidate="">
+                                        <form id="authenticationModalLogin" method="POST"
+                                            action="<?= base_url('auth/login') ?>" class="needs-validation"
+                                            novalidate="">
 
                                             <div class="form-group" style="position: relative;">
                                                 <label
@@ -1030,10 +1031,10 @@
                                             <?php } ?>
 
                                             <?php if (!turn_off_new_user_registration()) { ?>
-                                                <div class="text-muted text-center">
+                                                <div class="text-muted text-center ">
                                                     <?= $this->lang->line('dont_have_an_account') ? $this->lang->line('dont_have_an_account') : "Don't have an account?" ?>
-                                                    <a
-                                                        href="<?= base_url('auth/register'); ?>"><?= $this->lang->line('create_one') ? $this->lang->line('create_one') : 'Create One' ?></a>
+                                                    <a style="cursor: pointer;"
+                                                        class="x8oe2yx"><?= $this->lang->line('create_one') ? $this->lang->line('create_one') : 'Create One' ?></a>
                                                 </div>
                                             <?php } ?>
 
@@ -1047,7 +1048,7 @@
                                     </div>
                                 </div>
 
-                                <div class="signup">
+                                <div class="signup signup-form">
                                     <div class="modal-body-signup authentication-modal-single-side-content">
                                         <form id="register" method="POST" action="<?= base_url('auth/create_user') ?>"
                                             class="needs-validation" novalidate="">
@@ -1077,26 +1078,28 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="form-group col-6" style="position: relative;">
+                                                <div class="form-group col-12" style="position: relative;">
                                                     <label for="password"
                                                         class="d-block"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                                                     <input id="password" type="password" class="form-control pwstrength"
                                                         data-indicator="pwindicator" name="password" tabindex="4"
                                                         required>
                                                     <i class="fa fa-eye password-toggle2"
-                                                        style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
+                                                        style="position: absolute; right: 30px; top: 68%; transform: translateY(-60%); cursor: pointer;"></i>
                                                     <div id="pwindicator" class="pwindicator">
                                                         <div class="bar"></div>
                                                         <div class="label"></div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group col-6" style="position: relative;">
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-12" style="position: relative;">
                                                     <label for="password2"
-                                                        class="d-block"><?= $this->lang->line('password_confirmation') ? $this->lang->line('password_confirmation') : 'Confirm Password' ?></label>
+                                                        class="d-block"><?= $this->lang->line('password_confirmation') ? $this->lang->line('password_confirmation') : 'Confirm' ?></label>
                                                     <input id="password2" type="password" class="form-control"
                                                         name="password_confirm" tabindex="5" required>
                                                     <i class="fa fa-eye password-toggle"
-                                                        style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
+                                                        style="position: absolute; right: 30px; top: 68%; transform: translateY(-60%); cursor: pointer;"></i>
                                                 </div>
                                             </div>
 
@@ -1105,7 +1108,7 @@
                                                     <input type="checkbox" name="agree" class="custom-control-input"
                                                         id="agree_regi" checked>
                                                     <label class="custom-control-label"
-                                                        for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? htmlspecialchars($this->lang->line('i_agree_to_the_terms_and_conditions')) : 'I agree to the terms and conditions' ?></label>
+                                                        for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "'>Terms<a/> & <a href='" . base_url('front/terms-and-conditions') . "'>Conditions<a/>" ?></label>
                                                 </div>
                                             </div>
 
@@ -1132,8 +1135,8 @@
 
                                             <div class="text-muted text-center">
                                                 <?= $this->lang->line('already_have_an_account') ? $this->lang->line('already_have_an_account') : 'Already have an account?' ?>
-                                                <a
-                                                    href="<?= base_url('auth'); ?>"><?= $this->lang->line('login_here') ? $this->lang->line('login_here') : 'Login Here' ?></a>
+                                                <a class="x8oe2yx2"
+                                                    href="#"><?= $this->lang->line('login_here') ? $this->lang->line('login_here') : 'Login Here' ?></a>
                                             </div>
 
                                         </form>
@@ -1311,6 +1314,44 @@
             document.getElementById("arrow-down").classList.toggle("hidden");
         }
     </script>
+
+    <script>
+        $("#authenticationModalLogin").submit(function (e) {
+            e.preventDefault();
+            let save_button = $(this).find('.savebtn');
+            let output_status = $(this).find('.result')
+            save_button.addClass('btn-progress');
+            var formData = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result['error'] == false) {
+                        // window.location.replace(<?php echo base_url('/'); ?>);
+                        location.reload();
+                    } else {
+                        output_status.prepend('<div class="alert alert-danger">' + result['message'] + '</div>');
+                    }
+                    // card_progress.dismiss(function () {
+                    //     output_status.find('.alert').delay(4000).fadeOut();
+                    //     save_button.removeClass('btn-progress');
+                    //     $('html, body').animate({
+                    //         scrollTop: output_status.offset().top
+                    //     }, 1000);
+                    // });
+                }
+            });
+
+            return false;
+        });
+    </script>
+
 </body>
 
 </html>

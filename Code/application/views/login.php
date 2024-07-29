@@ -85,13 +85,9 @@ if ($google_client_id) { ?>
                   <div class="form-group">
                     <div class="result"><?= isset($message) ? htmlspecialchars($message) : ''; ?></div>
                   </div>
-
                 </form>
               </div>
             </div>
-
-
-
             <div class="simple-footer">
               <?= htmlspecialchars(footer_text()) ?>
             </div>

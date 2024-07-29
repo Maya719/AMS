@@ -25,32 +25,37 @@ $(document).ready(function () {
     });
   });
 
-  const loginRadio = $('#login');
+  const loginRadio = $('#authenticationModalLogin');
   const signupRadio = $('#signup');
   const loginContent = $('.modal-body-login');
   const signupContent = $('.modal-body-signup');
   const sliderTab = $('.slider-tab');
 
   function showLogin() {
+    loginContent.parent().show();
     loginContent.show();
-    signupContent.hide();
+    signupContent.parent().hide();
     sliderTab.css('left', '0');
-    loginContent.parent().css('height', "0px");
-
+    // loginContent.parent().css('height', "100px");
   }
 
   function showSignup() {
-    loginContent.hide();
+    loginContent.parent().hide();
+    signupContent.parent().show();
     signupContent.show();
-    loginContent.parent().css('height', "0px");
+    // loginContent.parent().css('height', "0px");
     sliderTab.css('left', '50%');
   }
 
   loginRadio.change(showLogin);
   signupRadio.change(showSignup);
 
-  $('.tp-btn').click(function () {
+  $('.x8oe2yx').click(function () {
     signupRadio.click();
+  });
+
+  $('.x8oe2yx2').click(function () {
+    loginRadio.click();
   });
 
   // Initial display setup
