@@ -969,7 +969,13 @@
                                                 </button>
                                             </div>
 
-                                            
+                                            <?php if ($google_client_id) { ?>
+                                                <div class="form-group my-2 row d-flex justify-content-center"
+                                                    style="width: 100%;">
+                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
+                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
+                                                </div>
+                                            <?php } ?>
 
                                             <?php if (!turn_off_new_user_registration()) { ?>
                                                 <div class="text-muted text-center ">
@@ -1042,13 +1048,7 @@
                                                 </div>
                                             </div>
 
-                                            <?php if ($google_client_id) { ?>
-                                                <div class="form-group my-2 row d-flex justify-content-center"
-                                                    style="width: 100%;">
-                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
-                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
-                                                </div>
-                                            <?php } ?>
+                                            
 
                                             <div class="text-muted text-center">
                                                 <?= $this->lang->line('already_have_an_account') ? $this->lang->line('already_have_an_account') : 'Already have an account?' ?>

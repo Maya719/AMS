@@ -24,7 +24,7 @@ class Chatbot extends CI_Controller
             $response_message = $query->row()->response_message;
             $advice = $response_message;
         } else {
-            $advice = 'sorry';
+            $advice = "I am sorry. I can't understand your question. Please rephrase your question and make sure it is related to this site. Thank you :)";
         }
 
         // Return the response in JSON format
