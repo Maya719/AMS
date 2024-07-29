@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <?php
+    $google_client_id = get_google_client_id();
+    if ($google_client_id) { ?>
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="<?= $google_client_id ?>">
+        <meta name="google-signin-plugin_name" content="auth2">
+    <?php } ?>
+
     <?php $this->load->view('front/meta'); ?>
     <style>
         :root {
@@ -961,11 +969,7 @@
                                                 </button>
                                             </div>
 
-                                            <?php if ($google_client_id) { ?>
-                                                <div class="form-group row">
-                                                    <div class="g-signin2 col-md-12 d-flex justify-content-center" data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
-                                                </div>
-                                            <?php } ?>
+                                            
 
                                             <?php if (!turn_off_new_user_registration()) { ?>
                                                 <div class="text-muted text-center ">
@@ -1025,12 +1029,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" name="agree" class="custom-control-input" id="agree_regi" checked>
-                                                    <label class="custom-control-label" for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "'>Terms<a/> & <a href='" . base_url('front/terms-and-conditions') . "'>Conditions<a/>" ?></label>
-                                                </div>
-                                            </div>
 
                                             <div class="form-group">
                                                 <button type="submit" class="savebtn btn btn-primary btn-lg btn-block" tabindex="6">
@@ -1038,17 +1036,19 @@
                                                 </button>
                                             </div>
 
-                                            <?php if ($google_client_id) { ?>
-                                                <div class="form-group row">
-                                                    <div class="g-signin2 col-md-12 d-flex justify-content-center" data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
-                                                </div>
-                                            <?php } ?>
-
                                             <div class="form-group">
                                                 <div class="result">
                                                     <?= isset($message) ? htmlspecialchars($message) : ''; ?>
                                                 </div>
                                             </div>
+
+                                            <?php if ($google_client_id) { ?>
+                                                <div class="form-group my-2 row d-flex justify-content-center"
+                                                    style="width: 100%;">
+                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
+                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
+                                                </div>
+                                            <?php } ?>
 
                                             <div class="text-muted text-center">
                                                 <?= $this->lang->line('already_have_an_account') ? $this->lang->line('already_have_an_account') : 'Already have an account?' ?>
@@ -1217,6 +1217,76 @@
             document.getElementById("arrow-down").classList.toggle("hidden");
         }
     </script>
+
+    <?php if ($google_client_id) { ?>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script>
+            function onSignIn(googleUser) {
+                gapi.load('auth2', function () {
+                    gapi.auth2.init().then(() => {
+                        var auth2 = gapi.auth2.getAuthInstance();
+                        auth2.signOut().then(function () {
+                            auth2.disconnect().then(function () {
+                                // do nothing
+                            });
+                        });
+                    });
+                });
+                var profile = googleUser.getBasicProfile();
+                if (profile && profile.getEmail() && profile.getGivenName() && profile.getFamilyName()) {
+                    if (site_key) {
+                        grecaptcha.ready(function () {
+                            grecaptcha.execute(site_key, {
+                                action: 'register_form'
+                            }).then(function (token) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: base_url + 'auth/social_auth',
+                                    data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName() + "&token=" + token + "&action=register_form",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        if (result['error'] == false) {
+                                            location.reload();
+                                        } else {
+                                            iziToast.error({
+                                                title: result['message'],
+                                                message: "",
+                                                position: 'topRight'
+                                            });
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: base_url + 'auth/social_auth',
+                            data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName(),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result['error'] == false) {
+                                    location.reload();
+                                } else {
+                                    iziToast.error({
+                                        title: result['message'],
+                                        message: "",
+                                        position: 'topRight'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    iziToast.error({
+                        title: something_wrong_try_again,
+                        message: "",
+                        position: 'topRight'
+                    });
+                }
+            }
+        </script>
+    <?php } ?>
 
     <script>
         $("#authenticationModalLogin").submit(function(e) {
