@@ -58,4 +58,16 @@ class Home extends CI_Controller
 			'counts' => $count
 		));
 	}
+	public function customizer()
+	{
+		if ($this->ion_auth->logged_in()) {
+			$this->data['page_title'] = 'Customizer - ' . company_name();
+			$this->data['main_page'] = 'Customizer ';
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$this->load->view('pages/home/customizer', $this->data);
+			// echo json_encode($this->data);
+		} else {
+			redirect_to_index();
+		}
+	}
 }

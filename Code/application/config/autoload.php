@@ -37,7 +37,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Prototype:
 |
 |  $autoload['packages'] = array(APPPATH.'third_party', '/usr/local/shared');
-|
+| {"paypal_client_id":"","paypal_secret":"1","stripe_publishable_key":"pk_live_51PLjglCWVjgr6DCqAaWPpU5FvICmvfHKpO7XCnfVaxT43eAVjPnCavazMp0FCol90i5wtIEjGAGj527veXjweUfy00581U0YDi","stripe_secret_key":"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","razorpay_key_id":"","razorpay_key_secret":"","paystack_public_key":"","paystack_secret_key":"","offline_bank_transfer":"","bank_details":""}
 */
 $autoload['packages'] = array();
 

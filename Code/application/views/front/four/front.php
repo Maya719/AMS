@@ -9,8 +9,7 @@
     <style>
         :root {
             --theme-color:
-                <?= theme_color() ?>
-            ;
+                <?= theme_color() ?>;
         }
     </style>
     <?php $google_analytics = google_analytics();
@@ -71,8 +70,7 @@
     <div class="back-to-top-wrapper">
         <button id="back_to_top" type="button" class="back-to-top-btn">
             <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 6L6 1L1 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
+                <path d="M11 6L6 1L1 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
         </button>
     </div>
@@ -90,14 +88,12 @@
                         <div class="col-6 col-lg-6 col-xl-2">
                             <div class="tp-header-logo tp-header-logo-border">
                                 <a href="<?= base_url() ?>">
-                                    <img src='<?= base_url('assets2/images/logos/' . full_logo()) ?>' height="50"
-                                        width="150" alt="">
+                                    <img src='<?= base_url('assets2/images/logos/' . full_logo()) ?>' height="50" width="150" alt="">
                                 </a>
                             </div>
                         </div>
                         <div class="col-6 col-lg-6 col-xl-10">
-                            <div
-                                class="tp-main-menu-2-area d-flex align-items-center justify-content-end justify-content-xl-center justify-content-xxl-end">
+                            <div class="tp-main-menu-2-area d-flex align-items-center justify-content-end justify-content-xl-center justify-content-xxl-end">
                                 <div class="tp-main-menu home-2">
                                     <nav id="tp-mobile-menu">
                                         <ul>
@@ -107,8 +103,7 @@
                                             <li><a href="<?= base_url('front/guide') ?>">Guide</a></li>
 
                                             <li>
-                                                <a href="<?= base_url('auth') ?>" type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#authenticationModal">
+                                                <a href="<?= base_url('auth') ?>" type="button" data-bs-toggle="modal" data-bs-target="#authenticationModal">
                                                     Login
                                                 </a>
                                             </li>
@@ -123,8 +118,7 @@
                                     <div class="tp-header-btn d-none d-xl-block">
                                         <!-- <a class="tp-btn" href="<?= base_url('auth/register') ?>">
                                             Get it free</a> -->
-                                        <a class="tp-btn" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#authenticationModal">
+                                        <a class="tp-btn" type="button" data-bs-toggle="modal" data-bs-target="#authenticationModal">
                                             Get it free</a>
                                     </div>
                                     <div class="mobile-menu d-block d-xl-none text-end">
@@ -193,40 +187,43 @@
     <!-- mobile menu style end -->
 
     <main>
-        <!-- hero area start -->
         <section class="tp-hero-2-area p-relative">
             <div class="hero-2-active splide">
                 <div class="splide__track">
                     <div class="splide__list">
                         <div class="splide__slide slider-item">
+
                             <div class="tp-hero-2-bg tp-hero-2-overlay">
-                                <div class="bubbles"></div>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-xl-6 col-lg-6">
-                                            <div class="tp-hero-wrapper d-flex align-items-center">
-                                                <div class="tp-hero-2-content">
-                                                    <div class="tp-hero-title-wrapper">
-                                                        <h5 class="tp-hero-2-title">
-                                                            <?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Agile your work' ?>
-                                                        </h5>
-                                                    </div>
-                                                    <p><?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our solution fosters your work productivity through simplicity, collaboration and agile methodologies. Our one stop solution helps to organize and improve efficiency of your work management.' ?>
-                                                    </p>
 
-                                                    <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">
-                                                        <a class="tp-btn" href="<?= base_url('auth/register') ?>"
-                                                            target="_blank">Get Started <i
-                                                                class="fa-regular fa-arrow-right-long"></i></a>
+                                <div class="">
+                                    <div class="bubbles"></div>
+                                    <div class="">
 
+                                        <img src='<?= base_url("assets/front/four/img/hero/home-2/img-34.png") ?>' alt="" class="background-image">
+
+                                    </div>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-xl-6 col-lg-6">
+                                                <div class="tp-hero-wrapper d-flex align-items-center">
+                                                    <div class="tp-hero-2-content">
+                                                        <div class="tp-hero-title-wrapper">
+                                                            <h5 class="tp-hero-2-title"><?= $this->lang->line('frontend_home_title') ? htmlspecialchars($this->lang->line('frontend_home_title')) : 'Agile your work' ?></h5>
+                                                        </div>
+                                                        <p>
+                                                            <?= $this->lang->line('frontend_home_description') ? htmlspecialchars($this->lang->line('frontend_home_description')) : 'Our solution fosters your work productivity through simplicity, collaboration and agile methodologies. Our one stop solution helps to organize and improve efficiency of your work management.' ?>
+                                                        </p>
+                                                        <div class="tp-hero-2-btn d-flex flex-wrap align-items-center">
+                                                            <a class="tp-btn" href="<?= base_url('auth/register') ?>" target="_blank">Get Started <i class="fa-regular fa-arrow-right-long"></i></a>
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-6 col-lg-6">
-                                            <div class="tp-hero-2-thumb">
-                                                <img src='<?= base_url("assets/front/four/img/hero/home-2/img-3.png") ?>'
-                                                    alt="">
+                                            <div class="col-xl-6 col-lg-6">
+                                                <div class="tp-hero-2-thumb">
+                                                    <img src='<?= base_url("assets/front/four/img/hero/home-2/img-3.png") ?>' alt="">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -235,9 +232,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
-        <!-- hero area end -->
 
         <!-- brands area start -->
         <section class="tp-brands-2-area pt-75 pb-90 p-relative">
@@ -252,26 +247,22 @@
                         </div>
                         <div class="tp-brands-2-top d-flex justify-content-center align-items-center">
                             <div class="tp-brands-2-top-img">
-                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/mobipixels.png") ?>'
-                                        alt="mobipixels"></a>
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/mobipixels.png") ?>' alt="mobipixels"></a>
 
                             </div>
                             <div class="tp-brands-2-top-img">
 
-                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-2.png") ?>'
-                                        alt="img-2"></a>
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-2.png") ?>' alt="img-2"></a>
 
                             </div>
                             <div class="tp-brands-2-top-img">
 
-                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-5.png") ?>'
-                                        alt="img-3"></a>
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-5.png") ?>' alt="img-3"></a>
 
                             </div>
                             <div class="tp-brands-2-top-img">
 
-                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-11.png") ?>'
-                                        alt="img-4"></a>
+                                <a href="#"><img src='<?= base_url("assets2/images/trusted_partners/img-11.png") ?>' alt="img-4"></a>
 
                             </div>
 
@@ -320,13 +311,12 @@
         <!-- brands area end -->
 
         <?php if (frontend_permissions('features') && $features) {
-            ?>
+        ?>
             <!-- our service area start -->
             <section class="tp-service-area fix tp-service-overlay pt-120 pb-110 p-relative" id="feature">
                 <div class="tp-service-shape">
                     <img class="service-1" src="<?= base_url('assets/front/four/img/services/shape-wrapper.png') ?>" alt="">
-                    <img class="service-2" src="<?= base_url('assets/front/four/img/services/shape-wrapper2.png') ?>"
-                        alt="">
+                    <img class="service-2" src="<?= base_url('assets/front/four/img/services/shape-wrapper2.png') ?>" alt="">
                 </div>
                 <div class="container-fluid">
                     <div class="row">
@@ -341,32 +331,28 @@
                     </div>
                     <div class="row">
                         <div class="col-xl-12">
-                            <div class="service-active splide wow fadeInUp slider-active splide mt-75"
-                                data-wow-duration="1s" data-wow-delay="0.7s">
+                            <div class="service-active splide wow fadeInUp slider-active splide mt-75" data-wow-duration="1s" data-wow-delay="0.7s">
                                 <div class="splide__track">
                                     <div class="splide__list">
                                         <?php if ($features) {
                                             foreach ($features as $key => $feature) {
-                                                ?>
+                                        ?>
                                                 <div class="splide__slide">
                                                     <div class="tp-service-item p-relative" style="height: 400px;">
                                                         <div class="item-shape">
-                                                            <img src="<?= base_url('assets/front/four/img/services/shape-item.png') ?>"
-                                                                alt="">
+                                                            <img src="<?= base_url('assets/front/four/img/services/shape-item.png') ?>" alt="">
                                                         </div>
                                                         <div class="tp-service-thumb">
-                                                            <i style="margin-top: 25px;"
-                                                                class="<?= isset($feature['icon']) ? htmlspecialchars($feature['icon']) : 'fa fa-fire' ?>"></i>
+                                                            <i style="margin-top: 25px;" class="<?= isset($feature['icon']) ? htmlspecialchars($feature['icon']) : 'fa fa-fire' ?>"></i>
                                                         </div>
-                                                        <h4 class="tp-service-title"><a
-                                                                href="service-details.html"><?= isset($feature['title']) ? htmlspecialchars($feature['title']) : '' ?></a>
+                                                        <h4 class="tp-service-title"><a href="service-details.html"><?= isset($feature['title']) ? htmlspecialchars($feature['title']) : '' ?></a>
                                                         </h4>
                                                         <p>
                                                             <?= isset($feature['description']) ? htmlspecialchars(substr($feature['description'], 0, 80)) . '...' : '' ?>
                                                         </p>
                                                     </div>
                                                 </div>
-                                            <?php }
+                                        <?php }
                                         } ?>
                                     </div>
                                 </div>
@@ -397,25 +383,20 @@
                                         <button class=" active" id="kitchen-tab" data-bs-toggle="pill" data-bs-target="#kitchen" type="button" role="tab" aria-controls="kitchen" aria-selected="true">Admin Dashboard</button>
                                     </li> -->
                                     <li class="nav-item" role="presentation">
-                                        <button class="active" id="OFFICE-tab" data-bs-toggle="pill"
-                                            data-bs-target="#OFFICE" type="button" role="tab" aria-controls="OFFICE"
-                                            aria-selected="false">HR Dashboard</button>
+                                        <button class="active" id="OFFICE-tab" data-bs-toggle="pill" data-bs-target="#OFFICE" type="button" role="tab" aria-controls="OFFICE" aria-selected="false">HR Dashboard</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="" id="HOME-tab" data-bs-toggle="pill" data-bs-target="#HOME"
-                                            type="button" role="tab" aria-controls="HOME" aria-selected="false">PMS
+                                        <button class="" id="HOME-tab" data-bs-toggle="pill" data-bs-target="#HOME" type="button" role="tab" aria-controls="HOME" aria-selected="false">PMS
                                             Dashboard</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="" id="WINDOW-tab" data-bs-toggle="pill" data-bs-target="#WINDOW"
-                                            type="button" role="tab" aria-controls="WINDOW" aria-selected="false">AMS
+                                        <button class="" id="WINDOW-tab" data-bs-toggle="pill" data-bs-target="#WINDOW" type="button" role="tab" aria-controls="WINDOW" aria-selected="false">AMS
                                             Dashboard</button>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="tab-content p-relative wow fadeInDown" data-wow-duration="1s" data-wow-delay=".3s"
-                            id="pills-tabContent">
+                        <div class="tab-content p-relative wow fadeInDown" data-wow-duration="1s" data-wow-delay=".3s" id="pills-tabContent">
 
                             <!-- <div class="tab-pane fade show " id="kitchen" role="tabpanel" aria-labelledby="kitchen-tab" tabindex="0">
                                 <div class="">
@@ -428,40 +409,34 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <div class="tab-pane fade show active" id="OFFICE" role="tabpanel"
-                                aria-labelledby="OFFICE-tab" tabindex="0">
+                            <div class="tab-pane fade show active" id="OFFICE" role="tabpanel" aria-labelledby="OFFICE-tab" tabindex="0">
                                 <div class="">
                                     <div class="tp-portfolio-slider-3">
                                         <div class="tp-portfolio-3-inner grid-item item-1 item-3">
                                             <div class="tp-portfolio-3-thumb">
-                                                <img src="<?= base_url('assets2/images/landing_page_images/hr_dashboard.png') ?>"
-                                                    alt="HR Dashboard">
+                                                <img src="<?= base_url('assets2/images/landing_page_images/hr_dashboard.png') ?>" alt="HR Dashboard">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="HOME" role="tabpanel" aria-labelledby="HOME-tab"
-                                tabindex="0">
+                            <div class="tab-pane fade show" id="HOME" role="tabpanel" aria-labelledby="HOME-tab" tabindex="0">
                                 <div class="">
                                     <div class="tp-portfolio-slider-3">
                                         <div class="tp-portfolio-3-inner grid-item item-3 item-2">
                                             <div class="tp-portfolio-3-thumb ">
-                                                <img src="<?= base_url('assets2/images/landing_page_images/pms_dashboard.png') ?>"
-                                                    alt="PMS">
+                                                <img src="<?= base_url('assets2/images/landing_page_images/pms_dashboard.png') ?>" alt="PMS">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="WINDOW" role="tabpanel" aria-labelledby="WINDOW-tab"
-                                tabindex="0">
+                            <div class="tab-pane fade show" id="WINDOW" role="tabpanel" aria-labelledby="WINDOW-tab" tabindex="0">
                                 <div class="">
                                     <div class="tp-portfolio-slider-3">
                                         <div class="tp-portfolio-3-inner grid-item item-2 item-1">
                                             <div class="tp-portfolio-3-thumb">
-                                                <img src="<?= base_url('assets2/images/landing_page_images/ams_dashboard.png') ?>"
-                                                    alt="AMS">
+                                                <img src="<?= base_url('assets2/images/landing_page_images/ams_dashboard.png') ?>" alt="AMS">
                                             </div>
                                         </div>
                                     </div>
@@ -478,8 +453,7 @@
         <!-- price area start -->
         <div id="featureItem" class="tp-pricing-area p-relative pt-120">
             <div class="tp-pricing-shape d-none d-lg-block">
-                <img class="mousemove__image shape-1"
-                    src="<?= base_url('assets/front/four/img/pricing/bublble-1.png') ?>" alt="">
+                <img class="mousemove__image shape-1" src="<?= base_url('assets/front/four/img/pricing/bublble-1.png') ?>" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -515,8 +489,7 @@
                     </div>
 
                     <div class="col-md-4 wow flipInX flipInX_img" data-wow-delay="0.3s">
-                        <img src="<?= base_url('assets2/images/landing_page_images/img_3.png') ?>" alt=""
-                            class="first img-fluid">
+                        <img src="<?= base_url('assets2/images/landing_page_images/img_3.png') ?>" alt="" class="first img-fluid">
                     </div>
                     <div class="col-md-6 m-auto wow fadeInRight" data-wow-delay="0.6s">
                         <div class="app-about-cont my-1">
@@ -578,8 +551,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 wow flipInX flipInX_img" data-wow-delay="0.6s">
-                        <img src="<?= base_url('assets2/images/landing_page_images/img_4.png') ?>" alt=""
-                            class="third img-fluid">
+                        <img src="<?= base_url('assets2/images/landing_page_images/img_4.png') ?>" alt="" class="third img-fluid">
                     </div>
                 </div>
                 <br>
@@ -589,8 +561,7 @@
 
                 <div class="row first my-5">
                     <div class="col-md-4 wow flipInX flipInX_img" data-wow-delay="0.3s">
-                        <img src="<?= base_url('assets2/images/landing_page_images/img_5.png') ?>" alt=""
-                            class="first img-fluid">
+                        <img src="<?= base_url('assets2/images/landing_page_images/img_5.png') ?>" alt="" class="first img-fluid">
                     </div>
                     <div class="col-md-6 m-auto wow fadeInRight" data-wow-delay="0.6s">
                         <div class="app-about-cont my-1">
@@ -660,8 +631,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 wow flipInX flipInX_img" data-wow-delay="0.6s">
-                        <img src="<?= base_url('assets2/images/landing_page_images/img_6.png') ?>" alt=""
-                            class="third img-fluid">
+                        <img src="<?= base_url('assets2/images/landing_page_images/img_6.png') ?>" alt="" class="third img-fluid">
                     </div>
                 </div>
             </div>
@@ -673,8 +643,7 @@
         <!-- start -->
         <section id="mousemove" class="tp-about-3-area p-relative pt-120 pb-85">
             <div class="tp-pricing-shape d-none d-lg-block">
-                <img class="mousemove__image shape-1"
-                    src="<?= base_url('assets/front/four/img/pricing/bublble-1.png') ?>" alt="">
+                <img class="mousemove__image shape-1" src="<?= base_url('assets/front/four/img/pricing/bublble-1.png') ?>" alt="">
             </div>
             <div class="container">
                 <div class="row">
@@ -684,16 +653,14 @@
 
                                 <div class="col-sm-12 col-md-7">
                                     <div class="tp-about-3-thumb-3 style_1">
-                                        <img src="<?= base_url('assets2/images/landing_page_images/img_2.png') ?>"
-                                            alt="">
+                                        <img src="<?= base_url('assets2/images/landing_page_images/img_2.png') ?>" alt="">
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-12 col-md-5">
                                     <div class="tp-about-3-thumb-1 mb-30">
-                                        <img src="<?= base_url('assets2/images/landing_page_images/img_1.png') ?>"
-                                            alt="">
+                                        <img src="<?= base_url('assets2/images/landing_page_images/img_1.png') ?>" alt="">
                                     </div>
                                     <br>
                                     <br>
@@ -701,10 +668,7 @@
                                     <div class="tp-about-3-thumb-2 p-relative progress_bar">
                                         <div class="skill__progress-circle">
                                             <div class="progress-circular">
-                                                <input type="text" class="knob" value="0" data-rel="90"
-                                                    data-linecap="round" data-width="140" data-height="140"
-                                                    data-bgcolor="#fff" data-fgcolor="#63ED7A" data-thickness=".15"
-                                                    data-readonly="true" disabled>
+                                                <input type="text" class="knob" value="0" data-rel="90" data-linecap="round" data-width="140" data-height="140" data-bgcolor="#fff" data-fgcolor="#63ED7A" data-thickness=".15" data-readonly="true" disabled>
                                             </div>
                                             <h4>Market Fit</h4>
                                         </div>
@@ -715,8 +679,7 @@
                         </div>
                     </div>
                     <div class="col-lg-12 col-xl-5">
-                        <div class="tp-about-3-wrapper mb-30 wow fadeInRight" data-wow-duration="1s"
-                            data-wow-delay=".3s">
+                        <div class="tp-about-3-wrapper mb-30 wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
                             <div class="tp-inner-pre">
                                 <span><i class="flaticon-mop"></i></span>
                             </div>
@@ -740,8 +703,7 @@
                                 </div>
                             </div>
                             <div class="tp-about-2-btn">
-                                <a class="tp-btn" href="<?= base_url('auth/register') ?>"> Get free demo <i
-                                        class="fa-regular fa-arrow-right-long"></i></a>
+                                <a class="tp-btn" href="<?= base_url('auth/register') ?>"> Get free demo <i class="fa-regular fa-arrow-right-long"></i></a>
                             </div>
                         </div>
                     </div>
@@ -760,22 +722,18 @@
             <div class="tp-testimonial-shape">
                 <img class="shape-1" src="<?= base_url('assets2/images/dashboards/shpe-1.png') ?>" alt="">
                 <img class="shape-2" src="<?= base_url('assets2/images/dashboards/shpe-2.png') ?>" alt="">
-                <img class="shape-3 d-none d-xl-block" src="<?= base_url('assets2/images/dashboards/shpe-3.png') ?>"
-                    alt="">
-                <img class="shape-4 d-none d-xl-block" src="<?= base_url('assets2/images/dashboards/shpe-4.png') ?>"
-                    alt="">
+                <img class="shape-3 d-none d-xl-block" src="<?= base_url('assets2/images/dashboards/shpe-3.png') ?>" alt="">
+                <img class="shape-4 d-none d-xl-block" src="<?= base_url('assets2/images/dashboards/shpe-4.png') ?>" alt="">
             </div>
             <div class="container">
                 <div class="tp-testimonial-wrapper">
                     <div class="row">
-                        <div class="col-lg-5 order-2 order-lg-1 wow fadeInLeft" data-wow-duration="1s"
-                            data-wow-delay=".3s">
+                        <div class="col-lg-5 order-2 order-lg-1 wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
                             <div class="tp-testimonial-thumb style_2">
                                 <img src="<?= base_url('assets2/images/landing_page_images/img_7.png') ?>" alt="">
                             </div>
                         </div>
-                        <div class="col-lg-7 order-1 order-lg-2 wow fadeInRight" data-wow-duration="1s"
-                            data-wow-delay=".3s">
+                        <div class="col-lg-7 order-1 order-lg-2 wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
                             <div class="tp-testimonial-content">
                                 <div class="tp-nav-wrap">
                                     <div class="testimonial-navigation-active splide">
@@ -783,20 +741,17 @@
                                             <div class="splide__list">
                                                 <div class="splide__slide">
                                                     <div class="tp-testimonial-user text-center">
-                                                        <img src="<?= base_url('assets2/images/dashboards/project_system.png') ?>"
-                                                            alt="">
+                                                        <img src="<?= base_url('assets2/images/dashboards/project_system.png') ?>" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="splide__slide">
                                                     <div class="tp-testimonial-user text-center">
-                                                        <img src="<?= base_url('assets2/images/dashboards/attendance_system.png') ?>"
-                                                            alt="">
+                                                        <img src="<?= base_url('assets2/images/dashboards/attendance_system.png') ?>" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="splide__slide">
                                                     <div class="tp-testimonial-user text-center">
-                                                        <img src="<?= base_url('assets2/images/dashboards/client_system.png') ?>"
-                                                            alt="">
+                                                        <img src="<?= base_url('assets2/images/dashboards/client_system.png') ?>" alt="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -814,8 +769,7 @@
                                                 </p>
                                                 <span class="text-center">Project Managment System</span>
                                                 <p class="tp-testimonial-designation text-center">
-                                                    <a class="" href="#multiple_dashboards">View <i
-                                                            class="fa-regular fa-arrow-right-long"></i></a>
+                                                    <a class="" href="#multiple_dashboards">View <i class="fa-regular fa-arrow-right-long"></i></a>
                                                 </p>
                                             </div>
                                             <div class="splide__slide">
@@ -826,8 +780,7 @@
                                                 </p>
                                                 <span class="text-center">Attendance Managment System</span>
                                                 <p class="tp-testimonial-designation text-center">
-                                                    <a class="" href="#multiple_dashboards">View <i
-                                                            class="fa-regular fa-arrow-right-long"></i></a>
+                                                    <a class="" href="#multiple_dashboards">View <i class="fa-regular fa-arrow-right-long"></i></a>
                                                 </p>
                                             </div>
                                             <div class="splide__slide">
@@ -838,8 +791,7 @@
                                                 </p>
                                                 <span class="text-center">Client Relationship Managment</span>
                                                 <p class="tp-testimonial-designation text-center">
-                                                    <a class="" href="#multiple_dashboards">View <i
-                                                            class="fa-regular fa-arrow-right-long"></i></a>
+                                                    <a class="" href="#multiple_dashboards">View <i class="fa-regular fa-arrow-right-long"></i></a>
                                                 </p>
                                             </div>
                                         </div>
@@ -867,8 +819,7 @@
                             </span>
                             <h3 class="tp-section__title">Get in Touch</h3>
                         </div>
-                        <div class="tp-contact-from p-relative"
-                            data-background="assets/img/brand/home-2/form-input.png">
+                        <div class="tp-contact-from p-relative" data-background="assets/img/brand/home-2/form-input.png">
                             <div class="tp-brands-from-overlay"></div>
                             <form id="contact-form2" method="POST" action="<?= base_url('front/send-mail') ?>">
                                 <div class="row tp-gx-20">
@@ -890,8 +841,7 @@
                                     <p class="ajax-response"></p>
                                 </div>
                                 <div class="tp-contact-submit text-center mt-20">
-                                    <button class="tp-btn savebtn" type="submit">Send Message <i
-                                            class="fa-regular fa-arrow-right-long"></i></button>
+                                    <button class="tp-btn savebtn" type="submit">Send Message <i class="fa-regular fa-arrow-right-long"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -949,15 +899,13 @@
     <!-- authentication modal starts here  -->
     <!-- authenticationModal -->
 
-    <div class="modal fade" id="authenticationModal" tabindex="-1" aria-labelledby="authenticationModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="authenticationModal" tabindex="-1" aria-labelledby="authenticationModalLabel" aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content ">
                 <div class="row " style="height: 100% !important; ">
                     <div class="col-6" style="padding: 0px;margin: 0px;">
                         <div class="auth-modal-imgae">
-                            <img src="https://images.unsplash.com/photo-1721804980240-4b8adc442fc4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="">
+                            <img src="https://images.unsplash.com/photo-1721804980240-4b8adc442fc4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
                         </div>
                     </div>
                     <div class="col-6" style="overflow: hidden !important;position: relative;left: -13px;">
@@ -977,20 +925,16 @@
                                 <div class="login">
                                     <div class="modal-body-login authentication-modal-single-side-content">
 
-                                        <form id="login" method="POST" action="<?= base_url('auth/login') ?>"
-                                            class="needs-validation" novalidate="">
+                                        <form id="login" method="POST" action="<?= base_url('auth/login') ?>" class="needs-validation" novalidate="">
 
                                             <div class="form-group" style="position: relative;">
-                                                <label
-                                                    for="identity"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
-                                                <input id="identity" type="email" class="form-control" name="identity"
-                                                    tabindex="1" required autofocus>
+                                                <label for="identity"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
+                                                <input id="identity" type="email" class="form-control" name="identity" tabindex="1" required autofocus>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="d-flex justify-content-between">
-                                                    <label for="password"
-                                                        class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
+                                                    <label for="password" class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                                                     <div class="float-right">
                                                         <a href="#" id="modal-forgot-password" class="text-small">
                                                             <?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>
@@ -998,42 +942,34 @@
                                                     </div>
                                                 </div>
                                                 <div class="password-wrapper" style="position: relative;">
-                                                    <input id="password" type="password" class="form-control"
-                                                        name="password" tabindex="2" required>
-                                                    <i class="fa fa-eye password-toggle"
-                                                        style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                                                    <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+                                                    <i class="fa fa-eye password-toggle" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" name="remember" class="custom-control-input"
-                                                        tabindex="3" id="remember-me">
-                                                    <label class="custom-control-label"
-                                                        for="remember-me"><?= $this->lang->line('remember_me') ? $this->lang->line('remember_me') : 'Remember Me' ?></label>
+                                                    <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                                                    <label class="custom-control-label" for="remember-me"><?= $this->lang->line('remember_me') ? $this->lang->line('remember_me') : 'Remember Me' ?></label>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <button type="submit" class="savebtn btn btn-primary btn-lg btn-block"
-                                                    tabindex="4">
+                                                <button type="submit" class="savebtn btn btn-primary btn-lg btn-block" tabindex="4">
                                                     <?= $this->lang->line('login') ? $this->lang->line('login') : 'Login' ?>
                                                 </button>
                                             </div>
 
                                             <?php if ($google_client_id) { ?>
                                                 <div class="form-group row">
-                                                    <div class="g-signin2 col-md-12 d-flex justify-content-center"
-                                                        data-width="300" data-height="43.59" data-onsuccess="onSignIn"
-                                                        data-theme="dark"></div>
+                                                    <div class="g-signin2 col-md-12 d-flex justify-content-center" data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
                                                 </div>
                                             <?php } ?>
 
                                             <?php if (!turn_off_new_user_registration()) { ?>
                                                 <div class="text-muted text-center">
                                                     <?= $this->lang->line('dont_have_an_account') ? $this->lang->line('dont_have_an_account') : "Don't have an account?" ?>
-                                                    <a
-                                                        href="<?= base_url('auth/register'); ?>"><?= $this->lang->line('create_one') ? $this->lang->line('create_one') : 'Create One' ?></a>
+                                                    <a href="<?= base_url('auth/register'); ?>"><?= $this->lang->line('create_one') ? $this->lang->line('create_one') : 'Create One' ?></a>
                                                 </div>
                                             <?php } ?>
 
@@ -1049,78 +985,59 @@
 
                                 <div class="signup">
                                     <div class="modal-body-signup authentication-modal-single-side-content">
-                                        <form id="register" method="POST" action="<?= base_url('auth/create_user') ?>"
-                                            class="needs-validation" novalidate="">
+                                        <form id="register" method="POST" action="<?= base_url('auth/create_user') ?>" class="needs-validation" novalidate="">
                                             <div class="row">
                                                 <div class="form-group col-6">
-                                                    <label
-                                                        for="frist_name"><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?></label>
+                                                    <label for="frist_name"><?= $this->lang->line('first_name') ? $this->lang->line('first_name') : 'First Name' ?></label>
                                                     <input type="hidden" name="groups" value="1">
                                                     <input type="hidden" name="new_register" value="1">
                                                     <input type="hidden" name="employee_id" id="employee_id">
-                                                    <input id="frist_name" type="text" class="form-control"
-                                                        name="first_name" tabindex="1" required autofocus>
+                                                    <input id="frist_name" type="text" class="form-control" name="first_name" tabindex="1" required autofocus>
                                                 </div>
                                                 <div class="form-group col-6">
-                                                    <label
-                                                        for="last_name"><?= $this->lang->line('last_name') ? $this->lang->line('last_name') : 'Last Name' ?></label>
-                                                    <input id="last_name" type="text" class="form-control"
-                                                        name="last_name" tabindex="2" required>
+                                                    <label for="last_name"><?= $this->lang->line('last_name') ? $this->lang->line('last_name') : 'Last Name' ?></label>
+                                                    <input id="last_name" type="text" class="form-control" name="last_name" tabindex="2" required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label
-                                                    for="email"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
-                                                <input id="email" type="email" class="form-control" name="email"
-                                                    tabindex="3" required>
+                                                <label for="email"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
+                                                <input id="email" type="email" class="form-control" name="email" tabindex="3" required>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-6" style="position: relative;">
-                                                    <label for="password"
-                                                        class="d-block"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
-                                                    <input id="password" type="password" class="form-control pwstrength"
-                                                        data-indicator="pwindicator" name="password" tabindex="4"
-                                                        required>
-                                                    <i class="fa fa-eye password-toggle2"
-                                                        style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
+                                                    <label for="password" class="d-block"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
+                                                    <input id="password" type="password" class="form-control pwstrength" data-indicator="pwindicator" name="password" tabindex="4" required>
+                                                    <i class="fa fa-eye password-toggle2" style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
                                                     <div id="pwindicator" class="pwindicator">
                                                         <div class="bar"></div>
                                                         <div class="label"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-6" style="position: relative;">
-                                                    <label for="password2"
-                                                        class="d-block"><?= $this->lang->line('password_confirmation') ? $this->lang->line('password_confirmation') : 'Confirm Password' ?></label>
-                                                    <input id="password2" type="password" class="form-control"
-                                                        name="password_confirm" tabindex="5" required>
-                                                    <i class="fa fa-eye password-toggle"
-                                                        style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
+                                                    <label for="password2" class="d-block"><?= $this->lang->line('password_confirmation') ? $this->lang->line('password_confirmation') : 'Confirm Password' ?></label>
+                                                    <input id="password2" type="password" class="form-control" name="password_confirm" tabindex="5" required>
+                                                    <i class="fa fa-eye password-toggle" style="position: absolute; right: 30px; top: 60%; transform: translateY(-60%); cursor: pointer;"></i>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" name="agree" class="custom-control-input"
-                                                        id="agree_regi" checked>
-                                                    <label class="custom-control-label"
-                                                        for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? htmlspecialchars($this->lang->line('i_agree_to_the_terms_and_conditions')) : 'I agree to the terms and conditions' ?></label>
+                                                    <input type="checkbox" name="agree" class="custom-control-input" id="agree_regi" checked>
+                                                    <label class="custom-control-label" for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? htmlspecialchars($this->lang->line('i_agree_to_the_terms_and_conditions')) : 'I agree to the terms and conditions' ?></label>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <button type="submit" class="savebtn btn btn-primary btn-lg btn-block"
-                                                    tabindex="6">
+                                                <button type="submit" class="savebtn btn btn-primary btn-lg btn-block" tabindex="6">
                                                     <?= $this->lang->line('register') ? $this->lang->line('register') : 'Register' ?>
                                                 </button>
                                             </div>
 
                                             <?php if ($google_client_id) { ?>
                                                 <div class="form-group row">
-                                                    <div class="g-signin2 col-md-12 d-flex justify-content-center"
-                                                        data-width="300" data-height="43.59" data-onsuccess="onSignIn"
-                                                        data-theme="dark"></div>
+                                                    <div class="g-signin2 col-md-12 d-flex justify-content-center" data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
                                                 </div>
                                             <?php } ?>
 
@@ -1132,8 +1049,7 @@
 
                                             <div class="text-muted text-center">
                                                 <?= $this->lang->line('already_have_an_account') ? $this->lang->line('already_have_an_account') : 'Already have an account?' ?>
-                                                <a
-                                                    href="<?= base_url('auth'); ?>"><?= $this->lang->line('login_here') ? $this->lang->line('login_here') : 'Login Here' ?></a>
+                                                <a href="<?= base_url('auth'); ?>"><?= $this->lang->line('login_here') ? $this->lang->line('login_here') : 'Login Here' ?></a>
                                             </div>
 
                                         </form>
@@ -1154,21 +1070,17 @@
 
     <!-- footer area start -->
     <footer id="footerTwo" class="tp-footer-2-area p-relative">
-        <div class="tp-footer-2-wrapper"
-            data-background='<?= base_url("assets2/images/landing_page_images/footer_bg_img.png") ?>'>
+        <div class="tp-footer-2-wrapper" data-background='<?= base_url("assets2/images/landing_page_images/footer_bg_img.png") ?>'>
             <div class="tp-footer-2-overlay"></div>
             <div class="tp-footer-2-shape d-none d-md-block">
                 <div class="shape-1">
-                    <img class="mousemove__image"
-                        src='<?= base_url("assets/front/four/img/footer/home-2/bubble.png") ?>' alt="">
+                    <img class="mousemove__image" src='<?= base_url("assets/front/four/img/footer/home-2/bubble.png") ?>' alt="">
                 </div>
                 <div class="shape-2">
-                    <img class="mousemove__image"
-                        src='<?= base_url("assets/front/four/img/footer/home-2/bubble-2.png") ?>' alt="">
+                    <img class="mousemove__image" src='<?= base_url("assets/front/four/img/footer/home-2/bubble-2.png") ?>' alt="">
                 </div>
                 <div class="shape-4">
-                    <img class="mousemove__image"
-                        src='<?= base_url("assets/front/four/img/footer/home-2/bubble-4.png") ?>' alt="">
+                    <img class="mousemove__image" src='<?= base_url("assets/front/four/img/footer/home-2/bubble-4.png") ?>' alt="">
                 </div>
             </div>
             <div class="tp-footer-inner-content pt-80">
@@ -1179,20 +1091,17 @@
                                 <div class="tp-footer-2-widget mb-30">
                                     <span class="mb-30">Contact Us</span>
                                     <div class="tp-footer-2-widget-contact d-flex align-items-center mb-30">
-                                        <a class="icon" href="tel:051-6102534"><i
-                                                class="flaticon-telephone-call"></i></a>
+                                        <a class="icon" href="tel:051-6102534"><i class="flaticon-telephone-call"></i></a>
                                         <div class="contact-inner">
                                             <p>Phone:</p>
                                             <a href="tel:051-6102534" style="font-size: 18px;">051-6102534</a>
                                         </div>
                                     </div>
                                     <div class="tp-footer-2-widget-contact d-flex align-items-center">
-                                        <a class="icon" href="mailto:ag.rana@airnet-technologies.com"><i
-                                                class="flaticon-mail"></i></a>
+                                        <a class="icon" href="mailto:ag.rana@airnet-technologies.com"><i class="flaticon-mail"></i></a>
                                         <div class="contact-inner">
                                             <p>E-mail:</p>
-                                            <a href="mailto:ag.rana@airnet-technologies.com"
-                                                style="font-size: 18px;">ag.rana@airnet-technologies.com</a>
+                                            <a href="mailto:ag.rana@airnet-technologies.com" style="font-size: 18px;">ag.rana@airnet-technologies.com</a>
                                         </div>
                                     </div>
                                 </div>
@@ -1231,21 +1140,16 @@
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-6 col-lg-4">
                             <div class="tp-footer-2-logo">
-                                <a href="<?= base_url() ?>"><img
-                                        src='<?= base_url('assets/uploads/logos/' . full_logo()) ?>' height="40"
-                                        alt=""></a>
+                                <a href="<?= base_url() ?>"><img src='<?= base_url('assets/uploads/logos/' . full_logo()) ?>' height="40" alt=""></a>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <div class="tp-btn-effect">
                                 <div class="tp-footer-2-social text-md-center d-flex align-items-center">
                                     <span>Follow Us:</span>
-                                    <a href="https://www.facebook.com/MobiPixels" target="_blank"><i
-                                            class="fa-brands fa-facebook-f"></i></a>
-                                    <a href="https://www.linkedin.com/company/mobipixels" target="_blank"><i
-                                            class="fa-brands fa-linkedin"></i></a>
-                                    <a href="https://www.youtube.com/@mobipixels4547" target="_blank"><i
-                                            class="fa-brands fa-youtube"></i></a>
+                                    <a href="https://www.facebook.com/MobiPixels" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                                    <a href="https://www.linkedin.com/company/mobipixels" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                                    <a href="https://www.youtube.com/@mobipixels4547" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -1298,8 +1202,7 @@
             <p><?= $this->lang->line('frontend_cookie_message') ? htmlspecialchars($this->lang->line('frontend_cookie_message')) : 'We use cookies to ensure that we give you the best experience on our website.' ?>
             </p>
             <div class="cookie-bar-action tp-hero-2-btn">
-                <button type="button"
-                    class="tp-btn cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
+                <button type="button" class="tp-btn cookie-bar-btn"><?= $this->lang->line('i_agree') ? $this->lang->line('i_agree') : 'I Agree!' ?></button>
             </div>
         </div>
     </div>

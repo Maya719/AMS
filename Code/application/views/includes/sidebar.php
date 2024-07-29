@@ -69,7 +69,7 @@
             <div class="dropdown-menu dropdown-menu-end">
               <?php if ($this->ion_auth->is_admin()) : ?>
                 <?php $my_plan = get_current_plan(); ?>
-                <a href="<?= base_url('setting/company') ?>" class="dropdown-item ai-icon">
+                <a href="<?= base_url('settings/company') ?>" class="dropdown-item ai-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-danger" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 8.5V8.35417C18 6.50171 16.4983 5 14.6458 5H9.5C7.567 5 6 6.567 6 8.5C6 10.433 7.567 12 9.5 12H14.5C16.433 12 18 13.567 18 15.5C18 17.433 16.433 19 14.5 19H9.42708C7.53436 19 6 17.4656 6 15.5729V15.5M12 3V21" />
                   </svg>
@@ -307,6 +307,10 @@
               <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
                 <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
               <?php } ?>
+              
+              <!-- <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
+                <li><a href="<?= base_url('home/customizer') ?>"><?= $this->lang->line('customizer') ? $this->lang->line('customizer') : 'Customize Dashboard' ?></a></li>
+              <?php } ?> -->
 
               <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
                 <li><a id="GuideStep2" href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>

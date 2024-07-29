@@ -52,11 +52,15 @@
                             <input type="number" class="form-control" name="employee_id" value="<?= htmlspecialchars($profile_user['employee_id']) ?>" id="employee_id_create" readonly>
                           </div>
                           <div class="col-6 mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">First Name</label>
+                            <label for="exampleFormControlInput12" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($profile_user['email']) ?>" id="exampleFormControlInput12" readonly disabled>
+                          </div>
+                          <div class="col-6 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">First Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($profile_user['first_name']) ?>" id="exampleFormControlInput1">
                           </div>
                           <div class="col-6 mb-3">
-                            <label for="exampleFormControlInput2" class="form-label">last Name</label>
+                            <label for="exampleFormControlInput2" class="form-label">last Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($profile_user['last_name']) ?>" id="exampleFormControlInput2">
                           </div>
                           <div class="col-6 mb-3">
@@ -104,7 +108,7 @@
                             <input type="text" class="form-control" value="<?= htmlspecialchars($profile_user['emg_number']) ?>" name="emg_number" id="exampleFormControlInput10">
                           </div>
                           <div class="col-12 mb-3">
-                            <label class="col-form-label"><?= $this->lang->line('user_profile') ? $this->lang->line('user_profile') : 'User Profile' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_empty_for_no_changes') ? $this->lang->line('leave_empty_for_no_changes') : "Leave empty for no changes." ?>"></i></label>
+                            <label class="col-form-label"><?= $this->lang->line('user_profile') ? $this->lang->line('user_profile') : 'Profile Picture' ?> <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="<?= $this->lang->line('leave_empty_for_no_changes') ? $this->lang->line('leave_empty_for_no_changes') : "Leave empty for no changes." ?>"></i></label>
                             <input class="form-control" type="file" name="profile" id="formFile">
                           </div>
                           <div class="col-12 mb-3">
@@ -117,17 +121,21 @@
                         <div class="timeline-badge dark">
                         </div>
                         <div class="title">
-                          <h5 class="text-primary ms-5 mt-2">Account Setting</h5>
+                          <h5 class="text-primary ms-5 mt-2">Change Password</h5>
                         </div>
                         <div class="row ms-5">
                           <div class="col-6 mb-3">
-                            <label for="exampleFormControlInput12" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($profile_user['email']) ?>" id="exampleFormControlInput12" readonly disabled>
+                            <label for="exampleFormControlInput13" class="form-label">Old Password</label>
+                            <input type="password" name="old_password" class="form-control" id="exampleFormControlInput13">
                           </div>
+                        </div>
+                        <div class="row ms-5">
                           <div class="col-6 mb-3">
-                            <label for="exampleFormControlInput13" class="form-label">Password</label>
+                            <label for="exampleFormControlInput13" class="form-label">New Password</label>
                             <input type="password" name="password" class="form-control" id="exampleFormControlInput13">
                           </div>
+                        </div>
+                        <div class="row ms-5">
                           <div class="col-6 mb-3">
                             <label for="exampleFormControlInput14" class="form-label">Confirm Password</label>
                             <input type="password" name="password_confirm" class="form-control" id="exampleFormControlInput14">
@@ -163,37 +171,42 @@
   <?php $this->load->view('includes/scripts'); ?>
   <script>
     $(document).on('click', '.btn-edit-user', function(e) {
+      e.preventDefault();
+
       var form = $('#form-part')[0];
       var formData = new FormData(form);
 
-      // Append additional data if needed
-      formData.append('custom_data', 'value');
-
-      console.log(formData);
-      $('.btn-edit-user').html(`<div class="spinner-border spinner-border-sm" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                          </div> Submit`)
       $.ajax({
         type: 'POST',
-        url: form.action,
+        url: form.getAttribute('action'),
         data: formData,
         processData: false,
         contentType: false,
         dataType: "json",
+        beforeSend: function() {
+          $('.btn-edit-user').prop('disabled', true).html('Submitting...');
+        },
         success: function(result) {
           if (result['error'] == false) {
             location.reload();
-          } else {}
-        }
+          } else {
+            $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+          }
+        },
+        complete: function() {
+          $('.btn-edit-user').prop('disabled', false).html('Submit');
+        },
       });
-
-      e.preventDefault();
     });
 
+
     $('.select2').select2()
-
   </script>
-
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
 </body>
 
 </html>

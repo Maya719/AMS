@@ -1166,18 +1166,26 @@ class Auth extends CI_Controller
 				$this->send_error_message('Old password incorrect.');
 				return false;
 			}
-
 			$profile_pic = $this->handle_file_upload('profile', 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/');
 			$document_paths = $this->handle_multiple_file_upload('files', 'assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/');
 			$this->delete_old_documents();
-
 			$data = $this->prepare_user_data($user, $profile_pic, $document_paths);
 
 			if ($this->update_user($user->id, $data, $currentGroups)) {
+
+				if ($this->input->post('password') && $this->validate_old_password($user->password)) {
+					$this->update_send_password_change_mail($user->id);
+				}
 				$this->update_company_details($user->id);
 				$this->update_user_plan($user->id);
 
-				$this->send_success_message();
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				$this->session->set_flashdata('message_type', 'success');
+
+				// $this->data['data'] = $this->inputs();
+				$this->data['error'] = false;
+				$this->data['message'] = $this->ion_auth->messages();
+				echo json_encode($this->data);
 				return false;
 			} else {
 				$this->send_error_message($this->ion_auth->errors());
@@ -1189,6 +1197,15 @@ class Auth extends CI_Controller
 		return false;
 	}
 
+	private function update_send_password_change_mail($id)
+	{
+		$user = $this->ion_auth->user($id)->row();
+		$template_data = array();
+		$template_data['NAME'] = $user->first_name . ' ' . $user->last_name;
+		$email_template = render_email_template('password_changed', $template_data);
+		send_mail($user->email, $email_template[0]['subject'], $email_template[0]['message']);
+		return true;
+	}
 	private function is_valid_user_id($id)
 	{
 		return !empty($id) && is_numeric($id);
@@ -1326,7 +1343,7 @@ class Auth extends CI_Controller
 		$resigned = $this->input->post('resigned') == 'on';
 		$resign_date = $resigned ? date("Y-m-d", strtotime($this->input->post('resign_date'))) : null;
 
-		return [
+		$data = [
 			'first_name'      => $this->input->post('first_name'),
 			'last_name'       => $this->input->post('last_name'),
 			'company'         => $this->input->post('company'),
@@ -1354,6 +1371,12 @@ class Auth extends CI_Controller
 			'profile'         => $profile_pic,
 			'password'        => $this->input->post('password')
 		];
+		if (!empty($profile_pic)) {
+			$data["profile"] = $profile_pic;
+		}else{
+			$data["profile"] = $this->input->post('old_profile_pic');
+		}
+		return $data;
 	}
 
 	private function update_user($user_id, $data, $currentGroups)
