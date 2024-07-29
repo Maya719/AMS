@@ -161,7 +161,7 @@
 }
 
 #authenticationModal .authentication-modal-single-side-content form#register {
-  height: 500px;
+  height: 520px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

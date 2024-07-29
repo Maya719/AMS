@@ -1,4 +1,21 @@
 $(document).ready(function () {
+
+  $('.password-toggle, .password-toggle2').on('click', function () {
+    var toggleButton = $(this);
+    var passwordInput = $(this).prev('input[type="password"]');
+    if (passwordInput.length === 0) {
+      var passwordInput = $(this).prev('input[type="text"]');
+    }
+
+    if (passwordInput.attr('type') === 'password') {
+      passwordInput.attr('type', 'text');
+      toggleButton.removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+      passwordInput.attr('type', 'password');
+      toggleButton.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
+  });
+
   $('#exampleModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var modal = $(this);
@@ -25,13 +42,14 @@ $(document).ready(function () {
     });
   });
 
-  const loginRadio = $('#authenticationModalLogin');
+  const loginRadio = $('#login');
   const signupRadio = $('#signup');
   const loginContent = $('.modal-body-login');
   const signupContent = $('.modal-body-signup');
   const sliderTab = $('.slider-tab');
 
   function showLogin() {
+    console.log("shoing login");
     loginContent.parent().show();
     loginContent.show();
     signupContent.parent().hide();
