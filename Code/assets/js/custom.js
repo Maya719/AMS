@@ -5896,7 +5896,7 @@ $(document).on('click', '.delete-leaves-type', function (e) {
 				});
 			}
 		});
-});
+}); 
 
 $(document).on('click', '.modal-edit-leaves-type', function (e) {
 	e.preventDefault();

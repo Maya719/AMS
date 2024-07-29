@@ -142,7 +142,7 @@
 
 #authenticationModal .authentication-modal-single-side-content {
   padding: 20px 20px;
-  display: flex;
+  display: flex; 
   max-height: 550px;
   align-items: stretch;
   flex-direction: column;

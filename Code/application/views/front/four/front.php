@@ -1106,7 +1106,7 @@
                                             <p>E-mail:</p>
                                             <a href="mailto:ag.rana@airnet-technologies.com" style="font-size: 18px;">ag.rana@airnet-technologies.com</a>
                                         </div>
-                                    </div>
+                                    </div> 
                                 </div>
                             </div>
                             <div class="col-12 col-md-12 col-lg-8 col-xl-5 order-3 order-lg-2 tp-footer-2-widget-space">
