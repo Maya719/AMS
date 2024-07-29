@@ -906,7 +906,7 @@
                 <div class="row " style="height: 100% !important; ">
                     <div class="col-6 d-none d-md-block" style="padding: 0px; margin: 0px;">
                         <div class="auth-modal-imgae">
-                            <img src="https://images.unsplash.com/photo-1721804980240-4b8adc442fc4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                            <img src="<?=base_url('assets/front/four/img/hero/model.jpg')?>" alt="">
                         </div>
                     </div>
                     <div class="col-sm-12  col-md-6" style="overflow: hidden !important;position: relative;left: -13px;">
