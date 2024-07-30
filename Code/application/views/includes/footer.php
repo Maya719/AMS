@@ -436,6 +436,10 @@
     box-shadow: rgb(0 0 0 / 10%) 0px 1px 6px, rgb(0 0 0 / 20%) 0px 2px 24px;
   }
 
+  .chat-window2 .second-chat p {
+    text-align: left;
+  }
+
   .chat-window2 .hi-there .p2 {
     font-size: 12px;
   }
@@ -478,6 +482,13 @@
 
   .message-box .second-chat {
     display: inline-block;
+    width: 95%;
+    background-color: #ecf1fb;
+    padding: 12px;
+    margin: 14px 0px;
+    border-radius: 10px;
+    color: #000;
+    position: relative;
   }
 
   .message-box .second-chat .circle {
@@ -486,28 +497,13 @@
     width: 30px;
     border-radius: 50%;
     float: left;
-    padding: 10px;
+    padding: 5px 8px 8px 10px;
     margin-top: 10px;
-    margin-right: 5px;
+    margin-right: 20px;
   }
 
   .message-box .second-chat #circle-mar {
     margin-top: 5px;
-  }
-
-  .message-box .second-chat p {
-    font-size: 12px;
-    overflow-wrap: break-word;
-  }
-
-  .message-box .second-chat p {
-    width: 200px;
-    float: left;
-    background-color: #ecf1fb;
-    padding: 12px;
-    margin: 0px 5px;
-    border-radius: 10px;
-    color: #000;
   }
 
   .message-box .second-chat .arrow {
@@ -521,6 +517,13 @@
     margin-left: 40px;
     margin-top: -2%;
     display: inline-block;
+  }
+
+  .message-box img {
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    cursor: pointer;
   }
 
   .chat-window2 .input-box {
@@ -612,26 +615,29 @@
     }
   }
 </style>
-<div id="container-floating">
-  <div class="nd3 nds"><img class="reminder">
-    <a href="javascript:void(0);" id="chat-open-button" onclick="chatOpen()">
-      <p class="letter"><i class="fa-solid fa-info"></i></p>
-    </a>
-  </div>
-  <div class="nd1 nds">
-    <a href="<?= base_url('chat') ?>">
-      <p class="letter"><i class="fa-regular fa-message"></i></p>
-    </a>
-  </div>
+<?php if (!is_saas_admin()) : ?>
+  <div id="container-floating">
+    <div class="nd3 nds"><img class="reminder">
+      <a href="javascript:void(0);" id="chat-open-button" onclick="chatOpen()">
+        <p class="letter"><i class="fa-solid fa-info"></i></p>
+      </a>
+    </div>
+    <div class="nd1 nds">
+      <a href="<?= base_url('chat') ?>">
+        <p class="letter"><i class="fa-regular fa-message"></i></p>
+      </a>
+    </div>
 
-  <div id="floating-button2" style="display: none;" onclick="chatClose()">
-    <p class="plus"><i class="fa-solid fa-xmark"></i></p>
+    <div id="floating-button2" style="display: none;" onclick="chatClose()">
+      <p class="plus"><i style="font-size: 30px;" class="fa-solid fa-xmark"></i></p>
+      <img class="edit" height="35" src="<?= base_url('assets2/icons/material-design-iconic-font/chatbot.png') ?>">
+    </div>
+    <div id="floating-button">
+      <p class="plus"><i style="font-size: 30px;" class="fa-regular fa-comment"></i></p>
+      <img class="edit" height="35" src="<?= base_url('assets2/icons/material-design-iconic-font/help.png') ?>">
+    </div>
   </div>
-  <div id="floating-button">
-    <p class="plus"><i class="fa-regular fa-comment"></i></p>
-    <img class="edit" height="35" src="<?= base_url('assets2/icons/material-design-iconic-font/help.png') ?>">
-  </div>
-</div>
+<?php endif ?>
 <div class="footer">
   <div class="copyright">
     <p><?= htmlspecialchars(footer_text()) ?></p>
@@ -653,14 +659,14 @@
 <div class="chat-window2" id="chat-window2">
   <div class="message-box" id="messageBox">
     <div class="second-chat">
-      <div class="circle"></div>
+      <div class="circle"><strong style="color: #FFF; font-size:16px; display:flex;">P</strong></div>
       <p>Hi! I'm Peri, a ChatBot of this application. How can I help you?</p>
       <div class="arrow"></div>
     </div>
   </div>
   <div class="input-box">
     <div class="surveysparrow">
-      <img src="<?=base_url('assets/uploads/logos/'.favicon())?>"/>
+      <img src="<?= base_url('assets/uploads/logos/' . favicon()) ?>" />
       <p>we run on surveysparrow</p>
     </div>
     <div class="write-reply">
@@ -674,6 +680,63 @@
   </div>
 </div>
 <script>
+  window.onload = function() {
+    fetch(base_url + 'chatbot/get_user_advices')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        // data.forEach(item => {
+        //   question = item.question;
+        //   response_message = item.response_message;
+
+        // });
+        const chatContainer = document.getElementById('messageBox');
+        data.forEach(item => {
+          // Create first-chat element
+          const firstChat = document.createElement('div');
+          firstChat.classList.add('first-chat');
+
+          const firstChatText = document.createElement('p');
+          firstChatText.textContent = item.question;
+
+          const firstChatArrow = document.createElement('div');
+          firstChatArrow.classList.add('arrow');
+
+          firstChat.appendChild(firstChatText);
+          firstChat.appendChild(firstChatArrow);
+
+          // Create second-chat element
+          const secondChat = document.createElement('div');
+          secondChat.classList.add('second-chat');
+
+          const circle = document.createElement('div');
+          circle.classList.add('circle');
+          circle.id = 'circle-mar';
+          circle.innerHTML = '<strong style="color: #FFF; font-size:16px; display:flex;">P</strong>';
+
+          const secondChatText = document.createElement('div');
+          secondChatText.innerHTML = item.response_message; 
+
+          const secondChatArrow = document.createElement('div');
+          secondChatArrow.classList.add('arrow');
+
+          secondChat.appendChild(circle);
+          secondChat.appendChild(secondChatText);
+          secondChat.appendChild(secondChatArrow);
+
+          // Append to chat container
+          chatContainer.appendChild(firstChat);
+          chatContainer.appendChild(secondChat);
+        });
+        console.log('API response data:', data);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
+</script>
+<script>
   function chatOpen() {
     document.getElementById("chat-window1").style.display = "block";
   }
@@ -683,7 +746,7 @@
     document.getElementById("chat-window2").style.display = "none";
     document.getElementById("floating-button2").style.display = "none";
     document.getElementById("floating-button").style.display = "block";
-    
+
   }
 
   function openConversation() {
@@ -695,9 +758,7 @@
 
   //Gets the text from the input box(user)
   function userResponse() {
-    console.log("response");
     let userText = document.getElementById("textInput").value;
-
     if (userText == "") {
       alert("Please type something!");
     } else {
@@ -717,27 +778,59 @@
 
   //admin Respononse to user's message
   function adminResponse(userText) {
-    fetch(base_url + 'chatbot/get_advice/'+userText)
-      .then((response) => {
-        return response.json();
+    let requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: userText,
       })
-      .then((adviceData) => {
+    };
+
+    // Fetch the advice from the server using POST request
+    fetch(base_url + 'chatbot/get_advice', requestOptions)
+      .then(response => response.json())
+      .then(adviceData => {
         console.log(adviceData);
         let Adviceobj = adviceData.slip;
-        document.getElementById(
-          "messageBox"
-        ).innerHTML += `<div class="second-chat">
-          <div class="circle" id="circle-mar"></div>
-          <p>${Adviceobj.advice}</p>
-          <div class="arrow"></div>
-        </div>`;
+        let messageBox = document.getElementById("messageBox");
 
-        var objDiv = document.getElementById("messageBox");
-        objDiv.scrollTop = objDiv.scrollHeight;
+        // Append new advice with potential images
+        messageBox.innerHTML += `
+                <div class="second-chat">
+                    <div class="circle" id="circle-mar"><strong style="color: #FFF; font-size:16px; display:flex;">P</strong></div>
+                    <div>${Adviceobj.advice}</div>
+                    <div class="arrow"></div>
+                </div>`;
+
+        // Handle image click events
+        handleImageClick();
+
+        // Scroll to the bottom of the message box
+        messageBox.scrollTop = messageBox.scrollHeight;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(error => {
+        console.log('Error fetching advice:', error);
       });
+  }
+
+
+  // Handle image click events
+
+  // Handle image click events
+  function handleImageClick() {
+    var modal = document.getElementById("myModal");
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+
+    // Add event listener to all images inside message box
+    document.querySelectorAll("#messageBox img").forEach(img => {
+      img.addEventListener('click', function() {
+        $('#myModal').modal('show');
+        modalImg.src = this.src;
+      });
+    });
   }
 
   //press enter on keyboard and send message
@@ -751,3 +844,15 @@
     }
   });
 </script>
+<div class="modal" tabindex="-1" id="myModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img class="modal-content" id="img01">
+      </div>
+    </div>
+  </div>
+</div>

@@ -357,6 +357,13 @@
           </a>
         </li>
       <?php } ?>
+      <?php if (is_saas_admin()) { ?>
+        <li><a href="<?= base_url('chatbot') ?>" aria-expanded="false">
+        <i class="fa-solid fa-robot"></i>
+            <span class="nav-text">FAQ's</span>
+          </a>
+        </li>
+      <?php } ?>
 
     </ul>
     <div class="copyright">

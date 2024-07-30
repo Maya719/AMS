@@ -33,9 +33,6 @@
     <div class="content-body default-height">
       <div class="container-fluid">
         <div class="row">
-
-
-
           <div class="col-md-12" id="home-card">
             <div class="card card-primary">
               <form action="<?= base_url('front/edit-pages') ?>" method="POST" id="home-form">
