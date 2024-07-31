@@ -972,8 +972,7 @@
                 <div class="row " style="height: 100% !important; ">
                     <div class="col-6 d-none d-md-block" style="padding: 0px; margin: 0px;">
                         <div class="auth-modal-imgae">
-                            <img src="https://images.unsplash.com/photo-1721804980240-4b8adc442fc4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="">
+                            <img src="<?=base_url('assets/front/four/img/hero/model.jpg')?>" alt="">
                         </div>
                     </div>
                     <div class="col-sm-12  col-md-6"
@@ -1039,7 +1038,13 @@
                                                 </button>
                                             </div>
 
-
+                                            <?php if ($google_client_id) { ?>
+                                                <div class="form-group my-2 row d-flex justify-content-center"
+                                                    style="width: 100%;">
+                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
+                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
+                                                </div>
+                                            <?php } ?>
 
                                             <?php if (!turn_off_new_user_registration()) { ?>
                                                 <div class="text-muted text-center ">
@@ -1128,13 +1133,7 @@
                                                 </div>
                                             </div>
 
-                                            <?php if ($google_client_id) { ?>
-                                                <div class="form-group my-2 row d-flex justify-content-center"
-                                                    style="width: 100%;">
-                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
-                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
-                                                </div>
-                                            <?php } ?>
+                                            
 
                                             <div class="text-muted text-center">
                                                 <?= $this->lang->line('already_have_an_account') ? $this->lang->line('already_have_an_account') : 'Already have an account?' ?>
