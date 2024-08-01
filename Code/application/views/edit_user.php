@@ -307,7 +307,7 @@
                                             }
                                             ?> -->
                                             <?php
-                                            if ($this->ion_auth->is_admin() || permissions('user_delete')) { ?>
+                                            if (($this->ion_auth->is_admin() || permissions('user_delete')) && ($role != 1)) { ?>
                                                 <button type="button" id="user_delete_btn" class="btn btn-danger">Delete Account</button>
                                             <?php
                                             }
@@ -322,7 +322,6 @@
                                             <?php
                                             }
                                             ?>
-
                                         </div>
                                     </div>
                                 <?php

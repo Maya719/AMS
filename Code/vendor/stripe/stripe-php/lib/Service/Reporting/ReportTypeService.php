@@ -4,18 +4,21 @@
 
 namespace Stripe\Service\Reporting;
 
+/**
+ * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
+ * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
+ */
 class ReportTypeService extends \Stripe\Service\AbstractService
 {
     /**
-     * Returns a full list of Report Types. (Requires a <a
-     * href="https://stripe.com/docs/keys#test-live-modes">live-mode API key</a>.).
+     * Returns a full list of Report Types.
      *
      * @param null|array $params
-     * @param null|array|\Stripe\Util\RequestOptions $opts
+     * @param null|RequestOptionsArray|\Stripe\Util\RequestOptions $opts
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection
+     * @return \Stripe\Collection<\Stripe\Reporting\ReportType>
      */
     public function all($params = null, $opts = null)
     {
@@ -23,12 +26,12 @@ class ReportTypeService extends \Stripe\Service\AbstractService
     }
 
     /**
-     * Retrieves the details of a Report Type. (Requires a <a
+     * Retrieves the details of a Report Type. (Certain report types require a <a
      * href="https://stripe.com/docs/keys#test-live-modes">live-mode API key</a>.).
      *
      * @param string $id
      * @param null|array $params
-     * @param null|array|\Stripe\Util\RequestOptions $opts
+     * @param null|RequestOptionsArray|\Stripe\Util\RequestOptions $opts
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *

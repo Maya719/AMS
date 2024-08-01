@@ -651,7 +651,7 @@
     <br />
     <p>Hi! I'm Peri, a ChatBot of this application. Ask i will response you!</p>
     <button class="new-conversation" type="button" onclick="openConversation()">
-      <span>New Conversation</span><i class="fa-regular fa-paper-plane"></i>
+      <span>Conversation</span><i class="fa-regular fa-paper-plane"></i>
     </button>
   </div>
 </div>
@@ -686,11 +686,6 @@
         return response.json();
       })
       .then(data => {
-        // data.forEach(item => {
-        //   question = item.question;
-        //   response_message = item.response_message;
-
-        // });
         const chatContainer = document.getElementById('messageBox');
         data.forEach(item => {
           // Create first-chat element
@@ -716,7 +711,7 @@
           circle.innerHTML = '<strong style="color: #FFF; font-size:16px; display:flex;">P</strong>';
 
           const secondChatText = document.createElement('div');
-          secondChatText.innerHTML = item.response_message; 
+          secondChatText.innerHTML = item.response_message;
 
           const secondChatArrow = document.createElement('div');
           secondChatArrow.classList.add('arrow');
@@ -730,6 +725,7 @@
           chatContainer.appendChild(secondChat);
         });
         console.log('API response data:', data);
+        handleImageClick();
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);

@@ -1038,6 +1038,10 @@ class Auth extends CI_Controller
 					$date = date("Y-m-d", strtotime("+15 days", $dt));
 				} elseif ($plan[0]['billing_type'] == "thirty_days_trial_plan") {
 					$date = date("Y-m-d", strtotime("+1 month", $dt));
+				} elseif ($plan[0]['billing_type'] == "three_months_trial_plan") {
+					$date = date("Y-m-d", strtotime("+3 months", $dt));
+				} elseif ($plan[0]['billing_type'] == "six_months_trial_plan") {
+					$date = date("Y-m-d", strtotime("+6 months", $dt));
 				} else {
 					$date = date("Y-m-d", strtotime("-1 day", $dt));
 				}

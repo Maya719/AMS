@@ -175,14 +175,14 @@
                 automatic_uploads: true,
                 file_picker_types: 'image',
                 images_upload_url: base_url + 'chatbot/upload_image',
+                images_upload_base_path: base_url + 'assets/uploads/chatbot/',
                 file_picker_callback: function(cb, value, meta) {
                     var input = document.createElement('input');
                     input.setAttribute('type', 'file');
                     input.setAttribute('accept', 'image/*');
-
                     input.onchange = function() {
                         var file = this.files[0];
-
+                        console.log(file);
                         var reader = new FileReader();
                         reader.onload = function() {
                             var id = 'blobid' + (new Date()).getTime();
@@ -190,7 +190,6 @@
                             var base64 = reader.result.split(',')[1];
                             var blobInfo = blobCache.create(id, file, base64);
                             blobCache.add(blobInfo);
-
                             cb(blobInfo.blobUri(), {
                                 title: file.name
                             });
@@ -260,6 +259,12 @@
                             $("#update_id").val(id);
                             $("#question_edit").val(result.response_messages.question);
                             $('#response_edit').html(result.response_messages.response_message);
+                            var editor = tinymce.get('response_edit');
+                            if (editor) {
+                                editor.setContent(result.response_messages.response_message);
+                            } else {
+                                console.error('TinyMCE editor with ID "response_edit" not found.');
+                            }
                         }
                     },
                     complete: function() {
