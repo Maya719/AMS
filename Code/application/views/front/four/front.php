@@ -33,10 +33,6 @@
             gtag('config', '<?= htmlspecialchars($google_analytics) ?>');
         </script>
     <?php } ?>
-
-
-
-
     <!-- CSS here -->
     <link rel="stylesheet" href='<?= base_url("assets/front/four/css/bootstrap.css") ?>'>
     <link rel="stylesheet" href='<?= base_url("assets/front/four/css/animate.css") ?>'>
@@ -54,7 +50,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/front/comman.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/front/four/css/page_styling.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/front/four/css/authentication_modal.css') ?>">
-    <link href="<?=base_url('assets2/vendor/sweetalert2/sweetalert2.min.css')?>" rel="stylesheet" type="text/css"/>	
+    <link href="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url('assets2/vendor/toastr/css/toastr.min.css') ?>" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet" />
 </head>
 
@@ -939,7 +936,7 @@
                                                 <div class="d-flex justify-content-between">
                                                     <label for="password" class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                                                     <div class="float-right">
-                                                        <a href="#" id="modal-forgot-password" class="text-small">
+                                                        <a href="<?= base_url('auth/redirect-forgot-password') ?>" id="modal-forgot-password" class="text-small">
                                                             <?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>
                                                         </a>
                                                     </div>
@@ -1029,7 +1026,7 @@
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" name="agree" class="custom-control-input" id="agree_regi" checked>
-                                                    <label class="custom-control-label" for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "'>Terms<a/> & <a href='" . base_url('front/terms-and-conditions') . "'>Conditions<a/>" ?></label>
+                                                    <label class="custom-control-label" for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "' style='text-decoration:underline;'>Privacy<a/> , <a href='" . base_url('front/terms-and-conditions') . "' style='text-decoration:underline;'>Terms & Conditions<a/>" ?></label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -1182,6 +1179,7 @@
     <script src='<?= base_url("assets/front/four/js/jquery.appear.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/jquery.knob.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/circularProgressBar.min.js") ?>'></script>
+    <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
     <script src='<?= base_url("assets/front/four/js/purecounter.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/main.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/authentication_modal.js") ?>'></script>
@@ -1346,26 +1344,48 @@
             return false;
         });
     </script>
-     <script>
-    $(document).ready(function() {
-      getEmployeeId();
+    <script>
+        $(document).ready(function() {
+            getEmployeeId();
 
-      function getEmployeeId() {
-        $.ajax({
-          url: '<?= base_url('users/get_employee_id') ?>',
-          method: 'POST',
-          dataType: 'json',
-          success: function(response) {
-            console.log(response);
-            var employee_id = response.max_employee_id;
-            employee_id++;
-            $('#employee_id').val(employee_id);
-          },
+            function getEmployeeId() {
+                $.ajax({
+                    url: '<?= base_url('users/get_employee_id') ?>',
+                    method: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var employee_id = response.max_employee_id;
+                        employee_id++;
+                        $('#employee_id').val(employee_id);
+                    },
+                });
+            }
         });
-      }
-    });
-  </script>
-
+    </script>
+    <?php if ($this->session->flashdata('message') && $this->session->flashdata('message_type') == 'success') { ?>
+        <script>
+            toastr.success("<?= $this->session->flashdata('message'); ?>", "Success", {
+                positionClass: "toast-top-right",
+                timeOut: 5e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "300",
+                hideDuration: "1000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+            <?php $this->session->set_flashdata('message', null); ?>
+        </script>
+    <?php } ?>
 </body>
 
 </html>

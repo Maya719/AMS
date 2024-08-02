@@ -1668,8 +1668,6 @@ class Settings extends CI_Controller
 			$permissions = json_encode($permissions);
 			$users = $this->input->post('users');
 			$users = json_encode($users);
-			$change_permissions_of = $this->input->post('change_permissions_of') ? $this->input->post('change_permissions_of') : 0;
-			$change_permissions_of = json_encode($change_permissions_of);
 
 			if ($this->form_validation->run() == TRUE) {
 				$data = array(
@@ -1679,7 +1677,6 @@ class Settings extends CI_Controller
 					'descriptive_name' => $this->input->post('descriptive_name'),
 					'permissions' => $permissions,
 					'assigned_users' => $users,
-					'change_permissions_of' => $change_permissions_of,
 				);
 
 				$id = $this->settings_model->roles_create($data);

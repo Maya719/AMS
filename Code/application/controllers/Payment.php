@@ -14,6 +14,26 @@ class Payment extends CI_Controller
     }
 
 
+    public function myfatoorah()
+    {
+
+        $invoiceValue       = 50;
+        $displayCurrencyIso = 'KWD';
+        
+        
+        try {
+            $paymentMethods = $this->mf->getVendorGateways($invoiceValue, $displayCurrencyIso);
+            $paymentMethodId = '20';
+            
+
+            echo json_encode($paymentMethods);
+        } catch (Exception $ex) {
+            echo 'Error processing payment: ' . $ex->getMessage();
+        }
+    }
+    public function callbackw()
+    {
+    }
     public function create_payment()
     {
         $this->form_validation->set_rules('paymentMethodId', 'Payment MethodId', 'required');
@@ -67,7 +87,7 @@ class Payment extends CI_Controller
         redirect('payment/paymentStatus?' . http_build_query($response));
     }
 
-    private function SuccessPaymentMail($saas_id,$transaction_id)
+    private function SuccessPaymentMail($saas_id, $transaction_id)
     {
         $saas_admins = $this->ion_auth->users(array(3))->result();
         foreach ($saas_admins as $saas_admin) {
@@ -81,7 +101,7 @@ class Payment extends CI_Controller
             $notification_id = $this->notifications_model->create($data);
         }
         $template_data = array();
-        $template_data['TRANSECTION_ID'] = 'T#'.$transaction_id;
+        $template_data['TRANSECTION_ID'] = 'T#' . $transaction_id;
         $email_template = render_email_template('subscription_completed', $template_data);
         $contation_subject = $email_template[0]['subject'];
         $user = $this->ion_auth->user($saas_id)->row();
@@ -108,7 +128,7 @@ class Payment extends CI_Controller
             ];
             if ($this->plans_model->create_order($order_data)) {
                 $this->setPlanUser($plan, $saas_id);
-                $this->SuccessPaymentMail($saas_id,$transaction_id);
+                $this->SuccessPaymentMail($saas_id, $transaction_id);
                 return true;
             }
         } else {

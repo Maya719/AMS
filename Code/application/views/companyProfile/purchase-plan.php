@@ -49,25 +49,31 @@
                             </select>
 
                             <div id="paymentDiv">
-                                <div class="form-check">
+                                <div class="form-check mb-3">
                                     <input class="form-check-input" type="radio" name="paymentMethod" id="flexRadioDefault1" value="stripe" checked>
                                     <label class="form-check-label" for="flexRadioDefault1">
                                         Stripe
                                     </label>
                                 </div>
-                                <div class="form-check mb-3">
+                                <!-- <div class="form-check mb-3">
                                     <input class="form-check-input" type="radio" name="paymentMethod" id="flexRadioDefault2" value="myFatoorah">
                                     <label class="form-check-label" for="flexRadioDefault2">
                                         myFatoorah
                                     </label>
+                                </div> -->
+                                <div class="stripe-fields">
+                                    <input class="form-control" type="text" name="name" placeholder="Card Holder" autocomplete="off">
+                                    <div id="card-element" class="form-control" style="background-color: #fff;"></div>
                                 </div>
-                                <input class="form-control" type="text" name="name" placeholder="Card Holder" autocomplete="off">
-                                <div id="card-element" class="form-control" style="background-color: #fff;"></div>
+                                <div class="myfatoorah-fields" style="display: none;">
+                                    <input class="form-control" type="text" name="name" placeholder="Name" required>
+                                    <input class="form-control" type="text" name="email" placeholder="Email" required>
+                                </div>
                             </div>
                             <div id="card-errors" role="alert"></div>
                             <div class="form-button">
                                 <button id="submit" type="submit" class="ibtn savebtn">Submit</button>
-                                <a href="<?=base_url('/')?>" class="ibtn savebtn">Use Trail</a>
+                                <a href="<?= base_url('/') ?>" class="ibtn savebtn">Use Trial</a>
                             </div>
                         </form>
                         <div class="result"></div>
@@ -91,7 +97,9 @@
     <?php if (get_stripe_publishable_key()) { ?>
         <script src="https://js.stripe.com/v3/"></script>
     <?php } ?>
+
     <script>
+        var base_url = '<?= base_url() ?>';
         document.addEventListener('DOMContentLoaded', function() {
             var stripe = Stripe(get_stripe_publishable_key);
             var elements = stripe.elements();
@@ -99,24 +107,80 @@
                 hidePostalCode: true
             });
             card.mount('#card-element');
+
             var form = document.getElementById('create-company');
+            var stripeFields = document.querySelector('.stripe-fields');
+            var myFatoorahFields = document.querySelector('.myfatoorah-fields');
+            var paymentMethodRadios = document.querySelectorAll('input[name="paymentMethod"]');
+
+            function updatePaymentMethodFields() {
+                const checkedRadio = document.querySelector('input[name="paymentMethod"]:checked').value;
+                if (checkedRadio === 'myFatoorah') {
+                    myFatoorahFields.style.display = 'block';
+                    stripeFields.style.display = 'none';
+                } else {
+                    myFatoorahFields.style.display = 'none';
+                    stripeFields.style.display = 'block';
+                }
+            }
+
+            paymentMethodRadios.forEach(function(radio) {
+                radio.addEventListener('change', updatePaymentMethodFields);
+            });
+
+            updatePaymentMethodFields();
+
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
-                stripe.createPaymentMethod({
-                    type: 'card',
-                    card: card,
-                    billing_details: {
-                        name: document.querySelector('input[name="name"]').value
-                    }
-                }).then(function(result) {
-                    if (result.error) {
-                        var errorElement = document.getElementById('card-errors');
-                        errorElement.textContent = result.error.message;
-                    } else {
-                        stripePaymentMethodHandler(result.paymentMethod);
-                    }
-                });
+                const checkedRadio = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+                if (checkedRadio === 'myFatoorah') {
+                    console.log('Processing MyFatoorah payment');
+                    myFatoorahPaymentMethodHandler()
+                } else {
+                    stripe.createPaymentMethod({
+                        type: 'card',
+                        card: card,
+                        billing_details: {
+                            name: document.querySelector('input[name="name"]').value
+                        }
+                    }).then(function(result) {
+                        if (result.error) {
+                            var errorElement = document.getElementById('card-errors');
+                            errorElement.textContent = result.error.message;
+                        } else {
+                            stripePaymentMethodHandler(result.paymentMethod);
+                        }
+                    });
+                }
             });
+
+            function myFatoorahPaymentMethodHandler() {
+                var newForm = document.createElement('form');
+                newForm.method = 'POST';
+                newForm.action = base_url+'payment/myfatoorah';
+
+                var hiddenInputs = [{
+                        name: 'name',
+                        value: document.querySelector('input[name="name"]').value
+                    },
+                    {
+                        name: 'email',
+                        value: document.querySelector('input[name="email"]').value
+                    },
+                    {
+                        name: 'saas_id',
+                        value: document.querySelector('input[name="saas_id"]').value
+                    },
+                    {
+                        name: 'plan_id',
+                        value: document.querySelector('select[name="plan_id"]').value
+                    }
+                ];
+                document.body.appendChild(newForm);
+                newForm.submit();
+                document.body.removeChild(newForm);
+            }
 
             function stripePaymentMethodHandler(paymentMethod) {
                 var newForm = document.createElement('form');

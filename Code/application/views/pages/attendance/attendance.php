@@ -94,16 +94,6 @@
                                                 <option value="custom"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Custom' ?></option>
                                             </select>
                                         </div>
-                                        <div id="custom-date-range" style="display: none;">
-                                            <div class="row mt-2">
-                                                <div class="col-lg-3">
-                                                    <input name="datepicker" class="datepicker-default form-control" placeholder="From Date" id="from">
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <input name="datepicker" class="datepicker-default form-control" placeholder="To Date" id="too">
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -128,6 +118,28 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="custom-dates" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <label class="form-label" for="from">From date</label>
+                                <input name="datepicker" class="datepicker-default form-control" placeholder="From Date" id="from">
+                            </div>
+                            <div class="col-lg-12 mt-3">
+                                <label class="form-label" for="from">To date</label>
+                                <input name="datepicker" class="datepicker-default form-control" placeholder="To Date" id="too">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-date-filter">Filter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--**********************************
 	Content body end
 ***********************************-->
@@ -135,20 +147,23 @@
     </div>
     <?php $this->load->view('includes/scripts'); ?>
     <script>
-        // dateFilterSelect.addEventListener('change', function() {
-        //     if (dateFilterSelect.value === 'custom') {
-        //         customDateDiv.style.display = 'block';
-        //     } else {
-        //         customDateDiv.style.display = 'none';
-        //     }
-        // });
-    </script>
-
-    <script>
         $(document).ready(function() {
             setFilter();
             $(document).on('change', '#shift_id, #department_id, #employee_id,#dateFilter, #from,#too', function() {
+                var filterOption = $('#dateFilter').val();
+                if (filterOption != 'custom') {
+                    setFilter();
+                }
+            });
+            $(document).on('click', '.btn-date-filter', function() {
+                $('#custom-dates').modal('hide');
                 setFilter();
+            });
+            $(document).on('change', '#dateFilter', function() {
+                var filterOption = $('#dateFilter').val();
+                if (filterOption == 'custom') {
+                    $('#custom-dates').modal('show');
+                }
             });
         });
 
@@ -566,13 +581,6 @@
             let selectedValue = select.options[select.selectedIndex].value;
             let att_selectId = 'att_' + selectId;
             setCookie(att_selectId, selectedValue, 7);
-            var dateFilterSelect = document.getElementById('dateFilter');
-            var customDateDiv = document.getElementById('custom-date-range');
-            if (dateFilterSelect.value === 'custom') {
-                customDateDiv.style.display = 'block';
-            } else {
-                customDateDiv.style.display = 'none';
-            }
         }
 
         function setSelectFromCookie(selectId) {
@@ -582,11 +590,7 @@
             if (cookieValue) {
                 console.log(cookieValue);
                 if (selectId == 'dateFilter' && cookieValue == 'custom') {
-                    var customDateDiv = document.getElementById('custom-date-range');
-                    customDateDiv.style.display = 'block';
-                }else{
-                    var customDateDiv = document.getElementById('custom-date-range');
-                    customDateDiv.style.display = 'none';
+                    $('#custom-dates').modal('show');
                 }
                 for (let i = 0; i < select.options.length; i++) {
                     if (select.options[i].value === cookieValue) {
