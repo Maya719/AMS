@@ -183,8 +183,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Leave Type</th>
-                                                        <th>Total</th>
-                                                        <th>Consume</th>
+                                                        <th>Total Allowed</th>
+                                                        <!-- <th>Consume</th> -->
                                                         <th>Paid</th>
                                                         <th>Unpaid</th>
                                                     </tr>
@@ -238,7 +238,7 @@
                             html += '<tr>';
                             html += '<td>' + value + '</td>';
                             html += '<td>' + response.total_leaves[index] + '</td>';
-                            html += '<td>' + response.consumed_leaves[index] + '</td>';
+                            // html += '<td>' + response.consumed_leaves[index] + '</td>';
                             html += '<td>' + response.paidArray[index] + '</td>';
                             html += '<td>' + response.unpaidArray[index] + '</td>';
                             html += '</tr>';
@@ -248,7 +248,6 @@
                         html += '<td colspan="5" class="text-center">No Leave Type</td>';
                         html += '</tr>';
                     }
-
                     // console.log(html);
                     $("#table_body").html(html);
 
@@ -275,7 +274,7 @@
                 var unpaidDays = parseInt($('#unpaid_days').val()) || 0;
                 var totalDays = paidDays + unpaidDays;
                 if (totalDays !== diffDays) {
-                    $('#alart').html('<p class="text-danger">Sum of Paid and Unpaid days must be equal to the duration of the leave. Total Duration is '+diffDays+'</p>');
+                    $('#alart').html('<p class="text-danger">Sum of Paid and Unpaid days must be equal to the duration of the leave. Total Duration is ' + diffDays + '</p>');
                     $(".btn-create-leave").prop("disabled", true).html('Error');
                     return false;
                 } else {
@@ -296,7 +295,7 @@
                     if (diffDays > 1) {
                         $('#paid_unpaid_div').hide();
                         $('#paid_unpaid_inputs').show();
-                        
+
                         $('#paid_days, #unpaid_days').on('input', function() {
                             validatePaidUnpaidDays(diffDays);
                         });
@@ -367,7 +366,7 @@
                 },
                 success: function(result) {
                     console.log(result);
-                  if (result['error'] == false) {
+                    if (result['error'] == false) {
                         // console.log(result);
                         window.location.href = base_url + 'leaves';
                     } else {
@@ -390,7 +389,7 @@
                             tapToDismiss: !1
                         });
                     }
-                    
+
                 },
                 complete: function() {
                     $(".btn-create-leave").prop("disabled", false).html('Create');

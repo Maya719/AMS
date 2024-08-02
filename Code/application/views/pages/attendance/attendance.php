@@ -149,7 +149,7 @@
     <script>
         $(document).ready(function() {
             setFilter();
-            $(document).on('change', '#shift_id, #department_id, #employee_id,#dateFilter, #from,#too', function() {
+            $(document).on('change', '#shift_id, #department_id, #employee_id,#dateFilter', function() {
                 var filterOption = $('#dateFilter').val();
                 if (filterOption != 'custom') {
                     setFilter();
@@ -476,6 +476,8 @@
         }
         $(document).on('change', '#employee_id', function() {
             var employee_id = $('#employee_id').val();
+            $('#dateFilter').val('tmonth').trigger('change');
+
             $.ajax({
                 url: '<?= base_url('attendance/get_filters_for_user') ?>',
                 type: 'GET',
@@ -486,11 +488,11 @@
                     var tableData = JSON.parse(response);
                     $('#shift_id').empty();
                     $('#department_id').empty();
-                    $('#shift_id').append('<option value="">Shift</option>');
+                    $('#shift_id').append('<option value="" selected>Shift</option>');
                     tableData.shift.forEach(function(shift) {
                         $('#shift_id').append('<option value="' + shift.id + '">' + shift.name + '</option>');
                     });
-                    $('#department_id').append('<option value="">Department</option>');
+                    $('#department_id').append('<option value="" selected>Department</option>');
                     tableData.department.forEach(function(department) {
                         $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
                     });
