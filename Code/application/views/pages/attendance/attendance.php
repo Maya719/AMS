@@ -123,6 +123,8 @@
     <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
     <script>
         $(document).ready(function() {
+            $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
+            $('#endDate').val(moment().format('YYYY-MM-DD'));
             setFilter();
             $(document).on('change', '#shift_id, #department_id, #employee_id,#config-demo, #status', function() {
                 console.log('call filters');
@@ -141,10 +143,10 @@
             console.log(startDate);
             console.log(endDate);
 
-            ajaxCall(employee_id, shift_id, department_id,status, startDate, endDate);
+            ajaxCall(employee_id, shift_id, department_id, status, startDate, endDate);
         }
 
-        function ajaxCall(employee_id, shift_id, department_id,status, from, too) {
+        function ajaxCall(employee_id, shift_id, department_id, status, from, too) {
             $.ajax({
                 url: '<?= base_url('attendance/get_attendance') ?>',
                 type: 'GET',
@@ -323,8 +325,6 @@
         }
         $(document).on('change', '#employee_id', function() {
             var employee_id = $('#employee_id').val();
-            $('#dateFilter').val('tmonth').trigger('change');
-
             $.ajax({
                 url: '<?= base_url('attendance/get_filters_for_user') ?>',
                 type: 'GET',
@@ -351,7 +351,7 @@
 
             });
         });
-        
+
         $(document).on('change', '#status', function() {
             var status = $('#status').val();
             $.ajax({
@@ -465,9 +465,7 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            // Set the default values for the input fields
-            $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
-            $('#endDate').val(moment().format('YYYY-MM-DD'));
+            
 
             $('#config-text').keyup(function() {
                 eval($(this).val());
