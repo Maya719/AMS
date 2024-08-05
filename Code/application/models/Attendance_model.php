@@ -599,7 +599,11 @@ class Attendance_model extends CI_Model
                                 $totalLateMinutes += $min["lateMinutes"];
                                 $userData["status"][] = '' . $min["lateMinutes"] . '';
                             } else {
-                                $userData["status"][] = 'P';
+                                if ($min["checkoffclock"]) {
+                                    $userData["status"][] = 'OC';
+                                }else {
+                                    $userData["status"][] = 'P';
+                                }
                             }
                         }
                         $userData["checkin"][] = $min;
@@ -656,6 +660,7 @@ class Attendance_model extends CI_Model
         $halfDay = false;
         $shortLeave = false;
         $halfDayLeave = false;
+        $checkoffclock = false;
         $checkInDateTime = new DateTime($date . ' ' . $checkInTime);
         if ($checkInDateTime != $checkOutDateTime) {
             if ($this->checkHalfDayLeave($date, $employee_id, $date,)) {
@@ -671,6 +676,7 @@ class Attendance_model extends CI_Model
                             $lateMinutes = 0;
                         } else {
                             if ($this->checkoffclock($employee_id, $date)) {
+                                $checkoffclock = true;
                                 $lateMinutes = 0;
                             } else {
                                 $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
@@ -703,6 +709,7 @@ class Attendance_model extends CI_Model
             'shortLeave' => $shortLeave,
             'halfDayLeave' => $halfDayLeave,
             'lateMinutes' => $lateMinutes,
+            'checkoffclock' => $checkoffclock,
             'shift_id' => $shift_id,
             'shift' => $shift,
         ];

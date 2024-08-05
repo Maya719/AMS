@@ -127,7 +127,6 @@
             $('#endDate').val(moment().format('YYYY-MM-DD'));
             setFilter();
             $(document).on('change', '#shift_id, #department_id, #employee_id,#config-demo, #status', function() {
-                console.log('call filters');
                 setFilter();
             });
         });
@@ -140,8 +139,7 @@
             var department_id = $('#department_id').val();
             var startDate = $("#startDate").val();
             var endDate = $("#endDate").val();
-            console.log(startDate);
-            console.log(endDate);
+            
 
             ajaxCall(employee_id, shift_id, department_id, status, startDate, endDate);
         }
@@ -163,7 +161,6 @@
                 },
                 success: function(response) {
                     var tableData = JSON.parse(response);
-                    console.log(tableData);
                     if (tableData.data.length > 0) {
                         showTable(tableData);
                     } else {
@@ -362,7 +359,6 @@
                 },
                 success: function(response) {
                     var tableData = JSON.parse(response);
-                    console.log(tableData);
                     $('#employee_id').empty();
                     $('#employee_id').append('<option value="">Employee</option>');
                     tableData.forEach(function(department) {
@@ -386,7 +382,6 @@
                 },
                 success: function(response) {
                     var tableData = JSON.parse(response);
-                    console.log(tableData);
                     $('#employee_id').empty();
                     $('#employee_id').append('<option value="">Employee</option>');
                     tableData.forEach(function(department) {
@@ -410,7 +405,6 @@
                 },
                 success: function(response) {
                     var tableData = JSON.parse(response);
-                    console.log(tableData);
                     $('#employee_id').empty();
                     $('#employee_id').append('<option value="">Employee</option>');
                     tableData.forEach(function(department) {
@@ -504,7 +498,6 @@
                     $('#startDate').val(start.format('YYYY-MM-DD'));
                     $('#endDate').val(end.format('YYYY-MM-DD'));
                     setFilter();
-                    console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
                 }).click();
 
 

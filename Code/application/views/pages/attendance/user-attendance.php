@@ -221,8 +221,6 @@
           }); // Use 'short' to get abbreviated day names
           userRow += '<th style="font-size:10px;">' + formattedDateString + '</th>';
         });
-
-
         userRow += '</tr>';
         userRow += '<tr>';
         userRow += '<th class="static-column-left" style="background: #FAFAFA; width: 2rem;">Status</th>';
@@ -230,7 +228,7 @@
         uniqueDates.forEach(date => {
           var statusIndex = uniqueDates.indexOf(date);
           var status = user.status ? user.status[statusIndex] : '';
-          if (status == 'P') {
+          if (status == 'P' || status == 'OC') {
             userRow += '<td class="text-success">' + status + '</td>';
           } else if (status == 'A') {
             userRow += '<td class="text-danger">' + status + '</td>';

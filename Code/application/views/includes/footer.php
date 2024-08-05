@@ -724,7 +724,6 @@
           chatContainer.appendChild(firstChat);
           chatContainer.appendChild(secondChat);
         });
-        console.log('API response data:', data);
         handleImageClick();
       })
       .catch(error => {
