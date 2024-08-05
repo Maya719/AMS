@@ -95,7 +95,7 @@ class Attendance_model extends CI_Model
             $system_users = [$this->ion_auth->user($get['user_id'])->row()];
         } else {
             if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
-                $system_users2 = $this->ion_auth->members()->result();
+                $system_users2 = $this->ion_auth->members_all()->result();
             } else {
                 $selected = selected_users();
                 foreach ($selected as $user_id) {
@@ -136,10 +136,18 @@ class Attendance_model extends CI_Model
 
         $formattedData = [];
 
+        if ($get["status"] == '1') {
+            $active = 1;
+        } else {
+            $active = 0;
+        }
+
         foreach ($system_users as $user) {
-            if ($user->active == 1 && $user->finger_config == 1) {
+            if ($user->active == $active && $user->finger_config == 1) {
                 $userjoin = new DateTime($user->join_date);
-                if ($userjoin < $toDate || $userjoin < $fromDate) {
+                $userresign = new DateTime($user->resign_date);
+
+                if (($userjoin < $toDate || $userjoin < $fromDate) && ($userresign < $toDate || $userresign < $fromDate)) {
                     $userId = $user->employee_id;
                     $userLink = '<a href="#" onclick="openChildWindow(' . $userId . ')">' . $userId . '</a>';
                     $userName = '<a href="#" onclick="openChildWindow(' . $userId . ')">' . $user->first_name . ' ' . $user->last_name . '</a>';
@@ -228,9 +236,10 @@ class Attendance_model extends CI_Model
         $query = $this->db->get();
         $user = $query->row();
         $userJoinDate = strtotime($user->join_date);
+        $userResignDate = strtotime($user->resign_date);
         $providedDate = strtotime($date);
 
-        if ($userJoinDate === false || $providedDate === false) {
+        if ($userJoinDate === false || $providedDate === false || $userResignDate) {
             return false;
         }
 
@@ -321,13 +330,20 @@ class Attendance_model extends CI_Model
             $shifts = $get['shifts'];
             $where .= " AND users.shift_id = '$shifts'";
         }
+        if ($get['status'] == '1') {
+            $where .= " AND users.active = '1'";
+        } else {
+            $where .= " AND users.active = '0'";
+        }
+
         if (isset($get['from']) && !empty($get['from']) && isset($get['too']) && !empty($get['too'])) {
             $where .= " AND DATE(attendance.finger) BETWEEN '" . format_date($get['from'], "Y-m-d") . "' AND '" . format_date($get['too'], "Y-m-d") . "' ";
         }
+
         $leftjoin = "LEFT JOIN users ON attendance.user_id = users.employee_id";
         $where .= " AND users.saas_id=" . $this->session->userdata('saas_id') . " ";
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user
-        FROM attendance " . $leftjoin . $where . " AND users.active=1 AND users.finger_config=1");
+        FROM attendance " . $leftjoin . $where . " AND users.finger_config=1");
         $results = $query->result_array();
         return $results;
     }
@@ -442,6 +458,17 @@ class Attendance_model extends CI_Model
         ];
     }
 
+    public function get_users_by_status($status)
+    {
+        if ($status == '1') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1' AND saas_id = " . $this->session->userdata('saas_id'));
+        }
+        if ($status == '2') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '0' AND finger_config = '1' AND saas_id = " . $this->session->userdata('saas_id'));
+        }
+        $results = $query->result_array();
+        return $results;
+    }
     public function get_users_by_department($department)
     {
         if ($department == '') {
@@ -492,7 +519,7 @@ class Attendance_model extends CI_Model
         $leftjoin = "LEFT JOIN users ON attendance.user_id = users.employee_id";
         $where .= " AND users.saas_id=" . $this->session->userdata('saas_id') . " ";
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user
-        FROM attendance " . $leftjoin . $where . " AND users.active=1 AND users.finger_config=1");
+        FROM attendance " . $leftjoin . $where . " AND users.finger_config=1");
         $results = $query->result_array();
         return $results;
     }

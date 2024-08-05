@@ -2700,7 +2700,6 @@ class Ion_auth_model extends CI_Model
 		$this->db->where('groups.name !=', 'client');
 		// $this->db->where('groups.name', 'members');
 		$this->db->where('groups.saas_id', $saas_id);
-		$this->db->where('users.active', 1);
 
 		$this->trigger_events('extra_where');
 

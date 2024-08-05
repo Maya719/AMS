@@ -169,6 +169,16 @@ class Attendance extends CI_Controller
 			return '';
 		}
 	}
+	public function get_users_by_status()
+	{
+		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
+			$activeInactive = $this->input->post('status');
+			$users = $this->attendance_model->get_users_by_status($activeInactive);
+			echo json_encode($users);
+		} else {
+			return '';
+		}
+	}
 	public function get_users_by_department()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {

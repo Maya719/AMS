@@ -1,4 +1,5 @@
 <?php $this->load->view('includes/header'); ?>
+<link rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
 <style>
     #attendance_list tbody td a {
         font-weight: bold;
@@ -19,7 +20,6 @@
 </head>
 
 <body>
-
     <!--*******************
         Preloader start
     ********************-->
@@ -38,13 +38,10 @@
     <!--*******************
         Preloader end
     ********************-->
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
     <div id="main-wrapper">
+
         <?php $this->load->view('includes/sidebar'); ?>
         <div class="content-body default-height">
-            <!-- row -->
             <div class="container-fluid">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -58,7 +55,15 @@
                             <div class="card-body">
                                 <div class="basic-form">
                                     <div class="row">
-                                        <div class="col-lg-3">
+                                        <input type="hidden" id="startDate">
+                                        <input type="hidden" id="endDate">
+                                        <div class="col-lg-2">
+                                            <select class="form-select select2" id="status" onchange="setCookieFromSelect('status')">
+                                                <option value="1"><?= $this->lang->line('active') ? $this->lang->line('active') : 'Active' ?></option>
+                                                <option value="2"><?= $this->lang->line('inactive') ? $this->lang->line('inactive') : 'Inactive' ?></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-2">
                                             <select class="form-select select2" id="employee_id" onchange="setCookieFromSelect('employee_id')">
                                                 <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                                                 <?php foreach ($system_users as $system_user) {
@@ -68,7 +73,7 @@
                                                 } ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-2">
                                             <select class="form-select select2" id="shift_id" onchange="setCookieFromSelect('shift_id')">
                                                 <option value=""><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></option>
                                                 <?php foreach ($shifts as $shift) : ?>
@@ -76,7 +81,7 @@
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-2">
                                             <select class="form-select select2" id="department_id" onchange="setCookieFromSelect('department_id')">
                                                 <option value=""><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></option>
                                                 <?php foreach ($departments as $department) : ?>
@@ -85,14 +90,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3">
-                                            <select class="form-select select2" id="dateFilter" onchange="setCookieFromSelect('dateFilter')">
-                                                <option value="today"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today' ?></option>
-                                                <option value="ystdy"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday' ?></option>
-                                                <option value="tweek"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Week' ?></option>
-                                                <option value="tmonth" selected><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Month' ?></option>
-                                                <option value="lmonth"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Last Month' ?></option>
-                                                <option value="custom"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Custom' ?></option>
-                                            </select>
+                                            <input type="text" id="config-demo" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -118,56 +116,35 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="custom-dates" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="row mt-2">
-                            <div class="col-lg-12">
-                                <label class="form-label" for="from">From date</label>
-                                <input name="datepicker" class="datepicker-default form-control" placeholder="From Date" id="from">
-                            </div>
-                            <div class="col-lg-12 mt-3">
-                                <label class="form-label" for="from">To date</label>
-                                <input name="datepicker" class="datepicker-default form-control" placeholder="To Date" id="too">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-date-filter">Filter</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--**********************************
-	Content body end
-***********************************-->
         <?php $this->load->view('includes/footer'); ?>
     </div>
     <?php $this->load->view('includes/scripts'); ?>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+    <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
     <script>
         $(document).ready(function() {
             setFilter();
-            $(document).on('change', '#shift_id, #department_id, #employee_id,#dateFilter', function() {
-                var filterOption = $('#dateFilter').val();
-                if (filterOption != 'custom') {
-                    setFilter();
-                }
-            });
-            $(document).on('click', '.btn-date-filter', function() {
-                $('#custom-dates').modal('hide');
+            $(document).on('change', '#shift_id, #department_id, #employee_id,#config-demo, #status', function() {
+                console.log('call filters');
                 setFilter();
-            });
-            $(document).on('change', '#dateFilter', function() {
-                var filterOption = $('#dateFilter').val();
-                if (filterOption == 'custom') {
-                    $('#custom-dates').modal('show');
-                }
             });
         });
 
-        function ajaxCall(employee_id, shift_id, department_id, from, too) {
+        function setFilter() {
+            var employee_id = $('#employee_id').val();
+            var shift_id = $('#shift_id').val();
+            var filterOption = $('#dateFilter').val();
+            var status = $('#status').val();
+            var department_id = $('#department_id').val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            console.log(startDate);
+            console.log(endDate);
+
+            ajaxCall(employee_id, shift_id, department_id,status, startDate, endDate);
+        }
+
+        function ajaxCall(employee_id, shift_id, department_id,status, from, too) {
             $.ajax({
                 url: '<?= base_url('attendance/get_attendance') ?>',
                 type: 'GET',
@@ -175,6 +152,7 @@
                     user_id: employee_id,
                     department: department_id,
                     shifts: shift_id,
+                    status: status,
                     from: from,
                     too: too
                 },
@@ -183,6 +161,7 @@
                 },
                 success: function(response) {
                     var tableData = JSON.parse(response);
+                    console.log(tableData);
                     if (tableData.data.length > 0) {
                         showTable(tableData);
                     } else {
@@ -198,49 +177,7 @@
             });
         }
 
-        function emptyTable() {
-            var table = $('#attendance_list');
-
-            if ($.fn.DataTable.isDataTable(table)) {
-                table.DataTable().destroy();
-            }
-            emptyDataTable(table);
-
-            var thead = table.find('thead');
-            var theadRow = '<tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px; width:20px;">Employee</th></tr>';
-            thead.html(theadRow);
-            let cookieValue = getCookie('attendance_list_length');
-
-            table.DataTable({
-                "language": {
-                    "paginate": {
-                        "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-                        "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
-                    }
-                },
-                "info": false,
-                "dom": '<"top"i>rt<"bottom"lp><"clear">',
-                "lengthMenu": [5, 10, 20],
-                "pageLength": cookieValue
-            });
-        }
-
-        // Call this function when you want to add an empty row to the table
-        function addEmptyRowToTable() {
-            var table = $('#attendance_list').DataTable();
-            table.row.add(['', '', '']).draw(); // Add an empty row with three empty cells
-        }
-
-        // Call this function when you want to remove all rows from the table
-        function removeAllRowsFromTable() {
-            var table = $('#attendance_list').DataTable();
-            table.clear().draw(); // Clear all rows from the table
-        }
-
-
-
         function showTable(data) {
-            console.log(data);
             var table = $('#attendance_list');
             if ($.fn.DataTable.isDataTable(table)) {
                 table.DataTable().destroy();
@@ -346,7 +283,6 @@
                 }
                 var table = $('#attendance_list').DataTable();
                 table.page(cookieValue - 1).draw(false);
-                console.log("Set current page number to:", cookieValue);
             } else {
                 console.error("DataTable initialization failed or table not found.");
             }
@@ -385,95 +321,6 @@
 
             return uniqueDates;
         }
-
-        function setFilter() {
-            var employee_id = $('#employee_id').val();
-            var shift_id = $('#shift_id').val();
-            var filterOption = $('#dateFilter').val();
-            var department_id = $('#department_id').val();
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth();
-            const day = today.getDate();
-
-            let fromDate, toDate;
-
-            switch (filterOption) {
-                case "today":
-                    fromDate = new Date(year, month, day);
-                    toDate = new Date(year, month, day);
-                    break;
-                case "ystdy":
-                    fromDate = new Date(year, month, day - 1);
-                    toDate = new Date(year, month, day - 1);
-                    break;
-                case "tweek":
-                    fromDate = new Date(year, month, day - today.getDay());
-                    toDate = new Date(year, month, day);
-                    break;
-                case "lweek":
-                    fromDate = new Date(year, month, day - today.getDay() - 7);
-                    toDate = new Date(year, month, day - today.getDay() - 1);
-                    break;
-                case "tmonth":
-                    fromDate = new Date(year, month, 1);
-                    toDate = today; // Set toDate as today
-                    break;
-                case "lmonth":
-                    fromDate = new Date(year, month - 1, 1);
-                    toDate = new Date(year, month, 0);
-                    break;
-                case "custom":
-                    var fromInput = $('#from').val();
-                    var toInput = $('#too').val();
-                    console.log(from);
-                    fromDate = new Date(convertDateFormat(fromInput));
-                    toDate = new Date(convertDateFormat(toInput));
-                    break;
-                default:
-                    console.error("Invalid filter option:", filterOption);
-                    return null;
-            }
-
-            // Format dates as strings
-            var formattedFromDate = formatDate(fromDate, "Y-m-d");
-            var formattedToDate = formatDate(toDate, "Y-m-d");
-            ajaxCall(employee_id, shift_id, department_id, formattedFromDate, formattedToDate);
-        }
-
-        function convertDateFormat(inputDate) {
-            const months = {
-                Jan: '01',
-                Feb: '02',
-                Mar: '03',
-                Apr: '04',
-                May: '05',
-                Jun: '06',
-                Jul: '07',
-                Aug: '08',
-                Sep: '09',
-                Oct: '10',
-                Nov: '11',
-                Dec: '12'
-            };
-
-            const [day, month, year] = inputDate.split(' ');
-
-            return `${year}-${months[month]}-${day}`;
-        }
-
-        function formatDate(date, format) {
-            const options = {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            };
-            const formattedDate = date.toLocaleDateString('en-US', options);
-            return format
-                .replace("Y", date.getFullYear())
-                .replace("m", formattedDate.slice(0, 2))
-                .replace("d", formattedDate.slice(3, 5));
-        }
         $(document).on('change', '#employee_id', function() {
             var employee_id = $('#employee_id').val();
             $('#dateFilter').val('tmonth').trigger('change');
@@ -495,6 +342,31 @@
                     $('#department_id').append('<option value="" selected>Department</option>');
                     tableData.department.forEach(function(department) {
                         $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
+                    });
+                },
+                complete: function() {},
+                error: function(error) {
+                    console.error(error);
+                }
+
+            });
+        });
+        
+        $(document).on('change', '#status', function() {
+            var status = $('#status').val();
+            $.ajax({
+                url: '<?= base_url('attendance/get_users_by_status') ?>',
+                type: 'POST',
+                data: {
+                    status: status,
+                },
+                success: function(response) {
+                    var tableData = JSON.parse(response);
+                    console.log(tableData);
+                    $('#employee_id').empty();
+                    $('#employee_id').append('<option value="">Employee</option>');
+                    tableData.forEach(function(department) {
+                        $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
                 complete: function() {},
@@ -552,15 +424,109 @@
 
             });
         });
-        $('.select2').select2();
+
+        function emptyTable() {
+            var table = $('#attendance_list');
+
+            if ($.fn.DataTable.isDataTable(table)) {
+                table.DataTable().destroy();
+            }
+            emptyDataTable(table);
+
+            var thead = table.find('thead');
+            var theadRow = '<tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px; width:20px;">Employee</th></tr>';
+            thead.html(theadRow);
+            let cookieValue = getCookie('attendance_list_length');
+
+            table.DataTable({
+                "language": {
+                    "paginate": {
+                        "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                        "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                    }
+                },
+                "info": false,
+                "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                "lengthMenu": [5, 10, 20],
+                "pageLength": cookieValue
+            });
+        }
+
+        function addEmptyRowToTable() {
+            var table = $('#attendance_list').DataTable();
+            table.row.add(['', '', '']).draw(); // Add an empty row with three empty cells
+        }
+
+        // Call this function when you want to remove all rows from the table
+        function removeAllRowsFromTable() {
+            var table = $('#attendance_list').DataTable();
+            table.clear().draw(); // Clear all rows from the table
+        }
     </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Set the default values for the input fields
+            $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
+            $('#endDate').val(moment().format('YYYY-MM-DD'));
+
+            $('#config-text').keyup(function() {
+                eval($(this).val());
+            });
+
+            $('.configurator input').change(function() {
+                updateConfig();
+            });
+
+            $('.demo i').click(function() {
+                $(this).parent().find('input').click();
+            });
+
+            updateConfig();
+
+            $('#config-demo').click(function() {
+                $(this).data('daterangepicker').show();
+            });
+
+            function updateConfig() {
+                var options = {
+                    startDate: moment().startOf('month'),
+                    endDate: moment(),
+                    maxDate: moment(),
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment()],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                };
+
+                $('#config-demo').daterangepicker(options, function(start, end, label) {
+                    $('#startDate').val(start.format('YYYY-MM-DD'));
+                    $('#endDate').val(end.format('YYYY-MM-DD'));
+                    setFilter();
+                    console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+                }).click();
+
+
+
+                $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+
+            }
+
+
+        });
+    </script>
+
     <!-- Set Filter Cookies -->
     <script>
-        function setCookie(name, value, days) {
+        function setCookie(name, value, minutes) {
             let expires = "";
-            if (days) {
+            if (minutes) {
                 let date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                date.setTime(date.getTime() + (minutes * 60 * 1000));
+                // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                 expires = "; expires=" + date.toUTCString();
             }
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
@@ -577,7 +543,6 @@
             return null;
         }
 
-        // Function to set cookie from select field
         function setCookieFromSelect(selectId) {
             let select = document.getElementById(selectId);
             let selectedValue = select.options[select.selectedIndex].value;
@@ -587,10 +552,8 @@
 
         function setSelectFromCookie(selectId) {
             let select = document.getElementById(selectId);
-            console.log(selectId);
             let cookieValue = getCookie(selectId);
             if (cookieValue) {
-                console.log(cookieValue);
                 if (selectId == 'dateFilter' && cookieValue == 'custom') {
                     $('#custom-dates').modal('show');
                 }
@@ -607,14 +570,13 @@
             setCookie('att_attendance_list_length', currentPageLength, 7);
         }
         document.addEventListener('DOMContentLoaded', (event) => {
-            const selectIds = ['employee_id', 'department_id', 'shift_id', 'dateFilter'];
+            const selectIds = ['employee_id', 'department_id', 'shift_id'];
             selectIds.forEach(setSelectFromCookie);
             $('.select2').select2();
             let cookieValue = getCookie('attendance_list_length');
         });
         $('#attendance_list').on('length.dt', function(e, settings, len) {
             var currentPageLength = len;
-            console.log(currentPageLength);
             setCookieFromSelectForDataTable(currentPageLength)
         });
         // Event listener for page change
@@ -625,7 +587,6 @@
         });
 
         function setCookieFromPageForDataTable(pageNumber) {
-            console.log(pageNumber);
             setCookie('att_page_no', pageNumber, 7);
         }
     </script>
