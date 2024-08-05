@@ -145,9 +145,7 @@ class Attendance_model extends CI_Model
         foreach ($system_users as $user) {
             if ($user->active == $active && $user->finger_config == 1) {
                 $userjoin = new DateTime($user->join_date);
-                $userresign = new DateTime($user->resign_date);
-
-                if (($userjoin < $toDate || $userjoin < $fromDate) && ($userresign < $toDate || $userresign < $fromDate)) {
+                if ($userjoin < $toDate || $userjoin < $fromDate) {
                     $userId = $user->employee_id;
                     $userLink = '<a href="#" onclick="openChildWindow(' . $userId . ')">' . $userId . '</a>';
                     $userName = '<a href="#" onclick="openChildWindow(' . $userId . ')">' . $user->first_name . ' ' . $user->last_name . '</a>';
