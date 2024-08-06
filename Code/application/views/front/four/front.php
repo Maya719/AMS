@@ -985,6 +985,9 @@
                                 </div>
                                 <div class="login login-form">
                                     <div class="modal-body-login authentication-modal-single-side-content">
+                                        <form id="authenticationModalLogin" method="POST"
+                                            action="<?= base_url('auth/login') ?>" class="needs-validation"
+                                            novalidate="">
                                             <div class="form-group" style="position: relative;">
                                                 <label
                                                     for="identity"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
@@ -997,7 +1000,8 @@
                                                     <label for="password"
                                                         class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                                                     <div class="float-right">
-                                                        <a href="<?= base_url('auth/redirect-forgot-password') ?>" id="modal-forgot-password" class="text-small">
+                                                        <a href="<?= base_url('auth/redirect-forgot-password') ?>"
+                                                            id="modal-forgot-password" class="text-small">
                                                             <?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>
                                                         </a>
                                                     </div>
@@ -1027,8 +1031,10 @@
                                             </div>
 
                                             <?php if ($google_client_id) { ?>
-                                                <div class="form-group my-2 row d-flex justify-content-center" style="width: 100%;">
-                                                    <div class="g-signin2 " data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
+                                                <div class="form-group my-2 row d-flex justify-content-center"
+                                                    style="width: 100%;">
+                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
+                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
                                                 </div>
                                             <?php } ?>
 
@@ -1106,8 +1112,10 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" name="agree" class="custom-control-input" id="agree_regi" checked>
-                                                    <label class="custom-control-label" for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "' style='text-decoration:underline;'>Privacy<a/> , <a href='" . base_url('front/terms-and-conditions') . "' style='text-decoration:underline;'>Terms & Conditions<a/>" ?></label>
+                                                    <input type="checkbox" name="agree" class="custom-control-input"
+                                                        id="agree_regi" checked>
+                                                    <label class="custom-control-label"
+                                                        for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "' style='text-decoration:underline;'>Privacy<a/> , <a href='" . base_url('front/terms-and-conditions') . "' style='text-decoration:underline;'>Terms & Conditions<a/>" ?></label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -1310,11 +1318,11 @@
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script>
             function onSignIn(googleUser) {
-                gapi.load('auth2', function() {
+                gapi.load('auth2', function () {
                     gapi.auth2.init().then(() => {
                         var auth2 = gapi.auth2.getAuthInstance();
-                        auth2.signOut().then(function() {
-                            auth2.disconnect().then(function() {
+                        auth2.signOut().then(function () {
+                            auth2.disconnect().then(function () {
                                 // do nothing
                             });
                         });
@@ -1323,16 +1331,16 @@
                 var profile = googleUser.getBasicProfile();
                 if (profile && profile.getEmail() && profile.getGivenName() && profile.getFamilyName()) {
                     if (site_key) {
-                        grecaptcha.ready(function() {
+                        grecaptcha.ready(function () {
                             grecaptcha.execute(site_key, {
                                 action: 'register_form'
-                            }).then(function(token) {
+                            }).then(function (token) {
                                 $.ajax({
                                     type: "POST",
                                     url: base_url + 'auth/social_auth',
                                     data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName() + "&token=" + token + "&action=register_form",
                                     dataType: "json",
-                                    success: function(result) {
+                                    success: function (result) {
                                         if (result['error'] == false) {
                                             location.reload();
                                         } else {
@@ -1352,7 +1360,7 @@
                             url: base_url + 'auth/social_auth',
                             data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName(),
                             dataType: "json",
-                            success: function(result) {
+                            success: function (result) {
                                 if (result['error'] == false) {
                                     location.reload();
                                 } else {
@@ -1402,7 +1410,7 @@
             });
             return false;
         });
-        $("#register").submit(function(e) {
+        $("#register").submit(function (e) {
             e.preventDefault();
             let save_button = $(this).find('.savebtn');
             let output_status = $(this).find('.result')
@@ -1418,7 +1426,7 @@
                 contentType: false,
                 processData: false,
                 dataType: "json",
-                success: function(result) {
+                success: function (result) {
                     save_button.html('Register');
                     save_button.prop("disabled", false);
                     console.log(result);
@@ -1441,7 +1449,7 @@
         });
     </script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             getEmployeeId();
 
             function getEmployeeId() {
@@ -1449,7 +1457,7 @@
                     url: '<?= base_url('users/get_employee_id') ?>',
                     method: 'POST',
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response);
                         var employee_id = response.max_employee_id;
                         employee_id++;
