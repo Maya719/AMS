@@ -225,6 +225,7 @@ class Plans extends CI_Controller
 										}
 									}
 								}
+								
 								$users_plans_data = array(
 									'plan_id' => $payment_details->metadata->plan_id,
 									'expired' => 1,

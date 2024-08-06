@@ -34,10 +34,6 @@
             gtag('config', '<?= htmlspecialchars($google_analytics) ?>');
         </script>
     <?php } ?>
-
-
-
-
     <!-- CSS here -->
     <link rel="stylesheet" href='<?= base_url("assets/front/four/css/bootstrap.css") ?>'>
     <link rel="stylesheet" href='<?= base_url("assets/front/four/css/animate.css") ?>'>
@@ -55,8 +51,9 @@
     <link rel="stylesheet" href="<?= base_url('assets/front/comman.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/front/four/css/page_styling.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/front/four/css/authentication_modal.css') ?>">
+    <link href="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.css') ?>" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url('assets2/vendor/toastr/css/toastr.min.css') ?>" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet" />
-
 </head>
 
 <body>
@@ -972,16 +969,12 @@
                 <div class="row " style="height: 100% !important; ">
                     <div class="col-6 d-none d-md-block" style="padding: 0px; margin: 0px;">
                         <div class="auth-modal-imgae">
-                            <img src="<?=base_url('assets/front/four/img/hero/model.jpg')?>" alt="">
+                            <img src="<?= base_url('assets/front/four/img/hero/model.jpg') ?>" alt="">
                         </div>
                     </div>
                     <div class="col-sm-12  col-md-6"
                         style="overflow: hidden !important;position: relative;left: -13px;">
                         <div class="wrapper">
-                            <!-- <div class="title-text">
-                                <div class="title login">Login Form</div>
-                                <div class="title signup">Signup Form</div>
-                            </div> -->
                             <div class="form-container" style="position:relative;">
                                 <div class="slide-controls">
                                     <input type="radio" name="slide" id="login" checked>
@@ -992,11 +985,6 @@
                                 </div>
                                 <div class="login login-form">
                                     <div class="modal-body-login authentication-modal-single-side-content">
-
-                                        <form id="authenticationModalLogin" method="POST"
-                                            action="<?= base_url('auth/login') ?>" class="needs-validation"
-                                            novalidate="">
-
                                             <div class="form-group" style="position: relative;">
                                                 <label
                                                     for="identity"><?= $this->lang->line('email') ? $this->lang->line('email') : 'Email' ?></label>
@@ -1009,7 +997,7 @@
                                                     <label for="password"
                                                         class="control-label"><?= $this->lang->line('password') ? $this->lang->line('password') : 'Password' ?></label>
                                                     <div class="float-right">
-                                                        <a href="#" id="modal-forgot-password" class="text-small">
+                                                        <a href="<?= base_url('auth/redirect-forgot-password') ?>" id="modal-forgot-password" class="text-small">
                                                             <?= $this->lang->line('forgot_password') ? $this->lang->line('forgot_password') : 'Forgot Password' ?>
                                                         </a>
                                                     </div>
@@ -1039,10 +1027,8 @@
                                             </div>
 
                                             <?php if ($google_client_id) { ?>
-                                                <div class="form-group my-2 row d-flex justify-content-center"
-                                                    style="width: 100%;">
-                                                    <div class="g-signin2 " data-width="300" data-height="43.59"
-                                                        data-onsuccess="onSignIn" data-theme="dark"></div>
+                                                <div class="form-group my-2 row d-flex justify-content-center" style="width: 100%;">
+                                                    <div class="g-signin2 " data-width="300" data-height="43.59" data-onsuccess="onSignIn" data-theme="dark"></div>
                                                 </div>
                                             <?php } ?>
 
@@ -1118,8 +1104,12 @@
                                                         style="position: absolute; right: 30px; top: 68%; transform: translateY(-60%); cursor: pointer;"></i>
                                                 </div>
                                             </div>
-
-
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" name="agree" class="custom-control-input" id="agree_regi" checked>
+                                                    <label class="custom-control-label" for="agree_regi"><?= $this->lang->line('i_agree_to_the_terms_and_conditions') ? "I Agree to <a href=''>Terms<a/> & <a href=''>Conditions<a/>" : "I Agree to <a href='" . base_url('front/privacy-policy') . "' style='text-decoration:underline;'>Privacy<a/> , <a href='" . base_url('front/terms-and-conditions') . "' style='text-decoration:underline;'>Terms & Conditions<a/>" ?></label>
+                                                </div>
+                                            </div>
                                             <div class="form-group">
                                                 <button type="submit" class="savebtn btn btn-primary btn-lg btn-block"
                                                     tabindex="6">
@@ -1127,20 +1117,17 @@
                                                 </button>
                                             </div>
 
-                                            <div class="form-group">
+                                            <div class="form-group mt-3">
                                                 <div class="result">
                                                     <?= isset($message) ? htmlspecialchars($message) : ''; ?>
                                                 </div>
                                             </div>
-
-                                            
 
                                             <div class="text-muted text-center">
                                                 <?= $this->lang->line('already_have_an_account') ? $this->lang->line('already_have_an_account') : 'Already have an account?' ?>
                                                 <a class="x8oe2yx2"
                                                     href="#"><?= $this->lang->line('login_here') ? $this->lang->line('login_here') : 'Login Here' ?></a>
                                             </div>
-
                                         </form>
                                     </div>
                                 </div>
@@ -1287,9 +1274,11 @@
     <script src='<?= base_url("assets/front/four/js/jquery.appear.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/jquery.knob.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/circularProgressBar.min.js") ?>'></script>
+    <script src="<?= base_url('assets2/vendor/toastr/js/toastr.min.js') ?>"></script>
     <script src='<?= base_url("assets/front/four/js/purecounter.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/main.js") ?>'></script>
     <script src='<?= base_url("assets/front/four/js/authentication_modal.js") ?>'></script>
+    <script src="<?= base_url('assets2/vendor/sweetalert2/sweetalert2.min.js') ?>"></script>
 
     <script>
         site_key = '<?php echo get_google_recaptcha_site_key(); ?>';
@@ -1321,11 +1310,11 @@
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script>
             function onSignIn(googleUser) {
-                gapi.load('auth2', function () {
+                gapi.load('auth2', function() {
                     gapi.auth2.init().then(() => {
                         var auth2 = gapi.auth2.getAuthInstance();
-                        auth2.signOut().then(function () {
-                            auth2.disconnect().then(function () {
+                        auth2.signOut().then(function() {
+                            auth2.disconnect().then(function() {
                                 // do nothing
                             });
                         });
@@ -1334,16 +1323,16 @@
                 var profile = googleUser.getBasicProfile();
                 if (profile && profile.getEmail() && profile.getGivenName() && profile.getFamilyName()) {
                     if (site_key) {
-                        grecaptcha.ready(function () {
+                        grecaptcha.ready(function() {
                             grecaptcha.execute(site_key, {
                                 action: 'register_form'
-                            }).then(function (token) {
+                            }).then(function(token) {
                                 $.ajax({
                                     type: "POST",
                                     url: base_url + 'auth/social_auth',
                                     data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName() + "&token=" + token + "&action=register_form",
                                     dataType: "json",
-                                    success: function (result) {
+                                    success: function(result) {
                                         if (result['error'] == false) {
                                             location.reload();
                                         } else {
@@ -1363,7 +1352,7 @@
                             url: base_url + 'auth/social_auth',
                             data: "email=" + profile.getEmail() + "&first_name=" + profile.getGivenName() + "&last_name=" + profile.getFamilyName(),
                             dataType: "json",
-                            success: function (result) {
+                            success: function(result) {
                                 if (result['error'] == false) {
                                     location.reload();
                                 } else {
@@ -1405,25 +1394,94 @@
                 success: function (result) {
                     console.log(result);
                     if (result['error'] == false) {
-                        // window.location.replace(<?php echo base_url('/'); ?>);
                         location.reload();
                     } else {
                         output_status.prepend('<div class="alert alert-danger">' + result['message'] + '</div>');
                     }
-                    // card_progress.dismiss(function () {
-                    //     output_status.find('.alert').delay(4000).fadeOut();
-                    //     save_button.removeClass('btn-progress');
-                    //     $('html, body').animate({
-                    //         scrollTop: output_status.offset().top
-                    //     }, 1000);
-                    // });
                 }
             });
+            return false;
+        });
+        $("#register").submit(function(e) {
+            e.preventDefault();
+            let save_button = $(this).find('.savebtn');
+            let output_status = $(this).find('.result')
+            save_button.html('Registering...');
+            save_button.prop("disabled", true);
 
+            var formData = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                success: function(result) {
+                    save_button.html('Register');
+                    save_button.prop("disabled", false);
+                    console.log(result);
+                    if (result['error'] == false) {
+                        console.log(result);
+                        $("#register")[0].reset();
+                        $("#authenticationModal").modal('hide');
+                        Swal.fire({
+                            title: "Successfully Registered",
+                            text: result.message,
+                            icon: "success"
+                        });
+                    } else {
+                        console.log(result);
+                        output_status.prepend('<div class="alert alert-danger">' + result['message'] + '</div>');
+                    }
+                }
+            });
             return false;
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            getEmployeeId();
 
+            function getEmployeeId() {
+                $.ajax({
+                    url: '<?= base_url('users/get_employee_id') ?>',
+                    method: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        var employee_id = response.max_employee_id;
+                        employee_id++;
+                        $('#employee_id').val(employee_id);
+                    },
+                });
+            }
+        });
+    </script>
+    <?php if ($this->session->flashdata('message') && $this->session->flashdata('message_type') == 'success') { ?>
+        <script>
+            toastr.success("<?= $this->session->flashdata('message'); ?>", "Success", {
+                positionClass: "toast-top-right",
+                timeOut: 5e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "300",
+                hideDuration: "1000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+            <?php $this->session->set_flashdata('message', null); ?>
+        </script>
+    <?php } ?>
 </body>
 
 </html>

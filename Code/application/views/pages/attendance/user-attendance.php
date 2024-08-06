@@ -1,4 +1,5 @@
 <?php $this->load->view('includes/header'); ?>
+<link rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
 <style>
   .static-column-left {
     position: sticky;
@@ -70,37 +71,17 @@
           </ol>
         </nav>
         <div class="row">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="basic-form">
-                  <form class="row">
-                    <div class="col-lg-12 mb-3">
-                      <select class="form-select select2" id="dateFilter">
-                        <option value="today"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Today' ?></option>
-                        <option value="ystdy"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Yesterday' ?></option>
-                        <option value="tweek"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Week' ?></option>
-                        <option value="tmonth" selected><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'This Month' ?></option>
-                        <option value="lmonth"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Last Month' ?></option>
-                        <option value="custom"><?= $this->lang->line('select_filter') ? $this->lang->line('select_filter') : 'Custom' ?></option>
-                      </select>
-                    </div>
-                    <div id="custom-date-range" class="row" style="display: none;">
-                      <div class="col-lg-3">
-                        <input name="datepicker" class="datepicker-default form-control" placeholder="From Date" id="from">
-                      </div>
-                      <div class="col-lg-3">
-                        <input name="datepicker" class="datepicker-default form-control" placeholder="To Date" id="too">
-                      </div>
-                    </div>
-                  </form>
-                </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="col-lg-4">
+                <input type="hidden" id="startDate">
+                <input type="hidden" id="endDate">
+                <input type="text" id="config-demo" class="form-control">
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-
           <div class="col-lg-12">
             <div class="card">
               <div class="card-header">
@@ -147,31 +128,6 @@
   <?php $this->load->view('includes/scripts'); ?>
   <script src="<?= base_url('assets2/js/loader.js') ?>"></script>
   <script>
-    $(document).ready(function() {
-      checkCustomSelect();
-
-      $("#date-filter").change(function() {
-        checkCustomSelect();
-      });
-
-      function checkCustomSelect() {
-        var selectedValue = $("#date-filter").val();
-        if (selectedValue === "custom") {
-          $("#custom-date-range").show();
-        } else {
-          $("#custom-date-range").hide();
-        }
-      }
-    });
-  </script>
-  <script>
-    $(document).ready(function() {
-      setFilter();
-      $(document).on('change', '#dateFilter, #from,#too', function() {
-        setFilter();
-      });
-    });
-
     function setFilter() {
       var filterOption = $('#dateFilter').val();
       var currentUrl = window.location.href;
@@ -182,77 +138,11 @@
         id = <?= json_encode($user_id) ?>;
       }
       var employee_id = id;
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-      const day = today.getDate();
-
-      let fromDate, toDate;
-
-      switch (filterOption) {
-        case "today":
-          fromDate = new Date(year, month, day);
-          toDate = new Date(year, month, day);
-          break;
-        case "ystdy":
-          fromDate = new Date(year, month, day - 1);
-          toDate = new Date(year, month, day - 1);
-          break;
-        case "tweek":
-          fromDate = new Date(year, month, day - today.getDay());
-          toDate = new Date(year, month, day);
-          break;
-        case "lweek":
-          fromDate = new Date(year, month, day - today.getDay() - 7);
-          toDate = new Date(year, month, day - today.getDay() - 1);
-          break;
-        case "tmonth":
-          fromDate = new Date(year, month, 1);
-          toDate = today;
-          break;
-        case "lmonth":
-          fromDate = new Date(year, month - 1, 1);
-          toDate = new Date(year, month, 0);
-          break;
-        case "custom":
-          $("#custom-date-range").show();
-          var fromInput = $('#from').val();
-          var toInput = $('#too').val();
-          fromDate = new Date(convertDateFormat(fromInput));
-          toDate = new Date(convertDateFormat(toInput));
-          break;
-        default:
-          console.error("Invalid filter option:", filterOption);
-          return null;
-      }
-
-
-      var formattedFromDate = formatDate(fromDate, "Y-m-d");
-      var formattedToDate = formatDate(toDate, "Y-m-d");
+      var formattedFromDate = $("#startDate").val();
+      var formattedToDate = $("#endDate").val();
       var rangetext = getRangeText(formattedFromDate, formattedToDate);
       $("#date-range").html(rangetext);
       ajaxCall(employee_id, formattedFromDate, formattedToDate);
-    }
-
-    function convertDateFormat(inputDate) {
-      const months = {
-        Jan: '01',
-        Feb: '02',
-        Mar: '03',
-        Apr: '04',
-        May: '05',
-        Jun: '06',
-        Jul: '07',
-        Aug: '08',
-        Sep: '09',
-        Oct: '10',
-        Nov: '11',
-        Dec: '12'
-      };
-
-      const [day, month, year] = inputDate.split(' ');
-
-      return `${year}-${months[month]}-${day}`;
     }
 
     function getRangeText(fromDate, toDate) {
@@ -284,7 +174,7 @@
           too: too
         },
         beforeSend: function() {
-          // showLoader();
+          showLoader();
         },
         success: function(response) {
           var tableData = JSON.parse(response);
@@ -292,7 +182,7 @@
           showTable(tableData);
         },
         complete: function() {
-          // hideLoader();
+          hideLoader();
         },
         error: function(error) {
           console.error(error);
@@ -331,8 +221,6 @@
           }); // Use 'short' to get abbreviated day names
           userRow += '<th style="font-size:10px;">' + formattedDateString + '</th>';
         });
-
-
         userRow += '</tr>';
         userRow += '<tr>';
         userRow += '<th class="static-column-left" style="background: #FAFAFA; width: 2rem;">Status</th>';
@@ -340,7 +228,7 @@
         uniqueDates.forEach(date => {
           var statusIndex = uniqueDates.indexOf(date);
           var status = user.status ? user.status[statusIndex] : '';
-          if (status == 'P') {
+          if (status == 'P' || status == 'OC') {
             userRow += '<td class="text-success">' + status + '</td>';
           } else if (status == 'A') {
             userRow += '<td class="text-danger">' + status + '</td>';
@@ -401,7 +289,61 @@
       return uniqueDates;
     }
   </script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+  <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
+      $('#endDate').val(moment().format('YYYY-MM-DD'));
+      setFilter();
+      $('#config-text').keyup(function() {
+        eval($(this).val());
+      });
+      $('.configurator input').change(function() {
+        updateConfig();
+      });
 
+      $('.demo i').click(function() {
+        $(this).parent().find('input').click();
+      });
+
+      updateConfig();
+
+      $('#config-demo').click(function() {
+        $(this).data('daterangepicker').show();
+      });
+
+      function updateConfig() {
+        var options = {
+          startDate: moment().startOf('month'),
+          endDate: moment(),
+          maxDate: moment(),
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment()],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          }
+        };
+
+        $('#config-demo').daterangepicker(options, function(start, end, label) {
+          $('#startDate').val(start.format('YYYY-MM-DD'));
+          $('#endDate').val(end.format('YYYY-MM-DD'));
+          setFilter();
+          console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+        }).click();
+
+
+
+        $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+
+      }
+
+
+    });
+  </script>
   <script>
     $(document).on('click', '#csv', function() {
       var filters = setFilter2();
@@ -665,12 +607,12 @@
 
     $('.select2').select2()
     <?php if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) : ?>
-    window.addEventListener('click', function(event) {
-      if (event.target.tagName === 'A' || event.target.tagName === 'li') {
-        window.close();
-        event.preventDefault();
-      }
-    });
+      window.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A' || event.target.tagName === 'li') {
+          window.close();
+          event.preventDefault();
+        }
+      });
     <?php endif ?>
   </script>
   <!--**********************************

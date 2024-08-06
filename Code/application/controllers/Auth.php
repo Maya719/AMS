@@ -215,17 +215,22 @@ class Auth extends CI_Controller
 	}
 
 	/**
+	 * 
 	 * Forgot password
+	 * 
 	 */
+
+	public function redirect_forgot_password()
+	{
+		$this->load->view('auth/pages/forgot-password');
+	}
 	public function forgot_password()
 	{
-		// ANCHOR  setting validation rules by checking whether identity is username or email
 		if ($this->config->item('identity', 'ion_auth') != 'email') {
 			$this->form_validation->set_rules('identity', $this->lang->line('forgot_password_identity_label'), 'required');
 		} else {
 			$this->form_validation->set_rules('identity', $this->lang->line('forgot_password_validation_email_label'), 'required|valid_email');
 		}
-
 
 		if ($this->form_validation->run() === FALSE) {
 			$this->data['error'] = true;
@@ -251,7 +256,7 @@ class Auth extends CI_Controller
 				return false;
 			}
 
-			// ANCHOR  run the forgotten password method to email an activation code to the user
+			// run the forgotten password method to email an activation code to the user
 			$forgotten = $this->ion_auth->forgotten_password($identity->{$this->config->item('identity', 'ion_auth')});
 
 			if ($forgotten) {
@@ -278,14 +283,12 @@ class Auth extends CI_Controller
 	{
 		if (!$code) {
 			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			redirect("auth", 'refresh');
+			redirect("/", 'refresh');
 		}
 
 		$user = $this->ion_auth->forgotten_password_check($code);
 
 		if ($user) {
-			// ANCHOR  if the code is valid then display the password reset form
-
 			$this->form_validation->set_rules('new', $this->lang->line('reset_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[new_confirm]');
 			$this->form_validation->set_rules('new_confirm', $this->lang->line('reset_password_validation_new_password_confirm_label'), 'required');
 
@@ -311,16 +314,15 @@ class Auth extends CI_Controller
 					// ANCHOR  if the password was successfully changed
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
 					$this->session->set_flashdata('message_type', 'success');
-					redirect("auth", 'refresh');
+					redirect("/", 'refresh');
 				} else {
 					$this->session->set_flashdata('message', $this->ion_auth->errors());
 					redirect('auth/reset_password/' . $code, 'refresh');
 				}
 			}
 		} else {
-			// ANCHOR  if the code is invalid then send them back to the forgot password page
 			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			redirect("auth", 'refresh');
+			redirect("/", 'refresh');
 		}
 	}
 
@@ -1038,6 +1040,10 @@ class Auth extends CI_Controller
 					$date = date("Y-m-d", strtotime("+15 days", $dt));
 				} elseif ($plan[0]['billing_type'] == "thirty_days_trial_plan") {
 					$date = date("Y-m-d", strtotime("+1 month", $dt));
+				} elseif ($plan[0]['billing_type'] == "three_months_trial_plan") {
+					$date = date("Y-m-d", strtotime("+3 months", $dt));
+				} elseif ($plan[0]['billing_type'] == "six_months_trial_plan") {
+					$date = date("Y-m-d", strtotime("+6 months", $dt));
 				} else {
 					$date = date("Y-m-d", strtotime("-1 day", $dt));
 				}
@@ -1373,7 +1379,7 @@ class Auth extends CI_Controller
 		];
 		if (!empty($profile_pic)) {
 			$data["profile"] = $profile_pic;
-		}else{
+		} else {
 			$data["profile"] = $this->input->post('old_profile_pic');
 		}
 		return $data;
