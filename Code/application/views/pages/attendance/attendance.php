@@ -19,13 +19,9 @@
     }
 
     .daterangepicker .ranges li.active {
-<<<<<<< HEAD
         background-color:
             <?= theme_color() ?>
         ;
-=======
-        background-color: <?= theme_color() ?>;
->>>>>>> c49f6791fa6ac52aae8ecc28e446bfb8339da9cf
     }
 </style>
 </head>
@@ -89,7 +85,8 @@
                                                     if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
                                                         <option value="<?= $system_user->id ?>">
                                                             <?= htmlspecialchars($system_user->first_name) ?>
-                                                            <?= htmlspecialchars($system_user->last_name) ?></option>
+                                                            <?= htmlspecialchars($system_user->last_name) ?>
+                                                        </option>
                                                     <?php }
                                                 } ?>
                                             </select>
@@ -113,7 +110,8 @@
                                                 </option>
                                                 <?php foreach ($departments as $department): ?>
                                                     <option value="<?= $department["id"] ?>">
-                                                        <?= $department["department_name"] ?></option>
+                                                        <?= $department["department_name"] ?>
+                                                    </option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
@@ -486,13 +484,8 @@
         }
     </script>
     <script type="text/javascript">
-<<<<<<< HEAD
         $(document).ready(function () {
             $('#config-text').keyup(function () {
-=======
-        $(document).ready(function() {
-            $('#config-text').keyup(function() {
->>>>>>> c49f6791fa6ac52aae8ecc28e446bfb8339da9cf
                 eval($(this).val());
             });
 
