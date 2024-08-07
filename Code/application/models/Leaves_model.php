@@ -47,9 +47,10 @@ class Leaves_model extends CI_Model
         $query = $this->db->query("SELECT * FROM leaves " . $where);
         $results = $query->result_array();
         foreach ($results as &$value) {
-            $query = $this->db->query("SELECT id FROM users WHERE employee_id = " . $value["user_id"]);
+            $query = $this->db->query("SELECT * FROM users WHERE employee_id = " . $value["user_id"]);
             $user = $query->row();
             $value["user_id"] = $user->id;
+            $active = $user->active;
             $value["starting_date"] = format_date($value['starting_date'], system_date_format());
             $value["ending_date"] = format_date($value['ending_date'], system_date_format());
             $stepResult = $this->getStatusForword($id);
@@ -60,17 +61,21 @@ class Leaves_model extends CI_Model
             $forword_result = $this->is_forworded($current_group_id, $step, $emppp);
             $value["current_group_id"] = $current_group_id;
             $value["step"] = $step;
-            if ($value["status"] == 1) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
-            } elseif ($value["status"] == 2) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>Rejected</button>';
-            } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin())) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
-            } else {
-                if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
-                    $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave btn-block col btn-danger mx-2">Delete</button>';
+            if ($active == '1') {
+                if ($value["status"] == 1) {
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
+                } elseif ($value["status"] == 2) {
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>Rejected</button>';
+                } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin())) {
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
+                } else {
+                    if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
+                        $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave btn-block col btn-danger mx-2">Delete</button>';
+                    }
+                    $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave btn-block col btn-primary ">Save</button>';
                 }
-                $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave btn-block col btn-primary ">Save</button>';
+            }else{
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>User is deactive</button>';
             }
             $value["forword_result"] = $forword_result;
         }
@@ -163,6 +168,16 @@ class Leaves_model extends CI_Model
             }
             $where .= " AND l.status = " . $status;
         }
+        if (isset($get['userstatus']) &&  !empty($get['userstatus'])) {
+            $userstatus = $get["userstatus"];
+            if ($userstatus == '1') {
+                $active = '1';
+            }else{
+                $active = '0';
+            }
+            $where .= " AND u.active = " . $active;
+        }
+        
         if (isset($get['leave_type']) &&  !empty($get['leave_type'])) {
             $type = $get["leave_type"];
             $where .= " AND l.type = " . $type;
