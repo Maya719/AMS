@@ -275,43 +275,39 @@
                 success: function (response) {
                     console.log(response);
                     var html = '';
-                    let emptyCell = '<td class="text-center"></td>';
+                    let emptyCell = '<td class=""></td>';
                     if (response.leave_types) {
                         response.leave_types.forEach((value, index) => {
                             html += '<tr>';
-
-                            html += '<td class="text-center">' + value + '</td>';
-                            html += '<td class="text-center">' + response.total_leaves[index] + '</td>';
-                            html += '<td class="text-center">' + response.consumed_leaves[index] + '</td>';
-                            // html += '<td class="text-center">' +  +response.total_leaves[index] - (+response.consumed_leaves[index]) + '</td>';
-                            html += '<td class="text-center">' + (response.total_leaves[index] - response.consumed_leaves[index]) + '</td>';
-
+                            html += '<td class="">' + value + '</td>';
+                            html += '<td class="">' + response.total_leaves[index] + '</td>';
+                            html += '<td class="">' + response.paidArray[index] + '</td>';
+                            html += '<td class="">' + (response.total_leaves[index] - response.paidArray[index]) + '</td>';
                             html += '</tr>';
-
                         });
                         html += '<tr class="section-header">';
-                        html += `<td colspan="4" class="text-center" 
+                        html += `<td colspan="4" class="" 
                         style="height:0px; padding:0px; margin:0px; border:1px solid black"></td>`;
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td class="fw-bold">Unpaind</td>';
-                        html += '<td class="text-center fw-bold">Days</td>' + emptyCell + emptyCell;
+                        html += '<td class=" fw-bold">Days</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Approved</td>';
-                        html += '<td class="text-center">' + response.unpaidArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0) + '</td>' + emptyCell + emptyCell;
+                        html += '<td class="">' + response.unpaidArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0) + '</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Absents</td>';
-                        html += '<td class="text-center"><?php echo $report['abs']; ?></td>' + emptyCell + emptyCell;
+                        html += '<td class=""><?php echo $report['abs']; ?></td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Late Minutes</td>';
-                        html += '<td id="late_minutes" class="text-center">-</td>' + emptyCell + emptyCell;
+                        html += '<td id="late_minutes" class="">-</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                     } else {
                         html += '<tr>';
-                        html += '<td colspan="5" class="text-center">No Leave Type</td>';
+                        html += '<td colspan="5" class="">No Leave Type</td>';
                         html += '</tr>';
                     }
                     // console.log(html);
