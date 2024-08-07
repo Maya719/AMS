@@ -290,7 +290,7 @@
                         style="height:0px; padding:0px; margin:0px; border:1px solid black"></td>`;
                         html += '</tr>';
                         html += '<tr>';
-                        html += '<td class="fw-bold">Unpaind</td>';
+                        html += '<td class="fw-bold">Unpaid</td>';
                         html += '<td class=" fw-bold">Days</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
