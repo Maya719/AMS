@@ -73,6 +73,12 @@ class Attendance_model extends CI_Model
     public function get_attendance()
     {
         $get = $this->input->get();
+        if (isset($get['q1']) ) {
+            if(isset($get['user_id'])){}
+            else {
+                echo json_encode(['msg' => ""]);
+            }
+        } 
         $attendance = $this->get_attendance_for_admin($get);
         $formated_data = $this->formated_data($attendance, $get);
         if (isset($get['q1'])) {

@@ -324,9 +324,9 @@
         }
         $(document).ready(function () {
             multiLineChart();
+            getLateMinutesOfSelectedUser();
         });
 
-        getLateMinutesOfSelectedUser();
 
         function getLateMinutesOfSelectedUser(user_id = $('#user_id').val()) {
 
