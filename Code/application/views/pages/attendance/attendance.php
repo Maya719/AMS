@@ -1,5 +1,6 @@
 <?php $this->load->view('includes/header'); ?>
-<link rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
+<link rel="stylesheet" type="text/css" media="all"
+    href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
 <style>
     #attendance_list tbody td a {
         font-weight: bold;
@@ -18,7 +19,9 @@
     }
 
     .daterangepicker .ranges li.active {
-        background-color: <?= theme_color() ?>;
+        background-color:
+            <?= theme_color() ?>
+        ;
     }
 </style>
 </head>
@@ -62,34 +65,53 @@
                                         <input type="hidden" id="startDate">
                                         <input type="hidden" id="endDate">
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="status" onchange="setCookieFromSelect('status')">
-                                                <option value="1"><?= $this->lang->line('active') ? $this->lang->line('active') : 'Active' ?></option>
-                                                <option value="2"><?= $this->lang->line('inactive') ? $this->lang->line('inactive') : 'Inactive' ?></option>
+                                            <select class="form-select select2" id="status"
+                                                onchange="setCookieFromSelect('status')">
+                                                <option value="1">
+                                                    <?= $this->lang->line('active') ? $this->lang->line('active') : 'Active' ?>
+                                                </option>
+                                                <option value="2">
+                                                    <?= $this->lang->line('inactive') ? $this->lang->line('inactive') : 'Inactive' ?>
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="employee_id" onchange="setCookieFromSelect('employee_id')">
-                                                <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
+                                            <select class="form-select select2" id="employee_id"
+                                                onchange="setCookieFromSelect('employee_id')">
+                                                <option value="">
+                                                    <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?>
+                                                </option>
                                                 <?php foreach ($system_users as $system_user) {
                                                     if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
-                                                        <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
-                                                <?php }
+                                                        <option value="<?= $system_user->id ?>">
+                                                            <?= htmlspecialchars($system_user->first_name) ?>
+                                                            <?= htmlspecialchars($system_user->last_name) ?>
+                                                        </option>
+                                                    <?php }
                                                 } ?>
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="shift_id" onchange="setCookieFromSelect('shift_id')">
-                                                <option value=""><?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?></option>
-                                                <?php foreach ($shifts as $shift) : ?>
+                                            <select class="form-select select2" id="shift_id"
+                                                onchange="setCookieFromSelect('shift_id')">
+                                                <option value="">
+                                                    <?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?>
+                                                </option>
+                                                <?php foreach ($shifts as $shift): ?>
                                                     <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="department_id" onchange="setCookieFromSelect('department_id')">
-                                                <option value=""><?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?></option>
-                                                <?php foreach ($departments as $department) : ?>
-                                                    <option value="<?= $department["id"] ?>"><?= $department["department_name"] ?></option>
+                                            <select class="form-select select2" id="department_id"
+                                                onchange="setCookieFromSelect('department_id')">
+                                                <option value="">
+                                                    <?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?>
+                                                </option>
+                                                <?php foreach ($departments as $department): ?>
+                                                    <option value="<?= $department["id"] ?>">
+                                                        <?= $department["department_name"] ?>
+                                                    </option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
@@ -126,11 +148,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
     <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
             $('#endDate').val(moment().format('YYYY-MM-DD'));
             setFilter();
-            $(document).on('change', '#shift_id, #department_id, #employee_id,#config-demo, #status', function() {
+            $(document).on('change', '#shift_id, #department_id, #employee_id,#config-demo, #status', function () {
                 setFilter();
             });
         });
@@ -160,10 +182,10 @@
                     from: from,
                     too: too
                 },
-                beforeSend: function() {
+                beforeSend: function () {
                     showLoader();
                 },
-                success: function(response) {
+                success: function (response) {
                     var tableData = JSON.parse(response);
                     if (tableData.data.length > 0) {
                         showTable(tableData);
@@ -171,10 +193,10 @@
                         emptyTable();
                     }
                 },
-                complete: function() {
+                complete: function () {
                     hideLoader();
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error(error);
                 }
             });
@@ -250,7 +272,7 @@
             });
             let cookieValue = getCookie('attendance_list_length');
 
-            if (cookieValue) {} else {
+            if (cookieValue) { } else {
                 cookieValue = 10;
             }
             table.DataTable({
@@ -267,13 +289,13 @@
                 "lengthMenu": [10, 20, 50, 500],
                 "pageLength": cookieValue,
                 "columnDefs": [{
-                        "orderable": true,
-                        "targets": [1, 2]
-                    },
-                    {
-                        "orderable": false,
-                        "targets": '_all'
-                    }
+                    "orderable": true,
+                    "targets": [1, 2]
+                },
+                {
+                    "orderable": false,
+                    "targets": '_all'
+                }
                 ],
                 "order": [
                     [0, 'asc']
@@ -281,7 +303,7 @@
             });
             if ($.fn.DataTable.isDataTable('#attendance_list')) {
                 let cookieValue = getCookie('page_no');
-                if (cookieValue) {} else {
+                if (cookieValue) { } else {
                     cookieValue = 1;
                 }
                 var table = $('#attendance_list').DataTable();
@@ -290,7 +312,7 @@
                 console.error("DataTable initialization failed or table not found.");
             }
         }
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
             $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
@@ -324,7 +346,7 @@
 
             return uniqueDates;
         }
-        $(document).on('change', '#employee_id', function() {
+        $(document).on('change', '#employee_id', function () {
             var employee_id = $('#employee_id').val();
             $.ajax({
                 url: '<?= base_url('attendance/get_filters_for_user') ?>',
@@ -332,28 +354,28 @@
                 data: {
                     employee_id: employee_id,
                 },
-                success: function(response) {
+                success: function (response) {
                     var tableData = JSON.parse(response);
                     $('#shift_id').empty();
                     $('#department_id').empty();
                     $('#shift_id').append('<option value="" selected>Shift</option>');
-                    tableData.shift.forEach(function(shift) {
+                    tableData.shift.forEach(function (shift) {
                         $('#shift_id').append('<option value="' + shift.id + '">' + shift.name + '</option>');
                     });
                     $('#department_id').append('<option value="" selected>Department</option>');
-                    tableData.department.forEach(function(department) {
+                    tableData.department.forEach(function (department) {
                         $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
                     });
                 },
-                complete: function() {},
-                error: function(error) {
+                complete: function () { },
+                error: function (error) {
                     console.error(error);
                 }
 
             });
         });
 
-        $(document).on('change', '#status', function() {
+        $(document).on('change', '#status', function () {
             var status = $('#status').val();
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_status') ?>',
@@ -361,22 +383,22 @@
                 data: {
                     status: status,
                 },
-                success: function(response) {
+                success: function (response) {
                     var tableData = JSON.parse(response);
                     $('#employee_id').empty();
                     $('#employee_id').append('<option value="">Employee</option>');
-                    tableData.forEach(function(department) {
+                    tableData.forEach(function (department) {
                         $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
-                complete: function() {},
-                error: function(error) {
+                complete: function () { },
+                error: function (error) {
                     console.error(error);
                 }
 
             });
         });
-        $(document).on('change', '#department_id', function() {
+        $(document).on('change', '#department_id', function () {
             var department_id = $('#department_id').val();
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_department') ?>',
@@ -384,22 +406,22 @@
                 data: {
                     department: department_id,
                 },
-                success: function(response) {
+                success: function (response) {
                     var tableData = JSON.parse(response);
                     $('#employee_id').empty();
                     $('#employee_id').append('<option value="">Employee</option>');
-                    tableData.forEach(function(department) {
+                    tableData.forEach(function (department) {
                         $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
-                complete: function() {},
-                error: function(error) {
+                complete: function () { },
+                error: function (error) {
                     console.error(error);
                 }
 
             });
         });
-        $(document).on('change', '#shift_id', function() {
+        $(document).on('change', '#shift_id', function () {
             var shift_id = $('#shift_id').val();
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_shifts') ?>',
@@ -407,16 +429,16 @@
                 data: {
                     shift_id: shift_id,
                 },
-                success: function(response) {
+                success: function (response) {
                     var tableData = JSON.parse(response);
                     $('#employee_id').empty();
                     $('#employee_id').append('<option value="">Employee</option>');
-                    tableData.forEach(function(department) {
+                    tableData.forEach(function (department) {
                         $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
-                complete: function() {},
-                error: function(error) {
+                complete: function () { },
+                error: function (error) {
                     console.error(error);
                 }
 
@@ -462,22 +484,22 @@
         }
     </script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#config-text').keyup(function() {
+        $(document).ready(function () {
+            $('#config-text').keyup(function () {
                 eval($(this).val());
             });
 
-            $('.configurator input').change(function() {
+            $('.configurator input').change(function () {
                 updateConfig();
             });
 
-            $('.demo i').click(function() {
+            $('.demo i').click(function () {
                 $(this).parent().find('input').click();
             });
 
             updateConfig();
 
-            $('#config-demo').click(function() {
+            $('#config-demo').click(function () {
                 $(this).data('daterangepicker').show();
             });
 
@@ -496,7 +518,7 @@
                     }
                 };
 
-                $('#config-demo').daterangepicker(options, function(start, end, label) {
+                $('#config-demo').daterangepicker(options, function (start, end, label) {
                     $('#startDate').val(start.format('YYYY-MM-DD'));
                     $('#endDate').val(end.format('YYYY-MM-DD'));
                     setFilter();
@@ -552,7 +574,7 @@
                         break;
                     }
                 }
-            } else {}
+            } else { }
         }
 
         function setCookieFromSelectForDataTable(currentPageLength) {
@@ -564,12 +586,12 @@
             $('.select2').select2();
             let cookieValue = getCookie('attendance_list_length');
         });
-        $('#attendance_list').on('length.dt', function(e, settings, len) {
+        $('#attendance_list').on('length.dt', function (e, settings, len) {
             var currentPageLength = len;
             setCookieFromSelectForDataTable(currentPageLength)
         });
         // Event listener for page change
-        $('#attendance_list').on('page.dt', function() {
+        $('#attendance_list').on('page.dt', function () {
             var table = $('#attendance_list').DataTable();
             var pageNumber = table.page.info().page + 1;
             setCookieFromPageForDataTable(pageNumber)

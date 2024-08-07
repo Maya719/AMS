@@ -73,15 +73,13 @@ class Attendance_model extends CI_Model
     public function get_attendance()
     {
         $get = $this->input->get();
-        $attendance_view_all = permissions('attendance_view_all') || permissions('attendance_view_selected');
-        if ($this->ion_auth->is_admin() || $attendance_view_all) {
-            $attendance = $this->get_attendance_for_admin($get);
-            $formated_data = $this->formated_data($attendance, $get);
-        } else {
-            $leaves = [];
-            $formated_data = [];
+        $attendance = $this->get_attendance_for_admin($get);
+        $formated_data = $this->formated_data($attendance, $get);
+        if (isset($get['q1'])) {
+            // echo $formated_data[$get['q1']][0][$get['q2']];
+            echo json_encode(['late_minutes' => explode("/", $formated_data[$get['q1']][0]['summery'])[2]]);
+            exit;
         }
-
         echo json_encode($formated_data);
     }
 
@@ -262,12 +260,12 @@ class Attendance_model extends CI_Model
                 } elseif ($holiday["apply"] == '1') {
                     $user = $this->ion_auth->user($user_id)->row();
                     $department = $user->department;
-                    $appliedDepart =  json_decode($holiday["department"]);
+                    $appliedDepart = json_decode($holiday["department"]);
                     if (in_array($department, $appliedDepart)) {
                         return true;
                     }
                 } elseif ($holiday["apply"] == '2') {
-                    $appliedUser =  json_decode($holiday["users"]);
+                    $appliedUser = json_decode($holiday["users"]);
                     if (in_array($user_id, $appliedUser)) {
                         return true;
                     }
@@ -342,6 +340,7 @@ class Attendance_model extends CI_Model
         $where .= " AND users.saas_id=" . $this->session->userdata('saas_id') . " ";
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user
         FROM attendance " . $leftjoin . $where . " AND users.finger_config=1");
+
         $results = $query->result_array();
         return $results;
     }
@@ -375,7 +374,7 @@ class Attendance_model extends CI_Model
             if ($user->finger_config == '1' && $user->active == '1') {
                 $total_staff++;
                 $userPresent = false;
-                foreach ($results as  $attendance) {
+                foreach ($results as $attendance) {
                     if ($user->employee_id == $attendance["user_id"]) {
                         $present++;
                         $userPresent = true;
@@ -601,7 +600,7 @@ class Attendance_model extends CI_Model
                             } else {
                                 if ($min["checkoffclock"]) {
                                     $userData["status"][] = 'OC';
-                                }else {
+                                } else {
                                     $userData["status"][] = 'P';
                                 }
                             }
@@ -663,7 +662,7 @@ class Attendance_model extends CI_Model
         $checkoffclock = false;
         $checkInDateTime = new DateTime($date . ' ' . $checkInTime);
         if ($checkInDateTime != $checkOutDateTime) {
-            if ($this->checkHalfDayLeave($date, $employee_id, $date,)) {
+            if ($this->checkHalfDayLeave($date, $employee_id, $date, )) {
                 $halfDayLeave = true;
                 $lateMinutes = 0;
             } else {

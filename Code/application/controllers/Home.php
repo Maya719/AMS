@@ -37,7 +37,6 @@ class Home extends CI_Controller
 	}
 	public function get_home_attendance()
 	{
-
 		$get = $this->input->get();
 		$dateRec = $get["date"];
 		$present = $get["present"];

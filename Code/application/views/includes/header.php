@@ -65,7 +65,8 @@ if ($my_current_lang) {
   <link href="<?= base_url('assets2/vendor/datatables/css/jquery.dataTables.min.css') ?>" rel="stylesheet"
     type="text/css" />
 
-  <link href="<?= base_url('assets2/vendor/datatables/responsive/responsive.css') ?>" rel="stylesheet" type="text/css" />
+  <link href="<?= base_url('assets2/vendor/datatables/responsive/responsive.css') ?>" rel="stylesheet"
+    type="text/css" />
 
   <link href="<?= base_url('assets2/vendor/clockpicker/css/bootstrap-clockpicker.min.css') ?>" rel="stylesheet"
     type="text/css" />
