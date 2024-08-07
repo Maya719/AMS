@@ -85,13 +85,20 @@
                                                 </select>
                                             </div>
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
-                                                <div class="col-lg-12 form-group mb-3">
+                                                <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs" style="display: none;">
+                                                    <label class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
+                                                    <input type="number" name="paid_days" id="paid_days" class="form-control">
+                                                    <label class="col-form-label"><?= $this->lang->line('unpaid_days') ? $this->lang->line('unpaid_days') : 'Unpaid Days' ?></label>
+                                                    <input type="number" name="unpaid_days" id="unpaid_days" class="form-control">
+                                                </div>
+                                                <div class="col-lg-12 form-group mb-3" id="paid_unpaid_div">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
                                                     <select name="paid" id="paid" class="form-control select2">
                                                         <option value="0" <?= $leave[0]["paid"] == 0 ? "selected" : "" ?>><?= $this->lang->line('paid') ? $this->lang->line('paid') : 'Paid Leave' ?></option>
                                                         <option value="1" <?= $leave[0]["paid"] == 1 ? "selected" : "" ?>><?= $this->lang->line('unpaid') ? $this->lang->line('unpaid') : 'Unpaid Leave' ?></option>
                                                     </select>
                                                 </div>
+                                                <div id="alart"></div>
                                             <?php } ?>
                                             <?php
                                             $leaveValue = showTypeDate($leave[0]["leave_duration"]);
@@ -365,16 +372,78 @@
                     $(".btn-edit-leave").prop("disabled", true);
                 },
                 success: function(result) {
+                    console.log(result);
                     closeChildAndReloadMain();
                 },
                 complete: function() {
                     $(".btn-edit-leave").prop("disabled", false);
-                }
+                },
             });
 
             e.preventDefault();
         });
         $('.select2').select2();
+        $(document).ready(function() {
+            changeDivBehave();
+
+            function validatePaidUnpaidDays(diffDays) {
+                var paidDays = parseInt($('#paid_days').val()) || 0;
+                var unpaidDays = parseInt($('#unpaid_days').val()) || 0;
+                var totalDays = paidDays + unpaidDays;
+                if (totalDays !== diffDays) {
+                    $('#alart').html('<p class="text-danger">Sum of Paid and Unpaid days must be equal to the duration of the leave. Total Duration is ' + diffDays + '</p>');
+                    $(".btn-create-leave").prop("disabled", true).html('Error');
+                    return false;
+                } else {
+                    $('#alart').html('');
+                    $(".btn-create-leave").prop("disabled", false).html('Create');
+                }
+                return true;
+            }
+
+            $('#starting_date, #ending_date').on('change', function() {
+                changeDivBehave();
+            });
+
+            function changeDivBehave() {
+                var startDate = new Date($('#starting_date').val());
+                var endDate = new Date($('#ending_date').val());
+                if (startDate && endDate && (endDate >= startDate)) {
+                    var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+                    console.log('run');
+                    validatePaidUnpaidDays(diffDays);
+                    if (diffDays > 1) {
+                        $('#paid_unpaid_div').hide();
+                        $('#paid_unpaid_inputs').show();
+
+                        $('#paid_days, #unpaid_days').on('input', function() {
+                            validatePaidUnpaidDays(diffDays);
+                        });
+                    } else {
+                        $('#alart').html('');
+                        $('#paid_unpaid_div').show();
+                        $('#paid_unpaid_inputs').hide();
+                        $(".btn-create-leave").prop("disabled", false).html('Create');
+                    }
+                } else {
+                    $('#paid_unpaid_div').show();
+                    $('#paid_unpaid_inputs').hide();
+                }
+            }
+            $('#half_day, #short_leave').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#alart').html('');
+                    $('#paid_unpaid_div').val(0);
+                    $('#paid_unpaid_div').show();
+                    $('#paid_unpaid_inputs').val(0);
+                    $('#paid_unpaid_inputs').hide();
+                    $(".btn-create-leave").prop("disabled", false).html('Create');
+                } else {
+                    changeDivBehave();
+                }
+            });
+        });
     </script>
 
 </body>

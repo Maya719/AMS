@@ -16,6 +16,9 @@
     #attendance_list tbody td {
         padding: 1px 5px;
     }
+    .daterangepicker .ranges li.active {
+        background-color: <?=theme_color()?>;
+    }
 </style>
 </head>
 
@@ -458,57 +461,51 @@
         }
     </script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            
-
-            $('#config-text').keyup(function() {
-                eval($(this).val());
-            });
-
-            $('.configurator input').change(function() {
-                updateConfig();
-            });
-
-            $('.demo i').click(function() {
-                $(this).parent().find('input').click();
-            });
-
-            updateConfig();
-
-            $('#config-demo').click(function() {
-                $(this).data('daterangepicker').show();
-            });
-
-            function updateConfig() {
-                var options = {
-                    startDate: moment().startOf('month'),
-                    endDate: moment(),
-                    maxDate: moment(),
-                    ranges: {
-                        'Today': [moment(), moment()],
-                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                        'This Month': [moment().startOf('month'), moment()],
-                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    }
-                };
-
-                $('#config-demo').daterangepicker(options, function(start, end, label) {
-                    $('#startDate').val(start.format('YYYY-MM-DD'));
-                    $('#endDate').val(end.format('YYYY-MM-DD'));
-                    setFilter();
-                }).click();
-
-
-
-                $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
-
-            }
-
-
+    $(document).ready(function() {
+        $('#config-text').keyup(function() {
+            eval($(this).val());
         });
-    </script>
+
+        $('.configurator input').change(function() {
+            updateConfig();
+        });
+
+        $('.demo i').click(function() {
+            $(this).parent().find('input').click();
+        });
+
+        updateConfig();
+
+        $('#config-demo').click(function() {
+            $(this).data('daterangepicker').show();
+        });
+
+        function updateConfig() {
+            var options = {
+                startDate: moment().startOf('month'),
+                endDate: moment(),
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment()],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            };
+
+            $('#config-demo').daterangepicker(options, function(start, end, label) {
+                $('#startDate').val(start.format('YYYY-MM-DD'));
+                $('#endDate').val(end.format('YYYY-MM-DD'));
+                setFilter();
+            });
+
+            $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+        }
+    });
+</script>
+
 
     <!-- Set Filter Cookies -->
     <script>

@@ -22,6 +22,22 @@ class Leaves_model extends CI_Model
         else
             return false;
     }
+    function deleteLeave($id)
+    {
+        $this->db->where('id', $id);
+        if ($this->db->delete('leaves'))
+            return true;
+        else
+            return false;
+    }
+    function deleteLog($id)
+    {
+        $this->db->where('id', $id);
+        if ($this->db->delete('leave_logs'))
+            return true;
+        else
+            return false;
+    }
 
     function get_leaves_by_id($id)
     {
@@ -398,42 +414,42 @@ class Leaves_model extends CI_Model
         return $step;
     }
     public function handle_document_upload()
-	{
-		if (!empty($_FILES['documents']['name'])) {
-			$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
+    {
+        if (!empty($_FILES['documents']['name'])) {
+            $upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
 
-			if (!is_dir($upload_path)) {
-				mkdir($upload_path, 0775, true);
-			}
-			$config = [
-				'upload_path' => $upload_path,
-				'allowed_types' => '*',
-				'overwrite' => false,
-				'max_size' => 0,
-				'max_width' => 0,
-				'max_height' => 0
-			];
+            if (!is_dir($upload_path)) {
+                mkdir($upload_path, 0775, true);
+            }
+            $config = [
+                'upload_path' => $upload_path,
+                'allowed_types' => '*',
+                'overwrite' => false,
+                'max_size' => 0,
+                'max_width' => 0,
+                'max_height' => 0
+            ];
 
-			$this->load->library('upload', $config);
+            $this->load->library('upload', $config);
 
-			if ($this->upload->do_upload('documents')) {
-				return $this->upload->data('file_name');
-			}
-		}
-		return '';
-	}
-	public function get_shift_times($user_id)
-	{
-		$shift_id_query = $this->db->select('shift_id')->get_where('users', ['id' => $user_id]);
-		$shift_id = $shift_id_query->row()->shift_id;
-		$shift_table = $this->db->get_where('shift', ['id' => $shift_id !== '0' ? $shift_id : 1]);
-		$shift_row = $shift_table->row();
+            if ($this->upload->do_upload('documents')) {
+                return $this->upload->data('file_name');
+            }
+        }
+        return '';
+    }
+    public function get_shift_times($user_id)
+    {
+        $shift_id_query = $this->db->select('shift_id')->get_where('users', ['id' => $user_id]);
+        $shift_id = $shift_id_query->row()->shift_id;
+        $shift_table = $this->db->get_where('shift', ['id' => $shift_id !== '0' ? $shift_id : 1]);
+        $shift_row = $shift_table->row();
 
-		return [
-			'check_in' => $shift_row->starting_time,
-			'break_start' => $shift_row->break_start,
-			'break_end' => $shift_row->break_end,
-			'check_out' => $shift_row->ending_time
-		];
-	}
+        return [
+            'check_in' => $shift_row->starting_time,
+            'break_start' => $shift_row->break_start,
+            'break_end' => $shift_row->break_end,
+            'check_out' => $shift_row->ending_time
+        ];
+    }
 }
