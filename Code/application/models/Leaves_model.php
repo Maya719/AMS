@@ -81,8 +81,7 @@ class Leaves_model extends CI_Model
         $this->db->where('id', $id);
         $this->db->where('saas_id', $this->session->userdata('saas_id'));
         $query = $this->db->get('leaves');
-        $value = $query->row_array(); // Get single row
-
+        $value = $query->row_array();
         if ($value) {
             $starting_date = strtotime($value['starting_date']);
             $ending_date = strtotime($value['ending_date']);
@@ -90,7 +89,6 @@ class Leaves_model extends CI_Model
             $leaveDurationInDays = $leaveDurationInSeconds / 86400;
             return $leaveDurationInDays + 1;
         }
-
         return 0;
     }
 
