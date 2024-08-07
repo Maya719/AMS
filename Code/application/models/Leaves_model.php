@@ -22,6 +22,22 @@ class Leaves_model extends CI_Model
         else
             return false;
     }
+    function deleteLeave($id)
+    {
+        $this->db->where('id', $id);
+        if ($this->db->delete('leaves'))
+            return true;
+        else
+            return false;
+    }
+    function deleteLog($id)
+    {
+        $this->db->where('id', $id);
+        if ($this->db->delete('leave_logs'))
+            return true;
+        else
+            return false;
+    }
 
     function get_leaves_by_id($id)
     {
@@ -31,9 +47,10 @@ class Leaves_model extends CI_Model
         $query = $this->db->query("SELECT * FROM leaves " . $where);
         $results = $query->result_array();
         foreach ($results as &$value) {
-            $query = $this->db->query("SELECT id FROM users WHERE employee_id = " . $value["user_id"]);
+            $query = $this->db->query("SELECT * FROM users WHERE employee_id = " . $value["user_id"]);
             $user = $query->row();
             $value["user_id"] = $user->id;
+            $active = $user->active;
             $value["starting_date"] = format_date($value['starting_date'], system_date_format());
             $value["ending_date"] = format_date($value['ending_date'], system_date_format());
             $stepResult = $this->getStatusForword($id);
@@ -44,22 +61,42 @@ class Leaves_model extends CI_Model
             $forword_result = $this->is_forworded($current_group_id, $step, $emppp);
             $value["current_group_id"] = $current_group_id;
             $value["step"] = $step;
-            if ($value["status"] == 1) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
-            } elseif ($value["status"] == 2) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>Rejected</button>';
-            } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin())) {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
-            } else {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2">Save</button>';
-                if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
-                    $value["btnHTML"] .= '<button type="button" class="btn btn-delete-leave btn-block btn-danger">Delete</button>';
+            if ($active == '1') {
+                if ($value["status"] == 1) {
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-success mx-2" disabled>Approved</button>';
+                } elseif ($value["status"] == 2) {
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>Rejected</button>';
+                } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin())) {
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
+                } else {
+                    if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
+                        $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave btn-block col btn-danger mx-2">Delete</button>';
+                    }
+                    $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave btn-block col btn-primary ">Save</button>';
                 }
+            }else{
+                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>User is deactive</button>';
             }
             $value["forword_result"] = $forword_result;
         }
         return $results;
     }
+    function get_leave_duration($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->where('saas_id', $this->session->userdata('saas_id'));
+        $query = $this->db->get('leaves');
+        $value = $query->row_array();
+        if ($value) {
+            $starting_date = strtotime($value['starting_date']);
+            $ending_date = strtotime($value['ending_date']);
+            $leaveDurationInSeconds = $ending_date - $starting_date;
+            $leaveDurationInDays = $leaveDurationInSeconds / 86400;
+            return $leaveDurationInDays + 1;
+        }
+        return 0;
+    }
+
 
     /*
     *
@@ -131,6 +168,16 @@ class Leaves_model extends CI_Model
             }
             $where .= " AND l.status = " . $status;
         }
+        if (isset($get['userstatus']) &&  !empty($get['userstatus'])) {
+            $userstatus = $get["userstatus"];
+            if ($userstatus == '1') {
+                $active = '1';
+            }else{
+                $active = '0';
+            }
+            $where .= " AND u.active = " . $active;
+        }
+        
         if (isset($get['leave_type']) &&  !empty($get['leave_type'])) {
             $type = $get["leave_type"];
             $where .= " AND l.type = " . $type;
@@ -398,42 +445,42 @@ class Leaves_model extends CI_Model
         return $step;
     }
     public function handle_document_upload()
-	{
-		if (!empty($_FILES['documents']['name'])) {
-			$upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
+    {
+        if (!empty($_FILES['documents']['name'])) {
+            $upload_path = 'assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/';
 
-			if (!is_dir($upload_path)) {
-				mkdir($upload_path, 0775, true);
-			}
-			$config = [
-				'upload_path' => $upload_path,
-				'allowed_types' => '*',
-				'overwrite' => false,
-				'max_size' => 0,
-				'max_width' => 0,
-				'max_height' => 0
-			];
+            if (!is_dir($upload_path)) {
+                mkdir($upload_path, 0775, true);
+            }
+            $config = [
+                'upload_path' => $upload_path,
+                'allowed_types' => '*',
+                'overwrite' => false,
+                'max_size' => 0,
+                'max_width' => 0,
+                'max_height' => 0
+            ];
 
-			$this->load->library('upload', $config);
+            $this->load->library('upload', $config);
 
-			if ($this->upload->do_upload('documents')) {
-				return $this->upload->data('file_name');
-			}
-		}
-		return '';
-	}
-	public function get_shift_times($user_id)
-	{
-		$shift_id_query = $this->db->select('shift_id')->get_where('users', ['id' => $user_id]);
-		$shift_id = $shift_id_query->row()->shift_id;
-		$shift_table = $this->db->get_where('shift', ['id' => $shift_id !== '0' ? $shift_id : 1]);
-		$shift_row = $shift_table->row();
+            if ($this->upload->do_upload('documents')) {
+                return $this->upload->data('file_name');
+            }
+        }
+        return '';
+    }
+    public function get_shift_times($user_id)
+    {
+        $shift_id_query = $this->db->select('shift_id')->get_where('users', ['id' => $user_id]);
+        $shift_id = $shift_id_query->row()->shift_id;
+        $shift_table = $this->db->get_where('shift', ['id' => $shift_id !== '0' ? $shift_id : 1]);
+        $shift_row = $shift_table->row();
 
-		return [
-			'check_in' => $shift_row->starting_time,
-			'break_start' => $shift_row->break_start,
-			'break_end' => $shift_row->break_end,
-			'check_out' => $shift_row->ending_time
-		];
-	}
+        return [
+            'check_in' => $shift_row->starting_time,
+            'break_start' => $shift_row->break_start,
+            'break_end' => $shift_row->break_end,
+            'check_out' => $shift_row->ending_time
+        ];
+    }
 }

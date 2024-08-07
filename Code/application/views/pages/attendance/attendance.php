@@ -19,9 +19,13 @@
     }
 
     .daterangepicker .ranges li.active {
+<<<<<<< HEAD
         background-color:
             <?= theme_color() ?>
         ;
+=======
+        background-color: <?= theme_color() ?>;
+>>>>>>> c49f6791fa6ac52aae8ecc28e446bfb8339da9cf
     }
 </style>
 </head>
@@ -482,8 +486,13 @@
         }
     </script>
     <script type="text/javascript">
+<<<<<<< HEAD
         $(document).ready(function () {
             $('#config-text').keyup(function () {
+=======
+        $(document).ready(function() {
+            $('#config-text').keyup(function() {
+>>>>>>> c49f6791fa6ac52aae8ecc28e446bfb8339da9cf
                 eval($(this).val());
             });
 

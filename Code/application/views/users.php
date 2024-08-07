@@ -92,11 +92,9 @@
                   <table id="employee_list" class="table table-sm mb-0">
                     <thead>
                       <tr>
-
                       </tr>
                     </thead>
                     <tbody id="customers">
-
                     </tbody>
                   </table>
                 </div>
@@ -118,6 +116,7 @@
 ***********************************-->
   </div>
   <?php $this->load->view('includes/scripts'); ?>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
   <script>
     $(document).ready(function() {
       setFilter();
@@ -235,13 +234,11 @@
 
       function startThriteenTutorial() {
         introJs().setOptions({
-          steps: [
-            {
-              element: '#stepInput15',
-              intro: "Click <strong>Add</strong> to open the Employee adding form.",
-              position: 'right',
-            }
-          ],
+          steps: [{
+            element: '#stepInput15',
+            intro: "Click <strong>Add</strong> to open the Employee adding form.",
+            position: 'right',
+          }],
           showBullets: false,
           tooltipClass: 'customTooltip'
         }).start().oncomplete(function() {
@@ -252,6 +249,30 @@
           window.location.href = base_url + 'users/create_user';
         });
       }
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      $('#active').val(Cookies.get('active') || '').trigger('change');
+      $('#department').val(Cookies.get('department') || '').trigger('change');
+      $('#shift').val(Cookies.get('shift') || '').trigger('change');
+
+      $('#active').change(function() {
+        Cookies.set('active', $(this).val(), {
+          expires: 1
+        });
+      });
+
+      $('#department').change(function() {
+        Cookies.set('department', $(this).val(), {
+          expires: 1
+        });
+      });
+      $('#shift').change(function() {
+        Cookies.set('shift', $(this).val(), {
+          expires: 1
+        });
+      });
     });
   </script>
 </body>

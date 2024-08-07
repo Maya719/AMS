@@ -21,6 +21,10 @@
   .table td {
     padding: 5px;
   }
+
+  .daterangepicker .ranges li.active {
+    background-color: <?= theme_color() ?>;
+  }
 </style>
 </head>
 
@@ -299,6 +303,7 @@
       $('#config-text').keyup(function() {
         eval($(this).val());
       });
+
       $('.configurator input').change(function() {
         updateConfig();
       });
@@ -332,16 +337,10 @@
           $('#startDate').val(start.format('YYYY-MM-DD'));
           $('#endDate').val(end.format('YYYY-MM-DD'));
           setFilter();
-          console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-        }).click();
-
-
+        });
 
         $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
-
       }
-
-
     });
   </script>
   <script>

@@ -4,64 +4,19 @@
 function setFilter() {
     var employee_id = $('#employee_id').val();
     var leave_type = $('#leave_type').val();
-    var filterOption = $('#dateFilter').val();
     var status = $('#status_name').val();
+    var userstatus = $('#status').val();
+    var startDate = $("#startDate").val();
+    var endDate = $("#endDate").val();
 
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const day = today.getDate();
-
-    let fromDate, toDate;
-
-    switch (filterOption) {
-        case "today":
-            fromDate = new Date(year, month, day);
-            toDate = new Date(year, month, day);
-            break;
-        case "ystdy":
-            fromDate = new Date(year, month, day - 1);
-            toDate = new Date(year, month, day - 1);
-            break;
-        case "tweek":
-            fromDate = new Date(year, month, day - today.getDay());
-            toDate = new Date(year, month, day);
-            break;
-        case "lweek":
-            fromDate = new Date(year, month, day - today.getDay() - 7);
-            toDate = new Date(year, month, day - today.getDay() - 1);
-            break;
-        case "tmonth":
-            fromDate = new Date(year, month, 1);
-            toDate = new Date(year, month + 1, 0);
-            break;
-        case "lmonth":
-            fromDate = new Date(year, month - 1, 1);
-            toDate = new Date(year, month, 0);
-            break;
-        case "tyear":
-            fromDate = new Date(year, 0, 1);
-            toDate = new Date(year, 11, 31);
-            break;
-        case "lyear":
-            fromDate = new Date(year - 1, 0, 1);
-            toDate = new Date(year - 1, 11, 31);
-            break;
-        default:
-            console.error("Invalid filter option:", filterOption);
-            return null;
-    }
-
-    // Format dates as strings
-    var formattedFromDate = formatDate(fromDate, "Y-m-d");
-    var formattedToDate = formatDate(toDate, "Y-m-d");
-    ajaxCall(employee_id, leave_type, status, formattedFromDate, formattedToDate);
+    ajaxCall(userstatus, employee_id, leave_type, status, startDate, endDate);
 }
-function ajaxCall(employee_id, leave_type, status, from, too) {
+function ajaxCall(userstatus, employee_id, leave_type, status, from, too) {
     $.ajax({
         url: base_url + 'leaves/get_leaves',
         type: 'GET',
         data: {
+            userstatus: userstatus,
             user_id: employee_id,
             leave_type: leave_type,
             status: status,
@@ -147,7 +102,7 @@ function showTable(data) {
         tbody.append(userRow);
     });
     let cookieValue = getCookie('leave_list_length');
-    if (cookieValue) {} else {
+    if (cookieValue) { } else {
         cookieValue = 10;
     }
     table.DataTable({
@@ -168,10 +123,10 @@ function showTable(data) {
     });
     if ($.fn.DataTable.isDataTable('#leave_list')) {
         let cookieValue = getCookie('page_no');
-        if (cookieValue) {} else {
+        if (cookieValue) { } else {
             cookieValue = 1;
         }
-        var table = $('#leave_list').DataTable(); 
+        var table = $('#leave_list').DataTable();
         table.page(cookieValue - 1).draw(false);
         console.log("Set current page number to:", cookieValue);
     } else {

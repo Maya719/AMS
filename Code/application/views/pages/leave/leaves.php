@@ -1,5 +1,9 @@
 <?php $this->load->view('includes/header'); ?>
+<link rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
 <style>
+  .daterangepicker .ranges li.active {
+    background-color: <?= theme_color() ?>;
+  }
 </style>
 </head>
 
@@ -50,7 +54,13 @@
                 <div class="basic-form">
                   <form class="row">
                     <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
-                      <div class="col-lg-3">
+                      <div class="col-lg-2">
+                        <select class="form-select select2" id="status">
+                          <option value="1">Active</option>
+                          <option value="2">Inactive</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
                         <select class="form-select select2" id="employee_id" onchange="setCookieFromSelect('employee_id')">
                           <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                           <?php foreach ($system_users as $system_user) {
@@ -62,7 +72,7 @@
                       </div>
                     <?php
                     } ?>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                       <select class="form-select select2" id="leave_type" onchange="setCookieFromSelect('leave_type')">
                         <option value=""><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave type' ?></option>
                         <?php foreach ($leaves_types as $leaves_type) : ?>
@@ -70,7 +80,7 @@
                         <?php endforeach ?>
                       </select>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                       <select class="form-select select2" id="status_name" onchange="setCookieFromSelect('status_name')">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
@@ -79,13 +89,10 @@
                       </select>
                     </div>
                     <div class="col-lg-3">
-                      <select class="form-select select2" id="dateFilter" onchange="setCookieFromSelect('dateFilter')">
-                        <option value="tmonth" selected>This Month</option>
-                        <option value="lmonth">Last Month</option>
-                        <option value="tyear">This Year</option>
-                        <option value="lyear">last Year</option>
-                      </select>
+                      <input type="text" id="config-demo" class="form-control">
                     </div>
+                    <input type="hidden" id="startDate">
+                    <input type="hidden" id="endDate">
                   </form>
                 </div>
               </div>
@@ -123,10 +130,14 @@
   </div>
   <?php $this->load->view('includes/scripts'); ?>
   <script src="<?= base_url('assets2/js/leaves/leaves.js') ?>"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+  <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
   <script>
     $(document).ready(function() {
+      $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
+      $('#endDate').val(moment().format('YYYY-MM-DD'));
       setFilter();
-      $(document).on('change', '#leave_type, #status_name, #employee_id,#dateFilter, #from,#too', function() {
+      $(document).on('change', '#leave_type, #status_name, #employee_id, #from,#too,#status', function() {
         setFilter();
       });
     });
@@ -196,8 +207,8 @@
     function setCookieFromSelectForDataTable(currentPageLength) {
       setCookie('leave_list_length', currentPageLength, 7);
     }
-    function setCookieFromPageForDataTable(pageNumber)
-    {
+
+    function setCookieFromPageForDataTable(pageNumber) {
       setCookie('page_no', pageNumber, 7);
     }
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -211,12 +222,79 @@
     });
     // Event listener for page change
     $('#leave_list').on('page.dt', function() {
-      var table = $('#leave_list').DataTable(); 
-      var pageNumber = table.page.info().page + 1; 
+      var table = $('#leave_list').DataTable();
+      var pageNumber = table.page.info().page + 1;
       setCookieFromPageForDataTable(pageNumber)
     });
-  </script>
+    $(document).on('change', '#status', function() {
+      var status = $('#status').val();
+      $.ajax({
+        url: '<?= base_url('attendance/get_users_by_status') ?>',
+        type: 'POST',
+        data: {
+          status: status,
+        },
+        success: function(response) {
+          var tableData = JSON.parse(response);
+          $('#employee_id').empty();
+          $('#employee_id').append('<option value="">Employee</option>');
+          tableData.forEach(function(department) {
+            $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+          });
+        },
+        complete: function() {},
+        error: function(error) {
+          console.error(error);
+        }
 
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#config-text').keyup(function() {
+        eval($(this).val());
+      });
+
+      $('.configurator input').change(function() {
+        updateConfig();
+      });
+
+      $('.demo i').click(function() {
+        $(this).parent().find('input').click();
+      });
+
+      updateConfig();
+
+      $('#config-demo').click(function() {
+        $(this).data('daterangepicker').show();
+      });
+
+      function updateConfig() {
+        var options = {
+          startDate: moment().startOf('month'),
+          endDate: moment(),
+          maxDate: moment(),
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment()],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          }
+        };
+
+        $('#config-demo').daterangepicker(options, function(start, end, label) {
+          $('#startDate').val(start.format('YYYY-MM-DD'));
+          $('#endDate').val(end.format('YYYY-MM-DD'));
+          setFilter();
+        });
+
+        $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+      }
+    });
+  </script>
 </body>
 
 </html>
