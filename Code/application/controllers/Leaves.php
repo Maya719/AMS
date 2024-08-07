@@ -221,8 +221,13 @@ class Leaves extends CI_Controller
 	}
 	private function prepareLeaveData()
 	{
+		$employeeIdQuery = $this->db->select('employee_id')->get_where('users', array('id' => $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id')));
+		if ($employeeIdQuery->num_rows() > 0) {
+			$employeeIdRow = $employeeIdQuery->row();
+			$employeeId = $employeeIdRow->employee_id;
+		}
 		$data = [
-			'user_id' => get_employee_id_from_user_id($this->input->post('user_id')),
+			'user_id' => $employeeId,
 			'saas_id' => $this->session->userdata('saas_id'),
 			'leave_reason' => $this->input->post('leave_reason'),
 			'type' => $this->input->post('type'),
