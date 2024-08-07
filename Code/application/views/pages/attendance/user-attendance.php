@@ -219,7 +219,7 @@
           const formattedDateString = formattedDate.toLocaleString('en-US', {
             weekday: 'short'
           }); // Use 'short' to get abbreviated day names
-          userRow += '<th style="font-size:10px;">' + formattedDateString + '</th>';
+          userRow += '<th style="font-size:10px;" class="testing">' + formattedDateString + '</th>';
         });
         userRow += '</tr>';
         userRow += '<tr>';

@@ -164,7 +164,6 @@ class Attendance extends CI_Controller
 			$responseData = array(
 				'report' => $attendanceReport,
 			);
-			return '';
 		} else {
 			return '';
 		}
@@ -366,7 +365,6 @@ class Attendance extends CI_Controller
 	{
 
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-
 			$employee_id = $this->uri->segment($this->uri->total_segments());
 			if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
 				$user_data = $this->ion_auth->user($employee_id)->row();

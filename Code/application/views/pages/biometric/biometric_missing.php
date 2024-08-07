@@ -57,14 +57,22 @@
                     <div class="col-lg-4">
                       <select class="form-select select2" id="employee_id">
                         <option value="">
+<<<<<<< Updated upstream
                           <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?>
                         </option>
+=======
+                          <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
+>>>>>>> Stashed changes
                         <?php foreach ($system_users as $system_user) {
                           if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
                             <option value="<?= $system_user->employee_id ?>">
                               <?= htmlspecialchars($system_user->first_name) ?>
+<<<<<<< Updated upstream
                               <?= htmlspecialchars($system_user->last_name) ?>
                             </option>
+=======
+                              <?= htmlspecialchars($system_user->last_name) ?></option>
+>>>>>>> Stashed changes
                           <?php }
                         } ?>
                       </select>
@@ -139,8 +147,12 @@
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?>
+<<<<<<< Updated upstream
                           <?= htmlspecialchars($system_user->last_name) ?>
                         </option>
+=======
+                          <?= htmlspecialchars($system_user->last_name) ?></option>
+>>>>>>> Stashed changes
                       <?php }
                     } ?>
                   </select>
@@ -201,8 +213,12 @@
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?>
+<<<<<<< Updated upstream
                           <?= htmlspecialchars($system_user->last_name) ?>
                         </option>
+=======
+                          <?= htmlspecialchars($system_user->last_name) ?></option>
+>>>>>>> Stashed changes
                       <?php }
                     } ?>
                   </select>
@@ -264,6 +280,7 @@
   <?php $this->load->view('includes/scripts'); ?>
   <script>
     $(document).ready(function () {
+<<<<<<< Updated upstream
 
       function initializeValuesFromCookies() {
         var employee_id = Cookies.get('employee_id') || $('#employee_id').val();
@@ -285,6 +302,10 @@
       $(document).on('change', '#status, #employee_id,#dateFilter, #from,#too', function () {
         console.log("Setting value of: " + $(this).attr('id') + " | value: " + $(this).val())
         Cookies.set($(this).attr('id'), $(this).val(), { expires: 1 });
+=======
+      setFilter();
+      $(document).on('change', '#status, #employee_id,#dateFilter, #from,#too', function () {
+>>>>>>> Stashed changes
         setFilter();
       });
 
