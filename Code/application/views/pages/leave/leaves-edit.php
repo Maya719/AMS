@@ -374,7 +374,7 @@
                 },
                 success: function(result) {
                     console.log(result);
-                    // closeChildAndReloadMain();
+                    closeChildAndReloadMain();
                 },
                 complete: function() {
                     $(".btn-edit-leave").prop("disabled", false);
