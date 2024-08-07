@@ -78,6 +78,11 @@ class Leaves extends CI_Controller
 			$this->respondWithError(validation_errors());
 			return;
 		}
+		$incorrectTimesError = $this->incorrectTimesError();
+		if ($incorrectTimesError["status"]) {
+			$this->respondWithError($incorrectTimesError["message"]);
+			return;
+		}
 		$data = $this->prepareLeaveData();
 		$logs = $this->NextLog($data[0]);
 		if ($this->leaves_model->edit($this->input->post('update_id'), $data[0])) {
@@ -94,7 +99,7 @@ class Leaves extends CI_Controller
 					$this->leaves_model->createLog($newlog);
 				}
 			}
-			$this->respondWithSuccess($this->lang->line('updated_successfully') ?: "Updated Successfully.", $logs);
+			$this->respondWithSuccess($this->lang->line('updated_successfully') ?: "Updated Successfully.", $incorrectTimesError);
 		} else {
 			$this->respondWithError($this->lang->line('something_went_wrong') ?: "Something went wrong.");
 			return;
@@ -102,6 +107,28 @@ class Leaves extends CI_Controller
 	}
 
 
+	private function incorrectTimesError()
+	{
+
+		if ($this->input->post('short_leave')) {
+			$startingTime = strtotime($this->input->post('starting_time'));
+			$endingTime = strtotime($this->input->post('ending_time'));
+			$durationSeconds = $endingTime - $startingTime;
+			$durationHours = floor($durationSeconds / 3600);
+			$durationMinutes = floor(($durationSeconds % 3600) / 60);
+			if (($durationHours < 3) || ($durationHours == 3 && $durationMinutes == 0)) {
+				$response = [
+					"status" => false,
+				];
+			} else {
+				$response = [
+					"status" => true,
+					"message" => 'Check Time manually'
+				];
+			}
+		}
+		return $response;
+	}
 	private function get_step_users($step, $leave)
 	{
 		$users = array();
@@ -124,16 +151,17 @@ class Leaves extends CI_Controller
 	private function sendNotification($users, $leave)
 	{
 		$template_data = array();
+		$leave_user = $this->ion_auth->user(get_user_id_from_employee_id($leave["user_id"]))->row();
 		foreach ($users as $user) {
 			if ($user->active == '1') {
+				$template_data['EMPLOYEE_NAME'] = $leave_user->first_name . ' ' . $leave_user->last_name;
 				$template_data['NAME'] = $user->first_name . ' ' . $user->last_name;
-				$type = $this->input->post('type');
 				$template_data['LEAVE_TYPE'] = '';
 				$querys = $this->db->query("SELECT * FROM leaves_type");
 				$leave_types = $querys->result_array();
 				if (!empty($leave_types)) {
 					foreach ($leave_types as $leave_type) {
-						if ($type == $leave['id']) {
+						if ($leave["type"] == $leave_type['id']) {
 							$template_data['LEAVE_TYPE'] = $leave_type['name'];
 						}
 					}
@@ -721,6 +749,7 @@ class Leaves extends CI_Controller
 			$this->db->where('saas_id', $saas_id);
 			$query = $this->db->get('leaves_type');
 			$this->data['leave'] = $this->leaves_model->get_leaves_by_id($id);
+			$this->data['durations'] = $this->leaves_model->get_leave_duration($id);
 			$this->data['leaves_types'] = $query->result_array();
 			$this->db->where('leave_id', $id);
 			$logs_query = $this->db->get('leave_logs');
@@ -736,7 +765,7 @@ class Leaves extends CI_Controller
 					$leaves_log["status"] = '' . $group->description . ' <strong class="text-success">Approve</strong>';
 					$leaves_log["class"] = 'success';
 				} else if ($leaves_log["status"] == 0) {
-					$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Pending</strong>';
+					$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Created</strong>';
 					$leaves_log["class"] = 'primary';
 				} else {
 					$leaves_log["status"] = '' . $group->description . ' <strong class="text-danger">Reject</strong>';

@@ -67,15 +67,33 @@ class Leaves_model extends CI_Model
             } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin())) {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
             } else {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-primary mx-2">Save</button>';
                 if (permissions('leaves_delete') || $this->ion_auth->is_admin()) {
-                    $value["btnHTML"] .= '<button type="button" class="btn btn-delete-leave btn-block btn-danger">Delete</button>';
+                    $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave btn-block col btn-danger mx-2">Delete</button>';
                 }
+                $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave btn-block col btn-primary ">Save</button>';
             }
             $value["forword_result"] = $forword_result;
         }
         return $results;
     }
+    function get_leave_duration($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->where('saas_id', $this->session->userdata('saas_id'));
+        $query = $this->db->get('leaves');
+        $value = $query->row_array(); // Get single row
+
+        if ($value) {
+            $starting_date = strtotime($value['starting_date']);
+            $ending_date = strtotime($value['ending_date']);
+            $leaveDurationInSeconds = $ending_date - $starting_date;
+            $leaveDurationInDays = $leaveDurationInSeconds / 86400;
+            return $leaveDurationInDays + 1;
+        }
+
+        return 0;
+    }
+
 
     /*
     *

@@ -84,12 +84,13 @@
                                                     } ?>
                                                 </select>
                                             </div>
+                                            
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                                                 <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs" style="display: none;">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
-                                                    <input type="number" name="paid_days" id="paid_days" class="form-control">
+                                                    <input type="number" name="paid_days" value="<?= ($leave[0]["paid"] == '0') ? $durations : '0' ?>" id="paid_days" class="form-control">
                                                     <label class="col-form-label"><?= $this->lang->line('unpaid_days') ? $this->lang->line('unpaid_days') : 'Unpaid Days' ?></label>
-                                                    <input type="number" name="unpaid_days" id="unpaid_days" class="form-control">
+                                                    <input type="number" name="unpaid_days" value="<?= ($leave[0]["paid"] == '1') ? $durations : '0' ?>" id="unpaid_days" class="form-control">
                                                 </div>
                                                 <div class="col-lg-12 form-group mb-3" id="paid_unpaid_div">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
@@ -187,8 +188,8 @@
                                                 </select>
                                             </div>
                                             <div class="form-group mb-3" id="remarksSection" style="display: none;">
-                                                <label class="col-form-label"><?= $this->lang->line('remarks') ? $this->lang->line('remarks') : 'Your Remark' ?><span class="text-danger">*</span></label>
-                                                <textarea type="text" name="remarks" id="remarks" class="form-control" required=""></textarea>
+                                                <label class="col-form-label"><?= $this->lang->line('remarks') ? $this->lang->line('remarks') : 'Your Remark' ?></label>
+                                                <textarea type="text" name="remarks" id="remarks" class="form-control"></textarea>
                                             </div>
 
                                         <?php } ?>
@@ -373,7 +374,7 @@
                 },
                 success: function(result) {
                     console.log(result);
-                    closeChildAndReloadMain();
+                    // closeChildAndReloadMain();
                 },
                 complete: function() {
                     $(".btn-edit-leave").prop("disabled", false);
