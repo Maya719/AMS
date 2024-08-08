@@ -223,8 +223,8 @@
 
         function updateConfig() {
             // Retrieve dates from sessionStorage or use defaults
-            const storedStartDate = sessionStorage.getItem('startDate');
-            const storedEndDate = sessionStorage.getItem('endDate');
+            const storedStartDate = sessionStorage.getItem('att_startDate');
+            const storedEndDate = sessionStorage.getItem('att_endDate');
 
             const startDate = storedStartDate ? moment(storedStartDate) : moment().startOf('month');
             const endDate = storedEndDate ? moment(storedEndDate) : moment();
