@@ -39,8 +39,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
-                        <li class="breadcrumb-item"><a class="text-primary"
-                                href="<?= base_url('leaves') ?>"><?= $main_page ?></a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('leaves') ?>"><?= $main_page ?></a></li>
                         <li class="breadcrumb-item active" aria-current="page">Create Leave</li>
                     </ol>
                 </nav>
@@ -51,14 +50,12 @@
                                 <h5 class="card-title">Create Leave Application</h5>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('leaves/create') ?>" method="POST"
-                                    id="modal-create-leaves-part" enctype="multipart/form-data">
+                                <form action="<?= base_url('leaves/create') ?>" method="POST" id="modal-create-leaves-part" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <div class="row">
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                                                 <div class="col-lg-6 form-group mb-3">
-                                                    <label
-                                                        class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></label>
+                                                    <label class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></label>
                                                     <select name="user_id_add" id="user_id" class="form-control select2">
                                                         <option value="">
                                                             <?= $this->lang->line('select_employee') ? $this->lang->line('select_employee') : 'Select Employee' ?>
@@ -69,24 +66,22 @@
                                                                     <?= htmlspecialchars($system_user->first_name) ?>
                                                                     <?= htmlspecialchars($system_user->last_name) ?>
                                                                 </option>
-                                                            <?php }
+                                                        <?php }
                                                         } ?>
                                                     </select>
                                                 </div>
                                             <?php } ?>
                                             <div class="col-lg-6 form-group mb-3">
-                                                <label
-                                                    class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
+                                                <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
                                                 <select class="form-control select2" name="type_add" id="type">
                                                     <?php foreach ($leaves_types as $leaves) { ?>
                                                         <option value="<?= $leaves['id'] ?>"><?= $leaves['name'] ?></option>
-                                                        <?php
+                                                    <?php
                                                     } ?>
                                                 </select>
                                             </div>
                                             <div class="col-lg-12 form-group mb-3" id="paid_unpaid_div">
-                                                <label
-                                                    class="col-form-label"><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
+                                                <label class="col-form-label"><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
                                                 <select name="paid" id="paidUnpaid" class="form-control select2">
                                                     <option value="0">
                                                         <?= $this->lang->line('paid') ? $this->lang->line('paid') : 'Paid Leave' ?>
@@ -96,65 +91,43 @@
                                                     </option>
                                                 </select>
                                             </div>
-                                            <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs"
-                                                style="display: none;">
-                                                <label
-                                                    class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
-                                                <input type="number" name="paid_days" id="paid_days"
-                                                    class="form-control">
-                                                <label
-                                                    class="col-form-label"><?= $this->lang->line('unpaid_days') ? $this->lang->line('unpaid_days') : 'Unpaid Days' ?></label>
-                                                <input type="number" name="unpaid_days" id="unpaid_days"
-                                                    class="form-control">
+                                            <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs" style="display: none;">
+                                                <label class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
+                                                <input type="number" name="paid_days" id="paid_days" class="form-control">
+                                                <label class="col-form-label"><?= $this->lang->line('unpaid_days') ? $this->lang->line('unpaid_days') : 'Unpaid Days' ?></label>
+                                                <input type="number" name="unpaid_days" id="unpaid_days" class="form-control">
                                             </div>
                                             <div id="alart"></div>
                                             <div class="form-group form-check form-check-inline col-md-6 md-3 mb-3">
-                                                <input class="form-check-input" type="checkbox" id="half_day"
-                                                    name="half_day">
-                                                <label class="form-check-label text-danger"
-                                                    for="half_day"><?= $this->lang->line('half_day') ? $this->lang->line('half_day') : 'Half Day' ?></label>
+                                                <input class="form-check-input" type="checkbox" id="half_day" name="half_day">
+                                                <label class="form-check-label text-danger" for="half_day"><?= $this->lang->line('half_day') ? $this->lang->line('half_day') : 'Half Day' ?></label>
                                             </div>
 
                                             <div class="form-group form-check form-check-inline col-md-5 mb-3">
-                                                <input class="form-check-input" type="checkbox" id="short_leave"
-                                                    name="short_leave">
-                                                <label class="form-check-label text-danger"
-                                                    for="short_leave"><?= $this->lang->line('short_leave') ? $this->lang->line('short_leave') : 'Short Leave' ?></label>
+                                                <input class="form-check-input" type="checkbox" id="short_leave" name="short_leave">
+                                                <label class="form-check-label text-danger" for="short_leave"><?= $this->lang->line('short_leave') ? $this->lang->line('short_leave') : 'Short Leave' ?></label>
                                             </div>
 
                                             <div id="date_fields">
                                                 <div id="full_day_dates" class="row">
                                                     <div class="col-md-6 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" id="starting_date_create"
-                                                            name="starting_date"
-                                                            class="form-control datepicker-default required">
+                                                        <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="starting_date_create" name="starting_date" class="form-control datepicker-default required">
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" id="ending_date_create" name="ending_date"
-                                                            class="form-control datepicker-default required">
+                                                        <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="ending_date_create" name="ending_date" class="form-control datepicker-default required">
                                                     </div>
                                                 </div>
 
                                                 <div id="half_day_date" class="row" style="display: none;">
                                                     <div class="col-md-6 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" id="date_half" name="date_half"
-                                                            class="form-control datepicker-default required">
+                                                        <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="date_half" name="date_half" class="form-control datepicker-default required">
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <select name="half_day_period"
-                                                            class=" form-group form-control select2">
+                                                        <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
+                                                        <select name="half_day_period" class=" form-group form-control select2">
                                                             <option value="0">First Time</option>
                                                             <option value="1">Second Time</option>
                                                         </select>
@@ -162,51 +135,35 @@
                                                 </div>
                                                 <div id="short_leave_dates" class="row" style="display: none;">
                                                     <div class="col-md-4 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" id="date" name="date"
-                                                            class="form-control datepicker-default required">
+                                                        <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" id="date" name="date" class="form-control datepicker-default required">
                                                     </div>
                                                     <div class="col-md-4 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" name="starting_time"
-                                                            id="starting_time_create" class="form-control timepicker">
+                                                        <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" name="starting_time" id="starting_time_create" class="form-control timepicker">
                                                     </div>
                                                     <div class="col-md-4 form-group mb-3">
-                                                        <label
-                                                            class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="text" name="ending_time" id="ending_time_create"
-                                                            class="form-control timepicker">
+                                                        <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
+                                                        <input type="text" name="ending_time" id="ending_time_create" class="form-control timepicker">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="mb-3">
-                                                <label
-                                                    class="col-form-label"><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?>
-                                                    <i class="fas fa-question-circle" data-bs-toggle="tooltip"
-                                                        data-bs-placement="right"
-                                                        title="<?= $this->lang->line('if_any_leave_document') ? $this->lang->line('if_any_leave_document') : "If any Document according to leave/s." ?>"></i></label>
+                                                <label class="col-form-label"><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?>
+                                                    <i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= $this->lang->line('if_any_leave_document') ? $this->lang->line('if_any_leave_document') : "If any Document according to leave/s." ?>"></i></label>
                                                 <input class="form-control" type="file" name="documents" id="formFile">
                                             </div>
                                         </div>
                                         <div class="form-group mb-3">
-                                            <label
-                                                class="col-form-label"><?= $this->lang->line('leave_reason') ? $this->lang->line('leave_reason') : 'Leave Reason' ?><span
-                                                    class="text-danger">*</span></label>
-                                            <textarea type="text" name="leave_reason" id="leave_reason"
-                                                class="form-control" required=""></textarea>
+                                            <label class="col-form-label"><?= $this->lang->line('leave_reason') ? $this->lang->line('leave_reason') : 'Leave Reason' ?><span class="text-danger">*</span></label>
+                                            <textarea type="text" name="leave_reason" id="leave_reason" class="form-control" required=""></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
                                         <div class="col-lg-3 d-flex">
-                                            <button type="submit"
-                                                class="btn btn-create-leave btn-block btn-primary mx-2">Create</button>
+                                            <button type="submit" class="btn btn-create-leave btn-block btn-primary mx-2">Create</button>
                                         </div>
                                     </div>
                                 </form>
@@ -260,7 +217,7 @@
     <script src="<?= base_url('assets2/vendor/chartist/js/chartist.min.js') ?>"></script>
     <script src="<?= base_url('assets2/vendor/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js') ?>"></script>
     <script>
-        var multiLineChart = function () {
+        var multiLineChart = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
                 url: base_url + 'leaves/get_leaves_count',
@@ -269,10 +226,10 @@
                 data: {
                     user_id: employee_id,
                 },
-                beforeSend: function () {
+                beforeSend: function() {
                     showLoader();
                 },
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     var html = '';
                     let emptyCell = '<td class=""></td>';
@@ -303,7 +260,7 @@
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Late Minutes</td>';
-                        html += '<td id="late_minutes" class="">-</td>' + emptyCell + emptyCell;
+                        html += '<td id="late_minutes" class=""><div class="spinner-border" role="status"> <span class = "visually-hidden" > Loading... < /span> </div></td > ' + emptyCell + emptyCell;
                         html += '</tr>';
                     } else {
                         html += '<tr>';
@@ -314,15 +271,15 @@
                     $("#table_body").html(html);
 
                 },
-                complete: function () {
+                complete: function() {
                     hideLoader();
                 },
-                error: function (error) {
+                error: function(error) {
                     console.error(error);
                 }
             });
         }
-        $(document).ready(function () {
+        $(document).ready(function() {
             multiLineChart();
             getLateMinutesOfSelectedUser();
         });
@@ -352,10 +309,10 @@
                     q1: "data",
                     q2: "summary",
                 },
-                beforeSend: function () {
+                beforeSend: function() {
                     // showLoader();
                 },
-                success: function (response) {
+                success: function(response) {
                     var tableData = JSON.parse(response);
                     const lateMinutes = tableData['late_minutes'];
                     $('#late_minutes').html(lateMinutes);
@@ -366,20 +323,20 @@
                     //     emptyTable();
                     // }
                 },
-                error: function (error) {
+                error: function(error) {
                     // console.error(error);
                 }
             });
         }
 
 
-        $('#user_id').on('change', function () {
+        $('#user_id').on('change', function() {
             multiLineChart();
             getLateMinutesOfSelectedUser($('#user_id').val());
         });
 
         $('.select2').select2();
-        $(document).ready(function () {
+        $(document).ready(function() {
             function validatePaidUnpaidDays(diffDays) {
                 var paidDays = parseInt($('#paid_days').val()) || 0;
                 var unpaidDays = parseInt($('#unpaid_days').val()) || 0;
@@ -395,7 +352,7 @@
                 return true;
             }
 
-            $('#starting_date_create, #ending_date_create').on('change', function () {
+            $('#starting_date_create, #ending_date_create').on('change', function() {
                 var startDate = new Date($('#starting_date_create').val());
                 var endDate = new Date($('#ending_date_create').val());
 
@@ -407,7 +364,7 @@
                         $('#paid_unpaid_div').hide();
                         $('#paid_unpaid_inputs').show();
 
-                        $('#paid_days, #unpaid_days').on('input', function () {
+                        $('#paid_days, #unpaid_days').on('input', function() {
                             validatePaidUnpaidDays(diffDays);
                         });
                     } else {
@@ -422,7 +379,7 @@
                 }
             });
 
-            $('#half_day, #short_leave').on('change', function () {
+            $('#half_day, #short_leave').on('change', function() {
                 if ($(this).is(':checked')) {
                     $('#alart').html('');
                     $('#paid_unpaid_div').val(0);
@@ -441,7 +398,7 @@
                             $('#paid_unpaid_div').hide();
                             $('#paid_unpaid_inputs').show();
                             $('#alart').html('<p class="text-danger">The sum of Paid and Unpaid days must be equal to the duration of the leave.</p>');
-                            $('#paid_days, #unpaid_days').on('input', function () {
+                            $('#paid_days, #unpaid_days').on('input', function() {
                                 validatePaidUnpaidDays(diffDays);
                             });
                         } else {
@@ -457,7 +414,7 @@
                 }
             });
         });
-        $(document).on('click', '.btn-create-leave', function (e) {
+        $(document).on('click', '.btn-create-leave', function(e) {
             e.preventDefault();
 
             var form = $('#modal-create-leaves-part')[0]; // Get the native DOM element
@@ -472,10 +429,10 @@
                 processData: false,
                 contentType: false,
                 dataType: "json",
-                beforeSend: function () {
+                beforeSend: function() {
                     $(".btn-create-leave").prop("disabled", true).html('Creating...');
                 },
-                success: function (result) {
+                success: function(result) {
                     console.log(result);
                     if (result['error'] == false) {
                         // console.log(result);
@@ -502,7 +459,7 @@
                     }
 
                 },
-                complete: function () {
+                complete: function() {
                     $(".btn-create-leave").prop("disabled", false).html('Create');
                 }
             });

@@ -197,6 +197,13 @@
           userRow += '</tr>';
           tbody.append(userRow);
         });
+
+        let emp_length = sessionStorage.getItem('emp_length');
+        console.log(emp_length);
+
+        if (emp_length == null) {
+          emp_length = 10;
+        }
         table.DataTable({
           "paging": true,
           "searching": true,
@@ -209,10 +216,19 @@
           "info": false,
           "lengthChange": true,
           "lengthMenu": [10, 20, 50, 500],
-          "pageLength": 10,
+          "pageLength": emp_length,
           "dom": '<"top"f>rt<"bottom"lp><"clear">'
         });
-
+        if ($.fn.DataTable.isDataTable('#employee_list')) {
+          let emp_page_no = sessionStorage.getItem('emp_page_no');
+          if (emp_page_no == null) {
+            emp_page_no = 1;
+          }
+          var table = $('#employee_list').DataTable();
+          table.page(emp_page_no - 1).draw(false);
+        } else {
+          console.error("DataTable initialization failed or table not found.");
+        }
       }
 
       function emptyDataTable(table) {
@@ -220,7 +236,18 @@
         table.find('tbody').empty();
       }
     });
+    $('#employee_list').on('length.dt', function(e, settings, len) {
+      var currentPageLength = len;
+      console.log(currentPageLength);
+      sessionStorage.setItem('emp_length', currentPageLength);
+    });
 
+    // Event listener for page change
+    $('#employee_list').on('page.dt', function() {
+      var table = $('#employee_list').DataTable();
+      var pageNumber = table.page.info().page + 1;
+      sessionStorage.setItem('emp_page_no', pageNumber);
+    });
     $('.select2').select2();
 
     $(document).ready(function() {

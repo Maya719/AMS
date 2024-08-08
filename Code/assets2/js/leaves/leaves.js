@@ -2,12 +2,12 @@
 
 
 function setFilter() {
-    var employee_id = $('#employee_id').val();
-    var leave_type = $('#leave_type').val();
-    var status = $('#status_name').val();
-    var userstatus = $('#status').val();
-    var startDate = $("#startDate").val();
-    var endDate = $("#endDate").val();
+    var employee_id = $('#le_employee_id').val();
+    var leave_type = $('#le_leave_type').val();
+    var status = $('#le_status_name').val();
+    var userstatus = $('#le_status').val();
+    var startDate = $("#le_startDate").val();
+    var endDate = $("#le_endDate").val();
 
     ajaxCall(userstatus, employee_id, leave_type, status, startDate, endDate);
 }

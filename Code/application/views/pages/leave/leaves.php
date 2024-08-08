@@ -55,13 +55,13 @@
                   <form class="row">
                     <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                       <div class="col-lg-2">
-                        <select class="form-select select2" id="status">
+                        <select class="form-select select2" id="le_status">
                           <option value="1">Active</option>
                           <option value="2">Inactive</option>
                         </select>
                       </div>
                       <div class="col-lg-2">
-                        <select class="form-select select2" id="employee_id" onchange="setCookieFromSelect('employee_id')">
+                        <select class="form-select select2" id="le_employee_id">
                           <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
                           <?php foreach ($system_users as $system_user) {
                             if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
@@ -73,7 +73,7 @@
                     <?php
                     } ?>
                     <div class="col-lg-2">
-                      <select class="form-select select2" id="leave_type" onchange="setCookieFromSelect('leave_type')">
+                      <select class="form-select select2" id="le_leave_type">
                         <option value=""><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave type' ?></option>
                         <?php foreach ($leaves_types as $leaves_type) : ?>
                           <option value="<?= $leaves_type["id"] ?>"><?= htmlspecialchars($leaves_type["name"]) ?></option>
@@ -81,7 +81,7 @@
                       </select>
                     </div>
                     <div class="col-lg-2">
-                      <select class="form-select select2" id="status_name" onchange="setCookieFromSelect('status_name')">
+                      <select class="form-select select2" id="le_status_name">
                         <option value="" selected>Status</option>
                         <option value="1">Approved</option>
                         <option value="3">Pending</option>
@@ -91,8 +91,8 @@
                     <div class="col-lg-3">
                       <input type="text" id="config-demo" class="form-control">
                     </div>
-                    <input type="hidden" id="startDate">
-                    <input type="hidden" id="endDate">
+                    <input type="hidden" id="le_startDate">
+                    <input type="hidden" id="le_endDate">
                   </form>
                 </div>
               </div>
@@ -134,14 +134,41 @@
   <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
   <script>
     $(document).ready(function() {
-      $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
-      $('#endDate').val(moment().format('YYYY-MM-DD'));
+      const startDate = sessionStorage.getItem('le_startDate') || moment().startOf('month').format('YYYY-MM-DD');
+      const endDate = sessionStorage.getItem('le_endDate') || moment().format('YYYY-MM-DD');
+      $('#le_startDate').val(startDate);
+      $('#le_endDate').val(endDate);
+      sessionStorage.setItem('le_startDate', startDate);
+      sessionStorage.setItem('le_endDate', endDate);
+
+      set_session("le_status");
+      set_session("le_leave_type");
+      set_session("le_status_name");
+
+      store_session("le_status");
+      store_session("le_leave_type");
+      store_session("le_status_name");
+      store_session("le_employee_id");
       setFilter();
-      $(document).on('change', '#leave_type, #status_name, #employee_id, #from,#too,#status', function() {
+      $(document).on('change', '#le_leave_type, #le_status_name, #le_employee_id,#le_status', function() {
         setFilter();
       });
     });
 
+    function set_session(id) {
+      const value = sessionStorage.getItem(id);
+      console.log(id + ':' + value);
+      if (value !== null) {
+        $(`#${id}`).val(value).trigger('change');
+      }
+    }
+
+    function store_session(id) {
+      $(`#${id}`).change(function() {
+        console.log(id + ' change ');
+        sessionStorage.setItem(id, $(this).val());
+      });
+    }
 
     $('.select2').select2();
 
@@ -161,73 +188,13 @@
       }
     });
 
-    // Function to set a cookie
-    function setCookie(name, value, days) {
-      let expires = "";
-      if (days) {
-        let date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-
-    // Function to get a cookie
-    function getCookie(name) {
-      let nameEQ = name + "=";
-      let ca = document.cookie.split(';');
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-      }
-      return null;
-    }
-
-    // Function to set cookie from select field
-    function setCookieFromSelect(selectId) {
-      let select = document.getElementById(selectId);
-      let selectedValue = select.options[select.selectedIndex].value;
-      setCookie(selectId, selectedValue, 7);
-    }
-
-    function setSelectFromCookie(selectId) {
-      let select = document.getElementById(selectId);
-      let cookieValue = getCookie(selectId);
-      if (cookieValue) {
-        console.log(cookieValue);
-        for (let i = 0; i < select.options.length; i++) {
-          if (select.options[i].value === cookieValue) {
-            select.selectedIndex = i;
-            break;
-          }
-        }
-      } else {}
-    }
-
-    function setCookieFromSelectForDataTable(currentPageLength) {
-      setCookie('leave_list_length', currentPageLength, 7);
-    }
-
-    function setCookieFromPageForDataTable(pageNumber) {
-      setCookie('page_no', pageNumber, 7);
-    }
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const selectIds = ['employee_id', 'leave_type', 'status_name', 'dateFilter'];
-      selectIds.forEach(setSelectFromCookie);
-      $('.select2').select2();
+    $(document).on('change', '#le_status', function() {
+      console.log("status changing");
+      appendStateEmp();
     });
-    $('#leave_list').on('length.dt', function(e, settings, len) {
-      var currentPageLength = len;
-      setCookieFromSelectForDataTable(currentPageLength)
-    });
-    // Event listener for page change
-    $('#leave_list').on('page.dt', function() {
-      var table = $('#leave_list').DataTable();
-      var pageNumber = table.page.info().page + 1;
-      setCookieFromPageForDataTable(pageNumber)
-    });
-    $(document).on('change', '#status', function() {
-      var status = $('#status').val();
+
+    function appendStateEmp() {
+      var status = $('#le_status').val();
       $.ajax({
         url: '<?= base_url('attendance/get_users_by_status') ?>',
         type: 'POST',
@@ -236,10 +203,15 @@
         },
         success: function(response) {
           var tableData = JSON.parse(response);
-          $('#employee_id').empty();
-          $('#employee_id').append('<option value="">Employee</option>');
+          const value = sessionStorage.getItem("le_employee_id");
+          $('#le_employee_id').empty();
+          $('#le_employee_id').append('<option value="">Employee</option>');
           tableData.forEach(function(department) {
-            $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+            if (value == department.id) {
+              $('#le_employee_id').append('<option value="' + department.id + '" selected>' + department.first_name + ' ' + department.last_name + '</option>');
+            } else {
+              $('#le_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+            }
           });
         },
         complete: function() {},
@@ -248,7 +220,7 @@
         }
 
       });
-    });
+    }
   </script>
   <script type="text/javascript">
     $(document).ready(function() {
@@ -271,9 +243,15 @@
       });
 
       function updateConfig() {
+        // Retrieve dates from sessionStorage or use defaults
+        const storedStartDate = sessionStorage.getItem('le_startDate');
+        const storedEndDate = sessionStorage.getItem('le_endDate');
+
+        const startDate = storedStartDate ? moment(storedStartDate) : moment().startOf('month');
+        const endDate = storedEndDate ? moment(storedEndDate) : moment();
         var options = {
-          startDate: moment().startOf('month'),
-          endDate: moment(),
+          startDate: startDate,
+          endDate: endDate,
           maxDate: moment(),
           ranges: {
             'Today': [moment(), moment()],
@@ -286,8 +264,12 @@
         };
 
         $('#config-demo').daterangepicker(options, function(start, end, label) {
-          $('#startDate').val(start.format('YYYY-MM-DD'));
-          $('#endDate').val(end.format('YYYY-MM-DD'));
+          const formattedStartDate = start.format('YYYY-MM-DD');
+          const formattedEndDate = end.format('YYYY-MM-DD');
+          $('#le_startDate').val(formattedStartDate);
+          $('#le_endDate').val(formattedEndDate);
+          sessionStorage.setItem('le_startDate', formattedStartDate);
+          sessionStorage.setItem('le_endDate', formattedEndDate);
           setFilter();
         });
 
