@@ -1,6 +1,9 @@
 <?php $this->load->view('includes/header'); ?>
+<link rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
 <style>
-
+  .daterangepicker .ranges li.active {
+    background-color: <?= theme_color() ?>;
+  }
 </style>
 </head>
 
@@ -76,12 +79,9 @@
                       </select>
                     </div>
                     <div class="col-lg-4">
-                      <select class="form-select select2" id="dateFilter">
-                        <option value="tmonth" selected>This Month</option>
-                        <option value="lmonth">Last Month</option>
-                        <option value="tyear">This Year</option>
-                        <option value="lyear">last Year</option>
-                      </select>
+                      <input type="hidden" id="startDate">
+                      <input type="hidden" id="endDate">
+                      <input type="text" id="config-demo" class="form-control">
                     </div>
                   </form>
                 </div>
@@ -241,67 +241,118 @@
 ***********************************-->
   </div>
   <?php $this->load->view('includes/scripts'); ?>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+  <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
+
   <script>
     $(document).ready(function() {
+      const startDate = sessionStorage.getItem('startDate') || moment().startOf('month').format('YYYY-MM-DD');
+      const endDate = sessionStorage.getItem('endDate') || moment().format('YYYY-MM-DD');
+
+      console.log(startDate);
+      console.log(endDate);
+
+      $('#startDate').val(startDate);
+      $('#endDate').val(endDate);
+
+      sessionStorage.setItem('startDate', startDate);
+      sessionStorage.setItem('endDate', endDate);
+
+      handleFilter('employee_id');
+      handleFilter('status');
       setFilter();
-      $(document).on('change', '#status, #employee_id,#dateFilter, #from,#too', function() {
+
+      // Evaluate and apply configurations from text input
+      $('#config-text').keyup(function() {
+        eval($(this).val());
+      });
+
+      // Update configuration on input change
+      $('.configurator input').change(function() {
+        updateConfig();
+      });
+
+      // Simulate click on input when demo icon is clicked
+      $('.demo i').click(function() {
+        $(this).parent().find('input').click();
+      });
+
+      // Initialize date range picker configuration
+      updateConfig();
+
+      // Show date range picker on demo config click
+      $('#config-demo').click(function() {
+        $(this).data('daterangepicker').show();
+      });
+
+      // Update filters on change events
+      $(document).on('change', '#status, #employee_id, #dateFilter, #from, #too', function() {
         setFilter();
       });
 
-      function setFilter() {
-        var employee_id = $('#employee_id').val();
-        var filterOption = $('#dateFilter').val();
-        var status = $('#status').val();
+      // Store the updated startDate and endDate in sessionStorage
+      $('#startDate, #endDate').change(function() {
+        sessionStorage.setItem('startDate', $('#startDate').val());
+        sessionStorage.setItem('endDate', $('#endDate').val());
+      });
 
-
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth();
-        const day = today.getDate();
-
-        let fromDate, toDate;
-
-        switch (filterOption) {
-          case "today":
-            fromDate = new Date(year, month, day);
-            toDate = new Date(year, month, day);
-            break;
-          case "ystdy":
-            fromDate = new Date(year, month, day - 1);
-            toDate = new Date(year, month, day - 1);
-            break;
-          case "tweek":
-            fromDate = new Date(year, month, day - today.getDay());
-            toDate = new Date(year, month, day);
-            break;
-          case "lweek":
-            fromDate = new Date(year, month, day - today.getDay() - 7);
-            toDate = new Date(year, month, day - today.getDay() - 1);
-            break;
-          case "tmonth":
-            fromDate = new Date(year, month, 1);
-            toDate = today;
-            break;
-          case "lmonth":
-            fromDate = new Date(year, month - 1, 1);
-            toDate = new Date(year, month, 0);
-            break;
-          case "tyear":
-            fromDate = new Date(year, 0, 1);
-            toDate = today;
-            break;
-          case "lyear":
-            fromDate = new Date(year - 1, 0, 1);
-            toDate = new Date(year - 1, 11, 31);
-            break;
-          default:
-            console.error("Invalid filter option:", filterOption);
-            return null;
+      // Function to handle filter initialization and changes
+      function handleFilter(id) {
+        const value = sessionStorage.getItem(id);
+        if (value !== null) {
+          $(`#${id}`).val(value).trigger('change');
         }
 
-        // Format dates as strings
-        var formattedFromDate = formatDate(fromDate, "Y-m-d");
-        var formattedToDate = formatDate(toDate, "Y-m-d");
+        $(`#${id}`).change(function() {
+          sessionStorage.setItem(id, $(this).val());
+          console.log(`${capitalizeFirstLetter(id)} set to:`, $(this).val());
+        });
+      }
+
+      function updateConfig() {
+        // Retrieve dates from sessionStorage or use defaults
+        const storedStartDate = sessionStorage.getItem('startDate');
+        const storedEndDate = sessionStorage.getItem('endDate');
+
+        const startDate = storedStartDate ? moment(storedStartDate) : moment().startOf('month');
+        const endDate = storedEndDate ? moment(storedEndDate) : moment();
+
+        const options = {
+          startDate: startDate,
+          endDate: endDate,
+          maxDate: moment(),
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment()],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          }
+        };
+
+        $('#config-demo').daterangepicker(options, function(start, end, label) {
+          const formattedStartDate = start.format('YYYY-MM-DD');
+          const formattedEndDate = end.format('YYYY-MM-DD');
+          $('#startDate').val(formattedStartDate);
+          $('#endDate').val(formattedEndDate);
+          sessionStorage.setItem('startDate', formattedStartDate);
+          sessionStorage.setItem('endDate', formattedEndDate);
+          setFilter();
+        });
+
+        // Update the date range picker input to show the selected date range
+        $('#config-demo').val(`${startDate.format('MM/DD/YYYY')} - ${endDate.format('MM/DD/YYYY')}`);
+      }
+
+
+      // Function to set filters and perform an AJAX call
+      function setFilter() {
+        const employee_id = $('#employee_id').val();
+        const status = $('#status').val();
+        const formattedFromDate = $('#startDate').val();
+        const formattedToDate = $('#endDate').val();
+
         ajaxCall(employee_id, status, formattedFromDate, formattedToDate);
       }
 
@@ -320,7 +371,6 @@
           },
           success: function(response) {
             var tableData = JSON.parse(response);
-            console.log(response);
             showTable(tableData);
           },
           complete: function() {
@@ -449,6 +499,7 @@
           .replace("d", formattedDate.slice(3, 5));
       }
     });
+
     var time24 = false;
     $('#timepicker').timepicker({
       format: 'HH:mm',
@@ -461,7 +512,6 @@
       var modal = $('#add-biometic-modal');
       var form = $('#modal-add-biometric-part');
       var formData = form.serialize();
-      console.log(formData);
       $.ajax({
         type: 'POST',
         url: form.attr('action'),
@@ -471,7 +521,6 @@
           $(".modal-body").append(ModelProgress);
         },
         success: function(result) {
-          console.log(result);
           if (result['error'] == false) {
             location.reload();
           } else {
@@ -490,7 +539,6 @@
       var modal = $('#edit-biometic-modal');
       var form = $('#modal-edit-biometric-part');
       var formData = form.serialize();
-      console.log(formData);
       $.ajax({
         type: 'POST',
         url: form.attr('action'),
@@ -516,7 +564,6 @@
     $(document).on('click', '.edit-bio', function(e) {
       e.preventDefault();
       var id = $(this).data("id");
-      console.log(id);
       $.ajax({
         type: "POST",
         url: base_url + 'biometric_missing/get_biometric_by_id',
@@ -528,11 +575,9 @@
         success: function(result) {
           if (result['error'] == false && result['data'] != '') {
             var date = moment(result['data'][0].date, 'YYYY-MM-DD').format(date_format_js);
-            console.log(result);
             $("#update_id").val(result['data'][0].id);
             $("#employee_id").val(result['data'][0].employee_id);
             var user = result.data[0].user;
-            console.log(user);
             $("#edit_user").val(user).trigger('change');
             $('#date').daterangepicker({
               locale: {
@@ -605,19 +650,7 @@
   </script>
   <script>
     $(document).ready(function() {
-      function handleFilter(id) {
-        const value = sessionStorage.getItem(id);
-        if (value !== null) {
-          $(`#${id}`).val(value).trigger('change');
-        }
 
-        $(`#${id}`).change(function() {
-          sessionStorage.setItem(id, $(this).val());
-          console.log(`${id.charAt(0).toUpperCase() + id.slice(1)} set to:`, $(this).val());
-        });
-      }
-      handleFilter('employee_id');
-      handleFilter('status');
     });
   </script>
 </body>

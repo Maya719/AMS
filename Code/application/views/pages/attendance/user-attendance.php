@@ -78,8 +78,8 @@
           <div class="card">
             <div class="card-body">
               <div class="col-lg-4">
-                <input type="hidden" id="startDate">
-                <input type="hidden" id="endDate">
+                <input type="hidden" id="att_startDate">
+                <input type="hidden" id="att_endDate">
                 <input type="text" id="config-demo" class="form-control">
               </div>
             </div>
@@ -142,8 +142,8 @@
         id = <?= json_encode($user_id) ?>;
       }
       var employee_id = id;
-      var formattedFromDate = $("#startDate").val();
-      var formattedToDate = $("#endDate").val();
+      var formattedFromDate = $("#att_startDate").val();
+      var formattedToDate = $("#att_endDate").val();
       var rangetext = getRangeText(formattedFromDate, formattedToDate);
       $("#date-range").html(rangetext);
       ajaxCall(employee_id, formattedFromDate, formattedToDate);
@@ -297,9 +297,14 @@
   <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
-      $('#endDate').val(moment().format('YYYY-MM-DD'));
+      const att_startDate = sessionStorage.getItem('att_startDate') || moment().startOf('month').format('YYYY-MM-DD');
+      const att_endDate = sessionStorage.getItem('att_endDate') || moment().format('YYYY-MM-DD');
+      $('#att_startDate').val(att_startDate);
+      $('#att_endDate').val(att_endDate);
+      sessionStorage.setItem('att_startDate', att_startDate);
+      sessionStorage.setItem('att_endDate', att_endDate);
       setFilter();
+      
       $('#config-text').keyup(function() {
         eval($(this).val());
       });
@@ -319,9 +324,16 @@
       });
 
       function updateConfig() {
-        var options = {
-          startDate: moment().startOf('month'),
-          endDate: moment(),
+        // Retrieve dates from sessionStorage or use defaults
+        const storedStartDate = sessionStorage.getItem('att_startDate');
+        const storedEndDate = sessionStorage.getItem('att_endDate');
+
+        const att_startDate = storedStartDate ? moment(storedStartDate) : moment().startOf('month');
+        const att_endDate = storedEndDate ? moment(storedEndDate) : moment();
+
+        const options = {
+          att_startDate: att_startDate,
+          att_endDate: att_endDate,
           maxDate: moment(),
           ranges: {
             'Today': [moment(), moment()],
@@ -334,12 +346,17 @@
         };
 
         $('#config-demo').daterangepicker(options, function(start, end, label) {
-          $('#startDate').val(start.format('YYYY-MM-DD'));
-          $('#endDate').val(end.format('YYYY-MM-DD'));
+          const formattedStartDate = start.format('YYYY-MM-DD');
+          const formattedEndDate = end.format('YYYY-MM-DD');
+          $('#att_startDate').val(formattedStartDate);
+          $('#att_endDate').val(formattedEndDate);
+          sessionStorage.setItem('att_startDate', formattedStartDate);
+          sessionStorage.setItem('att_endDate', formattedEndDate);
           setFilter();
         });
 
-        $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+        // Update the date range picker input to show the selected date range
+        $('#config-demo').val(`${att_startDate.format('MM/DD/YYYY')} - ${att_endDate.format('MM/DD/YYYY')}`);
       }
     });
   </script>

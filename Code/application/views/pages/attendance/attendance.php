@@ -1,6 +1,5 @@
 <?php $this->load->view('includes/header'); ?>
-<link rel="stylesheet" type="text/css" media="all"
-    href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
+<link rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets2/vendor/range-picker/daterangepicker.css') ?>" />
 <style>
     #attendance_list tbody td a {
         font-weight: bold;
@@ -20,8 +19,7 @@
 
     .daterangepicker .ranges li.active {
         background-color:
-            <?= theme_color() ?>
-        ;
+            <?= theme_color() ?>;
     }
 </style>
 </head>
@@ -62,11 +60,10 @@
                             <div class="card-body">
                                 <div class="basic-form">
                                     <div class="row">
-                                        <input type="hidden" id="startDate">
-                                        <input type="hidden" id="endDate">
+                                        <input type="hidden" id="att_startDate">
+                                        <input type="hidden" id="att_endDate">
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="status"
-                                                onchange="setCookieFromSelect('status')">
+                                            <select class="form-select select2" id="att_status">
                                                 <option value="1">
                                                     <?= $this->lang->line('active') ? $this->lang->line('active') : 'Active' ?>
                                                 </option>
@@ -76,8 +73,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="employee_id"
-                                                onchange="setCookieFromSelect('employee_id')">
+                                            <select class="form-select select2" id="att_employee_id">
                                                 <option value="">
                                                     <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?>
                                                 </option>
@@ -87,28 +83,26 @@
                                                             <?= htmlspecialchars($system_user->first_name) ?>
                                                             <?= htmlspecialchars($system_user->last_name) ?>
                                                         </option>
-                                                    <?php }
+                                                <?php }
                                                 } ?>
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="shift_id"
-                                                onchange="setCookieFromSelect('shift_id')">
+                                            <select class="form-select select2" id="att_shift_id">
                                                 <option value="">
                                                     <?= $this->lang->line('shift') ? $this->lang->line('shift') : 'Shift' ?>
                                                 </option>
-                                                <?php foreach ($shifts as $shift): ?>
+                                                <?php foreach ($shifts as $shift) : ?>
                                                     <option value="<?= $shift["id"] ?>"><?= $shift["name"] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
                                         <div class="col-lg-2">
-                                            <select class="form-select select2" id="department_id"
-                                                onchange="setCookieFromSelect('department_id')">
+                                            <select class="form-select select2" id="att_department_id">
                                                 <option value="">
                                                     <?= $this->lang->line('department') ? $this->lang->line('department') : 'Department' ?>
                                                 </option>
-                                                <?php foreach ($departments as $department): ?>
+                                                <?php foreach ($departments as $department) : ?>
                                                     <option value="<?= $department["id"] ?>">
                                                         <?= $department["department_name"] ?>
                                                     </option>
@@ -148,26 +142,119 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
     <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
     <script>
-        $(document).ready(function () {
-            $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'));
-            $('#endDate').val(moment().format('YYYY-MM-DD'));
+        $(document).ready(function() {
+            const startDate = sessionStorage.getItem('att_startDate') || moment().startOf('month').format('YYYY-MM-DD');
+            const endDate = sessionStorage.getItem('att_endDate') || moment().format('YYYY-MM-DD');
+            $('#att_startDate').val(startDate);
+            $('#att_endDate').val(endDate);
+            sessionStorage.setItem('att_startDate', startDate);
+            sessionStorage.setItem('att_endDate', endDate);
+            set_session('att_department_id');
+            set_session('att_shift_id');
+            set_session('att_status');
+
             setFilter();
-            $(document).on('change', '#shift_id, #department_id, #employee_id,#config-demo, #status', function () {
+            $('#config-text').keyup(function() {
+                eval($(this).val());
+            });
+
+            $('.configurator input').change(function() {
+                updateConfig();
+            });
+
+            $('.demo i').click(function() {
+                $(this).parent().find('input').click();
+            });
+
+            updateConfig();
+
+            $('#config-demo').click(function() {
+                $(this).data('daterangepicker').show();
+            });
+
+            $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
+            $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
+
+
+            setFilter();
+            $(document).on('change', '#att_shift_id, #att_department_id, #att_employee_id,#config-demo, #att_status', function() {
                 setFilter();
             });
         });
+        $(document).on('change', '#att_status', function() {
+            appendStatusUsers();
+            store_session('att_status');
+        });
+        $(document).on('change', '#att_department_id', function() {
+            appendDepartmentUsers();
+            store_session('att_department_id');
+        });
+        $(document).on('change', '#att_employee_id', function() {
+            appenShiftDepartment();
+            store_session('att_employee_id');
+        });
+        $(document).on('change', '#att_shift_id', function() {
+            appendShiftUsers();
+            store_session('att_shift_id');
+        });
+
+        function set_session(id) {
+            const value = sessionStorage.getItem(id);
+            if (value !== null) {
+                $(`#${id}`).val(value).trigger('change');
+            }
+        }
+
+        function store_session(id) {
+            $(`#${id}`).change(function() {
+                sessionStorage.setItem(id, $(this).val());
+            });
+        }
 
         function setFilter() {
-            var employee_id = $('#employee_id').val();
-            var shift_id = $('#shift_id').val();
-            var filterOption = $('#dateFilter').val();
-            var status = $('#status').val();
-            var department_id = $('#department_id').val();
-            var startDate = $("#startDate").val();
-            var endDate = $("#endDate").val();
-
-
+            var employee_id = $('#att_employee_id').val();
+            var shift_id = $('#att_shift_id').val();
+            var status = $('#att_status').val();
+            var department_id = $('#att_department_id').val();
+            var startDate = $("#att_startDate").val();
+            var endDate = $("#att_endDate").val();
             ajaxCall(employee_id, shift_id, department_id, status, startDate, endDate);
+        }
+
+        function updateConfig() {
+            // Retrieve dates from sessionStorage or use defaults
+            const storedStartDate = sessionStorage.getItem('startDate');
+            const storedEndDate = sessionStorage.getItem('endDate');
+
+            const startDate = storedStartDate ? moment(storedStartDate) : moment().startOf('month');
+            const endDate = storedEndDate ? moment(storedEndDate) : moment();
+
+            const options = {
+                startDate: startDate,
+                endDate: endDate,
+                maxDate: moment(),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment()],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            };
+
+            $('#config-demo').daterangepicker(options, function(start, end, label) {
+                const formattedStartDate = start.format('YYYY-MM-DD');
+                const formattedEndDate = end.format('YYYY-MM-DD');
+                $('#att_startDate').val(formattedStartDate);
+                $('#att_endDate').val(formattedEndDate);
+                sessionStorage.setItem('att_startDate', formattedStartDate);
+                sessionStorage.setItem('att_endDate', formattedEndDate);
+                setFilter();
+            });
+
+            // Update the date range picker input to show the selected date range
+            $('#config-demo').val(`${startDate.format('MM/DD/YYYY')} - ${endDate.format('MM/DD/YYYY')}`);
         }
 
         function ajaxCall(employee_id, shift_id, department_id, status, from, too) {
@@ -182,10 +269,10 @@
                     from: from,
                     too: too
                 },
-                beforeSend: function () {
+                beforeSend: function() {
                     showLoader();
                 },
-                success: function (response) {
+                success: function(response) {
                     var tableData = JSON.parse(response);
                     if (tableData.data.length > 0) {
                         showTable(tableData);
@@ -193,10 +280,10 @@
                         emptyTable();
                     }
                 },
-                complete: function () {
+                complete: function() {
                     hideLoader();
                 },
-                error: function (error) {
+                error: function(error) {
                     console.error(error);
                 }
             });
@@ -270,10 +357,10 @@
                 tbody.append(userRow);
                 count++;
             });
-            let cookieValue = getCookie('attendance_list_length');
-
-            if (cookieValue) { } else {
-                cookieValue = 10;
+            let att_length = sessionStorage.getItem('att_length');
+            
+            if (att_length == null) {
+                att_length = 10;
             }
             table.DataTable({
                 "paging": true,
@@ -287,36 +374,31 @@
                 "info": false,
                 "dom": '<"top"i>rt<"bottom"lp><"clear">',
                 "lengthMenu": [10, 20, 50, 500],
-                "pageLength": cookieValue,
+                "pageLength": att_length,
                 "columnDefs": [{
-                    "orderable": true,
-                    "targets": [1, 2]
-                },
-                {
-                    "orderable": false,
-                    "targets": '_all'
-                }
+                        "orderable": true,
+                        "targets": [1, 2]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": '_all'
+                    }
                 ],
                 "order": [
                     [0, 'asc']
                 ]
             });
             if ($.fn.DataTable.isDataTable('#attendance_list')) {
-                let cookieValue = getCookie('page_no');
-                if (cookieValue) { } else {
-                    cookieValue = 1;
+                let att_page_no = sessionStorage.getItem('att_page_no');
+                if (att_page_no == null) {
+                    att_page_no = 1;
                 }
                 var table = $('#attendance_list').DataTable();
-                table.page(cookieValue - 1).draw(false);
+                table.page(att_page_no - 1).draw(false);
             } else {
                 console.error("DataTable initialization failed or table not found.");
             }
         }
-        $(document).ready(function () {
-
-            $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
-            $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
-        });
 
         function emptyDataTable(table) {
             table.find('thead').empty();
@@ -346,104 +428,115 @@
 
             return uniqueDates;
         }
-        $(document).on('change', '#employee_id', function () {
-            var employee_id = $('#employee_id').val();
+
+        function appenShiftDepartment() {
+            var employee_id = $('#att_employee_id').val();
             $.ajax({
                 url: '<?= base_url('attendance/get_filters_for_user') ?>',
                 type: 'GET',
                 data: {
                     employee_id: employee_id,
                 },
-                success: function (response) {
+                success: function(response) {
                     var tableData = JSON.parse(response);
                     $('#shift_id').empty();
                     $('#department_id').empty();
                     $('#shift_id').append('<option value="" selected>Shift</option>');
-                    tableData.shift.forEach(function (shift) {
+                    tableData.shift.forEach(function(shift) {
                         $('#shift_id').append('<option value="' + shift.id + '">' + shift.name + '</option>');
                     });
                     $('#department_id').append('<option value="" selected>Department</option>');
-                    tableData.department.forEach(function (department) {
+                    tableData.department.forEach(function(department) {
                         $('#department_id').append('<option value="' + department.id + '">' + department.department_name + '</option>');
                     });
                 },
-                complete: function () { },
-                error: function (error) {
+                complete: function() {},
+                error: function(error) {
                     console.error(error);
                 }
 
             });
-        });
+        }
 
-        $(document).on('change', '#status', function () {
-            var status = $('#status').val();
+        function appendStatusUsers() {
+            var status = $('#att_status').val();
+            sessionStorage.removeItem('att_employee_id');
+            $("#att_employee_id").val("").trigger('change');
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_status') ?>',
                 type: 'POST',
                 data: {
                     status: status,
                 },
-                success: function (response) {
+                success: function(response) {
                     var tableData = JSON.parse(response);
-                    $('#employee_id').empty();
-                    $('#employee_id').append('<option value="">Employee</option>');
-                    tableData.forEach(function (department) {
-                        $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                    $('#att_employee_id').empty();
+                    $('#att_employee_id').append('<option value="">Employee</option>');
+                    const att_employee_id = sessionStorage.getItem('att_employee_id');
+                    tableData.forEach(function(department) {
+                        $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
-                complete: function () { },
-                error: function (error) {
+                complete: function() {},
+                error: function(error) {
                     console.error(error);
                 }
 
             });
-        });
-        $(document).on('change', '#department_id', function () {
-            var department_id = $('#department_id').val();
+        }
+
+        function appendDepartmentUsers() {
+            var department_id = $('#att_department_id').val();
+            sessionStorage.removeItem('att_employee_id');
+            $("#att_employee_id").val("").trigger('change');
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_department') ?>',
                 type: 'POST',
                 data: {
                     department: department_id,
                 },
-                success: function (response) {
+                success: function(response) {
                     var tableData = JSON.parse(response);
-                    $('#employee_id').empty();
-                    $('#employee_id').append('<option value="">Employee</option>');
-                    tableData.forEach(function (department) {
-                        $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                    $('#att_employee_id').empty();
+                    $('#att_employee_id').append('<option value="">Employee</option>');
+                    tableData.forEach(function(department) {
+                        $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
-                complete: function () { },
-                error: function (error) {
+                complete: function() {},
+                error: function(error) {
                     console.error(error);
                 }
 
             });
-        });
-        $(document).on('change', '#shift_id', function () {
-            var shift_id = $('#shift_id').val();
+        }
+
+
+        function appendShiftUsers() {
+            var shift_id = $('#att_shift_id').val();
+            sessionStorage.removeItem('att_employee_id');
+            $("#att_employee_id").val("").trigger('change');
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_shifts') ?>',
                 type: 'POST',
                 data: {
                     shift_id: shift_id,
                 },
-                success: function (response) {
+                success: function(response) {
                     var tableData = JSON.parse(response);
-                    $('#employee_id').empty();
-                    $('#employee_id').append('<option value="">Employee</option>');
-                    tableData.forEach(function (department) {
-                        $('#employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                    $('#att_employee_id').empty();
+                    $('#att_employee_id').append('<option value="">Employee</option>');
+                    tableData.forEach(function(department) {
+                        $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
                     });
                 },
-                complete: function () { },
-                error: function (error) {
+                complete: function() {},
+                error: function(error) {
                     console.error(error);
                 }
 
             });
-        });
+        }
 
         function emptyTable() {
             var table = $('#attendance_list');
@@ -456,8 +549,11 @@
             var thead = table.find('thead');
             var theadRow = '<tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px; width:20px;">Employee</th></tr>';
             thead.html(theadRow);
-            let cookieValue = getCookie('attendance_list_length');
-
+            let att_length = sessionStorage.getItem('att_length');
+            
+            if (att_length == null) {
+                att_length = 10;
+            }
             table.DataTable({
                 "language": {
                     "paginate": {
@@ -468,7 +564,7 @@
                 "info": false,
                 "dom": '<"top"i>rt<"bottom"lp><"clear">',
                 "lengthMenu": [5, 10, 20],
-                "pageLength": cookieValue
+                "pageLength": att_length
             });
         }
 
@@ -482,125 +578,21 @@
             var table = $('#attendance_list').DataTable();
             table.clear().draw(); // Clear all rows from the table
         }
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#config-text').keyup(function () {
-                eval($(this).val());
-            });
-
-            $('.configurator input').change(function () {
-                updateConfig();
-            });
-
-            $('.demo i').click(function () {
-                $(this).parent().find('input').click();
-            });
-
-            updateConfig();
-
-            $('#config-demo').click(function () {
-                $(this).data('daterangepicker').show();
-            });
-
-            function updateConfig() {
-                var options = {
-                    startDate: moment().startOf('month'),
-                    endDate: moment(),
-                    maxDate: moment(),
-                    ranges: {
-                        'Today': [moment(), moment()],
-                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                        'This Month': [moment().startOf('month'), moment()],
-                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    }
-                };
-
-                $('#config-demo').daterangepicker(options, function (start, end, label) {
-                    $('#startDate').val(start.format('YYYY-MM-DD'));
-                    $('#endDate').val(end.format('YYYY-MM-DD'));
-                    setFilter();
-                });
-
-                $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
-            }
-        });
-    </script>
-
-
-    <!-- Set Filter Cookies -->
-    <script>
-        function setCookie(name, value, minutes) {
-            let expires = "";
-            if (minutes) {
-                let date = new Date();
-                date.setTime(date.getTime() + (minutes * 60 * 1000));
-                // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-
-        function getCookie(name) {
-            name = 'att_' + name;
-            let nameEQ = name + "=";
-            let ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i].trim();
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        function setCookieFromSelect(selectId) {
-            let select = document.getElementById(selectId);
-            let selectedValue = select.options[select.selectedIndex].value;
-            let att_selectId = 'att_' + selectId;
-            setCookie(att_selectId, selectedValue, 7);
-        }
-
-        function setSelectFromCookie(selectId) {
-            let select = document.getElementById(selectId);
-            let cookieValue = getCookie(selectId);
-            if (cookieValue) {
-                if (selectId == 'dateFilter' && cookieValue == 'custom') {
-                    $('#custom-dates').modal('show');
-                }
-                for (let i = 0; i < select.options.length; i++) {
-                    if (select.options[i].value === cookieValue) {
-                        select.selectedIndex = i;
-                        break;
-                    }
-                }
-            } else { }
-        }
-
-        function setCookieFromSelectForDataTable(currentPageLength) {
-            setCookie('att_attendance_list_length', currentPageLength, 7);
-        }
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const selectIds = ['employee_id', 'department_id', 'shift_id'];
-            selectIds.forEach(setSelectFromCookie);
-            $('.select2').select2();
-            let cookieValue = getCookie('attendance_list_length');
-        });
-        $('#attendance_list').on('length.dt', function (e, settings, len) {
+        $('#attendance_list').on('length.dt', function(e, settings, len) {
             var currentPageLength = len;
-            setCookieFromSelectForDataTable(currentPageLength)
+            console.log(currentPageLength);
+            sessionStorage.setItem('att_length', currentPageLength);
         });
+
         // Event listener for page change
-        $('#attendance_list').on('page.dt', function () {
+        $('#attendance_list').on('page.dt', function() {
             var table = $('#attendance_list').DataTable();
             var pageNumber = table.page.info().page + 1;
-            setCookieFromPageForDataTable(pageNumber)
+            sessionStorage.setItem('att_page_no', pageNumber);
         });
-
-        function setCookieFromPageForDataTable(pageNumber) {
-            setCookie('att_page_no', pageNumber, 7);
-        }
+        $('.select2').select2();
     </script>
+
 </body>
 
 </html>

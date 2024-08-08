@@ -573,6 +573,7 @@ class Leaves extends CI_Controller
 		}
 		return $data;
 	}
+	
 	private function prepairFullDay($data, $shift)
 	{
 		if ($this->input->post('paid_days') > 0 && $this->input->post('unpaid_days') > 0) {
