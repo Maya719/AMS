@@ -57,23 +57,13 @@
                     <div class="col-lg-4">
                       <select class="form-select select2" id="employee_id">
                         <option value="">
-<<<<<<< Updated upstream
-                          <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?>
-                        </option>
-=======
                           <?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
->>>>>>> Stashed changes
                         <?php foreach ($system_users as $system_user) {
                           if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
                             <option value="<?= $system_user->employee_id ?>">
                               <?= htmlspecialchars($system_user->first_name) ?>
-<<<<<<< Updated upstream
-                              <?= htmlspecialchars($system_user->last_name) ?>
-                            </option>
-=======
                               <?= htmlspecialchars($system_user->last_name) ?></option>
->>>>>>> Stashed changes
-                          <?php }
+                        <?php }
                         } ?>
                       </select>
                     </div>
@@ -130,16 +120,12 @@
             <h5 class="modal-title">Create</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <form action="<?= base_url('biometric_missing/create') ?>" method="POST" class="modal-part"
-            id="modal-add-biometric-part"
-            data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>"
-            data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
+          <form action="<?= base_url('biometric_missing/create') ?>" method="POST" class="modal-part" id="modal-add-biometric-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
 
             <div class="modal-body">
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
                 <div class="form-group mb-3">
-                  <label
-                    class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id_add" class="form-control select2">
                     <option value="">
                       <?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?>
@@ -147,34 +133,25 @@
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?>
-<<<<<<< Updated upstream
-                          <?= htmlspecialchars($system_user->last_name) ?>
-                        </option>
-=======
                           <?= htmlspecialchars($system_user->last_name) ?></option>
->>>>>>> Stashed changes
-                      <?php }
+                    <?php }
                     } ?>
                   </select>
                 </div>
               <?php } ?>
 
               <div class="form-group mb-3">
-                <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span
-                    class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
                 <input type="text" name="date" class="form-control datepicker-default" required="">
               </div>
 
               <div class="form-group clockpicker mb-3">
-                <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span
-                    class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
                 <input class="form-control" name="time" id="timepicker">
               </div>
 
               <div class="form-group">
-                <label
-                  class="col-form-label"><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span
-                    class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="reason" class="form-control" required=""></textarea>
               </div>
 
@@ -195,17 +172,13 @@
             <h5 class="modal-title">Edit</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <form action="<?= base_url('biometric_missing/edit') ?>" method="POST" class="modal-part"
-            id="modal-edit-biometric-part"
-            data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>"
-            data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
+          <form action="<?= base_url('biometric_missing/edit') ?>" method="POST" class="modal-part" id="modal-edit-biometric-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
 
             <div class="modal-body">
               <input type="hidden" name="update_id" id="update_id">
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
                 <div class="form-group mb-3">
-                  <label
-                    class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="edit_user" class="form-control select2">
                     <option value="">
                       <?= $this->lang->line('select_users') ? $this->lang->line('select_users') : 'Select Users' ?>
@@ -213,41 +186,31 @@
                     <?php foreach ($system_users as $system_user) {
                       if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                         <option value="<?= $system_user->id ?>"><?= htmlspecialchars($system_user->first_name) ?>
-<<<<<<< Updated upstream
-                          <?= htmlspecialchars($system_user->last_name) ?>
-                        </option>
-=======
                           <?= htmlspecialchars($system_user->last_name) ?></option>
->>>>>>> Stashed changes
-                      <?php }
+                    <?php }
                     } ?>
                   </select>
                 </div>
               <?php } ?>
 
               <div class="form-group mb-3">
-                <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span
-                    class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
                 <input type="text" name="date" id="date" class="form-control datepicker-default" required="">
               </div>
 
               <div class="form-group mb-3">
-                <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span
-                    class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
                 <input class="form-control" name="time" id="timepicker2">
               </div>
 
               <div class="form-group mb-3">
-                <label
-                  class="col-form-label"><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span
-                    class="text-danger">*</span></label>
+                <label class="col-form-label"><?= $this->lang->line('reason') ? $this->lang->line('reason') : 'Missing Reason' ?><span class="text-danger">*</span></label>
                 <textarea type="text" name="reason" id="reason" class="form-control" required=""></textarea>
               </div>
 
               <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_status')) { ?>
                 <div class="form-group">
-                  <label
-                    class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
+                  <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
                   <select name="status" id="Edit_Status" class="form-control select2">
                     <option value="0">
                       <?= $this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending' ?>
@@ -279,33 +242,9 @@
   </div>
   <?php $this->load->view('includes/scripts'); ?>
   <script>
-    $(document).ready(function () {
-<<<<<<< Updated upstream
-
-      function initializeValuesFromCookies() {
-        var employee_id = Cookies.get('employee_id') || $('#employee_id').val();
-        var filterOption = Cookies.get('dateFilter') || $('#dateFilter').val();
-        var status = Cookies.get('status') || $('#status').val();
-
-        $('#employee_id').val(employee_id).trigger('change');
-        $('#dateFilter').val(filterOption).trigger('change');
-        $('#status').val(status).trigger('change');
-        $('.select2').select2();
-
-        // console.log("Key: employee_id" + " | value: " + employee_id)
-        // console.log("Key: dateFilter" + " | value: " + filterOption)
-        // console.log("Key: status" + " | value: " + status)
-        setFilter();
-      }
-
-      initializeValuesFromCookies();
-      $(document).on('change', '#status, #employee_id,#dateFilter, #from,#too', function () {
-        console.log("Setting value of: " + $(this).attr('id') + " | value: " + $(this).val())
-        Cookies.set($(this).attr('id'), $(this).val(), { expires: 1 });
-=======
+    $(document).ready(function() {
       setFilter();
-      $(document).on('change', '#status, #employee_id,#dateFilter, #from,#too', function () {
->>>>>>> Stashed changes
+      $(document).on('change', '#status, #employee_id,#dateFilter, #from,#too', function() {
         setFilter();
       });
 
@@ -376,18 +315,18 @@
             from: from,
             too: too
           },
-          beforeSend: function () {
+          beforeSend: function() {
             showLoader();
           },
-          success: function (response) {
+          success: function(response) {
             var tableData = JSON.parse(response);
             console.log(response);
             showTable(tableData);
           },
-          complete: function () {
+          complete: function() {
             hideLoader();
           },
-          error: function (error) {
+          error: function(error) {
             console.error(error);
           }
         });
@@ -410,9 +349,9 @@
         theadRow += '<th>Created</th>';
         <?php
         if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
-          ?>
+        ?>
           theadRow += '<th>Action</th>';
-          <?php
+        <?php
         }
         ?>
         theadRow += '</tr>';
@@ -432,39 +371,39 @@
           userRow += '<td>' + created + '</td>';
           <?php
           if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
-            ?>
+          ?>
             userRow += '<td>';
             userRow += '<div class="d-flex">';
             if (user.btn) {
               <?php
               if (permissions('biometric_request_edit') || $this->ion_auth->is_admin()) {
-                ?>
+              ?>
                 userRow += '<a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a>';
-                <?php
+              <?php
               }
               if (permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
-                ?>
+              ?>
                 userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
-                <?php
+              <?php
               }
               ?>
             } else {
               <?php
               if (permissions('biometric_request_edit') || $this->ion_auth->is_admin()) {
-                ?>
+              ?>
                 userRow += '<a href="#" class="text-muted" disabled><i class="fa fa-pencil"></i></a>';
-                <?php
+              <?php
               }
               if (permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
-                ?>
+              ?>
                 userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
-                <?php
+              <?php
               }
               ?>
             }
             userRow += '</div>';
             userRow += '</td>';
-            <?php
+          <?php
           }
           ?>
           userRow += '</tr>';
@@ -518,7 +457,7 @@
     });
   </script>
   <script>
-    $("#add-biometic-modal").on('click', '.btn-create-biometric', function (e) {
+    $("#add-biometic-modal").on('click', '.btn-create-biometric', function(e) {
       var modal = $('#add-biometic-modal');
       var form = $('#modal-add-biometric-part');
       var formData = form.serialize();
@@ -528,10 +467,10 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
-        beforeSend: function () {
+        beforeSend: function() {
           $(".modal-body").append(ModelProgress);
         },
-        success: function (result) {
+        success: function(result) {
           console.log(result);
           if (result['error'] == false) {
             location.reload();
@@ -540,14 +479,14 @@
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
         },
-        complete: function () {
+        complete: function() {
           $(".loader-progress").remove();
         }
       });
 
       e.preventDefault();
     });
-    $("#edit-biometic-modal").on('click', '.btn-edit-biometric', function (e) {
+    $("#edit-biometic-modal").on('click', '.btn-edit-biometric', function(e) {
       var modal = $('#edit-biometic-modal');
       var form = $('#modal-edit-biometric-part');
       var formData = form.serialize();
@@ -557,24 +496,24 @@
         url: form.attr('action'),
         data: formData,
         dataType: "json",
-        beforeSend: function () {
+        beforeSend: function() {
           $(".modal-body").append(ModelProgress);
         },
-        success: function (result) {
+        success: function(result) {
           if (result['error'] == false) {
             location.reload();
           } else {
             modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
           }
         },
-        complete: function () {
+        complete: function() {
           $(".loader-progress").remove();
         }
       });
 
       e.preventDefault();
     });
-    $(document).on('click', '.edit-bio', function (e) {
+    $(document).on('click', '.edit-bio', function(e) {
       e.preventDefault();
       var id = $(this).data("id");
       console.log(id);
@@ -583,10 +522,10 @@
         url: base_url + 'biometric_missing/get_biometric_by_id',
         data: "id=" + id,
         dataType: "json",
-        beforeSend: function () {
+        beforeSend: function() {
           $(".modal-body").append(ModelProgress);
         },
-        success: function (result) {
+        success: function(result) {
           if (result['error'] == false && result['data'] != '') {
             var date = moment(result['data'][0].date, 'YYYY-MM-DD').format(date_format_js);
             console.log(result);
@@ -623,12 +562,12 @@
             });
           }
         },
-        complete: function () {
+        complete: function() {
           $(".loader-progress").remove();
         }
       });
     })
-    $(document).on('click', '.delete-bio', function (e) {
+    $(document).on('click', '.delete-bio', function(e) {
       e.preventDefault();
       var id = $(this).data("id");
       Swal.fire({
@@ -646,7 +585,7 @@
             url: base_url + 'biometric_missing/delete/' + id,
             data: "id=" + id,
             dataType: "json",
-            success: function (result) {
+            success: function(result) {
               if (result['error'] == false) {
                 location.reload();
               } else {
@@ -663,6 +602,23 @@
     });
 
     $('.select2').select2()
+  </script>
+  <script>
+    $(document).ready(function() {
+      function handleFilter(id) {
+        const value = sessionStorage.getItem(id);
+        if (value !== null) {
+          $(`#${id}`).val(value).trigger('change');
+        }
+
+        $(`#${id}`).change(function() {
+          sessionStorage.setItem(id, $(this).val());
+          console.log(`${id.charAt(0).toUpperCase() + id.slice(1)} set to:`, $(this).val());
+        });
+      }
+      handleFilter('employee_id');
+      handleFilter('status');
+    });
   </script>
 </body>
 

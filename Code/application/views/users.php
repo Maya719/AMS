@@ -253,28 +253,24 @@
   </script>
   <script>
     $(document).ready(function() {
-      $('#active').val(Cookies.get('active') || '').trigger('change');
-      $('#department').val(Cookies.get('department') || '').trigger('change');
-      $('#shift').val(Cookies.get('shift') || '').trigger('change');
+      function handleFilter(id) {
+        const value = sessionStorage.getItem(id);
+        if (value !== null) {
+          $(`#${id}`).val(value).trigger('change');
+        }
 
-      $('#active').change(function() {
-        Cookies.set('active', $(this).val(), {
-          expires: 1
+        $(`#${id}`).change(function() {
+          sessionStorage.setItem(id, $(this).val());
+          console.log(`${id.charAt(0).toUpperCase() + id.slice(1)} set to:`, $(this).val());
         });
-      });
-
-      $('#department').change(function() {
-        Cookies.set('department', $(this).val(), {
-          expires: 1
-        });
-      });
-      $('#shift').change(function() {
-        Cookies.set('shift', $(this).val(), {
-          expires: 1
-        });
-      });
+      }
+      handleFilter('active');
+      handleFilter('department');
+      handleFilter('shift');
     });
   </script>
+
+
 </body>
 
 </html>
