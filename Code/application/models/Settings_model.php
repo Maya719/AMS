@@ -119,7 +119,7 @@ class Settings_model extends CI_Model
 
     function get_roles()
     {
-        
+
         $offset = 0;
         $limit = 10;
         $sort = 'r.id';
@@ -298,6 +298,9 @@ class Settings_model extends CI_Model
     function get_roles_by_id($id)
     {
         $group = $this->ion_auth->group($id)->row();
+        if ($group && !empty($group->permissions)) {
+            $group->permissions = json_decode($group->permissions, true);
+        }
         return $group;
     }
 

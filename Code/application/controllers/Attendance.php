@@ -140,9 +140,9 @@ class Attendance extends CI_Controller
 				}
 			}
 			$this->data['user_id'] = $user_id;
-			if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('attendance_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
@@ -366,7 +366,7 @@ class Attendance extends CI_Controller
 
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 			$employee_id = $this->uri->segment($this->uri->total_segments());
-			if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
+			if ($this->ion_auth->is_admin() || is_assign_users()) {
 				$user_data = $this->ion_auth->user($employee_id)->row();
 				$user_query = $this->db->get_where('users', array('employee_id' => $employee_id));
 				$user_data = $user_query->row();
@@ -475,15 +475,15 @@ class Attendance extends CI_Controller
 
 	public function offclock()
 	{
-		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4) && is_module_allowed('attendance') && ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view'))) {
+		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4) && is_module_allowed('attendance') && ($this->ion_auth->is_admin() || is_assign_users())) {
 			$saas_id = $this->session->userdata('saas_id');
 			$this->data['page_title'] = 'Off Clock - ' . company_name();
 			$this->data['main_page'] = 'Off Clock';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data['user_id'] = $user_id;
-			if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('attendance_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();

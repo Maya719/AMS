@@ -149,6 +149,7 @@
             $('#att_endDate').val(endDate);
             sessionStorage.setItem('att_startDate', startDate);
             sessionStorage.setItem('att_endDate', endDate);
+
             set_session('att_department_id');
             set_session('att_shift_id');
             set_session('att_status');
@@ -181,21 +182,23 @@
                 setFilter();
             });
         });
+        store_session('att_status');
+        store_session('att_department_id');
+        store_session('att_employee_id');
+        store_session('att_shift_id');
+
+
         $(document).on('change', '#att_status', function() {
             appendStatusUsers();
-            store_session('att_status');
         });
         $(document).on('change', '#att_department_id', function() {
             appendDepartmentUsers();
-            store_session('att_department_id');
         });
         $(document).on('change', '#att_employee_id', function() {
             appenShiftDepartment();
-            store_session('att_employee_id');
         });
         $(document).on('change', '#att_shift_id', function() {
             appendShiftUsers();
-            store_session('att_shift_id');
         });
 
         function set_session(id) {
@@ -358,7 +361,7 @@
                 count++;
             });
             let att_length = sessionStorage.getItem('att_length');
-            
+
             if (att_length == null) {
                 att_length = 10;
             }
@@ -410,6 +413,7 @@
         function openChildWindow(id) {
             var screenWidth = window.screen.width;
             var screenHeight = window.screen.height;
+            sessionStorage.setItem("window", true);
             window.open('' + base_url + 'attendance/user_attendance/' + id + '', 'childWindow', 'width=' + screenWidth + ',height=' + screenHeight + '');
         }
 
@@ -460,8 +464,6 @@
 
         function appendStatusUsers() {
             var status = $('#att_status').val();
-            sessionStorage.removeItem('att_employee_id');
-            $("#att_employee_id").val("").trigger('change');
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_status') ?>',
                 type: 'POST',
@@ -472,9 +474,13 @@
                     var tableData = JSON.parse(response);
                     $('#att_employee_id').empty();
                     $('#att_employee_id').append('<option value="">Employee</option>');
-                    const att_employee_id = sessionStorage.getItem('att_employee_id');
+                    const value = sessionStorage.getItem("att_employee_id");
                     tableData.forEach(function(department) {
-                        $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                        if (value == department.id) {
+                            $('#att_employee_id').append('<option value="' + department.id + '" selected>' + department.first_name + ' ' + department.last_name + '</option>');
+                        } else {
+                            $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                        }
                     });
                 },
                 complete: function() {},
@@ -487,8 +493,6 @@
 
         function appendDepartmentUsers() {
             var department_id = $('#att_department_id').val();
-            sessionStorage.removeItem('att_employee_id');
-            $("#att_employee_id").val("").trigger('change');
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_department') ?>',
                 type: 'POST',
@@ -499,8 +503,14 @@
                     var tableData = JSON.parse(response);
                     $('#att_employee_id').empty();
                     $('#att_employee_id').append('<option value="">Employee</option>');
+                    const value = sessionStorage.getItem("att_employee_id");
+
                     tableData.forEach(function(department) {
-                        $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                        if (value == department.id) {
+                            $('#att_employee_id').append('<option value="' + department.id + '" selected>' + department.first_name + ' ' + department.last_name + '</option>');
+                        } else {
+                            $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                        }
                     });
                 },
                 complete: function() {},
@@ -514,8 +524,6 @@
 
         function appendShiftUsers() {
             var shift_id = $('#att_shift_id').val();
-            sessionStorage.removeItem('att_employee_id');
-            $("#att_employee_id").val("").trigger('change');
             $.ajax({
                 url: '<?= base_url('attendance/get_users_by_shifts') ?>',
                 type: 'POST',
@@ -550,7 +558,7 @@
             var theadRow = '<tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px; width:20px;">Employee</th></tr>';
             thead.html(theadRow);
             let att_length = sessionStorage.getItem('att_length');
-            
+
             if (att_length == null) {
                 att_length = 10;
             }

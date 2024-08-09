@@ -10,7 +10,7 @@ class Biometric_missing_model extends CI_Model
 
     public function delete($id)
     {
-        if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) {
+        if ($this->ion_auth->is_admin() || is_assign_users()) {
             $this->db->where('id', $id);
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
             $result = $this->db->get('biometric_missing');
@@ -65,7 +65,7 @@ class Biometric_missing_model extends CI_Model
     {
         $where = "";
 
-        if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) {
+        if ($this->ion_auth->is_admin() || is_assign_users()) {
             $where .= " WHERE bm.id = $id ";
         } else {
             // $where .= " WHERE bm.user_id = ".$this->session->userdata('user_id');
@@ -93,14 +93,14 @@ class Biometric_missing_model extends CI_Model
         $get = $this->input->get();
         $where = '';
 
-        if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all')) {
+        if ($this->ion_auth->is_admin()) {
             if (isset($get['user_id']) && !empty($get['user_id'])) {
                 $where .= " WHERE bm.user_id = " . $get['user_id'];
             } else {
                 $where .= " WHERE bm.id != ''";
             }
         } else {
-            if (permissions('biometric_request_view_selected')) {
+            if (is_assign_users()) {
                 if (isset($get['user_id']) && !empty($get['user_id'])) {
                     $where .= " WHERE bm.user_id = " . $get['user_id'];
                 } else {

@@ -305,7 +305,6 @@
 
         $(`#${id}`).change(function() {
           sessionStorage.setItem(id, $(this).val());
-          console.log(`${capitalizeFirstLetter(id)} set to:`, $(this).val());
         });
       }
 

@@ -53,7 +53,7 @@
               <div class="card-body">
                 <div class="basic-form">
                   <form class="row">
-                    <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
+                    <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
                       <div class="col-lg-2">
                         <select class="form-select select2" id="le_status">
                           <option value="1">Active</option>

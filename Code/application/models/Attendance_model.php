@@ -92,7 +92,7 @@ class Attendance_model extends CI_Model
         if (!empty($get['user_id'])) {
             $system_users = [$this->ion_auth->user($get['user_id'])->row()];
         } else {
-            if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            if ($this->ion_auth->is_admin()) {
                 $system_users2 = $this->ion_auth->members_all()->result();
             } else {
                 $selected = selected_users();
@@ -305,9 +305,9 @@ class Attendance_model extends CI_Model
             $employee_id = get_employee_id_from_user_id($get['user_id']);
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
-            if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            if ($this->ion_auth->is_admin()) {
                 $where = " WHERE attendance.id IS NOT NULL ";
-            } elseif ('attendance_view_selected') {
+            } elseif (is_assign_users()) {
                 $selected = selected_users();
                 if (!empty($selected)) {
                     foreach ($selected as $assignee) {
@@ -360,7 +360,16 @@ class Attendance_model extends CI_Model
         $bio_rejected = 0;
         $currentDate = new DateTime();
         $todayDate = $currentDate->format('Y-m-d');
-        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+        if ($this->ion_auth->is_admin()) {
+            $where = " WHERE DATE(attendance.finger) = '" . $todayDate . "' ";
+            $system_users = $this->ion_auth->members_all()->result();
+        } elseif (is_assign_users()) {
+            $selected = selected_users();
+            foreach ($selected as $user_id) {
+                $users[] = $this->ion_auth->user($user_id)->row();
+            }
+            $users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+            $system_users = $users;
             $where = " WHERE DATE(attendance.finger) = '" . $todayDate . "' ";
         } else {
             $where = '';
@@ -369,7 +378,6 @@ class Attendance_model extends CI_Model
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user 
         FROM attendance " . $leftjoin . $where);
         $results = $query->result_array();
-        $system_users = $this->ion_auth->members_all()->result();
         foreach ($system_users as $user) {
             if ($user->finger_config == '1' && $user->active == '1') {
                 $total_staff++;
@@ -397,7 +405,7 @@ class Attendance_model extends CI_Model
 
         $where2 = " WHERE users.active= '1' AND users.finger_config='1' AND users.saas_id=" . $this->session->userdata('saas_id');
         $where2 .= " AND leaves.starting_date >= '" . $fromDate . "' AND leaves.ending_date <= '" . $todayDate . "'";
-        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+        if ($this->ion_auth->is_admin() || is_assign_users()) {
             $where2 .= " ";
         } else {
             $user = $this->ion_auth->user()->row();
@@ -420,7 +428,7 @@ class Attendance_model extends CI_Model
         $leftjoin3 = " LEFT JOIN users ON biometric_missing.user_id = users.employee_id";
 
         $where3 = " WHERE biometric_missing.date BETWEEN '" . $fromDate . "' AND '" . $todayDate . "'";
-        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+        if ($this->ion_auth->is_admin() || is_assign_users()) {
             $where3 .= " ";
         } else {
             $user = $this->ion_auth->user()->row();
@@ -491,8 +499,7 @@ class Attendance_model extends CI_Model
 
     public function get_single_user_attendance($get)
     {
-        $attendance_view_all = permissions('attendance_view_all') || permissions('attendance_view_selected');
-        if ($this->ion_auth->is_admin() || $attendance_view_all) {
+        if ($this->ion_auth->is_admin() || is_assign_users()) {
             $attendance = $this->get_single_attendance_for_admin($get["user_id"], $get["from"], $get["too"]);
             $formated_data = $this->format_single_user_attendance($attendance, $get);
         } else {
@@ -662,7 +669,7 @@ class Attendance_model extends CI_Model
         $checkoffclock = false;
         $checkInDateTime = new DateTime($date . ' ' . $checkInTime);
         if ($checkInDateTime != $checkOutDateTime) {
-            if ($this->checkHalfDayLeave($date, $employee_id, $date, )) {
+            if ($this->checkHalfDayLeave($date, $employee_id, $date,)) {
                 $halfDayLeave = true;
                 $lateMinutes = 0;
             } else {

@@ -16,7 +16,7 @@ class Users extends CI_Controller
 			$bulkData = array();
 			if ($this->ion_auth->is_admin() || permissions('user_view_all')) {
 				$system_users = $this->ion_auth->all_roles()->result();
-			} elseif (permissions('user_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
@@ -132,7 +132,7 @@ class Users extends CI_Controller
 	public function create_user()
 	{
 		$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("users");
-		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || permissions('user_view_selected') || $this->ion_auth->in_group(3))) {
+		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || is_assign_users() || $this->ion_auth->in_group(3))) {
 			$saas_id = $this->session->userdata('saas_id');
 			$this->data['user_groups'] = $this->ion_auth->get_all_groups();
 			$this->db->where('saas_id', $saas_id);
@@ -158,7 +158,7 @@ class Users extends CI_Controller
 	public function edit_user($id)
 	{
 
-		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || permissions('user_view_selected') || $this->ion_auth->in_group(3))) {
+		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || is_assign_users() || $this->ion_auth->in_group(3))) {
 			$this->data['user_groups'] = $this->ion_auth->get_all_groups();
 			$saas_id = $this->session->userdata('saas_id');
 			$query = $this->db->get('shift');
@@ -201,7 +201,7 @@ class Users extends CI_Controller
 	public function index()
 	{
 		$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
-		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || permissions('user_view_selected') || $this->ion_auth->in_group(3))) {
+		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || is_assign_users() || $this->ion_auth->in_group(3))) {
 			$this->data['page_title'] = 'Employee - ' . company_name();
 			$this->data['main_page'] = 'Employee';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
@@ -215,6 +215,7 @@ class Users extends CI_Controller
 
 			$query = $this->db->where('saas_id', $saas_id)->get('devices');
 			$this->data['devices'] = $query->result_array();
+			
 			if (is_saas_admin()) {
 				$system_users = $this->ion_auth->users(array(3))->result();
 				foreach ($system_users as $system_user) {
@@ -281,9 +282,9 @@ class Users extends CI_Controller
 					}
 				}
 				$this->data['saas_users'] = $rows;
-			} elseif ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+			} elseif ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('leaves_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
@@ -440,7 +441,6 @@ class Users extends CI_Controller
 	public function detail()
 	{
 		if ($this->ion_auth->logged_in()) {
-
 			$this->data['page_title'] = 'Profile - ' . company_name();
 			$this->data['current_user'] = $profile_user = $this->ion_auth->user()->row();
 			$query = $this->db->get('shift');
@@ -449,9 +449,8 @@ class Users extends CI_Controller
 			$this->data['departments'] = $query3->result_array();
 			$query = $this->db->get('devices');
 			$this->data['devices'] = $query->result_array();
-
 			$user_id = $this->uri->segment($this->uri->total_segments());
-			if (permissions('user_view_selected')) {
+			if (is_assign_users()) {
 				$selected = selected_users();
 				$selected[] = $this->session->userdata('user_id');
 				if (!empty($selected)) {
@@ -593,13 +592,13 @@ class Users extends CI_Controller
 		$system_user_ids = [];
 		$system_users = [];
 
-		if ($this->ion_auth->is_admin() || permissions('user_view_all')) {
+		if ($this->ion_auth->is_admin()) {
 			$system_user = $this->ion_auth->users()->result();
 
 			foreach ($system_user as $user) {
 				$system_user_ids[] = $user->id;
 			}
-		} elseif (permissions('user_view_selected')) {
+		} elseif (is_assign_users()) {
 			$selected = selected_users();
 			$selected[] = $this->session->userdata('user_id');
 			$users = [];

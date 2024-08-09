@@ -10,7 +10,7 @@ class Leaves_model extends CI_Model
 
     function delete($id)
     {
-        if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) {
+        if ($this->ion_auth->is_admin() || is_assign_users()) {
             $this->db->where('id', $id);
             $this->db->where('saas_id', $this->session->userdata('saas_id'));
         } else {
@@ -182,12 +182,12 @@ class Leaves_model extends CI_Model
             $type = $get["leave_type"];
             $where .= " AND l.type = " . $type;
         }
-        if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+        if ($this->ion_auth->is_admin()) {
             if (isset($get['user_id']) && !empty($get['user_id'])) {
                 $where .= " AND l.user_id = " . $get['user_id'];
             }
         } else {
-            if (permissions('leaves_view_selected')) {
+            if (is_assign_users()) {
                 $selected = selected_users();
                 foreach ($selected as $value) {
                     $selected[] = get_employee_id_from_user_id($value);

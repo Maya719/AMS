@@ -115,17 +115,17 @@
           <span class="nav-text">Dashboard</span>
         </a>
       </li>
-      <?php if (($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected') || permissions('attendance_view') || permissions('leaves_view') || permissions('biometric_request_view') || permissions('plan_holiday_view')) && !is_saas_admin() && (is_module_allowed('leaves') || is_module_allowed('attendance') || is_module_allowed('biometric_missing'))) { ?>
+      <?php if (($this->ion_auth->is_admin() || is_assign_users() || permissions('attendance_view') || permissions('leaves_view') || permissions('biometric_request_view') || permissions('plan_holiday_view')) && !is_saas_admin() && (is_module_allowed('leaves') || is_module_allowed('attendance') || is_module_allowed('biometric_missing'))) { ?>
         <li>
           <a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
             <i class="fas fa-fingerprint"></i>
             <span class="nav-text">AMS</span>
           </a>
           <ul aria-expanded="false">
-            <?php if (($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) && is_module_allowed('attendance')) { ?>
+            <?php if (($this->ion_auth->is_admin() || is_assign_users()) && is_module_allowed('attendance')) { ?>
               <li><a href="<?= base_url('attendance') ?>">Attendance</a></li>
             <?php } ?>
-            <?php if (is_module_allowed('attendance') && permissions('attendance_view') && !permissions('attendance_view_all') && !permissions('attendance_view_selected')) { ?>
+            <?php if (is_module_allowed('attendance') && permissions('attendance_view') && !is_assign_users()) { ?>
               <li><a href="<?= base_url('attendance/user_attendance') ?>">Attendance</a></li>
             <?php } ?>
             <?php if (is_module_allowed('leaves') && ($this->ion_auth->is_admin() || permissions('leaves_view'))) { ?>
@@ -137,7 +137,7 @@
             <?php if (($this->ion_auth->is_admin() || permissions('plan_holiday_view')) && is_module_allowed('attendance')) { ?>
               <li><a href="<?= base_url('holiday') ?>">Plan Holidays</a></li>
             <?php } ?>
-            <?php if (($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) && is_module_allowed('attendance')) { ?>
+            <?php if (($this->ion_auth->is_admin() || is_assign_users()) && is_module_allowed('attendance')) { ?>
               <li><a href="<?= base_url('attendance/offclock') ?>">Off Clock</a></li>
             <?php } ?>
           </ul>
@@ -241,7 +241,7 @@
         <?php } ?>
         <li><a href="<?= base_url('events') ?>" aria-expanded="false">
             <i class="fas fa-calendar"></i>
-            <span class="nav-text"><?= $this->lang->line('events') ? $this->lang->line('events') : 'Notice Board' ?></span>
+            <span class="nav-text"><?= $this->lang->line('events') ? $this->lang->line('events') : 'Events' ?></span>
           </a>
         </li>
       <?php } ?>
@@ -274,7 +274,7 @@
             <span class="nav-text">Reports</span>
           </a>
           <ul aria-expanded="false">
-            <?php if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) { ?>
+            <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
               <li><a href="<?= base_url('reports/attendance') ?>">Attendance</a></li>
             <?php } ?>
             <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
@@ -313,12 +313,12 @@
               <?php } ?> -->
 
               <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
-                <li><a id="GuideStep2" href="<?= base_url('settings/roles') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles' ?></a></li>
+                <li><a id="GuideStep2" href="<?= base_url('permissions') ?>"><?= $this->lang->line('roles') ? $this->lang->line('roles') : 'Roles & Permissions' ?></a></li>
               <?php } ?>
 
-              <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
+              <!-- <?php if (($this->ion_auth->is_admin() || change_permissions('')) && is_module_allowed('user_roles')) { ?>
                 <li><a href="<?= base_url('settings/roles-permissions') ?>"><?= $this->lang->line('roles_permissions') ? $this->lang->line('roles_permissions') : 'Permissions' ?></a></li>
-              <?php } ?>
+              <?php } ?> -->
 
               <?php if (($this->ion_auth->is_admin() || permissions('leaves_edit')) && is_module_allowed('leaves')) { ?>
                 <li><a href="<?= base_url('settings/leaves') ?>"><?= $this->lang->line('leave_type') ? $this->lang->line('leave_type') : 'Leave Type' ?></a></li>

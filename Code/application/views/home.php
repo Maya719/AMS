@@ -145,7 +145,7 @@
                               <div class="d-flex">
 
                                 <?php
-                                if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
+                                if ($this->ion_auth->is_admin() || is_assign_users()) {
                                 ?>
                                   <h4 class="text-primary">Staff</h4>
                                 <?php
@@ -157,7 +157,7 @@
                                 <h4 class="count ms-auto mb-0"><a class="text-primary" id="total_staff" href="javascript:void(0)"><?= $report["total_staff"] ?></a></h4>
                               </div>
                               <?php
-                              if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) {
+                              if ($this->ion_auth->is_admin() || is_assign_users()) {
                               ?>
                                 <p class="mb-0 text-muted" style="margin-top: -10px;">(Attendance)</p>
                               <?php

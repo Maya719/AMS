@@ -146,7 +146,7 @@
           var $new_message = '';
           if ($show_beep_for_msg) {
             $new_noti = false;
-            $new_message = '<li><a href="'+base_url+'chat'+'"><div class="timeline-panel"><div class="media me-2 media-primary"><i class="fa-solid fa-comment"></i></div><div class="media-body"><h6 class="mb-1"><?= $this->lang->line('new_message') ? $this->lang->line('new_message') : 'New Message' ?></h6> </div> </div></a></li>';
+            $new_message = '<li><a href="' + base_url + 'chat' + '"><div class="timeline-panel"><div class="media me-2 media-primary"><i class="fa-solid fa-comment"></i></div><div class="media-body"><h6 class="mb-1"><?= $this->lang->line('new_message') ? $this->lang->line('new_message') : 'New Message' ?></h6> </div> </div></a></li>';
 
             // $new_message = '<a href="<?= base_url('chat') ?>" class="dropdown-item dropdown-item-unread"><h6 class="dropdown-item-desc m-2"></h6></a>';
           }
@@ -169,7 +169,7 @@
               } else {
                 $profile = '<div class="media me-2 media-primary">' + notification['first_name'].substr(0, 1) + '' + notification['last_name'].substr(0, 1) + '</div>';
               }
-              $whole_noti += '<li><a href="'+notification["notification_url"]+'"><div class="timeline-panel"> ' + $profile + ' <div class="media-body"> <h6 class="mb-1">' + notification['notification'] + '</h6><small class="d-block">' + notification['created'] + '</small> </div> </div></a></li>';
+              $whole_noti += '<li><a href="' + notification["notification_url"] + '"><div class="timeline-panel"> ' + $profile + ' <div class="media-body"> <h6 class="mb-1">' + notification['notification'] + '</h6><small class="d-block">' + notification['created'] + '</small> </div> </div></a></li>';
             });
 
           } else {

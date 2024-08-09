@@ -432,7 +432,7 @@ function send_mail($to, $subject, $message)
     $CI->Subject = $subject;
     $CI->Body = $message;
     $CI->AddAddress($to);
-    
+
     return $CI->Send();
 }
 
@@ -1426,43 +1426,33 @@ function get_current_plan($saas_id = '')
 function permissions($permissions_type = '')
 {
     $CI = &get_instance();
-
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
-    $role = $group[0]->name;
-    $CI->db->where('type', $role . '_permissions_' . $CI->session->userdata('saas_id'));
-    $count = $CI->db->get('settings');
-
-    if ($count->num_rows() > 0) {
-        $where_type = $role . '_permissions_' . $CI->session->userdata('saas_id');
+    $role = $group[0]->permissions;
+    $permissions = json_decode($group[0]->permissions, true);
+    if (isset($permissions[$permissions_type]) && $permissions[$permissions_type] == 1) {
+        return true;
     } else {
-        $where_type = 'permissions';
-    }
-
-    $CI->db->where(['type' => $where_type]);
-    $query = $CI->db->get('settings');
-    $data = $query->result_array();
-
-    if (!$data) {
         return false;
     }
+}
+function is_assign_users()
+{
+    $CI = &get_instance();
+    $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
+    $assigned_users = json_decode($group[0]->assigned_users, true);
 
-    $data = json_decode($data[0]['value']);
-
-    if (empty($permissions_type)) {
-        return $data;
+    if (empty($assigned_users)) {
+        return false;
     } else {
-        if (isset($data->$permissions_type)) {
-            return $data->$permissions_type;
-        } else {
-            return false;
-        }
+        return true;
     }
 }
+
+
 
 function change_permissions($group_id)
 {
     $CI = &get_instance();
-
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
     $permissions = $group[0]->change_permissions_of;
     if (empty($permissions) || is_null($permissions)) {
@@ -2882,6 +2872,7 @@ function if_allowd_to_create_new($checking_for)
     return false;
 }
 
-function redirect_to_index(){
+function redirect_to_index()
+{
     redirect('/', 'refresh');
 }

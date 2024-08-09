@@ -53,7 +53,7 @@
                                 <form action="<?= base_url('leaves/create') ?>" method="POST" id="modal-create-leaves-part" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <div class="row">
-                                            <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
+                                            <?php if ($this->ion_auth->in_group(1) || is_assign_users()) { ?>
                                                 <div class="col-lg-6 form-group mb-3">
                                                     <label class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></label>
                                                     <select name="user_id_add" id="user_id" class="form-control select2">

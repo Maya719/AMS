@@ -30,7 +30,7 @@ class Home_model extends CI_Model
             $employee_id = $user->employee_id;
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
-            if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+            if ($this->ion_auth->is_admin()) {
                 $where = " WHERE attendance.id IS NOT NULL ";
             } else {
                 $selected = selected_users();
@@ -69,6 +69,7 @@ class Home_model extends CI_Model
         $formattedData = [];
         $leaveArray = [];
         $absentArray = [];
+        $presentArray = [];
 
         foreach ($attendance as $entry) {
             $userId = $entry['user_id'];
@@ -170,9 +171,9 @@ class Home_model extends CI_Model
         $abs = 0;
         $leaves = 0;
         $present = 0;
-        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+        if ($this->ion_auth->is_admin()) {
             $where = " WHERE DATE(attendance.finger) = '" . $date . "' ";
-        } elseif (permissions('attendance_view_selected')) {
+        } elseif (is_assign_users()) {
             $selected = selected_users();
             if (!empty($selected)) {
                 foreach ($selected as $assignee) {
@@ -189,9 +190,9 @@ class Home_model extends CI_Model
             FROM attendance " . $leftjoin . $where);
 
         $results = $query->result_array();
-        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+        if ($this->ion_auth->is_admin()) {
             $system_users = $this->ion_auth->members()->result();
-        } elseif (permissions('attendance_view_selected')) {
+        } elseif (is_assign_users()) {
             $selected = selected_users();
             foreach ($selected as $user_id) {
                 $users[] = $this->ion_auth->user($user_id)->row();

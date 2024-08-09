@@ -304,7 +304,7 @@
       sessionStorage.setItem('att_startDate', att_startDate);
       sessionStorage.setItem('att_endDate', att_endDate);
       setFilter();
-      
+
       $('#config-text').keyup(function() {
         eval($(this).val());
       });
@@ -621,10 +621,12 @@
       });
     }
 
-    $('.select2').select2()
-    <?php if ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view_selected')) : ?>
+    $('.select2').select2();
+    let windowSession = sessionStorage.getItem('window');
+    <?php if ($this->ion_auth->is_admin() || is_assign_users()) : ?>
       window.addEventListener('click', function(event) {
-        if (event.target.tagName === 'A' || event.target.tagName === 'li') {
+        if (windowSession && (event.target.tagName === 'A' || event.target.tagName === 'li')) {
+          sessionStorage.removeItem('window')
           window.close();
           event.preventDefault();
         }

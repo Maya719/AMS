@@ -201,9 +201,9 @@ class Biometric_missing extends CI_Controller
 			$this->data['page_title'] = 'Biometric Request - '.company_name();
 			$this->data['main_page'] = 'Biometric Request';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			}elseif (permissions('biometric_request_view_selected')) {
+			}elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[]= $this->ion_auth->user($user_id)->row();			

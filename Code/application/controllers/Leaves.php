@@ -15,9 +15,9 @@ class Leaves extends CI_Controller
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('leaves_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
@@ -573,7 +573,7 @@ class Leaves extends CI_Controller
 		}
 		return $data;
 	}
-	
+
 	private function prepairFullDay($data, $shift)
 	{
 		if ($this->input->post('paid_days') > 0 && $this->input->post('unpaid_days') > 0) {
@@ -1069,9 +1069,9 @@ class Leaves extends CI_Controller
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('leaves_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
@@ -1121,9 +1121,9 @@ class Leaves extends CI_Controller
 			$this->data["report"] = $this->attendance_model->get_count_abs();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin() || permissions('leaves_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('leaves_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();

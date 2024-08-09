@@ -1222,7 +1222,6 @@ class Settings extends CI_Controller
 
 	public function save_permissions_setting()
 	{
-
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || change_permissions(''))) {
 			$roles = $this->settings_model->get_roles_permissions();
 			foreach ($roles as $role) {
@@ -1743,7 +1742,6 @@ class Settings extends CI_Controller
 				echo json_encode($this->data);
 			}
 		} else {
-
 			$this->data['error'] = true;
 			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
 			echo json_encode($this->data);
@@ -1826,28 +1824,7 @@ class Settings extends CI_Controller
 	}
 
 
-	public function get_roles_by_id()
-	{
-		if ($this->ion_auth->logged_in() && !$this->ion_auth->in_group(3) && !$this->ion_auth->in_group(4)) {
-			$this->form_validation->set_rules('id', 'id', 'trim|required|strip_tags|xss_clean|is_numeric');
-
-			if ($this->form_validation->run() == TRUE) {
-				$data = $this->settings_model->get_roles_by_id($this->input->post('id'));
-				$this->data['error'] = false;
-				$this->data['data'] = $data ? $data : '';
-				$this->data['message'] = "Success";
-				echo json_encode($this->data);
-			} else {
-				$this->data['error'] = true;
-				$this->data['message'] = validation_errors();
-				echo json_encode($this->data);
-			}
-		} else {
-			$this->data['error'] = true;
-			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
-			echo json_encode($this->data);
-		}
-	}
+	
 
 	public function get_roles()
 	{
