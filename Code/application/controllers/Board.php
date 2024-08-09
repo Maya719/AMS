@@ -166,8 +166,8 @@ class Board extends CI_Controller
         if (!empty($user_id)) {
             $users = [$user_id];
         } else {
-            if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
-            } else if (permissions('project_view_selected')) {
+            if ($this->ion_auth->is_admin()) {
+            } else if (is_assign_users()) {
                 $users = selected_users();
             } else {
                 $users = [$this->session->userdata('user_id')];

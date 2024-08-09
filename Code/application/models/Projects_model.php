@@ -719,9 +719,9 @@ class Projects_model extends CI_Model
         if (!empty($get["user_id"])) {
             $where = " WHERE project_users.user_id = '" . $get["user_id"] . "' ";
         } else {
-            if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+            if ($this->ion_auth->is_admin()) {
                 $where = " WHERE project_users.id IS NOT NULL ";
-            } elseif (permissions('project_view_selected')) {
+            } elseif (is_assign_users()) {
                 $selected = selected_users();
                 if (!empty($selected)) {
                     $userIdsString = implode(',', $selected);
