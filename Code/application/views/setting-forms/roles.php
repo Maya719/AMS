@@ -110,6 +110,12 @@
                                                 <label class="form-check-label" for="">view</label>
                                             </div>
                                         </div>
+                                        <div class="col-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="offclock_view">
+                                                <label class="form-check-label" for="">Off Clock</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -519,6 +525,12 @@
                                                 <label class="form-check-label" for="">view</label>
                                             </div>
                                         </div>
+                                        <div class="col-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="offclock_view">
+                                                <label class="form-check-label" for="">Off Clock</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -883,7 +895,7 @@
                                         <input type="checkbox" id="selectAllUsersEdit"> Select All
                                         <select name="users[]" id="selectedUsersSelect" class="form-control select2" multiple="">
                                             <?php foreach ($system_users as $system_user) {
-                                                if ($system_user->active == '1' &&$system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                                                if ($system_user->active == '1' && $system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                                                     <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                             <?php }
                                             } ?>
@@ -899,259 +911,261 @@
                     </div>
                 </div>
             </div>
-            <!--**********************************
-  Content body end
-***********************************-->
-            <?php $this->load->view('includes/footer'); ?>
         </div>
 
-        <?php $this->load->view('includes/scripts'); ?>
-        <script>
-            $('#table').DataTable({
-                "paging": true,
-                "searching": false,
-                "language": {
-                    "paginate": {
-                        "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-                        "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
-                    }
-                },
-                "info": false,
-                "dom": '<"top"i>rt<"bottom"lp><"clear">',
-                "lengthMenu": [10, 20, 50, 500],
-                "pageLength": 10
-            });
-            /*
-             *
-             *roles
-             * 
-             */
-            $("#add-role-modal").on('click', '.btn-create', function(e) {
-                var modal = $('#add-role-modal');
-                var form = $('#modal-add-role-part');
-                var formData = form.serialize();
-                console.log(formData);
-                $.ajax({
-                    type: 'POST',
-                    url: form.attr('action'),
-                    data: formData,
-                    dataType: "json",
-                    success: function(result) {
-                        if (result['error'] == false) {
-                            location.reload();
-                        } else {
-                            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
-                        }
-                    }
-                });
+        <!--**********************************
+  Content body end
+***********************************-->
+        <?php $this->load->view('includes/footer'); ?>
+    </div>
 
-                e.preventDefault();
-            });
-
-            $("#edit-role-modal").on('click', '.btn-edit', function(e) {
-                var modal = $('#edit-role-modal');
-                var form = $('#modal-edit-role-part');
-                var formData = form.serialize();
-                console.log(formData);
-                $.ajax({
-                    type: 'POST',
-                    url: form.attr('action'),
-                    data: formData,
-                    dataType: "json",
-                    success: function(result) {
-                        if (result['error'] == false) {
-                            location.reload();
-                        } else {
-                            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
-                        }
+    <?php $this->load->view('includes/scripts'); ?>
+    <script>
+        $('#table').DataTable({
+            "paging": true,
+            "searching": false,
+            "language": {
+                "paginate": {
+                    "next": '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                    "previous": '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                }
+            },
+            "info": false,
+            "dom": '<"top"i>rt<"bottom"lp><"clear">',
+            "lengthMenu": [10, 20, 50, 500],
+            "pageLength": 10
+        });
+        /*
+         *
+         *roles
+         * 
+         */
+        $("#add-role-modal").on('click', '.btn-create', function(e) {
+            var modal = $('#add-role-modal');
+            var form = $('#modal-add-role-part');
+            var formData = form.serialize();
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                dataType: "json",
+                success: function(result) {
+                    if (result['error'] == false) {
+                        location.reload();
+                    } else {
+                        modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
-                });
-
-                e.preventDefault();
-            });
-            $(document).on('click', '.edit-role', function(e) {
-                e.preventDefault();
-                var id = $(this).data("id");
-                console.log(id);
-                $.ajax({
-                    type: "POST",
-                    url: base_url + 'permissions/get_roles_by_id',
-                    data: "id=" + id,
-                    dataType: "json",
-                    success: function(result) {
-                        if (result['error'] == false) {
-                            console.log(result["data"]);
-                            $("#update_id").val(result['data'].id);
-                            $("#description").val(result['data'].description);
-                            $("#description").trigger("change");
-                            $("#descriptive_name").val(result['data'].descriptive_name);
-                            $("#descriptive_name").trigger("change");
-                            $("input[type='checkbox']").prop('checked', false);
-                            $.each(result.data.permissions, function(permission, isChecked) {
-                                if (isChecked == '1') {
-                                    $("input[name='" + permission + "']").prop('checked', true);
-                                }
-                            });
-
-                            var assignedUsers = JSON.parse(result.data.assigned_users);
-                            console.log(assignedUsers);
-                            $("#selectedUsersSelect").val(assignedUsers).trigger('change');
-                            $("#modal-edit-roles").trigger("click");
-                        } else {
-                            iziToast.error({
-                                title: something_wrong_try_again,
-                                message: "",
-                                position: 'topRight'
-                            });
-                        }
-                    }
-                });
+                }
             });
 
+            e.preventDefault();
+        });
 
-            $(document).on('click', '.delete-role', function(e) {
-                e.preventDefault();
-                var id = $(this).data("id");
-                Swal.fire({
-                    title: are_you_sure,
-                    text: 'You won\'t be able to revert this!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: base_url + 'settings/roles_delete/' + id,
-                            data: "id=" + id,
-                            dataType: "json",
-                            success: function(result) {
-                                if (result['error'] == false) {
-                                    location.reload()
-                                } else {
-                                    iziToast.error({
-                                        title: result['message'],
-                                        message: "",
-                                        position: 'topRight'
-                                    });
-                                }
+        $("#edit-role-modal").on('click', '.btn-edit', function(e) {
+            var modal = $('#edit-role-modal');
+            var form = $('#modal-edit-role-part');
+            var formData = form.serialize();
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                dataType: "json",
+                success: function(result) {
+                    if (result['error'] == false) {
+                        location.reload();
+                    } else {
+                        modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+                    }
+                }
+            });
+
+            e.preventDefault();
+        });
+        $(document).on('click', '.edit-role', function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            console.log(id);
+            $.ajax({
+                type: "POST",
+                url: base_url + 'permissions/get_roles_by_id',
+                data: "id=" + id,
+                dataType: "json",
+                success: function(result) {
+                    if (result['error'] == false) {
+                        console.log(result["data"]);
+                        $("#update_id").val(result['data'].id);
+                        $("#description").val(result['data'].description);
+                        $("#description").trigger("change");
+                        $("#descriptive_name").val(result['data'].descriptive_name);
+                        $("#descriptive_name").trigger("change");
+                        $("input[type='checkbox']").prop('checked', false);
+                        $.each(result.data.permissions, function(permission, isChecked) {
+                            if (isChecked == '1') {
+                                $("input[name='" + permission + "']").prop('checked', true);
                             }
                         });
+
+                        var assignedUsers = JSON.parse(result.data.assigned_users);
+                        console.log(assignedUsers);
+                        $("#selectedUsersSelect").val(assignedUsers).trigger('change');
+                        $("#modal-edit-roles").trigger("click");
+                    } else {
+                        iziToast.error({
+                            title: something_wrong_try_again,
+                            message: "",
+                            position: 'topRight'
+                        });
                     }
-                });
+                }
             });
-            $("#add-leave-type-modal").on('click', '.btn-create', function(e) {
-                var modal = $('#add-leave-type-modal');
-                var form = $('#modal-add-leaves-part');
-                var formData = form.serialize();
-                console.log(formData);
-                $.ajax({
-                    type: 'POST',
-                    url: form.attr('action'),
-                    data: formData,
-                    dataType: "json",
-                    success: function(result) {
-                        if (result['error'] == false) {
-                            location.reload();
-                        } else {
-                            modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
+        });
+
+
+        $(document).on('click', '.delete-role', function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            Swal.fire({
+                title: are_you_sure,
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url + 'settings/roles_delete/' + id,
+                        data: "id=" + id,
+                        dataType: "json",
+                        success: function(result) {
+                            if (result['error'] == false) {
+                                location.reload()
+                            } else {
+                                iziToast.error({
+                                    title: result['message'],
+                                    message: "",
+                                    position: 'topRight'
+                                });
+                            }
                         }
-                    }
-                });
-
-                e.preventDefault();
+                    });
+                }
             });
-            $(".select2").select2();
-            $("#selectedUsersSelect").select2();
-            $(document).ready(function() {
-                // Initialize Select2
-                $("#selectedUsersSelect").select2({
-                    width: '100%'
-                });
-
-                // Handle Select All checkbox
-                $("#selectAllUsersEdit").on('change', function() {
-                    var selectAll = $(this).is(':checked');
-
-                    if (selectAll) {
-                        // Select all options
-                        var allOptionValues = $("#selectedUsersSelect").find('option').map(function() {
-                            return $(this).val();
-                        }).get();
-                        $("#selectedUsersSelect").val(allOptionValues).trigger('change');
+        });
+        $("#add-leave-type-modal").on('click', '.btn-create', function(e) {
+            var modal = $('#add-leave-type-modal');
+            var form = $('#modal-add-leaves-part');
+            var formData = form.serialize();
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                dataType: "json",
+                success: function(result) {
+                    if (result['error'] == false) {
+                        location.reload();
                     } else {
-                        // Deselect all options
-                        $("#selectedUsersSelect").val([]).trigger('change');
+                        modal.find('.modal-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }
-                });
-
-                // Update "Select All" checkbox based on individual selections
-                $("#selectedUsersSelect").on('select2:select', function() {
-                    var selectedCount = $(this).find('option:selected').length;
-                    var totalOptions = $(this).find('option').length;
-
-                    if (selectedCount === totalOptions) {
-                        $("#selectAllUsersEdit").prop('checked', true);
-                    } else {
-                        $("#selectAllUsersEdit").prop('checked', false);
-                    }
-                });
-
-                $("#selectedUsersSelect").on('select2:unselect', function() {
-                    var selectedCount = $(this).find('option:selected').length;
-                    var totalOptions = $(this).find('option').length;
-
-                    if (selectedCount < totalOptions) {
-                        $("#selectAllUsersEdit").prop('checked', false);
-                    }
-                });
+                }
             });
-            $(document).ready(function() {
-                // Initialize Select2
-                $("#change_permissions_of").select2({
-                    width: '100%'
-                });
 
-                // Handle Select All checkbox
-                $("#selectAllUsers").on('change', function() {
-                    var selectAll = $(this).is(':checked');
-
-                    if (selectAll) {
-                        // Select all options
-                        var allOptionValues = $("#change_permissions_of").find('option').map(function() {
-                            return $(this).val();
-                        }).get();
-                        $("#change_permissions_of").val(allOptionValues).trigger('change');
-                    } else {
-                        // Deselect all options
-                        $("#change_permissions_of").val([]).trigger('change');
-                    }
-                });
-
-                // Update "Select All" checkbox based on individual selections
-                $("#change_permissions_of").on('select2:select', function() {
-                    var selectedCount = $(this).find('option:selected').length;
-                    var totalOptions = $(this).find('option').length;
-
-                    if (selectedCount === totalOptions) {
-                        $("#selectAllUsers").prop('checked', true);
-                    } else {
-                        $("#selectAllUsers").prop('checked', false);
-                    }
-                });
-
-                $("#change_permissions_of").on('select2:unselect', function() {
-                    var selectedCount = $(this).find('option:selected').length;
-                    var totalOptions = $(this).find('option').length;
-
-                    if (selectedCount < totalOptions) {
-                        $("#selectAllUsers").prop('checked', false);
-                    }
-                });
+            e.preventDefault();
+        });
+        $(".select2").select2();
+        $("#selectedUsersSelect").select2();
+        $(document).ready(function() {
+            // Initialize Select2
+            $("#selectedUsersSelect").select2({
+                width: '100%'
             });
-        </script>
+
+            // Handle Select All checkbox
+            $("#selectAllUsersEdit").on('change', function() {
+                var selectAll = $(this).is(':checked');
+
+                if (selectAll) {
+                    // Select all options
+                    var allOptionValues = $("#selectedUsersSelect").find('option').map(function() {
+                        return $(this).val();
+                    }).get();
+                    $("#selectedUsersSelect").val(allOptionValues).trigger('change');
+                } else {
+                    // Deselect all options
+                    $("#selectedUsersSelect").val([]).trigger('change');
+                }
+            });
+
+            // Update "Select All" checkbox based on individual selections
+            $("#selectedUsersSelect").on('select2:select', function() {
+                var selectedCount = $(this).find('option:selected').length;
+                var totalOptions = $(this).find('option').length;
+
+                if (selectedCount === totalOptions) {
+                    $("#selectAllUsersEdit").prop('checked', true);
+                } else {
+                    $("#selectAllUsersEdit").prop('checked', false);
+                }
+            });
+
+            $("#selectedUsersSelect").on('select2:unselect', function() {
+                var selectedCount = $(this).find('option:selected').length;
+                var totalOptions = $(this).find('option').length;
+
+                if (selectedCount < totalOptions) {
+                    $("#selectAllUsersEdit").prop('checked', false);
+                }
+            });
+        });
+        $(document).ready(function() {
+            // Initialize Select2
+            $("#change_permissions_of").select2({
+                width: '100%'
+            });
+
+            // Handle Select All checkbox
+            $("#selectAllUsers").on('change', function() {
+                var selectAll = $(this).is(':checked');
+
+                if (selectAll) {
+                    // Select all options
+                    var allOptionValues = $("#change_permissions_of").find('option').map(function() {
+                        return $(this).val();
+                    }).get();
+                    $("#change_permissions_of").val(allOptionValues).trigger('change');
+                } else {
+                    // Deselect all options
+                    $("#change_permissions_of").val([]).trigger('change');
+                }
+            });
+
+            // Update "Select All" checkbox based on individual selections
+            $("#change_permissions_of").on('select2:select', function() {
+                var selectedCount = $(this).find('option:selected').length;
+                var totalOptions = $(this).find('option').length;
+
+                if (selectedCount === totalOptions) {
+                    $("#selectAllUsers").prop('checked', true);
+                } else {
+                    $("#selectAllUsers").prop('checked', false);
+                }
+            });
+
+            $("#change_permissions_of").on('select2:unselect', function() {
+                var selectedCount = $(this).find('option:selected').length;
+                var totalOptions = $(this).find('option').length;
+
+                if (selectedCount < totalOptions) {
+                    $("#selectAllUsers").prop('checked', false);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

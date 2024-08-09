@@ -3,9 +3,9 @@
 ***********************************-->
 <div class="nav-header">
   <a href="<?= base_url() ?>" class="brand-logo">
-    <img width="50" height="50" src="<?= base_url('assets/uploads/logos/'.favicon()) ?>" alt="">
+    <img width="50" height="50" src="<?= base_url('assets/uploads/logos/' . favicon()) ?>" alt="">
     <div class="brand-title">
-      <img width="190" height="50" src="<?= base_url('assets/uploads/logos/'.half_logo()) ?>" alt="">
+      <img width="190" height="50" src="<?= base_url('assets/uploads/logos/' . half_logo()) ?>" alt="">
     </div>
   </a>
   <div class="nav-control">
@@ -137,7 +137,7 @@
             <?php if (($this->ion_auth->is_admin() || permissions('plan_holiday_view')) && is_module_allowed('attendance')) { ?>
               <li><a href="<?= base_url('holiday') ?>">Plan Holidays</a></li>
             <?php } ?>
-            <?php if (($this->ion_auth->is_admin() || is_assign_users()) && is_module_allowed('attendance')) { ?>
+            <?php if (($this->ion_auth->is_admin() || permissions('offclock_view')) && is_module_allowed('attendance')) { ?>
               <li><a href="<?= base_url('attendance/offclock') ?>">Off Clock</a></li>
             <?php } ?>
           </ul>
@@ -307,7 +307,7 @@
               <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
                 <li><a href="<?= base_url('settings/company') ?>"><?= $this->lang->line('company') ? $this->lang->line('company') : 'Company' ?></a></li>
               <?php } ?>
-              
+
               <!-- <?php if ($this->ion_auth->is_admin() || permissions('company_view')) { ?>
                 <li><a href="<?= base_url('home/customizer') ?>"><?= $this->lang->line('customizer') ? $this->lang->line('customizer') : 'Customize Dashboard' ?></a></li>
               <?php } ?> -->
@@ -359,7 +359,7 @@
       <?php } ?>
       <?php if (is_saas_admin()) { ?>
         <li><a href="<?= base_url('chatbot') ?>" aria-expanded="false">
-        <i class="fa-solid fa-robot"></i>
+            <i class="fa-solid fa-robot"></i>
             <span class="nav-text">FAQ's</span>
           </a>
         </li>

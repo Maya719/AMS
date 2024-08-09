@@ -43,6 +43,7 @@ class Permissions extends CI_Controller
 
 				$data_json = [
 					'attendance_view' => $this->input->post('attendance_view') ? '1' : '0',
+					'offclock_view' => $this->input->post('offclock_view') ? '1' : '0',
 					'leaves_view' => $this->input->post('leaves_view') ? '1' : '0',
 					'leaves_create' => $this->input->post('leaves_create') ? '1' : '0',
 					'leaves_edit' => $this->input->post('leaves_edit') ? '1' : '0',
@@ -132,6 +133,7 @@ class Permissions extends CI_Controller
 
 				$data_json = [
 					'attendance_view' => $this->input->post('attendance_view') ? '1' : '0',
+					'offclock_view' => $this->input->post('offclock_view') ? '1' : '0',
 					'leaves_view' => $this->input->post('leaves_view') ? '1' : '0',
 					'leaves_create' => $this->input->post('leaves_create') ? '1' : '0',
 					'leaves_edit' => $this->input->post('leaves_edit') ? '1' : '0',
