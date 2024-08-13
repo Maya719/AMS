@@ -123,7 +123,7 @@
           <form action="<?= base_url('biometric_missing/create') ?>" method="POST" class="modal-part" id="modal-add-biometric-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
 
             <div class="modal-body">
-              <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
+              <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
                 <div class="form-group mb-3">
                   <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id_add" class="form-control select2">
@@ -176,7 +176,7 @@
 
             <div class="modal-body">
               <input type="hidden" name="update_id" id="update_id">
-              <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_view_all') || permissions('biometric_request_view_selected')) { ?>
+              <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
                 <div class="form-group mb-3">
                   <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="edit_user" class="form-control select2">
@@ -573,6 +573,8 @@
         },
         success: function(result) {
           if (result['error'] == false && result['data'] != '') {
+            console.log(result);
+            
             var date = moment(result['data'][0].date, 'YYYY-MM-DD').format(date_format_js);
             $("#update_id").val(result['data'][0].id);
             $("#employee_id").val(result['data'][0].employee_id);

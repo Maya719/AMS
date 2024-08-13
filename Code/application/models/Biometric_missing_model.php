@@ -99,25 +99,23 @@ class Biometric_missing_model extends CI_Model
             } else {
                 $where .= " WHERE bm.id != ''";
             }
-        } else {
-            if (is_assign_users()) {
-                if (isset($get['user_id']) && !empty($get['user_id'])) {
-                    $where .= " WHERE bm.user_id = " . $get['user_id'];
-                } else {
-                    $selected = selected_users();
-                    foreach ($selected as $value) {
-                        $id = get_employee_id_from_user_id($value);
-                        $system_user[]=$id;
-                    }
-                    if (!empty($selected)) {
-                        $userIdsString = implode(',', $system_user);
-                        $where = " WHERE bm.user_id IN ($userIdsString)";
-                    }
-                }
+        } elseif (is_assign_users()) {
+            if (isset($get['user_id']) && !empty($get['user_id'])) {
+                $where .= " WHERE bm.user_id = " . $get['user_id'];
             } else {
-                $id = get_employee_id_from_user_id($this->session->userdata('user_id'));
-                $where .= " WHERE bm.user_id = " . $id;
+                $selected = selected_users();
+                foreach ($selected as $value) {
+                    $id = get_employee_id_from_user_id($value);
+                    $system_user[] = $id;
+                }
+                if (!empty($selected)) {
+                    $userIdsString = implode(',', $system_user);
+                    $where = " WHERE bm.user_id IN ($userIdsString)";
+                }
             }
+        } else {
+            $id = get_employee_id_from_user_id($this->session->userdata('user_id'));
+            $where .= " WHERE bm.user_id = " . $id;
         }
 
         if (isset($get['status']) && !empty($get['status'])) {
