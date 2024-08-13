@@ -74,7 +74,7 @@ class Leaves_model extends CI_Model
                     }
                     $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave btn-block col btn-primary ">Save</button>';
                 }
-            }else{
+            } else {
                 $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave btn-block btn-danger mx-2" disabled>User is deactive</button>';
             }
             $value["forword_result"] = $forword_result;
@@ -172,12 +172,12 @@ class Leaves_model extends CI_Model
             $userstatus = $get["userstatus"];
             if ($userstatus == '1') {
                 $active = '1';
-            }else{
+            } else {
                 $active = '0';
             }
             $where .= " AND u.active = " . $active;
         }
-        
+
         if (isset($get['leave_type']) &&  !empty($get['leave_type'])) {
             $type = $get["leave_type"];
             $where .= " AND l.type = " . $type;
@@ -319,6 +319,7 @@ class Leaves_model extends CI_Model
     public function get_leaves_count($result)
     {
         $user_id2 = isset($result['user_id']) ? $result['user_id'] : $this->session->userdata('user_id');
+        $finger_config = $this->ion_auth->user($user_id2)->row()->finger_config;
         $user_id = get_employee_id_from_user_id($user_id2);
         $saas_id = $this->session->userdata('saas_id');
         // get consume leaves
@@ -350,14 +351,12 @@ class Leaves_model extends CI_Model
                 $endDate = new DateTime($leave->ending_date);
                 $leaveDuration = $endDate->diff($startDate)->days + 1;
                 if (strpos($leave->leave_duration, 'Full') !== false) {
-                    $consumed_leaves += $leaveDuration;
                     if ($leave->paid == 0) {
                         $paid_leaves += $leaveDuration;
                     } else {
                         $unpaid_leaves += $leaveDuration;
                     }
                 } elseif (strpos($leave->leave_duration, 'Half') !== false) {
-                    $consumed_leaves += $leaveDuration * 0.5;
                     if ($leave->paid == 0) {
                         $paid_leaves += 0.5;
                     } else {
@@ -373,10 +372,31 @@ class Leaves_model extends CI_Model
             $unpaidArray[] = $unpaid_leaves;
         }
 
+        if ($finger_config == 1) {
+
+            $late_min = 0;
+            $start_from = new DateTime(date('Y-01-01'));
+            $end_date = new DateTime(date('Y-m-d'));
+            $interval = new DateInterval('P1D');
+            $period = new DatePeriod($start_from, $interval, $end_date);
+            $shift_id = $this->shift_model->get_user_shift($user_id)->id;
+            foreach ($period as $date) {
+                $formatted_date = $date->format('Y-m-d');
+                $shift = $this->shift_model->get_shift_log_by_id($shift_id, $formatted_date);
+                $shift_start = $shift["starting_time"];
+                $shift_end = $shift["ending_time"];
+                $late_min += $this->att_model->get_late_min($user_id, $formatted_date, $formatted_date, $shift_start, $shift_end);
+            }
+        } else {
+            $late_min = 0;
+        }
+
+
         return array(
             'total_leaves' =>  $TotalLeaveArray,
             'leave_types' =>  $LeaveTypeArray,
             'consumed_leaves' => $consumeArray,
+            'late_min' => intval($late_min),
             'paidArray' => $paidArray,
             'unpaidArray' => $unpaidArray,
             'user_id' => $user_id,

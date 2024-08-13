@@ -65,7 +65,16 @@ class Shift_model extends CI_Model
         return $return;
     }
 
-
+    public function get_user_shift($user_id)
+    {
+        $user_id = get_user_id_from_employee_id($user_id);
+        $shift_id = $this->ion_auth->user($user_id)->row()->shift_id;
+        $this->db->where('saas_id', $this->session->userdata('saas_id'));
+        $this->db->where('id', $shift_id);
+        $query = $this->db->get('shift');
+        $shift = $query->row();
+        return $shift;
+    }
 
     function get_user_details($user_id)
     {

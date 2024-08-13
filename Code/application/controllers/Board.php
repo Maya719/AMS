@@ -158,6 +158,7 @@ class Board extends CI_Controller
             redirect_to_index();
         }
     }
+    
     public function filter_board()
     {
         $sprint_show = false;

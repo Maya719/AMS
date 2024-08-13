@@ -918,9 +918,7 @@ class Settings extends CI_Controller
 
 	public function hierarchy()
 	{
-		// ini_set('display_errors', 1);
-		// ini_set('display_startup_errors', 1);
-		// error_reporting(E_ALL);
+		
 
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_module_allowed('user_permissions'))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();

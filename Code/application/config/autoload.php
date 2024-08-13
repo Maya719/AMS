@@ -161,5 +161,6 @@ $autoload['model'] = array(
     'holiday_model',
     'events_model',
     'board_model',
-    'issues_model'
+    'issues_model',
+    'att_model',
 );

@@ -84,7 +84,7 @@
                                                     } ?>
                                                 </select>
                                             </div>
-                                            
+
                                             <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
                                                 <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs" style="display: none;">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
@@ -204,22 +204,21 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="row h-50">
+                        <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Leave balance</h4>
+                                        <h4 class="card-title">Leave balance </h4>
                                     </div>
-                                    <div class="card-body" style="height: 250px;">
+                                    <div class="card-body" style="min-height: 250px;">
                                         <div class="table-responsive">
                                             <table class="table table-sm mb-0" id="typesTable">
                                                 <thead>
                                                     <tr>
                                                         <th>Leave Type</th>
                                                         <th>Total</th>
-                                                        <th>Consume</th>
-                                                        <th>Paid</th>
-                                                        <th>Unpaid</th>
+                                                        <th>Consumed</th>
+                                                        <th>Balance</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table_body">
@@ -291,16 +290,42 @@
                 success: function(response) {
                     console.log(response);
                     var html = '';
-                    response.leave_types.forEach((value, index) => {
-                        html += '<tr>';
-                        html += '<td>' + value + '</td>';
-                        html += '<td>' + response.total_leaves[index] + '</td>';
-                        html += '<td>' + response.consumed_leaves[index] + '</td>';
-                        html += '<td>' + response.paidArray[index] + '</td>';
-                        html += '<td>' + response.unpaidArray[index] + '</td>';
+                    let emptyCell = '<td class=""></td>';
+                    if (response.leave_types) {
+                        response.leave_types.forEach((value, index) => {
+                            html += '<tr>';
+                            html += '<td class="">' + value + '</td>';
+                            html += '<td class="">' + response.total_leaves[index] + '</td>';
+                            html += '<td class="">' + response.paidArray[index] + '</td>';
+                            html += '<td class="">' + (response.total_leaves[index] - response.paidArray[index]) + '</td>';
+                            html += '</tr>';
+                        });
+                        html += '<tr class="section-header">';
+                        html += `<td colspan="4" class="" 
+                        style="height:0px; padding:0px; margin:0px; border:1px solid black"></td>`;
                         html += '</tr>';
-                    });
-                    console.log(html);
+                        html += '<tr>';
+                        html += '<td class="fw-bold">Unpaid</td>';
+                        html += '<td class=" fw-bold">Days</td>' + emptyCell + emptyCell;
+                        html += '</tr>';
+                        html += '<tr>';
+                        html += '<td>Approved</td>';
+                        html += '<td class="">' + response.unpaidArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0) + '</td>' + emptyCell + emptyCell;
+                        html += '</tr>';
+                        html += '<tr>';
+                        html += '<td>Absents</td>';
+                        html += '<td class=""><?php echo $report['abs']; ?></td>' + emptyCell + emptyCell;
+                        html += '</tr>';
+                        html += '<tr>';
+                        html += '<td>Late Minutes</td>';
+                        html += '<td id="late_minutes" class="">' + response.late_min + '</td > ' + emptyCell + emptyCell;
+                        html += '</tr>';
+                    } else {
+                        html += '<tr>';
+                        html += '<td colspan="5" class="">No Leave Type</td>';
+                        html += '</tr>';
+                    }
+                    // console.log(html);
                     $("#table_body").html(html);
 
                 },

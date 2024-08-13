@@ -825,7 +825,7 @@ class Projects_model extends CI_Model
 
         $where .= (!empty($project_id) && is_numeric($project_id) && empty($where)) ? "WHERE pu.project_id=$project_id" : "";
 
-        if (permissions('project_view_selected')) {
+        if (is_assign_users()) {
             $selected = selected_users();
             $selected[] = $this->session->userdata('user_id');
 

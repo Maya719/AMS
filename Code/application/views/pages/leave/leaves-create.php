@@ -260,7 +260,7 @@
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Late Minutes</td>';
-                        html += '<td id="late_minutes" class=""><div class="spinner-border" role="status"> <span class = "visually-hidden" > Loading... < /span> </div></td > ' + emptyCell + emptyCell;
+                        html += '<td id="late_minutes" class="">' + response.late_min + '</td > ' + emptyCell + emptyCell;
                         html += '</tr>';
                     } else {
                         html += '<tr>';
@@ -281,58 +281,14 @@
         }
         $(document).ready(function() {
             multiLineChart();
-            getLateMinutesOfSelectedUser();
         });
 
 
-        function getLateMinutesOfSelectedUser(user_id = $('#user_id').val()) {
 
-            const today = new Date();
-            const startOfYear = new Date(today.getFullYear(), 0, 1);
-            const formatDate = (date) => {
-                const year = date.getFullYear();
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const day = date.getDate().toString().padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            };
-
-            $.ajax({
-                url: '<?= base_url('attendance/get_attendance') ?>',
-                type: 'GET',
-                data: {
-                    user_id,
-                    from: formatDate(startOfYear),
-                    too: formatDate(today),
-                    status: "1",
-                    shifts: "",
-                    department: "",
-                    q1: "data",
-                    q2: "summary",
-                },
-                beforeSend: function() {
-                    // showLoader();
-                },
-                success: function(response) {
-                    var tableData = JSON.parse(response);
-                    const lateMinutes = tableData['late_minutes'];
-                    $('#late_minutes').html(lateMinutes);
-
-                    // if (tableData.data.length > 0) {
-                    //     showTable(tableData);
-                    // } else {
-                    //     emptyTable();
-                    // }
-                },
-                error: function(error) {
-                    // console.error(error);
-                }
-            });
-        }
 
 
         $('#user_id').on('change', function() {
             multiLineChart();
-            getLateMinutesOfSelectedUser($('#user_id').val());
         });
 
         $('.select2').select2();

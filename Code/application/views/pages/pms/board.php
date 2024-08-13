@@ -94,7 +94,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12 mt-3">
-                        <?php if ($this->ion_auth->is_admin() || permissions('task_view_all') || permissions('task_view_selected')) : ?>
+                        <?php if ($this->ion_auth->is_admin() || is_assign_users()) : ?>
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
