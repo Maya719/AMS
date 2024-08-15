@@ -1502,9 +1502,9 @@ class Projects extends CI_Controller
 			$this->data['page_title'] = 'Projects - ' . company_name();
 			$this->data['main_page'] = 'Projects';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('project_view_selected')) {
+			} elseif (is_assign_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			}
 			$this->data['system_clients'] = $this->ion_auth->users(array(4))->result();
@@ -1512,7 +1512,7 @@ class Projects extends CI_Controller
 
 			$this->data['project_status'] = project_status();
 
-			if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+			if ($this->ion_auth->is_admin() || is_assign_users()) {
 				$this->data['projects_all'] = $this->projects_model->get_projects();
 			} else {
 				$this->data['projects_all'] = $this->projects_model->get_projects($this->session->userdata('user_id'));

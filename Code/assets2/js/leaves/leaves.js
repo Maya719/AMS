@@ -194,7 +194,7 @@ $(document).ready(function () {
         var user_id = $('select[name="user_id_add"]').val();
         console.log(type);
         $.ajax({
-            url: base_url + 'leaves/get_leaves_count',
+            url: base_url + 'leaves/get_leaves_balance',
             method: 'POST',
             dataType: 'json',
             data: {

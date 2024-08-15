@@ -52,9 +52,9 @@ class Board extends CI_Controller
             $query9 = $this->db->get();
             $this->data['projects'] = $query9->result_array();
 
-            if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+            if ($this->ion_auth->is_admin()) {
                 $this->data['system_users'] = $this->ion_auth->members()->result();
-            } elseif (permissions('project_view_selected')) {
+            } elseif (is_assign_users()) {
                 $selected = selected_users();
                 foreach ($selected as $user_id) {
                     $users[] = $this->ion_auth->user($user_id)->row();
@@ -158,7 +158,7 @@ class Board extends CI_Controller
             redirect_to_index();
         }
     }
-    
+
     public function filter_board()
     {
         $sprint_show = false;
@@ -179,9 +179,9 @@ class Board extends CI_Controller
             $sprint_data = $this->board_model->get_running_sprint($project_id);
             if ($sprint_data) {
                 $sprint_show = true;
-                $issues_data = $this->get_sprint_issues($project_id, $users,$sprint_data->id);
+                $issues_data = $this->get_sprint_issues($project_id, $users, $sprint_data->id);
             }
-        }else{
+        } else {
             $issues_data = $this->get_issues($project_id, $users);
         }
 
@@ -218,7 +218,7 @@ class Board extends CI_Controller
         return $status_query->result_array();
     }
 
-    private function get_sprint_issues($project_id, $users,$sprint_id)
+    private function get_sprint_issues($project_id, $users, $sprint_id)
     {
         $this->db->select('i.*, p.title as project_title, pr.title as priority_title, pr.class as priority_class, u.first_name, u.last_name, u.profile');
         $this->db->from('tasks i');
@@ -373,13 +373,13 @@ class Board extends CI_Controller
                                         </ul>';
         }
         $due_or_not = $this->get_due_dates($issue["starting_date"], $issue["due_date"], $status["id"]);
-$html .= '
-<head>
-    <link rel="stylesheet" href="' . base_url('Code\assets2\css\custom.css') . '">
-</head>
-<div class="col-6 d-flex justify-content-end">
-    <p class="mb-0 small-text"><i class="far fa-clock me-2"></i>' . $due_or_not . '</p>
-</div>';
+        $html .= '
+        <head>
+            <link rel="stylesheet" href="' . base_url('Code\assets2\css\custom.css') . '">
+        </head>
+        <div class="col-6 d-flex justify-content-end">
+            <p class="mb-0 small-text"><i class="far fa-clock me-2"></i>' . $due_or_not . '</p>
+        </div>';
 
 
         $html .= ' 

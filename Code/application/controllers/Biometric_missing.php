@@ -198,7 +198,6 @@ class Biometric_missing extends CI_Controller
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
 				}
-				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
 				$this->data['system_users'] = $users;
 			}
 			$this->load->view('pages/biometric/biometric_missing', $this->data);

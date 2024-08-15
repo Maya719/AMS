@@ -197,6 +197,9 @@ class Leaves_model extends CI_Model
                     $userIdsString = implode(',', $selected);
                     $where .= " AND l.user_id IN ($userIdsString)";
                 }
+                if (isset($get['user_id']) && !empty($get['user_id'])) {
+                    $where .= " AND l.user_id = " . $get['user_id'];
+                }
             } else {
                 $id = get_employee_id_from_user_id($this->session->userdata('user_id'));
                 $where .= " AND l.user_id = " . $id;
@@ -316,93 +319,7 @@ class Leaves_model extends CI_Model
         }
     }
 
-    public function get_leaves_count($result)
-    {
-        $user_id2 = isset($result['user_id']) ? $result['user_id'] : $this->session->userdata('user_id');
-        $finger_config = $this->ion_auth->user($user_id2)->row()->finger_config;
-        $user_id = get_employee_id_from_user_id($user_id2);
-        $saas_id = $this->session->userdata('saas_id');
-        // get consume leaves
-        $currentDate = date('Y-m-d');
-        $currentYear = date('Y');
-        $currentMonth = date('m');
 
-        $from = $currentYear . '-01-01';
-        $too = $currentYear . '-12-31';
-
-        $this->db->from('leaves_type');
-        $this->db->where('saas_id', $saas_id);
-        $leaveTypes = $this->db->get();
-        $leaves_types = $leaveTypes->result();
-        foreach ($leaves_types as $type) {
-            $consumed_leaves = 0;
-            $paid_leaves = 0;
-            $unpaid_leaves = 0;
-            $this->db->from('leaves');
-            $this->db->where('user_id', $user_id);
-            $this->db->where('status', '1');
-            $this->db->where('type', $type->id);
-            $this->db->where('starting_date >=', $from);
-            $this->db->where('starting_date <=', $too);
-            $query = $this->db->get();
-            $leaves = $query->result();
-            foreach ($leaves as $leave) {
-                $startDate = new DateTime($leave->starting_date);
-                $endDate = new DateTime($leave->ending_date);
-                $leaveDuration = $endDate->diff($startDate)->days + 1;
-                if (strpos($leave->leave_duration, 'Full') !== false) {
-                    if ($leave->paid == 0) {
-                        $paid_leaves += $leaveDuration;
-                    } else {
-                        $unpaid_leaves += $leaveDuration;
-                    }
-                } elseif (strpos($leave->leave_duration, 'Half') !== false) {
-                    if ($leave->paid == 0) {
-                        $paid_leaves += 0.5;
-                    } else {
-                        $unpaid_leaves += 0.5;
-                    }
-                }
-            }
-            $leavesArray[] = $leaves;
-            $TotalLeaveArray[] = $type->leave_counts;
-            $LeaveTypeArray[] = $type->name;
-            $consumeArray[] = $consumed_leaves;
-            $paidArray[] = $paid_leaves;
-            $unpaidArray[] = $unpaid_leaves;
-        }
-
-        if ($finger_config == 1) {
-
-            $late_min = 0;
-            $start_from = new DateTime(date('Y-01-01'));
-            $end_date = new DateTime(date('Y-m-d'));
-            $interval = new DateInterval('P1D');
-            $period = new DatePeriod($start_from, $interval, $end_date);
-            $shift_id = $this->shift_model->get_user_shift($user_id)->id;
-            foreach ($period as $date) {
-                $formatted_date = $date->format('Y-m-d');
-                $shift = $this->shift_model->get_shift_log_by_id($shift_id, $formatted_date);
-                $shift_start = $shift["starting_time"];
-                $shift_end = $shift["ending_time"];
-                $late_min += $this->att_model->get_late_min($user_id, $formatted_date, $formatted_date, $shift_start, $shift_end);
-            }
-        } else {
-            $late_min = 0;
-        }
-
-
-        return array(
-            'total_leaves' =>  $TotalLeaveArray,
-            'leave_types' =>  $LeaveTypeArray,
-            'consumed_leaves' => $consumeArray,
-            'late_min' => intval($late_min),
-            'paidArray' => $paidArray,
-            'unpaidArray' => $unpaidArray,
-            'user_id' => $user_id,
-            'leavesArray' => $leavesArray,
-        );
-    }
 
     function sandwich_rule($startDate, $endDate)
     {
@@ -501,6 +418,136 @@ class Leaves_model extends CI_Model
             'break_start' => $shift_row->break_start,
             'break_end' => $shift_row->break_end,
             'check_out' => $shift_row->ending_time
+        ];
+    }
+
+    /**
+     * Retrieve leave records from the database.
+     *
+     * @param int|string|null $user_id The ID of the user to filter by (optional).
+     * @param string|null $from The start date for filtering leaves (optional).
+     * @param string|null $too The end date for filtering leaves (optional).
+     * @param int|string|null $type_id The type of leave to filter by (optional).
+     * @return \Illuminate\Database\Eloquent\Collection The list of leave records that match the given criteria.
+     */
+    public function get_db_leaves($user_id = '', $from = '', $too = '', $type_id = '')
+    {
+        $this->db->from('leaves');
+        if (!empty($user_id)) {
+            $this->db->where('user_id', $user_id);
+        }
+        if (!empty($type_id)) {
+            $this->db->where('type', $type_id);
+        }
+        $this->db->where('status', '1');
+        $this->db->where('starting_date >=', $from);
+        $this->db->where('starting_date <=', $too);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    /**
+     * Retrieve leave types from the database, optionally filtering by a specific ID.
+     *
+     * @param mixed $id Optional ID to filter the leave types. If provided, only the leave type with this ID will be returned.
+     * 
+     * @return array Returns an array of leave type objects from the database.
+     */
+    public function get_db_leave_types($id = '')
+    {
+        $saas_id = $this->session->userdata('saas_id');
+        $this->db->from('leaves_type');
+        if (!empty($id)) {
+            $this->db->where('id', $id);
+        }
+        $this->db->where('saas_id', $saas_id);
+        $leaveTypes = $this->db->get();
+        return $leaveTypes->result();
+    }
+    /**
+     * Retrieve the leave count, absents, late minutes, and other related details for a given user.
+     *
+     * @param mixed $user_id The ID of the user. If not provided, the session user ID will be used.
+     * 
+     * @return array Returns an array containing the following keys:
+     *   - 'total_leaves': Array of total leave counts per leave type.
+     *   - 'leave_types': Array of leave type names.
+     *   - 'absents': Array of absents for the user within the date range.
+     *   - 'late_min': Total number of late minutes for the user within the date range.
+     *   - 'paidArray': Array of paid leaves counts per leave type.
+     *   - 'unpaidArray': Array of unpaid leaves counts per leave type.
+     *   - 'user_id': The ID of the user.
+     */
+    public function get_leaves_balance($user_id)
+    {
+        $TotalLeaveArray = [];
+        $LeaveTypeArray = [];
+        $paidArray = [];
+        $unpaidArray = [];
+        $leavesArray = [];
+        $absents = [];
+        $late_min = 0;
+
+        if (empty($user_id)) {
+            $user_id = $this->session->userdata('user_id');
+        }
+
+        $user = $this->ion_auth->user($user_id)->row();
+        $user_id = get_employee_id_from_user_id($user_id);
+        $from = date('Y-01-01');
+        $too = date('Y-m-d');
+        if ($user->finger_config == 1) {
+            $absents = $this->att_model->get_absents($user_id, $from, $too);
+            $leaves_types = $this->get_db_leave_types();
+            foreach ($leaves_types as $type) {
+                $paid_leaves = 0;
+                $unpaid_leaves = 0;
+                $leaves = $this->get_db_leaves($user_id, $from, $too, $type->id);
+                foreach ($leaves as $leave) {
+                    $leaveDuration = (new DateTime($leave->ending_date))->diff(new DateTime($leave->starting_date))->days + 1;
+                    if (strpos($leave->leave_duration, 'Full') !== false) {
+                        if ($leave->paid == 0) {
+                            $paid_leaves += $leaveDuration;
+                        } else {
+                            $unpaid_leaves += $leaveDuration;
+                        }
+                    } elseif (strpos($leave->leave_duration, 'Half') !== false) {
+                        if ($leave->paid == 0) {
+                            $paid_leaves += 0.5;
+                        } else {
+                            $unpaid_leaves += 0.5;
+                        }
+                    }
+                }
+
+                $leavesArray[] = $leaves;
+                $TotalLeaveArray[] = $type->leave_counts;
+                $LeaveTypeArray[] = $type->name;
+                $paidArray[] = $paid_leaves;
+                $unpaidArray[] = $unpaid_leaves;
+            }
+
+            $shift_id = $this->shifts_model->get_user_shift($user_id)->id;
+            $dates = new DatePeriod(
+                new DateTime($from),
+                new DateInterval('P1D'),
+                (new DateTime($too))->modify('+1 day')
+            );
+
+            foreach ($dates as $date) {
+                $formatted_date = $date->format('Y-m-d');
+                $shift = $this->shift_model->get_shift_log_by_id($shift_id, $formatted_date);
+                $late_min += $this->att_model->get_late_min($user_id, $formatted_date, $formatted_date, $shift["starting_time"], $shift["ending_time"]);
+            }
+        }
+
+        return [
+            'total_leaves' => $TotalLeaveArray,
+            'leave_types' => $LeaveTypeArray,
+            'absents' => count($absents),
+            'late_min' => intval($late_min),
+            'paidArray' => $paidArray,
+            'unpaidArray' => $unpaidArray,
+            'user_id' => $user_id,
         ];
     }
 }

@@ -220,7 +220,7 @@
         var multiLineChart = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
-                url: base_url + 'leaves/get_leaves_count',
+                url: base_url + 'leaves/get_leaves_balance',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -256,7 +256,7 @@
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Absents</td>';
-                        html += '<td class=""><?php echo $report['abs']; ?></td>' + emptyCell + emptyCell;
+                        html += '<td class="">'+response.absents+'</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Late Minutes</td>';

@@ -8,29 +8,7 @@ class Attendance extends CI_Controller
 		parent::__construct();
 		// Load the library
 	}
-
-	public function get_attendance_by_id()
-	{
-		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-			$this->form_validation->set_rules('id', 'id', 'trim|required|strip_tags|xss_clean|is_numeric');
-
-			if ($this->form_validation->run() == TRUE) {
-				$data = $this->attendance_model->get_attendance_by_id($this->input->post('id'));
-				$this->data['error'] = false;
-				$this->data['data'] = $data ? $data : '';
-				$this->data['message'] = "Success";
-				echo json_encode($this->data);
-			} else {
-				$this->data['error'] = true;
-				$this->data['message'] = validation_errors();
-				echo json_encode($this->data);
-			}
-		} else {
-			$this->data['error'] = true;
-			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
-			echo json_encode($this->data);
-		}
-	}
+	
 	public function index()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4) && is_module_allowed('attendance') && ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view'))) {
@@ -390,12 +368,13 @@ class Attendance extends CI_Controller
 
 	public function offclock()
 	{
+		// ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// error_reporting(E_ALL);
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4) && is_module_allowed('attendance') && ($this->ion_auth->is_admin() || is_assign_users())) {
-			$saas_id = $this->session->userdata('saas_id');
 			$this->data['page_title'] = 'Off Clock - ' . company_name();
 			$this->data['main_page'] = 'Off Clock';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$this->data['user_id'] = $user_id;
 			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
@@ -407,19 +386,22 @@ class Attendance extends CI_Controller
 				$this->data['system_users'] = $users;
 			}
 
-			// Extract user IDs from system_users
-			$user_ids = array_map(function ($user) {
-				return $user->employee_id;
-			}, $this->data['system_users']);
-			$this->db->select('offclock.*, CONCAT(users.first_name, " ", users.last_name) as full_name');
-			$this->db->from('offclock');
-			$this->db->join('users', 'users.employee_id = offclock.user_id');
-			$this->db->where_in('user_id', $user_ids);
-			$query = $this->db->get();
-			$result = $query->result();
-			$this->data["offclock"] = $result;
-			// echo json_encode($result);
-			$this->load->view('pages/attendance/offclock', $this->data);
+			if (!empty($this->data['system_users'])) {
+				$user_ids = array_map(function ($user) {
+					return $user->employee_id;
+				}, $this->data['system_users']);
+				$this->db->select('offclock.*, CONCAT(users.first_name, " ", users.last_name) as full_name');
+				$this->db->from('offclock');
+				$this->db->join('users', 'users.employee_id = offclock.user_id');
+				$this->db->where_in('user_id', $user_ids);
+				$query = $this->db->get();
+				$result = $query->result();
+				$this->data["offclock"] = $result;
+				$this->load->view('pages/attendance/offclock', $this->data);
+			}else{
+				$this->data["offclock"] = [];
+				$this->load->view('pages/attendance/offclock', $this->data);
+			}
 		} else {
 			redirect_to_index();
 		}

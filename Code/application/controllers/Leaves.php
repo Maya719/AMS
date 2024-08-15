@@ -8,7 +8,47 @@ class Leaves extends CI_Controller
 	{
 		parent::__construct();
 	}
+	/**
+	 * Retrieve and return the leave balance for a specific user.
+	 *
+	 * This function checks if the current user is logged in and has the appropriate permissions 
+	 * (either belongs to group 1 or has 'leaves_view' permission). If the user has the necessary
+	 * permissions, the function retrieves the leave balance for the specified user ID and returns
+	 * it as a JSON response.
+	 * 
+	 * @return void|string Outputs the leave balance as a JSON-encoded array if the user has permission.
+	 *                     Returns an empty string if the user does not have the necessary permissions.
+	 */
+	public function get_leaves_balance()
+	{
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+			$user_id = $this->input->post('user_id');
+			$leaves_balance = $this->leaves_model->get_leaves_balance($user_id);
+			echo json_encode($leaves_balance);
+		} else {
+			return '';
+		}
+	}
 
+	/**
+	 * Displays the leaves application page.
+	 * 
+	 * This function performs the following checks and actions:
+	 * 1. Verifies if the user is logged in, the 'leaves' module is allowed, 
+	 *    and the user has the necessary permissions (either is an admin or has 'leaves_view' permission).
+	 * 2. Sets the page title and main page label.
+	 * 3. Retrieves the current user's details.
+	 * 4. Determines which users to list based on the user's role:
+	 *    - If the user is an admin, retrieves all system users.
+	 *    - If the user is assigned specific users, retrieves and filters these users to avoid duplicates.
+	 * 5. Fetches leave types based on the current SaaS ID and stores them in the data array.
+	 * 6. Loads the 'leaves' view with the populated data.
+	 * 
+	 * If the user does not have the required permissions or is not logged in,
+	 * the function redirects to the index page.
+	 * 
+	 * @return void
+	 */
 	public function index()
 	{
 		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
@@ -19,17 +59,18 @@ class Leaves extends CI_Controller
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
-				foreach ($selected as $user_id) {
-					$users[] = $this->ion_auth->user($user_id)->row();
-				}
-				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$user_ids = array_merge($selected, [$this->session->userdata('user_id')]);
+				$user_ids = array_unique($user_ids);
+				$users = array_map(function ($user_id) {
+					return $this->ion_auth->user($user_id)->row();
+				}, $user_ids);
+
 				$this->data['system_users'] = $users;
 			}
 			$saas_id = $this->session->userdata('saas_id');
 			$this->db->where('saas_id', $saas_id);
 			$query = $this->db->get('leaves_type');
 			$this->data['leaves_types'] = $query->result_array();
-			// echo json_encode($this->data["leaves_types"]);
 			$this->load->view('pages/leave/leaves', $this->data);
 		} else {
 			redirect_to_index();
@@ -62,6 +103,8 @@ class Leaves extends CI_Controller
 			echo json_encode($this->data);
 		}
 	}
+	/*........................................................ Not Optomize Functions................................*/
+
 
 
 	public function edit()
@@ -719,21 +762,7 @@ class Leaves extends CI_Controller
 		}
 		return $flattenedArray;
 	}
-	public function get_leaves_count()
-	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
-			$user_id = $this->input->post('user_id');
-			$result = [
-				'user_id' => $user_id,
-			];
 
-			$leaveReport = $this->leaves_model->get_leaves_count($result);
-
-			echo json_encode($leaveReport);
-		} else {
-			return '';
-		}
-	}
 	public function manage($id)
 	{
 		if ($this->ion_auth->logged_in()  && is_module_allowed('leaves') && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
@@ -745,10 +774,11 @@ class Leaves extends CI_Controller
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
-				foreach ($selected as $user_id) {
-					$users[] = $this->ion_auth->user($user_id)->row();
-				}
-				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$user_ids = array_merge($selected, [$this->session->userdata('user_id')]);
+				$user_ids = array_unique($user_ids);
+				$users = array_map(function ($user_id) {
+					return $this->ion_auth->user($user_id)->row();
+				}, $user_ids);
 				$this->data['system_users'] = $users;
 			}
 			$saas_id = $this->session->userdata('saas_id');
@@ -797,10 +827,11 @@ class Leaves extends CI_Controller
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
-				foreach ($selected as $user_id) {
-					$users[] = $this->ion_auth->user($user_id)->row();
-				}
-				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$user_ids = array_merge($selected, [$this->session->userdata('user_id')]);
+				$user_ids = array_unique($user_ids);
+				$users = array_map(function ($user_id) {
+					return $this->ion_auth->user($user_id)->row();
+				}, $user_ids);
 				$this->data['system_users'] = $users;
 			}
 			$saas_id = $this->session->userdata('saas_id');

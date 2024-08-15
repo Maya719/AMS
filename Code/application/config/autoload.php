@@ -156,6 +156,7 @@ $autoload['model'] = array(
     'biometric_missing_model',
     'device_config_model',
     'shift_model',
+    'shifts_model',
     'department_model',
     'home_model',
     'holiday_model',
