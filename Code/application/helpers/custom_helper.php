@@ -2876,3 +2876,10 @@ function redirect_to_index()
 {
     redirect('/', 'refresh');
 }
+
+function get_current_user_group($user_id)
+{
+    $CI = &get_instance();
+    $group = $CI->ion_auth->get_users_groups($user_id)->result();
+    return $group[0]->description ;
+}

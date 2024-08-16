@@ -37,8 +37,10 @@
             </nav>
           </div>
           <div class="col-xl-2 col-sm-3">
-            <a href="#" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#holiday-add-modal" class="btn btn-block btn-primary">+ ADD</a>
-          </div>
+          <?php if (permissions('plan_holiday_create')) : ?>
+              <a href="#" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#holiday-add-modal" class="btn btn-block btn-primary">+ ADD</a>
+              <?php endif ?>
+            </div>
         </div>
         <div class="row mt-3">
           <div class="col-lg-12">
@@ -53,7 +55,9 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Remarks</th>
-                        <th>Action</th>
+                        <?php if (permissions('plan_holiday_delete') || permissions('plan_holiday_edit')) : ?>
+                          <th>Action</th>
+                        <?php endif ?>
                       </tr>
                     </thead>
                     <tbody id="customers">
@@ -66,12 +70,21 @@
                           <td class="py-2 "> <?= $value["starting_date"] ?></td>
                           <td class="py-2 "> <?= $value["ending_date"] ?></td>
                           <td class="py-2 "> <?= $value["remarks"] ?></td>
-                          <td>
-                            <div class="d-flex">
-                              <span class="badge light badge-primary"><a href="javascript:void()" data-id="<?= $value["id"] ?>" data-bs-toggle="modal" data-bs-target="#holiday-edit-modal" class="text-primary holiday-edit" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
-                              <span class="badge light badge-danger ms-2"><a href="javascript:void()" class="text-danger btn-delete-holiday" data-id="<?= $value["id"] ?>" data-bs-toggle="tooltip" data-placement="top" title="Close"><i class="fas fa-trash"></i></a></span>
-                            </div>
-                          </td>
+                          <?php if (permissions('plan_holiday_delete') || permissions('plan_holiday_edit')) : ?>
+                            <td>
+                              <div class="d-flex">
+                                <?php
+                                if (permissions('plan_holiday_edit')) {
+                                ?>
+                                  <span class="badge light badge-primary"><a href="javascript:void()" data-id="<?= $value["id"] ?>" data-bs-toggle="modal" data-bs-target="#holiday-edit-modal" class="text-primary holiday-edit" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
+                                <?php
+                                } ?>
+                                <?php if (permissions('plan_holiday_delete')) { ?>
+                                  <span class="badge light badge-danger ms-2"><a href="javascript:void()" class="text-danger btn-delete-holiday" data-id="<?= $value["id"] ?>" data-bs-toggle="tooltip" data-placement="top" title="Close"><i class="fas fa-trash"></i></a></span>
+                                <?php                              } ?>
+                              </div>
+                            </td>
+                          <?php endif ?>
                         </tr>
                       <?php
                       } ?>
@@ -121,8 +134,8 @@
               <div class="form-group mb-3">
                 <label class="col-form-label"><?= $this->lang->line('applyon') ? $this->lang->line('applyon') : 'Apply On' ?></label>
                 <select name="applyforcreate" id="apply2" class="select2" style="width:100%;">
-                  <option value="0"><?= $this->lang->line('all') ? $this->lang->line('all') : 'All Employee' ?></option>
-                  <option value="1"><?= $this->lang->line('Department') ? $this->lang->line('Department') : 'Department' ?></option>
+                  <option value="0" <?= ($this->ion_auth->is_admin()) ? '' : 'disabled' ?>><?= $this->lang->line('all') ? $this->lang->line('all') : 'All Employee' ?></option>
+                  <option value="1" <?= ($this->ion_auth->is_admin()) ? '' : 'disabled' ?>><?= $this->lang->line('Department') ? $this->lang->line('Department') : 'Department' ?></option>
                   <option value="2"><?= $this->lang->line('Employee') ? $this->lang->line('Employee') : 'Selected Employee/s' ?></option>
                 </select>
               </div>
@@ -139,7 +152,7 @@
                 <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Select Employee/s' ?></label>
                 <select name="users[]" class="form-control select2" multiple="multiple">
                   <?php foreach ($system_users as $system_user) {
-                    if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                    if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->finger_config == '1' && $system_user->active == '1') { ?>
                       <option value="<?= $system_user->employee_id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                   <?php }
                   } ?>
@@ -209,7 +222,7 @@
                 <label class="col-form-label"><?= $this->lang->line('department') ? $this->lang->line('type') : 'Select User/s' ?></label>
                 <select name="users[]" id="users3" class="form-control select2" multiple>
                   <?php foreach ($system_users as $system_user) {
-                    if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                    if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->finger_config == '1' && $system_user->active == '1') { ?>
                       <option value="<?= $system_user->employee_id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                   <?php }
                   } ?>
@@ -253,20 +266,15 @@
       "dom": '<"top"f>rt<"bottom"lp><"clear">'
     });
     $(document).ready(function() {
-      $('#apply2').change(function() {
-        var selectedValue = $(this).val();
-        if (selectedValue == '1') {
-          $('#department2').removeClass('hidden');
-        } else {
-          $('#department2').addClass('hidden');
-        }
-        if (selectedValue == '2') {
-          $('#users2').removeClass('hidden');
-        } else {
-          $('#users2').addClass('hidden');
-        }
-      });
+      function toggleVisibility() {
+        var selectedValue = $('#apply2').val();
+        $('#users2').toggleClass('hidden', selectedValue !== '2');
+        $('#department2').toggleClass('hidden', selectedValue !== '1');
+      }
+      toggleVisibility();
+      $('#apply2').change(toggleVisibility);
     });
+
     $(".select2").select2();
   </script>
   <script>
@@ -327,20 +335,15 @@
       e.preventDefault();
     });
     $(document).ready(function() {
-      $('#apply4').change(function() {
-        var selectedValue = $(this).val();
-        if (selectedValue == '1') {
-          $('#department').removeClass('hidden');
-        } else {
-          $('#department').addClass('hidden');
-        }
-        if (selectedValue == '2') {
-          $('#users').removeClass('hidden');
-        } else {
-          $('#users').addClass('hidden');
-        }
-      });
+      function toggleVisibility() {
+        var selectedValue = $('#apply4').val();
+        $('#users').toggleClass('hidden', selectedValue !== '2');
+        $('#department').toggleClass('hidden', selectedValue !== '1');
+      }
+      toggleVisibility();
+      $('#apply4').change(toggleVisibility);
     });
+
     $(document).on('click', '.holiday-edit', function(e) {
       e.preventDefault();
       var id = $(this).data("id");

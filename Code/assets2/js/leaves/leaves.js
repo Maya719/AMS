@@ -176,60 +176,7 @@ $('#short_leave').change(function () {
         $('#short_leave_dates').hide();
     }
 });
-$(document).ready(function () {
-    $('select[name="user_id_add"]').on('change', function () {
-        updateLeaveCounts();
-    });
 
-    $('select[name="type_add"]').on('change', function () {
-        updateLeaveCounts();
-    });
-
-    $('.btn-create').on('click', function () {
-        updateLeaveCounts();
-    });
-
-    function updateLeaveCounts() {
-        var type = $('select[name="type_add"]').val();
-        var user_id = $('select[name="user_id_add"]').val();
-        console.log(type);
-        $.ajax({
-            url: base_url + 'leaves/get_leaves_balance',
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                user_id: user_id,
-                type: type
-            },
-            beforeSend: function () {
-                $(".modal-body").append(ModelProgress);
-            },
-            success: function (response) {
-                console.log(response);
-                var totalLeaves = response.total_leaves;
-                var consumedLeaves = response.consumed_leaves;
-                var remainingLeaves = response.remaining_leaves;
-                var query = response.query;
-
-                $('#total_leaves').val(totalLeaves);
-                $('#consumed_leaves').val(consumedLeaves);
-                if (remainingLeaves == 0) {
-                    $('#paidUnpaid').prop('disabled', true);
-                    $('#paidUnpaid').val('1');
-                    $("#paidUnpaid").trigger("change");
-                } else {
-                    $('#paidUnpaid').prop('disabled', false);
-                    $('#paidUnpaid').val('0');
-                    $("#paidUnpaid").trigger("change");
-                }
-                $('#remaining_leaves').val(remainingLeaves);
-            },
-            complete: function () {
-                $(".loader-progress").remove();
-            }
-        });
-    }
-});
 
 
 $(document).on('click', '.btn-delete-leave', function (e) {

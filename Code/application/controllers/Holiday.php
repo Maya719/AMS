@@ -17,7 +17,16 @@ class Holiday extends CI_Controller
 			$this->data['main_page'] = 'Holiday';
 			$this->data['data'] = $this->holiday_model->get_holiday();
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$this->data['system_users'] = $this->ion_auth->members()->result();
+			if ($this->ion_auth->is_admin()) {
+				$this->data['system_users'] = $this->ion_auth->members()->result();
+			} elseif (is_assign_users()) {
+				$selected = selected_users();
+				foreach ($selected as $user_id) {
+					$users[] = $this->ion_auth->user($user_id)->row();
+				}
+				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$this->data['system_users'] = $users;
+			}
 			$this->db->where('saas_id', $this->session->userdata('saas_id'));
 			$query3 = $this->db->get('departments');
 			$this->data['departments'] = $query3->result_array();

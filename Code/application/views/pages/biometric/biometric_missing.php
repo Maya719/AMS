@@ -397,7 +397,7 @@
         theadRow += '<th>Status</th>';
         theadRow += '<th>Created</th>';
         <?php
-        if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
+        if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || permissions('biometric_request_status') || $this->ion_auth->is_admin()) {
         ?>
           theadRow += '<th>Action</th>';
         <?php
@@ -419,13 +419,13 @@
           userRow += '<td>' + user.status + '</td>';
           userRow += '<td>' + created + '</td>';
           <?php
-          if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
+          if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || permissions('biometric_request_status') || $this->ion_auth->is_admin()) {
           ?>
             userRow += '<td>';
             userRow += '<div class="d-flex">';
             if (user.btn) {
               <?php
-              if (permissions('biometric_request_edit') || $this->ion_auth->is_admin()) {
+              if (permissions('biometric_request_edit') || permissions('biometric_request_status') || $this->ion_auth->is_admin()) {
               ?>
                 userRow += '<a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a>';
               <?php

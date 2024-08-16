@@ -231,7 +231,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header border-0 pb-0 flex-wrap">
-                                        <h5 class="card-title">Leaves Logs</h5>
+                                        <h5 class="card-title">Progress</h5>
                                     </div>
                                     <div class="card-body mt-1">
                                         <div id="DZ_W_TimeLine02" class="widget-timeline dlab-scroll style-1 ps ps--active-y p-3 height370">
@@ -275,7 +275,7 @@
     <script src="<?= base_url('assets2/vendor/chartist/js/chartist.min.js') ?>"></script>
     <script src="<?= base_url('assets2/vendor/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js') ?>"></script>
     <script>
-        var multiLineChart = function() {
+        var leave_balance = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
                 url: base_url + 'leaves/get_leaves_balance',
@@ -338,10 +338,10 @@
             });
         }
         $(document).ready(function() {
-            multiLineChart();
+            leave_balance();
         });
         $('#user_id').on('change', function() {
-            multiLineChart();
+            leave_balance();
         });
     </script>
     <script>

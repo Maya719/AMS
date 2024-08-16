@@ -1244,7 +1244,9 @@ class Auth extends CI_Controller
 		$this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'trim|strip_tags|xss_clean');
 
 		if ($this->input->post('password')) {
-			$this->form_validation->set_rules('old_password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
+			if ($this->session->userdata('user_id') == $this->input->post('update_id')) {
+				$this->form_validation->set_rules('old_password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
+			}
 			$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
 			$this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
 		}
@@ -1252,8 +1254,13 @@ class Auth extends CI_Controller
 
 	private function validate_old_password($hash_password_db)
 	{
-		$old_password = $this->input->post('old_password');
-		return $this->ion_auth->verify_password($old_password, $hash_password_db);
+		if ($this->session->userdata('user_id') == $this->input->post('update_id')) {
+			$old_password = $this->input->post('old_password');
+			return $this->ion_auth->verify_password($old_password, $hash_password_db);
+		}else{
+			return true;
+		}
+		
 	}
 
 	private function handle_file_upload($field_name, $upload_path)

@@ -30,7 +30,6 @@
 #authenticationModal .wrapper .form-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 #authenticationModal .wrapper .title-text {

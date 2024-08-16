@@ -45,9 +45,12 @@ class Att_model extends CI_Model
      * @param string $end_date The end date for the absence check (in 'Y-m-d' format, default is an empty string).
      * @return array Returns an array of dates (in 'Y-m-d' format) when the user was absent.
      */
-    public function get_absents($user_id = '', $start_date = '', $end_date = '')
+    public function get_absents($user_id = '', $start_date = '', $end_date = '', $attendance_data = '')
     {
-        $attendance_data = $this->get_attendance($user_id, $start_date, $end_date);
+        $absent_count = 0;
+        if (empty($attendance_data)) {
+            $attendance_data = $this->get_attendance($user_id, $start_date, $end_date);
+        }
         $present_dates = [];
         foreach ($attendance_data as $entry) {
             $date = date('Y-m-d', strtotime($entry['finger']));
@@ -59,11 +62,35 @@ class Att_model extends CI_Model
         while ($current_date <= $end_date) {
             if (!isset($present_dates[$current_date]) && !$this->is_holiday($user_id, $current_date) && !$this->full_day_leave($user_id, $current_date)) {
                 $absent_dates[] = $current_date;
+                $absent_count++;
+            } elseif ($this->half_day_absent($user_id, $current_date, $attendance_data)) {
+                $absent_dates[] = $current_date;
+                $absent_count += 0.5;
             }
             $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
         }
 
-        return $absent_dates;
+        return $absent_count;
+    }
+    protected function half_day_absent($user_id, $current_date, $attendance_data = '')
+    {
+        if (empty($attendance_data)) {
+            $attendance_data = $this->get_attendance($user_id, $current_date, $current_date);
+        }
+        foreach ($attendance_data as $record) {
+            $date = date('Y-m-d', strtotime($record['finger']));
+            $attendance_by_date[$date][] = $record['finger'];
+        }
+        foreach ($attendance_by_date as $date => $times) {
+            $check_in = date('H:i:s', strtotime($times[0]));
+            $check_out = date('H:i:s', strtotime(end($times)));
+            $shift = $this->shifts_model->get_shifts_by_id($this->shifts_model->get_user_shift($user_id)->id, $date);
+            $half_day_in = $shift['half_day_check_in'] ?? '13:00:00';
+            $half_day_out = $shift['half_day_check_out'] ?? '16:00:00';
+            if (($check_in == $check_out || $check_in > $half_day_in || $check_out < $half_day_out) && !$this->first_time_half_day_leave($user_id, $date) && !$this->second_time_half_day_leave($user_id, $date)) {
+                return true;
+            }
+        }
     }
 
     /**
@@ -78,18 +105,14 @@ class Att_model extends CI_Model
      * @param string $end_date The end date for the attendance check (in 'Y-m-d' format).
      * @return int Returns the total number of late minutes as an integer.
      */
-    public function get_late_min($user_id, $start_date = '', $end_date = '')
+    public function get_late_min($user_id, $start_date = '', $end_date = '', $attendance_data = '')
     {
         $attendance_by_date = [];
         $late_minutes = 0;
 
-        $attendance_data = $this->get_attendance($user_id, $start_date, $end_date);
-        $shift = $this->shifts_model->get_shifts_by_id($this->shifts_model->get_user_shift($user_id)->id, $start_date);
-
-        $shift_start = $shift['starting_time'] ?? '09:00:00';
-        $shift_end = $shift['ending_time'] ?? '18:00:00';
-        $half_day_in = $shift['half_day_check_in'] ?? '13:00:00';
-        $half_day_out = $shift['half_day_check_out'] ?? '16:00:00';
+        if (empty($attendance_data)) {
+            $attendance_data = $this->get_attendance($user_id, $start_date, $end_date);
+        }
 
         foreach ($attendance_data as $record) {
             $date = date('Y-m-d', strtotime($record['finger']));
@@ -97,24 +120,44 @@ class Att_model extends CI_Model
         }
 
         foreach ($attendance_by_date as $date => $times) {
+            $first = 0;
+            $second = 0;
             $check_in = date('H:i:s', strtotime($times[0]));
             $check_out = date('H:i:s', strtotime(end($times)));
+            $shift = $this->shifts_model->get_shifts_by_id($this->shifts_model->get_user_shift($user_id)->id, $date);
+
+            $shift_start = $shift['starting_time'] ?? '09:00:00';
+            $shift_end = $shift['ending_time'] ?? '18:00:00';
+            $half_day_in = $shift['half_day_check_in'] ?? '13:00:00';
+            $half_day_out = $shift['half_day_check_out'] ?? '16:00:00';
 
             if ($check_in != $check_out && !$this->Offclock($user_id, $date)) {
                 $is_first_time_half_day_leave = $this->first_time_half_day_leave($user_id, $date);
                 $is_second_time_half_day_leave = $this->second_time_half_day_leave($user_id, $date);
                 $is_first_time_short_leave = $this->first_time_short_leave($user_id, $date, $shift_start);
+
                 $is_second_time_short_leave = $this->second_time_short_leave($user_id, $date, $shift_end, $check_out);
 
                 if (!$is_first_time_short_leave && !$this->first_time_halfDay($half_day_in, $check_in) && !$is_first_time_half_day_leave) {
-                    $late_minutes += max(0, (strtotime($check_in) - strtotime($shift_start)) / 60);
+                    $first = max(0, (strtotime($check_in) - strtotime($shift_start)) / 60);
+                    $late_minutes += (max(0, (strtotime($check_in) - strtotime($shift_start)) / 60));
                 }
-
                 if (!$is_second_time_short_leave && !$this->second_time_halfDay($half_day_out, $check_out) && !$is_second_time_half_day_leave) {
-                    $late_minutes += max(0, (strtotime($shift_end) - strtotime($check_out)) / 60);
+                    $second = max(0, (strtotime($shift_end) - strtotime($check_out)) / 60);
+                    $late_minutes += (max(0, (strtotime($shift_end) - strtotime($check_out)) / 60));
                 }
             }
+            $array[] = [
+                'date' => $date,
+                'morning' => intval($first),
+                'evening' => intval($second),
+                'check_in' => $check_in,
+                'check_out' => $check_out,
+                'shift_start' => $shift_start,
+                'shift_end' => $shift_end,
+            ];
         }
+        $array[] = ['total' => intval($late_minutes)];
 
         return intval($late_minutes);
     }
@@ -239,7 +282,7 @@ class Att_model extends CI_Model
         $this->db->where('starting_date <=', $date);
         $this->db->where('ending_date >=', $date);
         $this->db->where('status', 1);
-        $this->db->where('paid', 1);
+        $this->db->where('paid', 0);
         $this->db->where('leave_duration LIKE', '%Short%');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -273,6 +316,7 @@ class Att_model extends CI_Model
         $this->db->where('starting_date <=', $date);
         $this->db->where('ending_date >=', $date);
         $this->db->where('status', 1);
+        $this->db->where('paid', 0);
         $this->db->where('leave_duration LIKE', '%Short%');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {

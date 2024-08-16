@@ -217,7 +217,7 @@
     <script src="<?= base_url('assets2/vendor/chartist/js/chartist.min.js') ?>"></script>
     <script src="<?= base_url('assets2/vendor/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js') ?>"></script>
     <script>
-        var multiLineChart = function() {
+        var Leave_Balance = function() {
             var employee_id = $('#user_id').val();
             $.ajax({
                 url: base_url + 'leaves/get_leaves_balance',
@@ -255,7 +255,7 @@
                         html += '<td class="">' + response.unpaidArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0) + '</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
-                        html += '<td>Absents</td>';
+                        html += '<td>Absences</td>';
                         html += '<td class="">'+response.absents+'</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
@@ -280,15 +280,12 @@
             });
         }
         $(document).ready(function() {
-            multiLineChart();
+            Leave_Balance();
         });
 
-
-
-
-
         $('#user_id').on('change', function() {
-            multiLineChart();
+            console.log('on change');
+            Leave_Balance();
         });
 
         $('.select2').select2();

@@ -255,9 +255,9 @@
                                             <div class="tab-pane fade" id="changePassword">
                                                 <div class="pt-4">
                                                     <div class="row d-flex justify-content-center">
-                                                        <div class="col-8 mb-3">
+                                                        <div class="col-8 mb-3" style="display: <?=($data->id == $this->session->userdata('user_id')?'':'none')?>;">
                                                             <label for="exampleFormControlInput13" class="form-label">Current Password <span class="text-danger">*</span></label>
-                                                            <input type="password" name="old_password" class="form-control" id="exampleFormControlInput13">
+                                                            <input type="password" name="old_password" class="form-control" id="exampleFormControlInput13" require>
                                                         </div>
                                                         <div class="col-8 mb-3">
                                                             <label for="exampleFormControlInput13" class="form-label">New Password <span class="text-danger">*</span></label>
@@ -301,10 +301,10 @@
                                         </div>
                                         <div class="col-6 text-end">
                                             <!-- <?php
-                                            if ($this->ion_auth->is_admin()) { ?>
+                                                    if ($this->ion_auth->is_admin()) { ?>
                                                 <button type="button" id="user_login_btn" class="btn btn-warning">Login</button>
                                             <?php
-                                            }
+                                                    }
                                             ?> -->
                                             <?php
                                             if (($this->ion_auth->is_admin() || permissions('user_delete')) && ($role != 1)) { ?>
@@ -318,7 +318,7 @@
                                             <?php
                                             } else {
                                             ?>
-                                                <button type="button" id="user_deactive_btn" class="btn btn-danger">Deativate Account</button>
+                                                <button type="button" id="user_deactive_btn" class="btn btn-danger">Deactivate Account</button>
                                             <?php
                                             }
                                             ?>

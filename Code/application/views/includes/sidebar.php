@@ -39,6 +39,12 @@
             </li>
           <?php
           } ?>
+          
+          <li class="nav-item dropdown notification_dropdown">
+            <a class="btn btn-outline-primary btn-sm" style="padding:0.325rem 0.5rem;" href="#">
+              <?= get_current_user_group($this->session->userdata('user_id')) ?>
+            </a>
+          </li>
           <li class="nav-item dropdown notification_dropdown">
             <a class="nav-link bell-link" href="<?= base_url('chat') ?>">
               <i class="fa-regular fa-envelope text-primary"></i>

@@ -543,7 +543,7 @@ class Leaves_model extends CI_Model
         return [
             'total_leaves' => $TotalLeaveArray,
             'leave_types' => $LeaveTypeArray,
-            'absents' => count($absents),
+            'absents' => $absents,
             'late_min' => intval($late_min),
             'paidArray' => $paidArray,
             'unpaidArray' => $unpaidArray,
