@@ -183,7 +183,7 @@
             $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
             $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
             setFilter();
-            $(document).on('change', '#att_shift_id, #att_department_id, #att_employee_id,#config-demo, #att_status', function() {
+            $(document).on('change', '#att_shift_id, #att_department_id, #att_employee_id, #att_status', function() {
                 setFilter();
             });
         });
