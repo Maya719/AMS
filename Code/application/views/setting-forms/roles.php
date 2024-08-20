@@ -152,7 +152,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Leaves Type</label>
                                         </div>
@@ -180,7 +180,7 @@
                                                 <label class="form-check-label" for="">delete</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Biomatric Request</label>
@@ -310,7 +310,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Departments</label>
                                         </div>
@@ -338,7 +338,7 @@
                                                 <label class="form-check-label" for="">delete</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Plan Holiday</label>
@@ -368,7 +368,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Shifts</label>
                                         </div>
@@ -396,7 +396,7 @@
                                                 <label class="form-check-label" for="">delete</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -567,7 +567,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Leaves Type</label>
                                         </div>
@@ -595,7 +595,7 @@
                                                 <label class="form-check-label" for="">delete</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -726,7 +726,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Departments</label>
                                         </div>
@@ -754,7 +754,7 @@
                                                 <label class="form-check-label" for="">delete</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Plan Holiday</label>
@@ -784,7 +784,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
+                                    <!-- <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Shifts</label>
                                         </div>
@@ -812,7 +812,7 @@
                                                 <label class="form-check-label" for="">delete</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="row mb-3">
                                         <div class="col-12">

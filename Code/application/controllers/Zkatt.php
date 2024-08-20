@@ -18,13 +18,14 @@ class Zkatt extends CI_Controller
 
     public function single_user_attendance()
     {
-        $start_from = date('Y-01-01');
+        $start_from = date('Y-08-01');
         $end_date = date('Y-m-d');
-        $data = $this->att_model->get_attendance('1995', $start_from, $end_date);
-        $late_min = $this->att_model->get_late_min('1995', $start_from, $end_date,$data);
-        $absents = ($this->att_model->get_absents('1995', $start_from, $end_date,$data));
+        $attendance = $this->att_model->get_attendance('1995', $start_from, $end_date);
+        $grouped_data = $this->att_model->group_attendance($attendance);
+        $late_min = $this->att_model->get_late_min('1995', $start_from, $end_date,$attendance);
+        $absents = ($this->att_model->get_absents('1995', $start_from, $end_date,$attendance));
         $leaves = $this->leaves_model->get_db_leaves('1995', $start_from, $end_date);
-        echo json_encode(array('late_min'=>$late_min,'absents'=> $absents,'leaves'=>$leaves));
+        echo json_encode(array('late_min'=>$late_min,'absents'=> $absents,'leaves'=>$leaves,'attendance'=>$grouped_data));
     }
     public function get_late_min()
     {
@@ -45,8 +46,8 @@ class Zkatt extends CI_Controller
     public function get_absents()
     {
         $absents = 0;
-        $start_from = date('Y-01-01');
-        $end_date = date('Y-01-10');
+        $start_from = date('Y-08-01');
+        $end_date = date('Y-m-d');
         $absents = $this->att_model->get_absents('1859', $start_from, $end_date);
         echo json_encode($absents);
     }

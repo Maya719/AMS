@@ -11,7 +11,16 @@ class Attendance_model extends CI_Model
     {
         parent::__construct();
     }
-
+    /**
+     * Insert a new record into the 'attendance' table.
+     * 
+     * This function inserts a new row in the 'attendance' table with the provided data.
+     * If the insert operation is successful, it returns the ID of the newly inserted record.
+     * If the operation fails, it returns `false`.
+     * 
+     * @param array $data The data to insert into the 'attendance' table.
+     * @return int|false The ID of the newly inserted record on success, or `false` on failure.
+     */
     public function create($data)
     {
         if ($this->db->insert('attendance', $data)) {
@@ -20,6 +29,16 @@ class Attendance_model extends CI_Model
             return false;
         }
     }
+    /**
+     * Insert a new record into the 'offclock' table.
+     * 
+     * This function inserts a new row in the 'offclock' table with the provided data.
+     * If the insert operation is successful, it returns the ID of the newly inserted record.
+     * If the operation fails, it returns `false`.
+     * 
+     * @param array $data The data to insert into the 'offclock' table.
+     * @return int|false The ID of the newly inserted record on success, or `false` on failure.
+     */
     public function create_offclock($data)
     {
         if ($this->db->insert('offclock', $data)) {
@@ -28,6 +47,17 @@ class Attendance_model extends CI_Model
             return false;
         }
     }
+    /**
+     * Update an existing record in the 'offclock' table.
+     * 
+     * This function updates a row in the 'offclock' table based on the provided ID.
+     * If the update operation is successful, it returns `true`.
+     * If the operation fails, it returns `false`.
+     * 
+     * @param int $id The ID of the record to update in the 'offclock' table.
+     * @param array $data The new data to update the record with.
+     * @return bool `true` on success, `false` on failure.
+     */
     function edit_offclock($id, $data)
     {
         $this->db->where('id', $id);
@@ -36,6 +66,16 @@ class Attendance_model extends CI_Model
         else
             return false;
     }
+    /**
+     * Delete a record from the 'offclock' table.
+     * 
+     * This function deletes a row from the 'offclock' table based on the provided ID.
+     * If the delete operation is successful, it returns `true`.
+     * If the operation fails, it returns `false`.
+     * 
+     * @param int $id The ID of the record to delete from the 'offclock' table.
+     * @return bool `true` on success, `false` on failure.
+     */
     function delete_offclock($id)
     {
         $this->db->where('id', $id);
@@ -44,51 +84,266 @@ class Attendance_model extends CI_Model
         else
             return false;
     }
-    public function my_att_running($user_id)
+    /**
+     * Retrieve users based on their active/inactive status.
+     * 
+     * This function executes a query to fetch users based on their status:
+     * - Status '1' returns active users.
+     * - Status '2' returns inactive users.
+     * 
+     * Users are further filtered by their finger configuration and SaaS ID.
+     * 
+     * @param string $status The status of the users to retrieve ('1' for active, '2' for inactive).
+     * @return array The resulting array of users matching the given status.
+     */
+    public function get_users_by_status($status)
     {
-
-        $where = " WHERE user_id = " . $user_id;
-
-        $where .= " AND saas_id = " . $this->session->userdata('saas_id');
-
-        $where .= " AND check_out IS NULL ";
-
-        $query = $this->db->query("SELECT * FROM attendance " . $where);
-
+        if ($status == '1') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1' AND saas_id = " . $this->session->userdata('saas_id'));
+        }
+        if ($status == '2') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '0' AND finger_config = '1' AND saas_id = " . $this->session->userdata('saas_id'));
+        }
         $results = $query->result_array();
-
+        return $results;
+    }
+    /**
+     * Retrieve users based on their department.
+     * 
+     * This function executes a query to fetch users who are active and have a specific department:
+     * - If no department is provided, it returns all active users with finger configuration enabled.
+     * - If a department is specified, it returns users matching that department.
+     * 
+     * @param string $department The department ID to filter users by.
+     * @return array The resulting array of users matching the given department.
+     */
+    public function get_users_by_department($department)
+    {
+        if ($department == '') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1'");
+        }
+        if ($department != '') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND department= '$department' AND finger_config = '1'");
+        }
+        $results = $query->result_array();
+        return $results;
+    }
+    /**
+     * Retrieve users based on their assigned shift.
+     * 
+     * This function executes a query to fetch users who are active and assigned to a specific shift:
+     * - If no shift ID is provided, it returns all active users with finger configuration enabled.
+     * - If a shift ID is specified, it returns users assigned to that shift.
+     * 
+     * @param string $shifts_id The shift ID to filter users by.
+     * @return array The resulting array of users matching the given shift ID.
+     */
+    public function get_users_by_shifts($shifts_id)
+    {
+        if ($shifts_id == '') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1'");
+        }
+        if ($shifts_id != '') {
+            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND shift_id= '$shifts_id' AND finger_config = '1'");
+        }
+        $results = $query->result_array();
         return $results;
     }
 
-    public function get_attendance_by_id($id)
+    /**
+     * Format attendance data for a single user over a specified date range.
+     * 
+     * This function processes attendance data and formats it for reporting. It performs the following steps:
+     * 
+     * 1. **Date Range Calculation**:
+     *    - Converts the provided start and end dates into `DateTime` objects.
+     *    - Creates a list of dates between the start and end dates using `DatePeriod`.
+     * 
+     * 2. **Attendance Data Formatting**:
+     *    - Iterates through the attendance entries and organizes them by user ID and date.
+     *    - Stores the time of each attendance entry for each date.
+     * 
+     * 3. **Status Determination**:
+     *    - For each user and each date, determines the attendance status:
+     *      - `L` for leave, if the user is on leave.
+     *      - `H` for holiday, if the date is a holiday.
+     *      - `A` for absent, if no attendance data is found and it's not a leave or holiday.
+     *      - `HD L` for half-day leave.
+     *      - `SL` for short leave.
+     *      - `HD` for half-day absent.
+     *      - `P` for present.
+     *      - `OC` for off-clock.
+     *    - Calculates late minutes and aggregates leave and absence counts.
+     * 
+     * 4. **Result Compilation**:
+     *    - Compiles the formatted data into an array including the attendance status, check-in details, and summary of absences and late minutes.
+     * 
+     * @param array $attendance Array of attendance records.
+     * @param array $get Array containing the 'from' and 'too' dates.
+     * 
+     * @return array Formatted attendance data for each user.
+     */
+    public function format_single_user_attendance($attendance, $get)
     {
+        $from = $get["from"];
+        $too = $get["too"];
+        $fromDate = new DateTime($from);
+        $toDate = new DateTime($too);
 
-        $query = $this->db->query("SELECT * FROM attendance WHERE id = $id");
+        $dateArray = array();
+        $interval = new DateInterval('P1D');
+        $datePeriod = new DatePeriod($fromDate, $interval, $toDate->modify('+1 day'));
 
-        $results = $query->result_array();
+        foreach ($datePeriod as $date) {
+            $dateArray[] = $date->format('Y-m-d');
+        }
 
-        return $results;
+        $formattedData = [];
+        foreach ($attendance as $entry) {
+            $userId = $entry['user_id'];
+            $finger = $entry['finger'];
+            $createdDate = date("Y-m-d", strtotime($finger));
+            $createdTime = date("H:i:s", strtotime($finger));
+
+            if (!isset($formattedData[$userId])) {
+                $formattedData[$userId] = [
+                    'user_id' => $userId,
+                    'dates' => [],
+                ];
+            }
+
+            if (!isset($formattedData[$userId]['dates'][$createdDate])) {
+                $formattedData[$userId]['dates'][$createdDate] = [];
+            }
+
+            $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
+        }
+
+        $leave = '0.0';
+        $absent = '0.0';
+        $totalLateMinutes = 0;
+
+        foreach ($formattedData as &$userData) {
+            $user_id = $userData['user_id'];
+            foreach ($dateArray as $date) {
+                if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
+                    if ($this->checkLeave($user_id, $date)) {
+                        $userData['dates'][$date][] = '--';
+                        $userData["status"][] = 'L';
+                        $leave++;
+                    } elseif ($this->holidayCheck($user_id, $date)) {
+                        $userData['dates'][$date][] = '--';
+                        $userData["status"][] = 'H';
+                    } else {
+                        $userData['dates'][$date][] = '--';
+                        $userData["status"][] = 'A';
+                        $absent++;
+                    }
+                } else {
+                    if ($this->checkHalfDayLeave($date, $user_id)) {
+                        $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                        if ($min["halfDayLeave"]) {
+                            $leave = '' . floatval($leave) + floatval(1 / 2) . '';
+                        }
+                        $userData["status"][] = 'HD L';
+                        $userData["checkin"][] = $min;
+                    } else {
+                        $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
+                        if ($min["shortLeave"]) {
+                            $userData["status"][] = 'SL';
+                        } elseif ($min["halfDay"]) {
+                            $userData["status"][] = 'HD';
+                            $absent = '' . floatval($absent) + floatval(1 / 2) . '';
+                        } else {
+                            if ($min["lateMinutes"]) {
+                                $totalLateMinutes += $min["lateMinutes"];
+                                $userData["status"][] = '' . $min["lateMinutes"] . '';
+                            } else {
+                                if ($min["checkoffclock"]) {
+                                    $userData["status"][] = 'OC';
+                                } else {
+                                    $userData["status"][] = 'P';
+                                }
+                            }
+                        }
+                        $userData["checkin"][] = $min;
+                    }
+                }
+            }
+            $userData["text"] = 'A/ ' . $absent . ' <br>L/ ' . $leave . ' <br>L min/ ' . $totalLateMinutes;
+        }
+        $resultArray = array_values($formattedData);
+        return $resultArray;
     }
 
+    /**
+     * Retrieve and format attendance data for the admin.
+     * 
+     * This method processes the attendance data based on the provided query parameters and returns the formatted result as JSON.
+     * 
+     * 1. **Retrieve Query Parameters**:
+     *    - Uses `$this->input->get()` to get query parameters from the request.
+     * 
+     * 2. **Fetch Attendance Data**:
+     *    - Calls `get_attendance_for_admin` with the query parameters to fetch the raw attendance data.
+     * 
+     * 3. **Format Data**:
+     *    - Formats the retrieved attendance data using `formated_data`.
+     * 
+     * 4. **Return Response**:
+     *    - Encodes the formatted data as JSON and outputs it.
+     * 
+     * @return void
+     */
     public function get_attendance()
     {
         $get = $this->input->get();
         $attendance = $this->get_attendance_for_admin($get);
         $formated_data = $this->formated_data($attendance, $get);
-        if (isset($get['q1'])) {
-            // echo $formated_data[$get['q1']][0][$get['q2']];
-            echo json_encode(['late_minutes' => explode("/", $formated_data[$get['q1']][0]['summery'])[2]]);
-            exit;
-        }
         echo json_encode($formated_data);
     }
 
+    /**
+     * Format attendance data based on query parameters.
+     * 
+     * This method formats the attendance data for users based on the provided date range and other query parameters.
+     * 
+     * 1. **Parse Query Parameters**:
+     *    - Extracts the `from` and `too` dates from the `$get` array and creates `DateTime` objects.
+     * 
+     * 2. **Determine User List**:
+     *    - Depending on whether `user_id`, `department`, and `shifts` are provided, determines which users to include.
+     *    - Filters users based on their department and shift if applicable.
+     * 
+     * 3. **Generate Date Range**:
+     *    - Creates an array of dates between the `from` and `too` dates using `DatePeriod`.
+     * 
+     * 4. **Initialize Formatted Data**:
+     *    - Initializes the `formattedData` array with user details and their attendance.
+     * 
+     * 5. **Process Attendance Entries**:
+     *    - Maps attendance entries to the corresponding user and date, recording check-in times.
+     * 
+     * 6. **Calculate Attendance Status**:
+     *    - Determines attendance status for each user and date, including handling leaves, holidays, absences, and late minutes.
+     * 
+     * 7. **Group Data by Month**:
+     *    - Groups dates by month and counts the number of days in each month.
+     * 
+     * 8. **Prepare Output**:
+     *    - Prepares the final output array with formatted data, month counts, raw attendance data, and query parameters.
+     * 
+     * @param array $attendance The raw attendance data.
+     * @param array $get Query parameters including date range, user ID, department, and shifts.
+     * @return array The formatted attendance data including summary and date ranges.
+     */
     public function formated_data($attendance, $get)
     {
         $from = $get["from"];
         $too = $get["too"];
         $fromDate = new DateTime($from);
         $toDate = new DateTime($too);
+
         if (!empty($get['user_id'])) {
             $system_users = [$this->ion_auth->user($get['user_id'])->row()];
         } else {
@@ -124,6 +379,7 @@ class Attendance_model extends CI_Model
                 $system_users = $system_users2;
             }
         }
+
         $dateArray = array();
         $interval = new DateInterval('P1D');
         $datePeriod = new DatePeriod($fromDate, $interval, $toDate->modify('+1 day'));
@@ -133,12 +389,7 @@ class Attendance_model extends CI_Model
         }
 
         $formattedData = [];
-
-        if ($get["status"] == '1') {
-            $active = 1;
-        } else {
-            $active = 0;
-        }
+        $active = ($get["status"] == '1') ? 1 : 0;
 
         foreach ($system_users as $user) {
             if ($user->active == $active && $user->finger_config == 1) {
@@ -168,7 +419,6 @@ class Attendance_model extends CI_Model
             $leave = '0';
             $absent = '0';
             $latemin = 0;
-            $attendancePageSummery2 = [];
             $user_id = $userData['user_id'];
             foreach ($dateArray as $date) {
                 if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
@@ -203,7 +453,6 @@ class Attendance_model extends CI_Model
         }
 
         $groupedData = [];
-
         foreach ($dateArray as $date) {
             $monthYear = date('M Y', strtotime($date));
             if (!isset($groupedData[$monthYear])) {
@@ -211,7 +460,6 @@ class Attendance_model extends CI_Model
             }
             $groupedData[$monthYear][] = $date;
         }
-
         $monthCounts = array_map('count', $groupedData);
 
         $output = [
@@ -222,8 +470,13 @@ class Attendance_model extends CI_Model
         ];
         return $output;
     }
-
-
+    /**
+     * Check if a user has joined by a given date.
+     * 
+     * @param string $user_id The employee ID of the user.
+     * @param string $date The date to check.
+     * @return bool True if the user has joined on or before the date, otherwise false.
+     */
     public function checkJoined($user_id, $date)
     {
         $this->db->select('*');
@@ -244,6 +497,13 @@ class Attendance_model extends CI_Model
         }
         return true;
     }
+    /**
+     * Check if a given date is a holiday for a specific user.
+     *
+     * @param string $user_id The employee ID of the user.
+     * @param string $date The date to check.
+     * @return bool True if the date is a holiday for the user, otherwise false.
+     */
     public function holidayCheck($user_id, $date)
     {
         $this->db->select('*');
@@ -273,15 +533,15 @@ class Attendance_model extends CI_Model
             }
         } else {
             return false;
-
-            // $dayOfWeek = date('N', strtotime($date));
-            // if ($dayOfWeek == 6 || $dayOfWeek == 7) {
-            //     return true;
-            // } else {
-            //     return false;
-            // }
         }
     }
+    /**
+     * Check if a user is on full-day leave on a specific date.
+     *
+     * @param string $user_id The employee ID of the user.
+     * @param string $date The date to check.
+     * @return bool True if the user is on full-day leave, otherwise false.
+     */
     public function checkLeave($user_id, $date)
     {
         $this->db->select('*');
@@ -299,6 +559,22 @@ class Attendance_model extends CI_Model
             return false;
         }
     }
+    /**
+     * Retrieve attendance records based on various filters provided in the input.
+     *
+     * This function builds a SQL query to fetch attendance data, filtered by
+     * user ID, department, shift, active status, and date range. The query
+     * also includes a join with the `users` table to retrieve user details.
+     *
+     * The function supports:
+     * - Filtering by a specific user or by users assigned to the logged-in user.
+     * - Filtering by department and shift.
+     * - Filtering by the user's active status.
+     * - Filtering by a specified date range.
+     *
+     * @param  array  $get  The input array containing the filter criteria.
+     * @return array        The result set of attendance records.
+     */
     public function get_attendance_for_admin($get)
     {
         if (!empty($get['user_id'])) {
@@ -340,7 +616,6 @@ class Attendance_model extends CI_Model
         $where .= " AND users.saas_id=" . $this->session->userdata('saas_id') . " ";
         $query = $this->db->query("SELECT attendance.*, CONCAT(users.first_name, ' ', users.last_name) AS user
         FROM attendance " . $leftjoin . $where . " AND users.finger_config=1");
-
         $results = $query->result_array();
         return $results;
     }
@@ -449,7 +724,6 @@ class Attendance_model extends CI_Model
         }
 
         return $array = [
-            // "system_users" => $system_users,
             "total_staff" => $total_staff,
             "abs" => $abs,
             "leave" => $leaves,
@@ -463,52 +737,6 @@ class Attendance_model extends CI_Model
         ];
     }
 
-    public function get_users_by_status($status)
-    {
-        if ($status == '1') {
-            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1' AND saas_id = " . $this->session->userdata('saas_id'));
-        }
-        if ($status == '2') {
-            $query = $this->db->query("SELECT * FROM users WHERE active = '0' AND finger_config = '1' AND saas_id = " . $this->session->userdata('saas_id'));
-        }
-        $results = $query->result_array();
-        return $results;
-    }
-    public function get_users_by_department($department)
-    {
-        if ($department == '') {
-            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1'");
-        }
-        if ($department != '') {
-            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND department= '$department' AND finger_config = '1'");
-        }
-        $results = $query->result_array();
-        return $results;
-    }
-    public function get_users_by_shifts($shifts_id)
-    {
-        if ($shifts_id == '') {
-            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND finger_config = '1'");
-        }
-        if ($shifts_id != '') {
-            $query = $this->db->query("SELECT * FROM users WHERE active = '1' AND shift_id= '$shifts_id' AND finger_config = '1'");
-        }
-        $results = $query->result_array();
-        return $results;
-    }
-
-    public function get_single_user_attendance($get)
-    {
-        if ($this->ion_auth->is_admin() || is_assign_users()) {
-            $attendance = $this->get_single_attendance_for_admin($get["user_id"], $get["from"], $get["too"]);
-            $formated_data = $this->format_single_user_attendance($attendance, $get);
-        } else {
-            $id = $this->ion_auth->user()->row()->employee_id;
-            $attendance = $this->get_single_attendance_for_admin($id, $get["from"], $get["too"]);
-            $formated_data = $this->format_single_user_attendance($attendance, $get);
-        }
-        return $formated_data;
-    }
 
     public function get_single_attendance_for_admin($user_id, $from, $too)
     {
@@ -528,100 +756,7 @@ class Attendance_model extends CI_Model
         return $results;
     }
 
-    public function format_single_user_attendance($attendance, $get)
-    {
-        $from = $get["from"];
-        $too = $get["too"];
-        $fromDate = new DateTime($from);
-        $toDate = new DateTime($too);
 
-        $dateArray = array();
-        $interval = new DateInterval('P1D');
-        $datePeriod = new DatePeriod($fromDate, $interval, $toDate->modify('+1 day'));
-
-        foreach ($datePeriod as $date) {
-            $dateArray[] = $date->format('Y-m-d');
-        }
-
-        $formattedData = [];
-        foreach ($attendance as $entry) {
-            $userId = $entry['user_id'];
-            $user = $entry['user'];
-            $finger = $entry['finger'];
-            $createdDate = date("Y-m-d", strtotime($finger));
-            $createdTime = date("H:i:s", strtotime($finger));
-
-            if (!isset($formattedData[$userId])) {
-                $formattedData[$userId] = [
-                    'user_id' => $userId,
-                    'dates' => [],
-                ];
-            }
-
-            if (!isset($formattedData[$userId]['dates'][$createdDate])) {
-                $formattedData[$userId]['dates'][$createdDate] = [];
-            }
-
-            $formattedData[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
-        }
-
-        $leave = '0.0';
-        $absent = '0.0';
-        $totalLateMinutes = 0;
-
-        foreach ($formattedData as &$userData) {
-            $user_id = $userData['user_id'];
-            foreach ($dateArray as $date) {
-                if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
-                    if ($this->checkLeave($user_id, $date)) {
-                        $userData['dates'][$date][] = '--';
-                        $userData["status"][] = 'L';
-                        $leave++;
-                    } elseif ($this->holidayCheck($user_id, $date)) {
-                        $userData['dates'][$date][] = '--';
-                        $userData["status"][] = 'H';
-                    } else {
-                        $userData['dates'][$date][] = '--';
-                        $userData["status"][] = 'A';
-                        $absent++;
-                    }
-                } else {
-                    if ($this->checkHalfDayLeave($date, $user_id)) {
-                        $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
-                        if ($min["halfDayLeave"]) {
-                            $leave = '' . floatval($leave) + floatval(1 / 2) . '';
-                        }
-                        $userData["status"][] = 'HD L';
-                        $userData["checkin"][] = $min;
-                    } else {
-                        $min = $this->checkHalfDayLeavesAbsentsLateMin($userData['dates'][$date], $date, $user_id);
-                        if ($min["shortLeave"]) {
-                            $userData["status"][] = 'SL';
-                        } elseif ($min["halfDay"]) {
-                            $userData["status"][] = 'HD';
-                            $absent = '' . floatval($absent) + floatval(1 / 2) . '';
-                        } else {
-                            if ($min["lateMinutes"]) {
-                                $totalLateMinutes += $min["lateMinutes"];
-                                $userData["status"][] = '' . $min["lateMinutes"] . '';
-                            } else {
-                                if ($min["checkoffclock"]) {
-                                    $userData["status"][] = 'OC';
-                                } else {
-                                    $userData["status"][] = 'P';
-                                }
-                            }
-                        }
-                        $userData["checkin"][] = $min;
-                    }
-                }
-            }
-            $userData["text"] = 'A/ ' . $absent . ' <br>L/ ' . $leave . ' <br>L min/ ' . $totalLateMinutes;
-        }
-
-        $resultArray = array_values($formattedData);
-        return $resultArray;
-    }
 
 
     public function checkHalfDayLeavesAbsentsLateMin($data, $date, $employee_id)
@@ -699,7 +834,6 @@ class Attendance_model extends CI_Model
                 }
             }
         } elseif ($date == date('Y-m-d')) {
-            # code...
         } else {
             $halfDay = true;
         }

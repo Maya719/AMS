@@ -484,7 +484,7 @@ class Leaves_model extends CI_Model
         $paidArray = [];
         $unpaidArray = [];
         $leavesArray = [];
-        $absents = [];
+        $absents = 0;
         $late_min = 0;
 
         if (empty($user_id)) {
@@ -526,7 +526,6 @@ class Leaves_model extends CI_Model
                 $unpaidArray[] = $unpaid_leaves;
             }
 
-            $shift_id = $this->shifts_model->get_user_shift($user_id)->id;
             $dates = new DatePeriod(
                 new DateTime($from),
                 new DateInterval('P1D'),
@@ -535,8 +534,7 @@ class Leaves_model extends CI_Model
 
             foreach ($dates as $date) {
                 $formatted_date = $date->format('Y-m-d');
-                $shift = $this->shift_model->get_shift_log_by_id($shift_id, $formatted_date);
-                $late_min += $this->att_model->get_late_min($user_id, $formatted_date, $formatted_date, $shift["starting_time"], $shift["ending_time"]);
+                $late_min += $this->att_model->get_late_min($user_id, $formatted_date, $formatted_date);
             }
         }
 
@@ -544,9 +542,10 @@ class Leaves_model extends CI_Model
             'total_leaves' => $TotalLeaveArray,
             'leave_types' => $LeaveTypeArray,
             'absents' => $absents,
-            'late_min' => intval($late_min),
+            'late_min' => $late_min,
             'paidArray' => $paidArray,
             'unpaidArray' => $unpaidArray,
+            'user_id' => $user_id,
             'user_id' => $user_id,
         ];
     }

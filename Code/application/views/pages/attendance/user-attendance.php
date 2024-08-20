@@ -355,7 +355,6 @@
           setFilter();
         });
 
-        // Update the date range picker input to show the selected date range
         $('#config-demo').val(`${att_startDate.format('MM/DD/YYYY')} - ${att_endDate.format('MM/DD/YYYY')}`);
       }
     });

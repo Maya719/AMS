@@ -8,7 +8,20 @@ class Attendance extends CI_Controller
 		parent::__construct();
 		// Load the library
 	}
-	
+	/**
+	 * Display the Attendance page for the current user.
+	 * 
+	 * This function checks if the user is logged in and has the necessary permissions 
+	 * to view the Attendance page. It retrieves the relevant shifts and departments 
+	 * data based on the user's `saas_id`, prepares the page title and main page 
+	 * details, and then loads the Attendance view with the data.
+	 * 
+	 * - Only users with the appropriate permissions can view this page.
+	 * - Admins can view all system users, while non-admin users will see assigned users.
+	 * - Redirects to the index page if the user does not have access.
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4) && is_module_allowed('attendance') && ($this->ion_auth->is_admin() || permissions('attendance_view_all') || permissions('attendance_view'))) {
@@ -22,17 +35,6 @@ class Attendance extends CI_Controller
 			$this->data['page_title'] = 'Attendance - ' . company_name();
 			$this->data['main_page'] = 'Attendance';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$query2 = $this->db->query("SELECT * FROM users WHERE active = '1'");
-			$results2 = $query2->result_array();
-			foreach ($results2 as $current_user) {
-				if ($current_user["id"] == $this->session->userdata('user_id')) {
-					$employee_id = $current_user["employee_id"];
-					$where = " WHERE attendance.user_id = " . $employee_id;
-					$where2 = " WHERE leaves.employee_id = " . $employee_id;
-					$user_id = $employee_id;
-				}
-			}
-			$this->data['user_id'] = $user_id;
 			if ($this->ion_auth->is_admin()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
@@ -43,24 +45,44 @@ class Attendance extends CI_Controller
 				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
 				$this->data['system_users'] = $users;
 			}
-			// echo json_encode($this->data);
 			$this->load->view('pages/attendance/attendance', $this->data);
 		} else {
 			redirect_to_index();
 		}
 	}
 
+	/**
+	 * Retrieve attendance data for the logged-in user.
+	 * 
+	 * This function checks if the user is logged in and meets specific criteria:
+	 * - The user is not a SaaS admin.
+	 * - The user is not in group 4.
+	 * 
+	 * If the conditions are met, it retrieves attendance data from the `attendance_model`.
+	 * Otherwise, it returns an empty string.
+	 * 
+	 * @return mixed The attendance data retrieved from the model, or an empty string if access is denied.
+	 */
 	public function get_attendance()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-			$attendanceReport = $this->attendance_model->get_attendance();
-			$responseData = array(
-				'report' => $attendanceReport,
-			);
+			return $this->attendance_model->get_attendance();
 		} else {
 			return '';
 		}
 	}
+	/**
+	 * Retrieve users based on their active/inactive status.
+	 * 
+	 * This function checks if the user is logged in and has the necessary permissions. 
+	 * If so, it retrieves a list of users filtered by their status (active or inactive) 
+	 * and returns this data as a JSON response.
+	 * 
+	 * - Accessible only to authorized users who are not SaaS admins or part of group 4.
+	 * - The status is passed through a POST request.
+	 * 
+	 * @return void
+	 */
 	public function get_users_by_status()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
@@ -71,6 +93,18 @@ class Attendance extends CI_Controller
 			return '';
 		}
 	}
+	/**
+	 * Retrieve users based on their department.
+	 * 
+	 * This function checks if the user is logged in and has the necessary permissions. 
+	 * If so, it retrieves a list of users filtered by their department and returns this 
+	 * data as a JSON response.
+	 * 
+	 * - Accessible only to authorized users who are not SaaS admins or part of group 4.
+	 * - The department is passed through a POST request.
+	 * 
+	 * @return void
+	 */
 	public function get_users_by_department()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
@@ -82,6 +116,18 @@ class Attendance extends CI_Controller
 			return '';
 		}
 	}
+	/**
+	 * Retrieve users based on their assigned shift.
+	 * 
+	 * This function checks if the user is logged in and has the necessary permissions. 
+	 * If so, it retrieves a list of users filtered by their shift ID and returns this 
+	 * data as a JSON response.
+	 * 
+	 * - Accessible only to authorized users who are not SaaS admins or part of group 4.
+	 * - The shift ID is passed through a POST request.
+	 * 
+	 * @return void
+	 */
 	public function get_users_by_shifts()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
@@ -92,44 +138,119 @@ class Attendance extends CI_Controller
 			return '';
 		}
 	}
+	/**
+	 * Establish a connection using the Attendance model.
+	 * 
+	 * This function serves as a proxy to establish a connection by invoking the `connect` 
+	 * method of the `attendance_model`. It abstracts the connection process, making it 
+	 * accessible through the current class.
+	 * 
+	 * @return mixed The result of the `connect` method from the `attendance_model`.
+	 */
+	public function connect()
+	{
+		return $this->attendance_model->connect();
+	}
+
+	/**
+	 * Retrieve the attendance report for the logged-in user.
+	 * 
+	 * This function verifies if the user is authenticated and has the necessary permissions:
+	 * - The user is logged in.
+	 * - The user is not a SaaS admin.
+	 * - The user does not belong to group 4.
+	 * 
+	 * If these conditions are satisfied, it fetches the user's attendance report 
+	 * from the `attendance_model` and returns it. If the user does not meet the 
+	 * criteria, an empty string is returned.
+	 * 
+	 * @return mixed The user's attendance report from the model, or an empty string if access is denied.
+	 */
 	public function get_user_attendance()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 			$attendanceReport = $this->attendance_model->get_user_attendance();
-			$responseData = array(
-				'report' => $attendanceReport
-			);
-			return $responseData;
+			return $attendanceReport;
 		} else {
 			return '';
 		}
 	}
+	/**
+	 * Display the attendance page for a specific user.
+	 * 
+	 * This function checks if the user is authenticated and has the necessary permissions:
+	 * - The user is logged in.
+	 * - The user is not a SaaS admin.
+	 * - The user is not part of group 4.
+	 * 
+	 * The function fetches the employee ID from the URI and verifies if the logged-in user is an admin 
+	 * or has assigned users. If so, it retrieves the user's data based on the employee ID and sets 
+	 * the user's name in the view data. If not, it uses the logged-in user's data.
+	 * 
+	 * The function then prepares additional data, including the page title, the current user, 
+	 * and a list of system users, before loading the attendance view.
+	 * 
+	 * If the user does not meet the criteria, they are redirected to the index page.
+	 * 
+	 * @return void
+	 */
+	public function user_attendance()
+	{
+		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
+			$employee_id = $this->uri->segment($this->uri->total_segments());
+			if ($this->ion_auth->is_admin() || is_assign_users()) {
+				$user_data = $this->ion_auth->user($employee_id)->row();
+				$user_query = $this->db->get_where('users', ['employee_id' => $employee_id]);
+				$user_data = $user_query->row();
+				if ($user_data) {
+					$this->data['name'] = $user_data->first_name . ' ' . $user_data->last_name;
+				}
+			} else {
+				$user_data = $this->ion_auth->user()->row();
+				$this->data['name'] = $user_data->first_name . ' ' . $user_data->last_name;
+			}
+			$this->data['page_title'] = 'Attendance - ' . company_name();
+			$this->data['main_page'] = 'Attendance';
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$this->data['system_users'] = $this->ion_auth->users([1, 2])->result();
+			$this->load->view('pages/attendance/user-attendance', $this->data);
+		} else {
+			redirect_to_index();
+		}
+	}
 
-	public function get_filter_page()
+	/**
+	 * Retrieve and format attendance data for a single user.
+	 * 
+	 * This function first checks if the user is logged in and has the necessary permissions:
+	 * - The user is logged in.
+	 * - The user is not a SaaS admin.
+	 * - The user is not part of group 4.
+	 * 
+	 * If the conditions are met, it retrieves the user ID, start date, and end date from the POST data.
+	 * It then fetches attendance data for the specified user and date range using the `att_model`'s 
+	 * `get_attendance` method. The attendance data is formatted using the `attendance_model`'s 
+	 * `format_single_user_attendance` method. The formatted data is then returned as a JSON response.
+	 * 
+	 * If the user does not meet the criteria, an empty string is returned.
+	 * 
+	 * @return string|void JSON encoded formatted attendance data or an empty string if access is denied.
+	 */
+	public function get_single_user_attendance()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 			$user_id = $this->input->post('user_id');
 			$from = $this->input->post('from');
 			$too = $this->input->post('too');
-			if ($this->ion_auth->is_admin()) {
-				$result = [
-					'user_id' => $user_id,
-					'from' => $from,
-				];
-			} else {
-				$result = [
-					'from' => $from,
-					'too' => $too
-				];
-			}
-
-			$attendanceReport = $this->attendance_model->get_filter_page($result);
-
-			echo json_encode($attendanceReport);
+			$attendance = $this->att_model->get_attendance($user_id, $from, $too);
+			$formatted_data = $this->attendance_model->format_single_user_attendance($attendance, $this->input->post());
+			echo json_encode($formatted_data);
 		} else {
 			return '';
 		}
 	}
+
+	
 	public function get_leaves()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
@@ -156,66 +277,6 @@ class Attendance extends CI_Controller
 		}
 	}
 
-	public function create()
-	{
-		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-
-			$data['saas_id'] = $this->session->userdata('saas_id');
-			$data['user_id'] = $this->input->post('user_id') ? $this->input->post('user_id') : $this->session->userdata('user_id');
-			$data['check_in'] = $this->input->post('check_in') ? format_date($this->input->post('check_in'), "Y-m-d H:i:s") : date("Y-m-d H:i:s");
-			$data['check_out'] = $this->input->post('check_out') ? format_date($this->input->post('check_out'), "Y-m-d H:i:s") : NULL;
-			$data['note'] = $this->input->post('note') ? $this->input->post('note') : '';
-
-			$id = $this->attendance_model->create($data);
-
-			if ($id) {
-
-				$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");
-				$this->session->set_flashdata('message_type', 'success');
-				$this->data['error'] = false;
-				$this->data['data'] = $id;
-				$this->data['message'] = $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.";
-				echo json_encode($this->data);
-			} else {
-				$this->data['error'] = true;
-				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-				echo json_encode($this->data);
-			}
-		} else {
-
-			$this->data['error'] = true;
-			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
-			echo json_encode($this->data);
-		}
-	}
-
-	public function delete($id = '')
-	{
-		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-
-			if (empty($id)) {
-				$id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
-			}
-
-			if (!empty($id) && $this->attendance_model->delete($id)) {
-
-				$this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
-				$this->session->set_flashdata('message_type', 'success');
-
-				$this->data['error'] = false;
-				$this->data['message'] = $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.";
-				echo json_encode($this->data);
-			} else {
-				$this->data['error'] = true;
-				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
-				echo json_encode($this->data);
-			}
-		} else {
-			$this->data['error'] = true;
-			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
-			echo json_encode($this->data);
-		}
-	}
 
 	public function get_attendance_report()
 	{
@@ -247,58 +308,11 @@ class Attendance extends CI_Controller
 			return '';
 		}
 	}
-	public function connect()
-	{
-		return $this->attendance_model->connect();
-	}
+
 
 	// user attendance page
 
-	public function user_attendance()
-	{
 
-		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-			$employee_id = $this->uri->segment($this->uri->total_segments());
-			if ($this->ion_auth->is_admin() || is_assign_users()) {
-				$user_data = $this->ion_auth->user($employee_id)->row();
-				$user_query = $this->db->get_where('users', array('employee_id' => $employee_id));
-				$user_data = $user_query->row();
-				if ($user_data) {
-					$this->data['name'] = $user_data->first_name . ' ' . $user_data->last_name;
-				}
-			} else {
-				$user_data = $this->ion_auth->user()->row();
-				$this->data['name'] = $user_data->first_name . ' ' . $user_data->last_name;
-			}
-			$this->data['page_title'] = 'Attendance - ' . company_name();
-			$this->data['main_page'] = 'Attendance';
-			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$this->data['system_users'] = $this->ion_auth->users(array(1, 2))->result();
-			$this->load->view('pages/attendance/user-attendance', $this->data);
-		} else {
-			redirect_to_index();
-		}
-	}
-	public function get_single_user_attendance()
-	{
-		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-			if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
-				$user_id = $this->input->post('user_id');
-				$from = $this->input->post('from');
-				$too = $this->input->post('too');
-				$result = [
-					'user_id' => $user_id,
-					'from' => $from,
-					'too' => $too,
-				];
-				$attendanceReport = $this->attendance_model->get_single_user_attendance($result);
-
-				echo json_encode($attendanceReport);
-			} else {
-				return '';
-			}
-		}
-	}
 	public function get_active_inactive_users()
 	{
 		$user = $this->input->get('value');
@@ -398,7 +412,7 @@ class Attendance extends CI_Controller
 				$result = $query->result();
 				$this->data["offclock"] = $result;
 				$this->load->view('pages/attendance/offclock', $this->data);
-			}else{
+			} else {
 				$this->data["offclock"] = [];
 				$this->load->view('pages/attendance/offclock', $this->data);
 			}

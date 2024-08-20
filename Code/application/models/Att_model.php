@@ -33,6 +33,16 @@ class Att_model extends CI_Model
         return $query->result_array();
     }
 
+    public function group_attendance($attendance)
+    {
+
+        foreach ($attendance as $record) {
+            $date = date('Y-m-d', strtotime($record['finger']));
+            $createdTime = date("H:i", strtotime($record['finger']));
+            $attendance_by_date[$date][] = $createdTime;
+        }
+        return $attendance_by_date;
+    }
     /**
      * Retrieve a list of dates when a user was absent within a specified date range.
      *
@@ -63,9 +73,6 @@ class Att_model extends CI_Model
             if (!isset($present_dates[$current_date]) && !$this->is_holiday($user_id, $current_date) && !$this->full_day_leave($user_id, $current_date)) {
                 $absent_dates[] = $current_date;
                 $absent_count++;
-            } elseif ($this->half_day_absent($user_id, $current_date, $attendance_data)) {
-                $absent_dates[] = $current_date;
-                $absent_count += 0.5;
             }
             $current_date = date('Y-m-d', strtotime($current_date . ' +1 day'));
         }
@@ -87,10 +94,11 @@ class Att_model extends CI_Model
             $shift = $this->shifts_model->get_shifts_by_id($this->shifts_model->get_user_shift($user_id)->id, $date);
             $half_day_in = $shift['half_day_check_in'] ?? '13:00:00';
             $half_day_out = $shift['half_day_check_out'] ?? '16:00:00';
-            if (($check_in == $check_out || $check_in > $half_day_in || $check_out < $half_day_out) && !$this->first_time_half_day_leave($user_id, $date) && !$this->second_time_half_day_leave($user_id, $date)) {
+            if (($check_in == $check_out || $check_in > $half_day_in || $check_out < $half_day_out)) {
                 return true;
             }
         }
+        return false;
     }
 
     /**
