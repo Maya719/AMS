@@ -56,7 +56,14 @@ class Holiday extends CI_Controller
 				$apply = '2';
 				$departments = json_encode(array());
 				$users = $this->input->post('users');
-				$users = json_encode($users);
+				if (!is_null($users)) {
+					$users = json_encode($users);
+				}else{
+					$this->data['error'] = true;
+					$this->data['message'] = "Select Users! Try again.";
+					echo json_encode($this->data);
+					exit;
+				}
 			}
 			if ($this->form_validation->run() == TRUE) {
 				$data = array(

@@ -158,10 +158,10 @@
             setFilter();
 
             /*
-            * 
-            *   Range Picker Init
-            * 
-            */
+             * 
+             *   Range Picker Init
+             * 
+             */
             $('#config-text').keyup(function() {
                 eval($(this).val());
             });
@@ -267,7 +267,7 @@
 
         function ajaxCall(employee_id, shift_id, department_id, status, from, too) {
             $.ajax({
-                url: '<?= base_url('attendance/get_attendance') ?>',
+                url: '<?= base_url('zkatt/get_attendance') ?>',
                 type: 'GET',
                 data: {
                     user_id: employee_id,
@@ -298,12 +298,13 @@
         }
 
         function showTable(data) {
+            var uniqueDates = getUniqueDates(data.data);
+            var count = 1;
             var table = $('#attendance_list');
             if ($.fn.DataTable.isDataTable(table)) {
                 table.DataTable().destroy();
             }
             emptyDataTable(table);
-            var uniqueDates = getUniqueDates(data.data);
             var thead = table.find('thead');
             var theadRow = '<tr><td style="background=#FAFAFA;border:2px solid #FAFAFA;" colspan="4"></td> ';
             const dataArray = Object.entries(data.range);
@@ -313,6 +314,7 @@
             theadRow += '</tr><tr><th style="font-size:12px;">#</th><th style="font-size:12px;">ID</th><th style="font-size:12px;  width:100px;">Employee</th><th style="font-size:12px;  width:20px;">A/L/Min</th>';
 
             uniqueDates.forEach(date => {
+
                 var filterOption = $('#dateFilter').val();
                 if (filterOption == 'today' || filterOption == 'ystdy') {
                     theadRow += '<th style="font-size:12px;">Times</th>';
@@ -342,18 +344,13 @@
 
             theadRow += '</tr>';
             thead.html(theadRow);
-
-            // Add table body
             var tbody = table.find('tbody');
-
-            var count = 1;
             data.data.forEach(user => {
                 var userRow = '<tr>';
                 userRow += '<td style="font-size:10px;"><a href="#" onclick="openChildWindow(' + user.user_id + ')">' + count + '</a></td>';
                 userRow += '<td style="font-size:10px;">' + user.user + '</td>';
                 userRow += '<td style="font-size:10px;">' + user.name + '</td>';
                 userRow += '<td style="font-size:10px;"><a href="#" onclick="openChildWindow(' + user.user_id + ')">' + user.summery + '</a></td>';
-
                 uniqueDates.forEach(date => {
                     if (user.dates[date]) {
                         userRow += '<td style="font-size:10px;">' + user.dates[date].join('<br>') + '</td>';

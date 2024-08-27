@@ -240,6 +240,10 @@ class Attendance extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 			$user_id = $this->input->post('user_id');
+			if (empty($user_id)) {
+				$user = $this->ion_auth->user()->row();
+				$user_id = $user->employee_id;
+			}
 			$from = $this->input->post('from');
 			$too = $this->input->post('too');
 			$attendance = $this->att_model->get_attendance($user_id, $from, $too);

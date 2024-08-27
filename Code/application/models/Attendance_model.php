@@ -425,7 +425,7 @@ class Attendance_model extends CI_Model
                     if ($this->checkLeave($user_id, $date)) {
                         $leave++;
                         $userData['dates'][$date][] = '<span class="text-success">L</span>';
-                    } elseif ($this->holidayCheck($user_id, $date)) {
+                    } elseif ($this->att_model->is_holiday($user_id, $date)) {
                         $userData['dates'][$date][] = '<span class="text-primary">H</span>';
                     } else {
                         if ($this->checkJoined($user_id, $date)) {
@@ -465,7 +465,6 @@ class Attendance_model extends CI_Model
         $output = [
             'data' => array_values($formattedData),
             'range' => $monthCounts,
-            'attendance' => $attendance,
             'get' => $get,
         ];
         return $output;
@@ -820,7 +819,7 @@ class Attendance_model extends CI_Model
                                 $checkoffclock = true;
                                 $lateMinutes = 0;
                             } else {
-                                $lateMinutes = $checkInDateTime->diff($shiftStartDateTime)->format('%h') * 60 + $checkInDateTime->diff($shiftStartDateTime)->format('%i');
+                                $lateMinutes = $this->att_model->get_late_min($employee_id, $date, $date);
                             }
                         }
                     } elseif ($checkOutDateTime < $shiftEndDateTime) {

@@ -291,14 +291,16 @@
                     console.log(response);
                     var html = '';
                     let emptyCell = '<td class=""></td>';
-                    if (response.leave_types) {
-                        response.leave_types.forEach((value, index) => {
+                    if (response) {
+                        Totalunpaid = 0;
+                        response.leave_summary.forEach((value, index) => {
                             html += '<tr>';
-                            html += '<td class="">' + value + '</td>';
-                            html += '<td class="">' + response.total_leaves[index] + '</td>';
-                            html += '<td class="">' + response.paidArray[index] + '</td>';
-                            html += '<td class="">' + (response.total_leaves[index] - response.paidArray[index]) + '</td>';
+                            html += '<td class="">' + value.leave_type_name + '</td>';
+                            html += '<td class="">' + value.total_leaves + '</td>';
+                            html += '<td class="">' + value.paid_leaves + '</td>';
+                            html += '<td class="">' + (value.total_leaves - value.paid_leaves) + '</td>';
                             html += '</tr>';
+                            Totalunpaid += value.unpaid_leaves;
                         });
                         html += '<tr class="section-header">';
                         html += `<td colspan="4" class="" 
@@ -310,10 +312,10 @@
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Approved</td>';
-                        html += '<td class="">' + response.unpaidArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0) + '</td>' + emptyCell + emptyCell;
+                        html += '<td class="">' + Totalunpaid + '</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
-                        html += '<td>Absents</td>';
+                        html += '<td>Absences</td>';
                         html += '<td class="">'+response.absents+'</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
@@ -325,7 +327,6 @@
                         html += '<td colspan="5" class="">No Leave Type</td>';
                         html += '</tr>';
                     }
-                    // console.log(html);
                     $("#table_body").html(html);
 
                 },

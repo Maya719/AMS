@@ -37,7 +37,7 @@
             </nav>
           </div>
           <div class="col-xl-2 col-sm-3">
-          <?php if (permissions('plan_holiday_create')) : ?>
+          <?php if (permissions('plan_holiday_create') || $this->ion_auth->is_admin()) : ?>
               <a href="#" id="modal-add-leaves" data-bs-toggle="modal" data-bs-target="#holiday-add-modal" class="btn btn-block btn-primary">+ ADD</a>
               <?php endif ?>
             </div>
@@ -134,8 +134,8 @@
               <div class="form-group mb-3">
                 <label class="col-form-label"><?= $this->lang->line('applyon') ? $this->lang->line('applyon') : 'Apply On' ?></label>
                 <select name="applyforcreate" id="apply2" class="select2" style="width:100%;">
-                  <option value="0" <?= ($this->ion_auth->is_admin()) ? '' : 'disabled' ?>><?= $this->lang->line('all') ? $this->lang->line('all') : 'All Employee' ?></option>
-                  <option value="1" <?= ($this->ion_auth->is_admin()) ? '' : 'disabled' ?>><?= $this->lang->line('Department') ? $this->lang->line('Department') : 'Department' ?></option>
+                  <option value="0"><?= $this->lang->line('all') ? $this->lang->line('all') : 'All Employee' ?></option>
+                  <option value="1"><?= $this->lang->line('Department') ? $this->lang->line('Department') : 'Department' ?></option>
                   <option value="2"><?= $this->lang->line('Employee') ? $this->lang->line('Employee') : 'Selected Employee/s' ?></option>
                 </select>
               </div>

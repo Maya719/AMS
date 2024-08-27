@@ -19,15 +19,62 @@ class Leaves extends CI_Controller
 	 * @return void|string Outputs the leave balance as a JSON-encoded array if the user has permission.
 	 *                     Returns an empty string if the user does not have the necessary permissions.
 	 */
+
 	public function get_leaves_balance()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
-			$user_id = $this->input->post('user_id');
-			$leaves_balance = $this->leaves_model->get_leaves_balance($user_id);
-			echo json_encode($leaves_balance);
-		} else {
-			return '';
+		$from = date('Y-01-01');
+		$too = date('Y-m-d');
+		$late_min = 0;
+		$absents = 0;
+		$leave_types = $this->att_model->get_db_leave_types();
+		$user_id = $this->input->post('user_id');
+		$user = $this->ion_auth->user($user_id)->row();
+		$leave_summary = [];
+		foreach ($leave_types as $leave_type) {
+			$paid_leaves = 0;
+			$unpaid_leaves = 0;
+			$total = 0;
+			if ($user->finger_config == 1) {
+				$leaves = $this->att_model->get_db_leaves($user->employee_id, $from, $too, $leave_type->id);
+				foreach ($leaves as $leave) {
+					$leaveDuration = (new DateTime($leave->ending_date))->diff(new DateTime($leave->starting_date))->days + 1;
+
+					if (strpos($leave->leave_duration, 'Full') !== false) {
+						if ($leave->paid == 0) {
+							$paid_leaves += $leaveDuration;
+						} else {
+							$unpaid_leaves += $leaveDuration;
+						}
+					} elseif (strpos($leave->leave_duration, 'Half') !== false) {
+						if ($leave->paid == 0) {
+							$paid_leaves += 0.5;
+						} else {
+							$unpaid_leaves += 0.5;
+						}
+					}
+				}
+				$total = $this->att_model->get_total_of_leave_type_for_user($leave_type, $user, $too);
+			}
+
+			$leave_summary[] = [
+				'leave_type_name' => $leave_type->name,
+				'total_leaves' => $total,
+				'paid_leaves' => $paid_leaves,
+				'unpaid_leaves' => $unpaid_leaves,
+			];
 		}
+		if ($user->finger_config == 1) {
+			$emp = get_employee_id_from_user_id($user_id);
+			$late_min = $this->att_model->get_late_min($emp, $from, $too);
+			$absents = $this->att_model->get_absents($emp, $from, $too);
+		}
+
+		$response = [
+			'leave_summary' => $leave_summary,
+			'absents' => $absents,
+			'late_min' => $late_min,
+		];
+		echo json_encode($response);
 	}
 
 	/**
