@@ -150,7 +150,7 @@ class Leaves extends CI_Controller
 			echo json_encode($this->data);
 		}
 	}
-	/*........................................................ Not Optomize Functions................................*/
+	/*........................................................ Not Optomize Functions below ................................*/
 
 
 
@@ -289,7 +289,7 @@ class Leaves extends CI_Controller
 			'group_id' => $group_id,
 			'remarks' => $this->input->post('remarks'),
 			'status' => $this->input->post('status'),
-			'level' => ($this->input->post('status') == 1) ? $Step + 1 : $Step+1,
+			'level' => ($this->input->post('status') == 1 || $this->input->post('status') == 2) ? $Step + 1 : $Step,
 		];
 		$this->leaves_model->createLog($log);
 		$this->get_step_users($Step + 1, $leave);
@@ -654,7 +654,7 @@ class Leaves extends CI_Controller
 							$template_data['DUE_DATE'] = $this->input->post('ending_date');
 							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
 							$email_template = render_email_template('leave_request', $template_data);
-							send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+							// send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 
 							$notification_data = array(
 								'notification' => 'Leave request received',

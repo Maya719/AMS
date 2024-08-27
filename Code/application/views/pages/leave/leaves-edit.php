@@ -85,7 +85,7 @@
                                                 </select>
                                             </div>
 
-                                            <?php if ($this->ion_auth->in_group(1) || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
+                                            <?php if ($this->ion_auth->in_group(1) || is_assign_users()) { ?>
                                                 <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs" style="display: none;">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
                                                     <input type="number" name="paid_days" value="<?= ($leave[0]["paid"] == '0') ? $durations : '0' ?>" id="paid_days" class="form-control">
