@@ -162,6 +162,7 @@
              *   Range Picker Init
              * 
              */
+
             $('#config-text').keyup(function() {
                 eval($(this).val());
             });
@@ -420,7 +421,6 @@
         }
 
         function getUniqueDates(data) {
-            // Extract unique dates from the data
             var uniqueDates = [];
             data.forEach(user => {
                 Object.keys(user.dates).forEach(date => {

@@ -277,24 +277,22 @@ class Leaves extends CI_Controller
 
 	private function NextLog($leave)
 	{
-		if ($this->input->post('status') == '1') {
-			$roler = $this->session->userdata('user_id');
-			$group = $this->ion_auth->get_users_groups($roler)->result();
-			$group_id = $group[0]->id;
-			$this->db->where('group_id', $group_id);
-			$getCurrentGroupStep = $this->db->get('leave_hierarchy');
-			$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
-			$Step = $heiCurrentGroupStepResult->step_no;
-			$log = [
-				'leave_id' => $this->input->post('update_id'),
-				'group_id' => $group_id,
-				'remarks' => $this->input->post('remarks'),
-				'status' => $this->input->post('status'),
-				'level' => ($this->input->post('status') == 1) ? $Step + 1 : $Step,
-			];
-			$this->leaves_model->createLog($log);
-			$this->get_step_users($Step + 1, $leave);
-		}
+		$roler = $this->session->userdata('user_id');
+		$group = $this->ion_auth->get_users_groups($roler)->result();
+		$group_id = $group[0]->id;
+		$this->db->where('group_id', $group_id);
+		$getCurrentGroupStep = $this->db->get('leave_hierarchy');
+		$heiCurrentGroupStepResult = $getCurrentGroupStep->row();
+		$Step = $heiCurrentGroupStepResult->step_no;
+		$log = [
+			'leave_id' => $this->input->post('update_id'),
+			'group_id' => $group_id,
+			'remarks' => $this->input->post('remarks'),
+			'status' => $this->input->post('status'),
+			'level' => ($this->input->post('status') == 1) ? $Step + 1 : $Step+1,
+		];
+		$this->leaves_model->createLog($log);
+		$this->get_step_users($Step + 1, $leave);
 		$this->db->select('*');
 		$this->db->from('leave_logs');
 		$this->db->where('leave_id', $this->input->post('update_id'));
