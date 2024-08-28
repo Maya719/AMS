@@ -141,14 +141,14 @@
       sessionStorage.setItem('le_startDate', startDate);
       sessionStorage.setItem('le_endDate', endDate);
 
-      set_session("le_status");
-      set_session("le_leave_type");
-      set_session("le_status_name");
-
       store_session("le_status");
       store_session("le_leave_type");
       store_session("le_status_name");
       store_session("le_employee_id");
+
+      set_session("le_status");
+      set_session("le_leave_type");
+      set_session("le_status_name");
       setFilter();
       $(document).on('change', '#le_leave_type, #le_status_name, #le_employee_id,#le_status', function() {
         setFilter();
@@ -194,6 +194,7 @@
     });
 
     function appendStateEmp() {
+      sessionStorage.removeItem('le_employee_id');
       var status = $('#le_status').val();
       $.ajax({
         url: '<?= base_url('attendance/get_users_by_status') ?>',
