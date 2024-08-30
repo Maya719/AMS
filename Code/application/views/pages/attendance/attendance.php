@@ -268,7 +268,7 @@
 
         function ajaxCall(employee_id, shift_id, department_id, status, from, too) {
             $.ajax({
-                url: '<?= base_url('zkatt/get_attendance') ?>',
+                url: '<?= base_url('attendance/get_attendance') ?>',
                 type: 'GET',
                 data: {
                     user_id: employee_id,

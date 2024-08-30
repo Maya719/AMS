@@ -48,7 +48,7 @@ class Att_model extends CI_Model
         return $query->result_array();
     }
 
-    public function set_attendance($attendance, $users, $from, $too, $dateArray, $active)
+    public function set_attendance($attendance, $users, $from, $too, $dateArray, $active, $user_id = '')
     {
         foreach ($users as $user) {
             if ($user->active == $active && $user->finger_config == 1) {
@@ -71,28 +71,29 @@ class Att_model extends CI_Model
         }
 
         foreach ($formattedData as &$userData) {
-            $user_id = $userData['user_id'];
-            $absents = $this->get_absents($user_id, $from, $too);
-            $late_min = $this->get_late_min($user_id, $from, $too);
-            $leaves = $this->get_leaves_counts($user_id, $from, $too);
-            foreach ($dateArray as $date) {
-                if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
-                    if ($this->checkLeave($user_id, $date)) {
-                        $userData['dates'][$date][] = '<span class="text-success">L</span>';
-                    } elseif ($this->att_model->is_holiday($user_id, $date)) {
-                        $userData['dates'][$date][] = '<span class="text-primary">H</span>';
-                    } else {
-                        if ($this->check_joined_date($user_id, $date)) {
-                            $userData['dates'][$date][] = '<span class="text-danger">A</span>';
+            if ($user_id == $user_id) {
+                $userId = $userData['user_id'];
+                $absents = $this->get_absents($userId, $from, $too);
+                $late_min = $this->get_late_min($userId, $from, $too);
+                $leaves = $this->get_leaves_counts($userId, $from, $too);
+                foreach ($dateArray as $date) {
+                    if (!isset($userData['dates'][$date]) || empty($userData['dates'][$date])) {
+                        if ($this->checkLeave($userId, $date)) {
+                            $userData['dates'][$date][] = '<span class="text-success">L</span>';
+                        } elseif ($this->att_model->is_holiday($userId, $date)) {
+                            $userData['dates'][$date][] = '<span class="text-primary">H</span>';
                         } else {
-                            $userData['dates'][$date][] = '<span class="text-muted">--</span>';
+                            if ($this->check_joined_date($userId, $date)) {
+                                $userData['dates'][$date][] = '<span class="text-danger">A</span>';
+                            } else {
+                                $userData['dates'][$date][] = '<span class="text-muted">--</span>';
+                            }
                         }
                     }
                 }
+                $userData['summery'] = $absents . "/" . $leaves . "/" . $late_min;
             }
-            $userData['summery'] = $absents . "/" . $leaves . "/" . $late_min;
         }
-
         return $formattedData;
     }
 

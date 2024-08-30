@@ -52,7 +52,7 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header border-0 pb-0 flex-wrap">
-                                <h5 class="card-title">Edit Leave Application</h5>
+                                <h5 class="card-title">Leave Application</h5>
                             </div>
                             <div class="card-body">
                                 <form action="<?= base_url('leaves/edit') ?>" method="POST" id="modal-edit-leaves-part" enctype="multipart/form-data">
@@ -195,7 +195,7 @@
                                         <?php } ?>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-lg-8 d-flex">
                                             <?= $leave[0]["btnHTML"] ?>
                                         </div>
                                     </div>

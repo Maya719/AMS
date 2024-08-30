@@ -15,7 +15,7 @@ class Zkatt extends CI_Controller
 
         // Fetch attendance data once
         $attendance_data = $this->att_model->get_attendance(
-            '',
+            $this->input->get("user_id"),
             $start_from,
             $end_date,
             $this->input->get("shift"),
@@ -40,7 +40,7 @@ class Zkatt extends CI_Controller
             'users' => $users,
         ];
 
-        echo json_encode($output);
+        echo json_encode($attendance_data);
     }
 
     // Function to get date range array
