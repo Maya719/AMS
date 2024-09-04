@@ -15,7 +15,7 @@ class Permissions extends CI_Controller
 			$this->data['main_page2'] = 'roles';
 			$this->data['main_page'] = 'Roles';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$this->data['system_users'] = $this->ion_auth->members()->result();
+			$this->data['system_users'] = $this->ion_auth->members_all()->result();
 			$this->data['departments'] = $this->department_model->saas_department();
 			$this->data['shifts'] = $this->shift_model->saas_shifts();
 			$this->data['permissions'] = permissions();

@@ -895,7 +895,7 @@
                                         <input type="checkbox" id="selectAllUsersEdit"> Select All
                                         <select name="users[]" id="selectedUsersSelect" class="form-control select2" multiple="">
                                             <?php foreach ($system_users as $system_user) {
-                                                if ($system_user->active == '1' && $system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                                                if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                                                     <option value="<?= htmlspecialchars($system_user->id) ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                             <?php }
                                             } ?>
