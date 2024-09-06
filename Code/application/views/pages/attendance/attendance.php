@@ -154,7 +154,6 @@
             set_session('att_shift_id');
             set_session('att_status');
 
-
             setFilter();
 
             /*
@@ -183,7 +182,9 @@
 
             $(".dataTables_info").appendTo("#attendance_list_wrapper .bottom");
             $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
-            setFilter();
+            setTimeout(function() {
+                setFilter();
+            }, 500);
             $(document).on('change', '#att_shift_id, #att_department_id, #att_employee_id, #att_status', function() {
                 setFilter();
             });
@@ -391,7 +392,7 @@
                     }
                 ],
                 "order": [
-                    [0, 'asc']
+                    [1, 'asc']
                 ]
             });
             if ($.fn.DataTable.isDataTable('#attendance_list')) {
@@ -536,8 +537,13 @@
                     var tableData = JSON.parse(response);
                     $('#att_employee_id').empty();
                     $('#att_employee_id').append('<option value="">Employee</option>');
+                    const value = sessionStorage.getItem("att_employee_id");
                     tableData.forEach(function(department) {
-                        $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                        if (value == department.id) {
+                            $('#att_employee_id').append('<option value="' + department.id + '" selected>' + department.first_name + ' ' + department.last_name + '</option>');
+                        } else {
+                            $('#att_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
+                        }
                     });
                 },
                 complete: function() {},
