@@ -149,9 +149,10 @@
       set_session("le_status");
       set_session("le_leave_type");
       set_session("le_status_name");
+      set_session("le_employee_id");
       setTimeout(function() {
           setFilter();
-      }, 1000);
+      }, 500);
       $(document).on('change', '#le_leave_type, #le_status_name, #le_employee_id,#le_status', function() {
         setFilter();
       });
@@ -190,6 +191,9 @@
       }
     });
 
+    $(document).on('change', '#le_employee_id', function() {
+      store_session("le_employee_id");
+    });
     $(document).on('change', '#le_status', function() {
       console.log("status changing");
       appendStateEmp();
