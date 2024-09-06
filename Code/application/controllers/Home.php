@@ -47,7 +47,7 @@ class Home extends CI_Controller
 		$leave = $get["leave"];
 		$dateObject = date_create($dateRec);
 		$date = $dateObject->format('Y-m-d');
-		if ($this->ion_auth->is_admin() || is_assign_users()) {
+		if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
 			$attendance = $this->home_model->get_home_attendance_for_admin($date, $present, $absent, $leave);
 			$count = $this->home_model->filter_count_abs($date);
 		} else {

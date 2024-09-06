@@ -30,7 +30,7 @@ class Home_model extends CI_Model
             $employee_id = $user->employee_id;
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
-            if ($this->ion_auth->is_admin()) {
+            if ($this->ion_auth->is_admin() || is_all_users()) {
                 $where = " WHERE attendance.id IS NOT NULL ";
             } else {
                 $selected = selected_users();
@@ -100,7 +100,7 @@ class Home_model extends CI_Model
             $presentArray[$userId]['dates'][$createdDate][] = date('H:i', strtotime($createdTime));
         }
 
-        if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+        if ($this->ion_auth->is_admin() || is_all_users()) {
             $system_users = $this->ion_auth->members()->result();
         } else {
             $selected = selected_users();
@@ -171,7 +171,7 @@ class Home_model extends CI_Model
         $abs = 0;
         $leaves = 0;
         $present = 0;
-        if ($this->ion_auth->is_admin()) {
+        if ($this->ion_auth->is_admin() || is_all_users()) {
             $where = " WHERE DATE(attendance.finger) = '" . $date . "' ";
         } elseif (is_assign_users()) {
             $selected = selected_users();
@@ -190,7 +190,7 @@ class Home_model extends CI_Model
             FROM attendance " . $leftjoin . $where);
 
         $results = $query->result_array();
-        if ($this->ion_auth->is_admin()) {
+        if ($this->ion_auth->is_admin() || is_all_users()) {
             $system_users = $this->ion_auth->members()->result();
         } elseif (is_assign_users()) {
             $selected = selected_users();

@@ -38,9 +38,16 @@ class Permissions extends CI_Controller
 			$this->form_validation->set_rules('description', 'Name', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('descriptive_name', 'Description', 'trim|strip_tags|xss_clean');
 			if ($this->form_validation->run() == TRUE) {
-				$users = $this->input->post('users');
-				$users = json_encode($users);
-
+				if ($this->input->post('users')) {
+					$users = $this->input->post('users');
+					$users = json_encode($users);
+				}else{
+					$users = json_encode(array());
+				}
+				$all_users = 'false';
+				if ($this->input->post('all_selected_edit') == 'all') {
+					$all_users = 'true';
+				}
 				$data_json = [
 					'attendance_view' => $this->input->post('attendance_view') ? '1' : '0',
 					'offclock_view' => $this->input->post('offclock_view') ? '1' : '0',
@@ -53,6 +60,7 @@ class Permissions extends CI_Controller
 					'leave_type_create' => $this->input->post('leave_type_create') ? '1' : '0',
 					'leave_type_edit' => $this->input->post('leave_type_edit') ? '1' : '0',
 					'leave_type_delete' => $this->input->post('leave_type_delete') ? '1' : '0',
+					'leaves_status_edit' => $this->input->post('leaves_status_edit') ? '1' : '0',
 					'shift_view' => $this->input->post('shift_view') ? '1' : '0',
 					'shift_create' => $this->input->post('shift_create') ? '1' : '0',
 					'shift_edit' => $this->input->post('shift_edit') ? '1' : '0',
@@ -100,6 +108,7 @@ class Permissions extends CI_Controller
 					'descriptive_name' => $this->input->post('descriptive_name'),
 					'permissions' => json_encode($data_json),
 					'assigned_users' => $users,
+					'all_users' => $all_users,
 				);
 				$id = $this->settings_model->roles_create($data);
 				if ($id) {
@@ -128,9 +137,16 @@ class Permissions extends CI_Controller
 			$this->form_validation->set_rules('descriptive_name', 'Description', 'trim|strip_tags|xss_clean');
 			if ($this->form_validation->run() == TRUE) {
 				$id = $this->input->post('update_id');
-				$users = $this->input->post('users');
-				$users = json_encode($users);
-
+				if ($this->input->post('users')) {
+					$users = $this->input->post('users');
+					$users = json_encode($users);
+				}else{
+					$users = json_encode(array());
+				}
+				$all_users = 'false';
+				if ($this->input->post('all_selected_edit') == 'all') {
+					$all_users = 'true';
+				}
 				$data_json = [
 					'attendance_view' => $this->input->post('attendance_view') ? '1' : '0',
 					'offclock_view' => $this->input->post('offclock_view') ? '1' : '0',
@@ -143,6 +159,7 @@ class Permissions extends CI_Controller
 					'leave_type_create' => $this->input->post('leave_type_create') ? '1' : '0',
 					'leave_type_edit' => $this->input->post('leave_type_edit') ? '1' : '0',
 					'leave_type_delete' => $this->input->post('leave_type_delete') ? '1' : '0',
+					'leaves_status_edit' => $this->input->post('leaves_status_edit') ? '1' : '0',
 					'shift_view' => $this->input->post('shift_view') ? '1' : '0',
 					'shift_create' => $this->input->post('shift_create') ? '1' : '0',
 					'shift_edit' => $this->input->post('shift_edit') ? '1' : '0',
@@ -190,6 +207,7 @@ class Permissions extends CI_Controller
 					'descriptive_name' => $this->input->post('descriptive_name'),
 					'permissions' => json_encode($data_json),
 					'assigned_users' => $users,
+					'all_users' => $all_users,
 				);
 
 				if ($this->settings_model->roles_edit($id, $data)) {

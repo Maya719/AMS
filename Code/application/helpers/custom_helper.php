@@ -1378,51 +1378,6 @@ function get_current_plan($saas_id = '')
     }
 }
 
-// function permissions($permissions_type = '')
-// {
-//     $CI =& get_instance();
-
-//     $CI->db->where('type', 'permissions_'.$CI->session->userdata('saas_id'));
-//     $count = $CI->db->get('settings');
-
-//     if($count->num_rows() > 0){
-//         $where_type = 'permissions_'.$CI->session->userdata('saas_id');
-//     }else{
-//         $where_type = 'permissions';
-//     }
-
-//     if($CI->ion_auth->in_group(4)){
-//         $CI->db->where('type', 'clients_permissions_'.$CI->session->userdata('saas_id'));
-//         $count = $CI->db->get('settings');
-
-//         if($count->num_rows() > 0){
-//             $where_type = 'clients_permissions_'.$CI->session->userdata('saas_id');
-//         }else{
-//             $where_type = 'permissions';
-//         }
-//     }
-
-//     $CI->db->where(['type'=>$where_type]);
-//     $query = $CI->db->get('settings');
-//     $data = $query->result_array();
-
-//     if(!$data){
-//         return false;
-//     }
-
-//     $data = json_decode($data[0]['value']);
-
-//     if(empty($permissions_type)){
-//         return $data;
-//     }else{
-//         if(isset($data->$permissions_type)){
-//             return $data->$permissions_type;
-//         }else{
-//             return false;
-//         }
-//     }
-// }  
-
 function permissions($permissions_type = '')
 {
     $CI = &get_instance();
@@ -1435,39 +1390,28 @@ function permissions($permissions_type = '')
         return false;
     }
 }
+function is_all_users()
+{
+    $CI = &get_instance();
+    $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
+    $all_users = $group[0]->all_users;
+    if ($all_users == "true") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function is_assign_users()
 {
     $CI = &get_instance();
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
-    $assigned_users = json_decode($group[0]->assigned_users, true);
+    return $assigned_users = json_decode($group[0]->assigned_users, true);
+    if (!empty($assigned_users)) {
+         true;
+    }else{
 
-    if (empty($assigned_users)) {
         return false;
-    } else {
-        return true;
-    }
-}
-
-
-
-function change_permissions($group_id)
-{
-    $CI = &get_instance();
-    $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
-    $permissions = $group[0]->change_permissions_of;
-    if (empty($permissions) || is_null($permissions)) {
-        return false;
-    } else {
-        $data = json_decode($permissions, true);
-        if (empty($group_id)) {
-            return true;
-        } else {
-            if (in_array($group_id, $data)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
     }
 }
 

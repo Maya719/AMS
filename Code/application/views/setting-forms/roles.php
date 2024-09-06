@@ -1,5 +1,10 @@
 <?php $this->load->view('includes/header'); ?>
 <link href="<?= base_url('assets2/vendor/introjs/modern.css') ?>" rel="stylesheet" type="text/css" />
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 </head>
 
 <body>
@@ -151,6 +156,12 @@
                                                 <label class="form-check-label" for="">approval</label>
                                             </div>
                                         </div>
+                                        <div class="col-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="leaves_status_edit">
+                                                <label class="form-check-label" for="">edit approval</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- <div class="row mb-3">
                                         <div class="col-12">
@@ -475,8 +486,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group mt-3">
+                                        <select class="form-control select2" name="all_selected_edit" id="all_selected">
+                                            <option value="all">ALL</option>
+                                            <option value="selected">Select Users</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-3 hidden" id="selected_div">
                                         <label class="col-form-label"><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?></label>
-                                        <input type="checkbox" id="selectAllUsers"> Select All
                                         <select name="users[]" id="change_permissions_of" class="form-control select2" multiple="">
                                             <?php foreach ($system_users as $system_user) {
                                                 if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -566,36 +582,13 @@
                                                 <label class="form-check-label" for="">approval</label>
                                             </div>
                                         </div>
+                                        <div class="col-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="leaves_status_edit">
+                                                <label class="form-check-label" for="">edit approval</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- <div class="row mb-3">
-                                        <div class="col-12">
-                                            <label class="form-check-label" for="">Leaves Type</label>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="leave_type_view">
-                                                <label class="form-check-label" for="">view</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="leave_type_create">
-                                                <label class="form-check-label" for="">create</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="leave_type_edit">
-                                                <label class="form-check-label" for="">edit</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="leave_type_delete">
-                                                <label class="form-check-label" for="">delete</label>
-                                            </div>
-                                        </div>
-                                    </div> -->
 
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -725,36 +718,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="row mb-3">
-                                        <div class="col-12">
-                                            <label class="form-check-label" for="">Departments</label>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="departments_view">
-                                                <label class="form-check-label" for="">view</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="departments_create">
-                                                <label class="form-check-label" for="">create</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="departments_edit">
-                                                <label class="form-check-label" for="">edit</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="departments_delete">
-                                                <label class="form-check-label" for="">delete</label>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Plan Holiday</label>
@@ -784,35 +747,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="row mb-3">
-                                        <div class="col-12">
-                                            <label class="form-check-label" for="">Shifts</label>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_view">
-                                                <label class="form-check-label" for="">view</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_create">
-                                                <label class="form-check-label" for="">create</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_edit">
-                                                <label class="form-check-label" for="">edit</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_delete">
-                                                <label class="form-check-label" for="">delete</label>
-                                            </div>
-                                        </div>
-                                    </div> -->
 
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -891,8 +825,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group mt-3">
+                                        <select class="form-control select2" name="all_selected_edit" id="all_selected_edit">
+                                            <option value="all">ALL</option>
+                                            <option value="selected">Select Users</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-3" id="selected_div_edit">
                                         <label class="col-form-label"><?= $this->lang->line('selected_users') ? $this->lang->line('selected_users') : 'Selected Users' ?></label>
-                                        <input type="checkbox" id="selectAllUsersEdit"> Select All
                                         <select name="users[]" id="selectedUsersSelect" class="form-control select2" multiple="">
                                             <?php foreach ($system_users as $system_user) {
                                                 if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
@@ -1008,8 +947,14 @@
                         });
 
                         var assignedUsers = JSON.parse(result.data.assigned_users);
-                        console.log(assignedUsers);
-                        $("#selectedUsersSelect").val(assignedUsers).trigger('change');
+                        if (assignedUsers.length > 0) {
+                            console.log(assignedUsers);
+                             $("#all_selected_edit").val('selected').trigger('change');
+                            $("#selectedUsersSelect").val(assignedUsers).trigger('change');
+                        }else{
+                            $("#all_selected_edit").val('all').trigger('change');
+                            $("#selected_div_edit").addClass('hidden');
+                        }
                         $("#modal-edit-roles").trigger("click");
                     } else {
                         iziToast.error({
@@ -1085,83 +1030,36 @@
                 width: '100%'
             });
 
-            // Handle Select All checkbox
-            $("#selectAllUsersEdit").on('change', function() {
-                var selectAll = $(this).is(':checked');
-
-                if (selectAll) {
-                    // Select all options
-                    var allOptionValues = $("#selectedUsersSelect").find('option').map(function() {
-                        return $(this).val();
-                    }).get();
-                    $("#selectedUsersSelect").val(allOptionValues).trigger('change');
-                } else {
-                    // Deselect all options
-                    $("#selectedUsersSelect").val([]).trigger('change');
-                }
-            });
-
-            // Update "Select All" checkbox based on individual selections
-            $("#selectedUsersSelect").on('select2:select', function() {
-                var selectedCount = $(this).find('option:selected').length;
-                var totalOptions = $(this).find('option').length;
-
-                if (selectedCount === totalOptions) {
-                    $("#selectAllUsersEdit").prop('checked', true);
-                } else {
-                    $("#selectAllUsersEdit").prop('checked', false);
-                }
-            });
-
-            $("#selectedUsersSelect").on('select2:unselect', function() {
-                var selectedCount = $(this).find('option:selected').length;
-                var totalOptions = $(this).find('option').length;
-
-                if (selectedCount < totalOptions) {
-                    $("#selectAllUsersEdit").prop('checked', false);
-                }
-            });
         });
         $(document).ready(function() {
             // Initialize Select2
             $("#change_permissions_of").select2({
                 width: '100%'
             });
-
-            // Handle Select All checkbox
-            $("#selectAllUsers").on('change', function() {
-                var selectAll = $(this).is(':checked');
-
-                if (selectAll) {
-                    // Select all options
-                    var allOptionValues = $("#change_permissions_of").find('option').map(function() {
-                        return $(this).val();
-                    }).get();
-                    $("#change_permissions_of").val(allOptionValues).trigger('change');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#all_selected').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue === 'selected') {
+                    $('#selected_div').removeClass('hidden');
                 } else {
-                    // Deselect all options
-                    $("#change_permissions_of").val([]).trigger('change');
+                    $('#change_permissions_of').select2();
+                    var preSelectedValues = [];
+                    $('#change_permissions_of').val(preSelectedValues).trigger('change');
+                    $('#selected_div').addClass('hidden');
                 }
             });
-
-            // Update "Select All" checkbox based on individual selections
-            $("#change_permissions_of").on('select2:select', function() {
-                var selectedCount = $(this).find('option:selected').length;
-                var totalOptions = $(this).find('option').length;
-
-                if (selectedCount === totalOptions) {
-                    $("#selectAllUsers").prop('checked', true);
+            $('#all_selected_edit').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue === 'selected') {
+                    $('#selected_div_edit').removeClass('hidden');
                 } else {
-                    $("#selectAllUsers").prop('checked', false);
-                }
-            });
-
-            $("#change_permissions_of").on('select2:unselect', function() {
-                var selectedCount = $(this).find('option:selected').length;
-                var totalOptions = $(this).find('option').length;
-
-                if (selectedCount < totalOptions) {
-                    $("#selectAllUsers").prop('checked', false);
+                    $('#selectedUsersSelect').select2();
+                    var preSelectedValues = [];
+                    $('#selectedUsersSelect').val(preSelectedValues).trigger('change');
+                    $('#selected_div_edit').addClass('hidden');
                 }
             });
         });

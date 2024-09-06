@@ -35,7 +35,7 @@ class Attendance extends CI_Controller
 			$this->data['page_title'] = 'Attendance - ' . company_name();
 			$this->data['main_page'] = 'Attendance';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin()) {
+			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
@@ -198,7 +198,7 @@ class Attendance extends CI_Controller
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
 			$employee_id = $this->uri->segment($this->uri->total_segments());
-			if ($this->ion_auth->is_admin() || is_assign_users()) {
+			if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
 				$user_data = $this->ion_auth->user($employee_id)->row();
 				$user_query = $this->db->get_where('users', ['employee_id' => $employee_id]);
 				$user_data = $user_query->row();

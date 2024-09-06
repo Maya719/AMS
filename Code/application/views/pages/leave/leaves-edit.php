@@ -58,16 +58,17 @@
                                 <form action="<?= base_url('leaves/edit') ?>" method="POST" id="modal-edit-leaves-part" enctype="multipart/form-data">
                                     <div class="modal-body">
                                         <input type="hidden" name="update_id" id="update_id" value="<?= $leave[0]["id"] ?>">
+                                        <input type="hidden" name="enable_edit" id="enable_edit" value="false">
                                         <input type="hidden" name="leave_duration" id="leave_duration" value="<?= $leave[0]["leave_duration"] ?>">
                                         <input type="hidden" name="document" id="document" value="<?= $leave[0]["document"] ?>">
                                         <div class="row">
-                                            <?php if ($this->ion_auth->in_group(1) || is_assign_users()) { ?>
+                                            <?php if ($this->ion_auth->in_group(1) || is_assign_users() || is_all_users()) { ?>
                                                 <div class="col-lg-6 form-group mb-3">
                                                     <label class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></label>
-                                                    <select name="user_id" id="user_id" class="form-control select2">
+                                                    <select name="user_id" id="user_id" class="form-control select2" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                         <option value=""><?= $this->lang->line('select_employee') ? $this->lang->line('select_employee') : 'Select Employee' ?></option>
                                                         <?php foreach ($system_users as $system_user) {
-                                                            if ($system_user->saas_id == $this->session->userdata('saas_id')) { ?>
+                                                            if ($system_user->finger_config == 1 && $system_user->saas_id == $this->session->userdata('saas_id')) { ?>
                                                                 <option value="<?= $system_user->id ?>" <?= $leave[0]["user_id"] == $system_user->id ? "selected" : "" ?>><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
                                                         <?php }
                                                         } ?>
@@ -77,7 +78,7 @@
 
                                             <div class="col-lg-6 form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('type') ? $this->lang->line('type') : 'Type' ?></label>
-                                                <select class="form-control select2" name="type" id="type">
+                                                <select class="form-control select2" name="type" id="type" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     <?php foreach ($leaves_types as $leaves) { ?>
                                                         <option value="<?= $leaves['id'] ?>" <?= $leave[0]["type"] == $leaves['id'] ? "selected" : "" ?>><?= $leaves['name'] ?></option>
                                                     <?php
@@ -85,16 +86,16 @@
                                                 </select>
                                             </div>
 
-                                            <?php if ($this->ion_auth->in_group(1) || is_assign_users()) { ?>
+                                            <?php if ($this->ion_auth->in_group(1) || is_assign_users() || is_all_users()) { ?>
                                                 <div class="col-lg-12 form-group mb-3" id="paid_unpaid_inputs" style="display: none;">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_days') ? $this->lang->line('paid_days') : 'Paid Days' ?></label>
-                                                    <input type="number" name="paid_days" value="<?= ($leave[0]["paid"] == '0') ? $durations : '0' ?>" id="paid_days" class="form-control">
+                                                    <input type="number" name="paid_days" value="<?= ($leave[0]["paid"] == '0') ? $durations : '0' ?>" id="paid_days" class="form-control" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     <label class="col-form-label"><?= $this->lang->line('unpaid_days') ? $this->lang->line('unpaid_days') : 'Unpaid Days' ?></label>
-                                                    <input type="number" name="unpaid_days" value="<?= ($leave[0]["paid"] == '1') ? $durations : '0' ?>" id="unpaid_days" class="form-control">
+                                                    <input type="number" name="unpaid_days" value="<?= ($leave[0]["paid"] == '1') ? $durations : '0' ?>" id="unpaid_days" class="form-control" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                 </div>
                                                 <div class="col-lg-12 form-group mb-3" id="paid_unpaid_div">
                                                     <label class="col-form-label"><?= $this->lang->line('paid_unpaid') ? $this->lang->line('paid_unpaid') : 'Paid / Unpaid Leave' ?></label>
-                                                    <select name="paid" id="paid" class="form-control select2">
+                                                    <select name="paid" id="paid" class="form-control select2" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                         <option value="0" <?= $leave[0]["paid"] == 0 ? "selected" : "" ?>><?= $this->lang->line('paid') ? $this->lang->line('paid') : 'Paid Leave' ?></option>
                                                         <option value="1" <?= $leave[0]["paid"] == 1 ? "selected" : "" ?>><?= $this->lang->line('unpaid') ? $this->lang->line('unpaid') : 'Unpaid Leave' ?></option>
                                                     </select>
@@ -108,12 +109,12 @@
                                         </div>
                                         <div class="row ms-2">
                                             <div class="form-group form-check form-check-inline col-md-6 md-3 mb-3">
-                                                <input class="form-check-input" type="checkbox" id="half_day" name="half_day" <?= $leaveValue === "Half" ? "checked" : ""; ?>>
+                                                <input class="form-check-input" type="checkbox" id="half_day" name="half_day" <?= $leaveValue === "Half" ? "checked" : ""; ?> <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                 <label class="form-check-label text-danger" for="half_day"><?= $this->lang->line('half_day') ? $this->lang->line('half_day') : 'Half Day' ?></label>
                                             </div>
 
                                             <div class="form-group form-check form-check-inline col-md-5 mb-3">
-                                                <input class="form-check-input" type="checkbox" id="short_leave" name="short_leave" <?= $leaveValue === "Short" ? "checked" : ""; ?>>
+                                                <input class="form-check-input" type="checkbox" id="short_leave" name="short_leave" <?= $leaveValue === "Short" ? "checked" : ""; ?> <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                 <label class="form-check-label text-danger" for="short_leave"><?= $this->lang->line('short_leave') ? $this->lang->line('short_leave') : 'Short Leave' ?></label>
                                             </div>
                                         </div>
@@ -122,11 +123,11 @@
                                                 <div class="row">
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('starting_date') ? $this->lang->line('starting_date') : 'Starting Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="starting_date" name="starting_date" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>">
+                                                        <input type="text" id="starting_date" name="starting_date" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('ending_date') ? $this->lang->line('ending_date') : 'Ending Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="ending_date" name="ending_date" class="form-control datepicker-default required" value="<?= $leave[0]["ending_date"] ?>">
+                                                        <input type="text" id="ending_date" name="ending_date" class="form-control datepicker-default required" value="<?= $leave[0]["ending_date"] ?>" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     </div>
                                                 </div>
                                             </div>
@@ -135,11 +136,11 @@
                                                 <div class="row">
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="date_half2" name="date_half" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>">
+                                                        <input type="text" id="date_half2" name="date_half" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     </div>
                                                     <div class="col-md-6 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('time') ? $this->lang->line('time') : 'Time' ?><span class="text-danger">*</span></label>
-                                                        <select name="half_day_period" id="half_day_period" class=" form-group form-control">
+                                                        <select name="half_day_period" id="half_day_period" class=" form-group form-control" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                             <option value="0" <?= $leave[0]["leave_duration"] == "First Time Half Day" ? "selected" : ""; ?>>First Time</option>
                                                             <option value="1" <?= $leave[0]["leave_duration"] == "Second Time Half Day" ? "selected" : ""; ?>>Second Time</option>
                                                         </select>
@@ -151,15 +152,15 @@
                                                 <div class="row">
                                                     <div class="col-md-4 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('date') ? $this->lang->line('date') : 'Date' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="date5" name="date" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>">
+                                                        <input type="text" id="date5" name="date" class="form-control datepicker-default required" value="<?= $leave[0]["starting_date"] ?>" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     </div>
                                                     <div class="col-md-4 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('starting_time') ? $this->lang->line('starting_time') : 'Starting Time' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="starting_time" name="starting_time" class="form-control timepicker" value="<?= $leave[0]["starting_time"] ?>">
+                                                        <input type="text" id="starting_time" name="starting_time" class="form-control timepicker" value="<?= $leave[0]["starting_time"] ?>" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     </div>
                                                     <div class="col-md-4 form-group mb-3">
                                                         <label class="col-form-label"><?= $this->lang->line('ending_time') ? $this->lang->line('ending_time') : 'Ending Time' ?><span class="text-danger">*</span></label>
-                                                        <input type="text" id="ending_time" name="ending_time" class="form-control timepicker" value="<?= $leave[0]["ending_time"] ?>">
+                                                        <input type="text" id="ending_time" name="ending_time" class="form-control timepicker" value="<?= $leave[0]["ending_time"] ?>" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                                     </div>
                                                 </div>
                                             </div>
@@ -169,12 +170,12 @@
                                                 <label class="col-form-label"><?= $this->lang->line('Document') ? $this->lang->line('Document') : 'Document' ?> <?php if (!empty($leave[0]["document"])) : ?>
                                                         (<a href="<?= base_url('assets/uploads/f' . $this->session->userdata('saas_id') . '/leaves/' . $leave[0]["document"]) ?>" download="<?= $leave[0]["document"] ?>"><?= $leave[0]["document"] ?></a>)
                                                     <?php endif; ?></label>
-                                                <input class="form-control" type="file" name="documents" id="formFile">
+                                                <input class="form-control" type="file" name="documents" id="formFile" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>>
                                             </div>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="col-form-label"><?= $this->lang->line('leave_reason') ? $this->lang->line('leave_reason') : 'Leave Reason' ?><span class="text-danger">*</span></label>
-                                            <textarea type="text" name="leave_reason" id="leave_reason" class="form-control" required=""><?= $leave[0]["leave_reason"] ?></textarea>
+                                            <textarea type="text" name="leave_reason" id="leave_reason" class="form-control" required="" <?= $leave[0]["status"] == 1 ? "disabled" : "" ?><?= $leave[0]["status"] == 2 ? "disabled" : "" ?>><?= $leave[0]["leave_reason"] ?></textarea>
                                         </div>
                                         <?php if (permissions('leaves_status') || $this->ion_auth->is_admin()) {
                                         ?>
@@ -195,8 +196,11 @@
                                         <?php } ?>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
-                                        <div class="col-lg-8 d-flex">
+                                        <div class="col-lg-8 d-flex col-sm-8">
                                             <?= $leave[0]["btnHTML"] ?>
+                                            <?php if (permissions('leaves_status_edit') && ($leave[0]["status"] == 2 || $leave[0]["status"] == 1)) : ?>
+                                                <button type="button" class="btn btn-edit-enable-leave col btn-primary mx-2">Enable Edit</button>
+                                            <?php endif ?>
                                         </div>
                                     </div>
                                 </form>
@@ -316,7 +320,7 @@
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Absences</td>';
-                        html += '<td class="">'+response.absents+'</td>' + emptyCell + emptyCell;
+                        html += '<td class="">' + response.absents + '</td>' + emptyCell + emptyCell;
                         html += '</tr>';
                         html += '<tr>';
                         html += '<td>Late Minutes</td>';
@@ -470,6 +474,15 @@
                     changeDivBehave();
                 }
             });
+        });
+    </script>
+    <script>
+        $('.btn-edit-enable-leave').on('click', function() {
+            $('input:disabled, textarea:disabled, select:disabled').prop('disabled', false);
+            $('.btn-edit-leave').html('Save').removeClass('btn-success').addClass('btn-primary');
+            $('.btn-edit-enable-leave').prop('disabled', true);
+            $('#enable_edit').val('true');
+            $('.btn-edit-leave').prop('disabled', false);
         });
     </script>
 

@@ -57,6 +57,7 @@
               <div class="card-body">
                 <div class="basic-form">
                   <form class="row">
+                  <?php if ($this->ion_auth->is_admin() || is_all_users() || is_assign_users()) { ?>
                     <div class="col-lg-4">
                       <select class="form-select select2" id="employee_id">
                         <option value="">
@@ -70,6 +71,8 @@
                         } ?>
                       </select>
                     </div>
+                    <?php
+                        } ?>
                     <div class="col-lg-4">
                       <select class="form-select select2" id="status">
                         <option value="" selected>Status</option>
@@ -123,7 +126,7 @@
           <form action="<?= base_url('biometric_missing/create') ?>" method="POST" class="modal-part" id="modal-add-biometric-part" data-title="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>" data-btn="<?= $this->lang->line('create') ? $this->lang->line('create') : 'Create' ?>">
 
             <div class="modal-body">
-              <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
+              <?php if ($this->ion_auth->is_admin() || is_all_users() || is_assign_users()) { ?>
                 <div class="form-group mb-3">
                   <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="user_id_add" class="form-control select2">
@@ -176,7 +179,7 @@
 
             <div class="modal-body">
               <input type="hidden" name="update_id" id="update_id">
-              <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
+              <?php if ($this->ion_auth->is_admin() || is_all_users() || is_assign_users()) { ?>
                 <div class="form-group mb-3">
                   <label class="col-form-label"><?= $this->lang->line('team_members') ? $this->lang->line('team_members') : 'users' ?></label>
                   <select name="user_id" id="edit_user" class="form-control select2">
@@ -208,7 +211,7 @@
                 <textarea type="text" name="reason" id="reason" class="form-control" required=""></textarea>
               </div>
 
-              <?php if ($this->ion_auth->is_admin() || permissions('biometric_request_status')) { ?>
+              <?php if ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_status')) { ?>
                 <div class="form-group">
                   <label class="col-form-label"><?= $this->lang->line('status') ? $this->lang->line('status') : 'Status' ?></label>
                   <select name="status" id="Edit_Status" class="form-control select2">
@@ -397,7 +400,7 @@
         theadRow += '<th>Status</th>';
         theadRow += '<th>Created</th>';
         <?php
-        if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || permissions('biometric_request_status') || $this->ion_auth->is_admin()) {
+        if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || permissions('biometric_request_status') || $this->ion_auth->is_admin() || is_all_users()) {
         ?>
           theadRow += '<th>Action</th>';
         <?php
@@ -419,18 +422,18 @@
           userRow += '<td>' + user.status + '</td>';
           userRow += '<td>' + created + '</td>';
           <?php
-          if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || permissions('biometric_request_status') || $this->ion_auth->is_admin()) {
+          if (permissions('biometric_request_edit') || permissions('biometric_request_delete') || permissions('biometric_request_status') || $this->ion_auth->is_admin() || is_all_users()) {
           ?>
             userRow += '<td>';
             userRow += '<div class="d-flex">';
             if (user.btn) {
               <?php
-              if (permissions('biometric_request_edit') || permissions('biometric_request_status') || $this->ion_auth->is_admin()) {
+              if (permissions('biometric_request_edit') || permissions('biometric_request_status') || $this->ion_auth->is_admin() || is_all_users()) {
               ?>
                 userRow += '<a href="#" class="text-primary edit-bio" data-id="' + user.id + '" data-bs-toggle="modal" data-bs-target="#edit-biometic-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a>';
               <?php
               }
-              if (permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
+              if (permissions('biometric_request_delete') || $this->ion_auth->is_admin() || is_all_users()) {
               ?>
                 userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
               <?php
@@ -438,12 +441,12 @@
               ?>
             } else {
               <?php
-              if (permissions('biometric_request_edit') || $this->ion_auth->is_admin()) {
+              if (permissions('biometric_request_edit') || $this->ion_auth->is_admin() || is_all_users()) {
               ?>
                 userRow += '<a href="#" class="text-muted" disabled><i class="fa fa-pencil"></i></a>';
               <?php
               }
-              if (permissions('biometric_request_delete') || $this->ion_auth->is_admin()) {
+              if (permissions('biometric_request_delete') || $this->ion_auth->is_admin() || is_all_users()) {
               ?>
                 userRow += '<a href="#" class="text-danger delete-bio ms-2" data-bs-toggle="tooltip" data-id="' + user.id + '" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>';
               <?php

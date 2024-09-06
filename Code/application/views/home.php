@@ -128,7 +128,7 @@
                     <div class="card-body">
                       <div class="row shapreter-row">
                         <?php
-                        if ($this->ion_auth->is_admin() || permissions('attendance_view')) {
+                        if ($this->ion_auth->is_admin() || permissions('attendance_view') || is_all_users()) {
                         ?>
                           <?php
                           $totalStaff = $report["present"] + $report["leave"] + $report["abs"];
@@ -145,7 +145,7 @@
                               <div class="d-flex">
 
                                 <?php
-                                if ($this->ion_auth->is_admin() || is_assign_users()) {
+                                if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
                                 ?>
                                   <h4 class="text-primary">Staff</h4>
                                 <?php
@@ -157,7 +157,7 @@
                                 <h4 class="count ms-auto mb-0"><a class="text-primary" id="total_staff" href="javascript:void(0)"><?= $report["total_staff"] ?></a></h4>
                               </div>
                               <?php
-                              if ($this->ion_auth->is_admin() || is_assign_users()) {
+                              if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
                               ?>
                                 <p class="mb-0 text-muted" style="margin-top: -10px;">(Attendance)</p>
                               <?php
@@ -276,7 +276,7 @@
                     </div>
                     <div class="card-body p-0">
                       <?php
-                      if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+                      if ($this->ion_auth->is_admin() || is_all_users()) {
                       ?>
                         <div id="DZ_W_Todo1" class="widget-media dlab-scroll p-4 height500 mb-1">
                         <?php
@@ -324,7 +324,7 @@
               <div id="navpills2-2" class="tab-pane <?= (is_client()) ? 'active' : ''; ?>">
                 <div class="row">
                   <?php
-                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_all_users()) {
                     $pendingP = get_count('id', 'projects', '(status=1 OR status=2) AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
                   } elseif (is_client()) {
                     $pendingP = get_count('id', 'projects', '(status=1 OR status=2) AND client_id=' . htmlspecialchars($this->session->userdata('user_id')));
@@ -337,7 +337,7 @@
                     $pendingP = get_count('p.id', 'projects p LEFT JOIN project_users pu ON p.id=pu.project_id', '(status=1 OR status=2) AND pu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
                   }
 
-                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_all_users()) {
                     $completedP = get_count('id', 'projects', 'status=3 AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
                   } elseif (is_client()) {
                     $completedP = get_count('id', 'projects', 'status=3 AND client_id=' . htmlspecialchars($this->session->userdata('user_id')));
@@ -378,7 +378,7 @@
                     </div>
                   </div>
                   <?php
-                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_all_users()) {
                     $pendingT = get_count('id', 'tasks', '(status=1 OR status=2 OR status=3) AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
                   } elseif (is_client()) {
                     $pendingT = get_count('t.id', 'tasks t LEFT JOIN projects p on t.project_id = p.id', '(t.status=1 OR t.status=2 OR t.status=3) AND p.client_id = ' . htmlspecialchars($this->session->userdata('user_id')));
@@ -389,7 +389,7 @@
                   } else {
                     $pendingT = get_count('t.id', 'tasks t LEFT JOIN task_users tu ON t.id=tu.task_id', '(status=1 OR status=2 OR status=3) AND tu.user_id=' . htmlspecialchars($this->session->userdata('user_id')));
                   }
-                  if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+                  if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_all_users()) {
                     $completedT = get_count('id', 'tasks', 'status=4 AND saas_id=' . $this->session->userdata('saas_id'));
                   } elseif (is_client()) {
                     $completedT = get_count('t.id', 'tasks t LEFT JOIN projects p on t.project_id = p.id', 't.status=4 AND p.client_id = ' . htmlspecialchars($this->session->userdata('user_id')));
@@ -494,7 +494,7 @@
     <?php
     foreach ($project_status as $project_title) {
       $tmpP[] = $project_title['title'];
-      if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+      if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_all_users()) {
         $tmpPV[] = get_count('id', 'projects', 'status=' . $project_title['id'] . ' AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
       } elseif (is_client()) {
         $tmpPV[] = get_count('id', 'projects', 'client_id=' . htmlspecialchars($this->session->userdata('user_id')) . ' AND status=' . htmlspecialchars($project_title['id']));
@@ -509,7 +509,7 @@
 
     foreach ($task_status as $task_title) {
       $tmpT[] = $task_title['title'];
-      if ($this->ion_auth->is_admin() || permissions('project_view_all')) {
+      if ($this->ion_auth->is_admin() || permissions('project_view_all') || is_all_users()) {
         $tmpTV[] = get_count('id', 'tasks', 'status=' . htmlspecialchars($task_title['id']) . ' AND saas_id=' . htmlspecialchars($this->session->userdata('saas_id')));
       } elseif (is_client()) {
         $tmpTV[] = get_count('t.id', 'tasks t LEFT JOIN projects p on t.project_id = p.id', 'p.client_id = ' . htmlspecialchars($this->session->userdata('user_id')) . ' AND t.status = ' . htmlspecialchars($task_title['id']));

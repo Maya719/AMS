@@ -347,7 +347,7 @@ class Attendance_model extends CI_Model
         if (!empty($get['user_id'])) {
             $system_users = [$this->ion_auth->user($get['user_id'])->row()];
         } else {
-            if ($this->ion_auth->is_admin()) {
+            if ($this->ion_auth->is_admin() || is_all_users()) {
                 $system_users2 = $this->ion_auth->members_all()->result();
             } else {
                 $selected = selected_users();
@@ -580,7 +580,7 @@ class Attendance_model extends CI_Model
             $employee_id = get_employee_id_from_user_id($get['user_id']);
             $where = " WHERE attendance.user_id = " . $employee_id;
         } else {
-            if ($this->ion_auth->is_admin()) {
+            if ($this->ion_auth->is_admin() || is_all_users()) {
                 $where = " WHERE attendance.id IS NOT NULL ";
             } elseif (is_assign_users()) {
                 $selected = selected_users();
@@ -634,7 +634,7 @@ class Attendance_model extends CI_Model
         $bio_rejected = 0;
         $currentDate = new DateTime();
         $todayDate = $currentDate->format('Y-m-d');
-        if ($this->ion_auth->is_admin()) {
+        if ($this->ion_auth->is_admin() || is_all_users()) {
             $where = " WHERE DATE(attendance.finger) = '" . $todayDate . "' ";
             $system_users = $this->ion_auth->members_all()->result();
         } elseif (is_assign_users()) {
@@ -679,7 +679,7 @@ class Attendance_model extends CI_Model
 
         $where2 = " WHERE users.active= '1' AND users.finger_config='1' AND users.saas_id=" . $this->session->userdata('saas_id');
         $where2 .= " AND leaves.starting_date >= '" . $fromDate . "' AND leaves.ending_date <= '" . $todayDate . "'";
-        if ($this->ion_auth->is_admin() || is_assign_users()) {
+        if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
             $where2 .= " ";
         } else {
             $user = $this->ion_auth->user()->row();
@@ -702,7 +702,7 @@ class Attendance_model extends CI_Model
         $leftjoin3 = " LEFT JOIN users ON biometric_missing.user_id = users.employee_id";
 
         $where3 = " WHERE biometric_missing.date BETWEEN '" . $fromDate . "' AND '" . $todayDate . "'";
-        if ($this->ion_auth->is_admin() || is_assign_users()) {
+        if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
             $where3 .= " ";
         } else {
             $user = $this->ion_auth->user()->row();

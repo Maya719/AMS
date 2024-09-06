@@ -121,17 +121,17 @@
           <span class="nav-text">Dashboard</span>
         </a>
       </li>
-      <?php if (($this->ion_auth->is_admin() || is_assign_users() || permissions('attendance_view') || permissions('leaves_view') || permissions('biometric_request_view') || permissions('plan_holiday_view')) && !is_saas_admin() && (is_module_allowed('leaves') || is_module_allowed('attendance') || is_module_allowed('biometric_missing'))) { ?>
+      <?php if (($this->ion_auth->is_admin()|| is_all_users() || is_assign_users() || permissions('attendance_view') || permissions('leaves_view') || permissions('biometric_request_view') || permissions('plan_holiday_view')) && !is_saas_admin() && (is_module_allowed('leaves') || is_module_allowed('attendance') || is_module_allowed('biometric_missing'))) { ?>
         <li>
           <a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
             <i class="fas fa-fingerprint"></i>
             <span class="nav-text">AMS</span>
           </a>
           <ul aria-expanded="false">
-            <?php if (($this->ion_auth->is_admin() || is_assign_users()) && is_module_allowed('attendance')) { ?>
+            <?php if (($this->ion_auth->is_admin() || is_all_users() || is_assign_users()) && is_module_allowed('attendance')) { ?>
               <li><a href="<?= base_url('attendance') ?>">Attendance</a></li>
             <?php } ?>
-            <?php if (is_module_allowed('attendance') && permissions('attendance_view') && !is_assign_users()) { ?>
+            <?php if (is_module_allowed('attendance') && permissions('attendance_view') && !is_assign_users() && !is_all_users()) { ?>
               <li><a href="<?= base_url('attendance/user_attendance') ?>">Attendance</a></li>
             <?php } ?>
             <?php if (is_module_allowed('leaves') && ($this->ion_auth->is_admin() || permissions('leaves_view'))) { ?>

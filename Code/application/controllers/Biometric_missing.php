@@ -11,7 +11,7 @@ class Biometric_missing extends CI_Controller
 
 	public function delete($id = '')
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 
 			if (empty($id)) {
 				$id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
@@ -36,7 +36,7 @@ class Biometric_missing extends CI_Controller
 
 	public function edit()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 			$this->form_validation->set_rules('update_id', 'Biometric ID', 'trim|required|strip_tags|xss_clean|is_numeric');
 			$this->form_validation->set_rules('reason', 'Reason', 'trim|required|strip_tags|xss_clean');
 
@@ -108,7 +108,7 @@ class Biometric_missing extends CI_Controller
 
 	public function get_biometric_by_id()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 			$this->form_validation->set_rules('id', 'id', 'trim|required|strip_tags|xss_clean|is_numeric');
 
 			if ($this->form_validation->run() == TRUE) {
@@ -131,7 +131,7 @@ class Biometric_missing extends CI_Controller
 
 	public function get_biometric()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 			echo json_encode($this->biometric_missing_model->get_biometric());
 		} else {
 			$this->data['error'] = true;
@@ -142,7 +142,7 @@ class Biometric_missing extends CI_Controller
 
 	public function create()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 			$this->form_validation->set_rules('date', 'Date', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('time', 'Time', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('reason', 'Missing Reason', 'trim|required|strip_tags|xss_clean');
@@ -187,11 +187,11 @@ class Biometric_missing extends CI_Controller
 
 	public function index()
 	{
-		if ($this->ion_auth->logged_in()  && is_module_allowed('biometric_missing') && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in()  && is_module_allowed('biometric_missing') && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 			$this->data['page_title'] = 'Biometric Request - ' . company_name();
 			$this->data['main_page'] = 'Biometric Request';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin()) {
+			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
@@ -208,7 +208,7 @@ class Biometric_missing extends CI_Controller
 
 	public function get_shift_time()
 	{
-		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('biometric_request_view'))) {
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_all_users() || permissions('biometric_request_view'))) {
 			$user_id = $this->input->post('user_id');
 			$result = [
 				'user_id' => $user_id,

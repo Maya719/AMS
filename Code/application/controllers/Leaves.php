@@ -102,7 +102,7 @@ class Leaves extends CI_Controller
 			$this->data['page_title'] = 'Leaves - ' . company_name();
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			if ($this->ion_auth->is_admin()) {
+			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
@@ -305,7 +305,7 @@ class Leaves extends CI_Controller
 		$step = $leave->level;
 		$highStep = $this->db->select('step_no')->where('saas_id', $this->session->userdata('saas_id'))->order_by('step_no', 'desc')->limit(1)->get('leave_hierarchy')->row()->step_no;
 		$appOrRec = $this->db->select('recomender_approver')->where('saas_id', $this->session->userdata('saas_id'))->where('step_no', $step)->limit(1)->get('leave_hierarchy')->row()->recomender_approver;
-		return ($highStep == $step || $appOrRec == 'approver') ? $this->input->post('status') : '0';
+		return ($highStep == $step || $appOrRec == 'approver' || $this->input->post('enable_edit')) ? $this->input->post('status') : '0';
 	}
 	private function prepareLeaveData()
 	{
@@ -815,7 +815,7 @@ class Leaves extends CI_Controller
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data["report"] = $this->attendance_model->get_count_abs();
-			if ($this->ion_auth->is_admin()) {
+			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();
@@ -868,7 +868,7 @@ class Leaves extends CI_Controller
 			$this->data['main_page'] = 'Leaves Application';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
 			$this->data["report"] = $this->attendance_model->get_count_abs();
-			if ($this->ion_auth->is_admin()) {
+			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
 				$selected = selected_users();

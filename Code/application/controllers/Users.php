@@ -592,7 +592,7 @@ class Users extends CI_Controller
 		$system_user_ids = [];
 		$system_users = [];
 
-		if ($this->ion_auth->is_admin()) {
+		if ($this->ion_auth->is_admin() || is_all_users()) {
 			$system_user = $this->ion_auth->users()->result();
 
 			foreach ($system_user as $user) {
