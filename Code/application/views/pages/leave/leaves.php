@@ -151,7 +151,7 @@
       set_session("le_status_name");
       setTimeout(function() {
           setFilter();
-      }, 500);
+      }, 1000);
       $(document).on('change', '#le_leave_type, #le_status_name, #le_employee_id,#le_status', function() {
         setFilter();
       });

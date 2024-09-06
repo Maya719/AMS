@@ -184,7 +184,7 @@
             $(".dataTables_length").appendTo("#attendance_list_wrapper .bottom");
             setTimeout(function() {
                 setFilter();
-            }, 500);
+            }, 1000);
             $(document).on('change', '#att_shift_id, #att_department_id, #att_employee_id, #att_status', function() {
                 setFilter();
             });
