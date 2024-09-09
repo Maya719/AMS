@@ -305,7 +305,7 @@ class Leaves extends CI_Controller
 		$step = $leave->level;
 		$highStep = $this->db->select('step_no')->where('saas_id', $this->session->userdata('saas_id'))->order_by('step_no', 'desc')->limit(1)->get('leave_hierarchy')->row()->step_no;
 		$appOrRec = $this->db->select('recomender_approver')->where('saas_id', $this->session->userdata('saas_id'))->where('step_no', $step)->limit(1)->get('leave_hierarchy')->row()->recomender_approver;
-		return ($highStep == $step || $appOrRec == 'approver' || $this->input->post('enable_edit')) ? $this->input->post('status') : '0';
+		return ($highStep == $step || $appOrRec == 'approver' || $this->input->post('enable_edit') == 'true') ? $this->input->post('status') : '0';
 	}
 	private function prepareLeaveData()
 	{
@@ -835,6 +835,7 @@ class Leaves extends CI_Controller
 			$this->db->where('leave_id', $id);
 			$logs_query = $this->db->get('leave_logs');
 			$leaves_logs = $logs_query->result_array();
+			$pendings = 0;
 			foreach ($leaves_logs as &$leaves_log) {
 				$leaves_log["created"] = $this->getTimeAgo($leaves_log["created"]);
 				$group_id = $leaves_log["group_id"];
@@ -846,8 +847,13 @@ class Leaves extends CI_Controller
 					$leaves_log["status"] = '' . $group->description . ' <strong class="text-success">Approve</strong>';
 					$leaves_log["class"] = 'success';
 				} else if ($leaves_log["status"] == 0) {
-					$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Created</strong>';
+					if ($pendings > 0) {
+						$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Pending</strong>';
+					} else {
+						$leaves_log["status"] = '' . $group->description . ' <strong class="text-primary">Created</strong>';
+					}
 					$leaves_log["class"] = 'primary';
+					$pendings++;
 				} else {
 					$leaves_log["status"] = '' . $group->description . ' <strong class="text-danger">Reject</strong>';
 					$leaves_log["class"] = 'danger';

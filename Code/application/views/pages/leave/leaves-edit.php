@@ -482,6 +482,7 @@
             $('.btn-edit-leave').html('Save').removeClass('btn-success').addClass('btn-primary');
             $('.btn-edit-enable-leave').prop('disabled', true);
             $('#enable_edit').val('true');
+            $('#status option[value="0"]').prop('disabled', true);
             $('.btn-edit-leave').prop('disabled', false);
         });
     </script>

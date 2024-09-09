@@ -154,8 +154,6 @@
             set_session('att_shift_id');
             set_session('att_status');
 
-            setFilter();
-
             /*
              * 
              *   Range Picker Init
@@ -191,6 +189,7 @@
         });
         store_session('att_status');
         store_session('att_department_id');
+        store_session('att_employee_id');
         store_session('att_shift_id');
 
 
@@ -201,6 +200,7 @@
             appendDepartmentUsers();
         });
         $(document).on('change', '#att_employee_id', function() {
+            store_session('att_employee_id');
             appenShiftDepartment();
         });
         $(document).on('change', '#att_shift_id', function() {
