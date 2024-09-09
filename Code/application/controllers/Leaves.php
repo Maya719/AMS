@@ -654,7 +654,7 @@ class Leaves extends CI_Controller
 							$template_data['DUE_DATE'] = $this->input->post('ending_date');
 							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
 							$email_template = render_email_template('leave_request', $template_data);
-							// send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
+							send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
 
 							$notification_data = array(
 								'notification' => 'Leave request received',
