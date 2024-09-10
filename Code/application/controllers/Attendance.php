@@ -254,7 +254,7 @@ class Attendance extends CI_Controller
 		}
 	}
 
-	
+
 	public function get_leaves()
 	{
 		if ($this->ion_auth->logged_in() && !is_saas_admin() && !$this->ion_auth->in_group(4)) {
@@ -549,81 +549,50 @@ class Attendance extends CI_Controller
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public function get_filters_for_user()
 	{
-		if (!empty($this->input->get('employee_id'))) {
-			$employee_id = $this->input->get('employee_id');
-			$user = $this->ion_auth->user($employee_id)->row();
-			$shift_id = $user->shift_id;
-			$department_id = $user->department;
-			$this->db->select('*');
-			$this->db->from('shift');
-			$this->db->where('id', $shift_id);
-			$query = $this->db->get();
-			$shift_info = $query->row();
-
-			$this->db->select('*');
-			$this->db->from('departments');
-			$this->db->where('id', $department_id);
-			$query2 = $this->db->get();
-			$department_info = $query2->row();
-			$array = [
-				'shift' => [$shift_info],
-				'department' => [$department_info]
-			];
-		} else {
-			$user = $this->ion_auth->user()->row();
-			$saas_id = $user->saas_id;
-			$this->db->select('*');
-			$this->db->from('shift');
-			$this->db->where('saas_id', $saas_id);
-			$query = $this->db->get();
-			$shifts = $query->result();
-			$this->db->select('*');
-			$this->db->from('departments');
-			$this->db->where('saas_id', $saas_id);
-			$query2 = $this->db->get();
-			$departments = $query2->result();
-			$array = [
-				'shift' => $shifts,
-				'department' => $departments
-			];
+		if ($this->ion_auth->is_admin() || is_all_users()) {
+			$system_user = $this->ion_auth->users()->result();
+			foreach ($system_user as $user) {
+				$system_user_ids[] = $user->id;
+			}
+		} elseif (is_assign_users()) {
+			$selected = selected_users();
+			$selected[] = $this->session->userdata('user_id');
+			$users = [];
+			foreach ($selected as $user_id) {
+				$users[] = $this->ion_auth->user($user_id)->row();
+				$system_user_ids[] = $user_id;
+			}
 		}
-		echo json_encode($array);
+		$status = $this->input->get('status');
+		$department = $this->input->get('department');
+		$shift = $this->input->get('shift');
+
+		if ($status == '1') {
+			$this->db->where('active', 1);
+		}else{
+			$this->db->where('active', 0);
+		}
+		if (isset($department) && !empty($department)) {
+			$this->db->where('department', $department);
+		}
+		if (isset($shift) && !empty($shift)) {
+			$this->db->where('shift_id', $shift);
+		}
+		$this->db->where('finger_config', 1);
+		$this->db->where('saas_id', $this->session->userdata('saas_id'));
+		$this->db->where_in('id', $system_user_ids);
+		$query = $this->db->get('users');
+		$system_users = $query->result();
+		$rows = [];
+		foreach ($system_users as $system_user) {
+			if ($this->session->userdata('saas_id') == $system_user->saas_id) {
+				$tempRow['id'] = $system_user->id;
+				$tempRow['name'] = $system_user->first_name.' '.$system_user->last_name;
+				$rows[] = $tempRow;
+			}
+		}
+		echo json_encode($rows);
 	}
 }

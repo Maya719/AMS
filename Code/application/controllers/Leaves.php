@@ -576,7 +576,6 @@ class Leaves extends CI_Controller
 			$this->form_validation->set_rules('ending_date', 'Ending Date', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('leave_reason', 'Leave Reason', 'trim|required|strip_tags|xss_clean');
 			$this->form_validation->set_rules('type_add', 'Leave Type', 'trim|required|strip_tags|xss_clean');
-
 			if ($this->form_validation->run() == TRUE) {
 				$user_id = $this->input->post('user_id_add') ? $this->input->post('user_id_add') : $this->session->userdata('user_id');
 				$shift_times = $this->leaves_model->get_shift_times($user_id);
@@ -655,7 +654,6 @@ class Leaves extends CI_Controller
 							$template_data['LEAVE_REQUEST_URL'] = base_url('leaves');
 							$email_template = render_email_template('leave_request', $template_data);
 							send_mail($system_user->email, $email_template[0]['subject'], $email_template[0]['message']);
-
 							$notification_data = array(
 								'notification' => 'Leave request received',
 								'type' => 'leave_request',
