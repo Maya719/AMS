@@ -172,7 +172,7 @@
         theadRow += '<th style="font-size: 15px;">Department</th>';
         theadRow += '<th style="font-size: 15px;">Join Date</th>';
         theadRow += '<th style="font-size: 15px;">Status</th>';
-        <?php if (permissions('user_edit')) { ?>
+        <?php if ($this->ion_auth->is_admin() || permissions('user_edit')) { ?>
           theadRow += '<th style="font-size: 15px;">Action</th>';
         <?php } ?>
         theadRow += '</tr>';
@@ -191,7 +191,7 @@
           userRow += '<td style="font-size:13px;">' + user.department + '</td>';
           userRow += '<td style="font-size:13px;">' + user.joining_date + '</td>';
           userRow += '<td style="font-size:13px;">' + user.status + '</td>';
-          <?php if (permissions('user_edit')) { ?>
+          <?php if ($this->ion_auth->is_admin() || permissions('user_edit')) { ?>
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           userRow += user.action;

@@ -226,6 +226,17 @@ class Users extends CI_Controller
 				->get('groups')
 				->row();
 			$this->data['hr_manager'] = $hr_manager;
+			$otherSuperRoles = $this->db->where('saas_id', $saas_id)
+				->where('show_with', 2)
+				->where('name !=', 'employee')
+				->get('groups')
+				->result();
+			$this->data['otherSuperRoles'] = $otherSuperRoles;
+			$showWithEmp = $this->db->where('saas_id', $saas_id)
+				->where('show_with', 1)
+				->get('groups')
+				->result();
+			$this->data['showWithEmp'] = $showWithEmp;
 			$this->load->view('pages/users/users-control', $this->data);
 		} else {
 			redirect_to_index();
@@ -351,7 +362,7 @@ class Users extends CI_Controller
 				$this->load->view('saas-admins', $this->data);
 			} else {
 				// echo json_encode($this->data);
-				$this->load->view('users', $this->data);
+				$this->load->view('pages/users/users', $this->data);
 			}
 		} else {
 			redirect_to_index();
@@ -754,7 +765,8 @@ class Users extends CI_Controller
 				$tempRow['group_id'] = $group[0]->id;
 				$tempRow['projects_count'] = '<span class="badge badge-secondary">' . get_count('id', 'project_users', 'user_id=' . $user_id) . '</span>';
 				$tempRow['tasks_count'] = '<span class="badge badge-secondary">' . get_count('id', 'task_users', 'user_id=' . $user_id) . '</span>';
-				if ($group[0]->name != 'client' && $group[0]->name != 'ceo' && $group[0]->name != 'partners' && $group[0]->name != 'hr_manager' && $group[0]->name != 'admin') {
+
+				if (($group[0]->name == 'employee' || $group[0]->show_with == '1') && $group[0]->name != 'admin') {
 					$rows[] = $tempRow;
 					$serial_no++;
 				}

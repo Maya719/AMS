@@ -4,6 +4,13 @@
     .hidden {
         display: none;
     }
+
+    .image-option img {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
 </style>
 </head>
 
@@ -69,7 +76,9 @@
                                                     <td>
                                                         <div class="d-flex">
                                                             <span class="badge light badge-primary"><a href="#" class="text-primary edit-role" data-id="<?= $group->id ?>" data-bs-toggle="modal" data-bs-target="#edit-role-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
-                                                            <span class="badge light badge-danger ms-2"><a href="#" class="text-danger delete-role" data-bs-toggle="tooltip" data-id="<?= $group->id ?>" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>
+                                                            <?php if ($group->name !== 'employee' && $group->name !== 'client' && $group->name !== 'hr_manager' && $group->name !== 'ceo' && $group->name !== 'partners') : ?>
+                                                                <span class="badge light badge-danger ms-2"><a href="#" class="text-danger delete-role" data-bs-toggle="tooltip" data-id="<?= $group->id ?>" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></span>
+                                                            <?php endif ?>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -501,6 +510,27 @@
                                             } ?>
                                         </select>
                                     </div>
+                                    <div id="roller2">
+                                        <div class="form-group mt-3">
+                                            <label for="show_with" class="form-label">Show in Employee Management</label>
+                                            <select class="form-control select2" name="show_with" id="show_with2">
+                                                <option value="1">With Employee</option>
+                                                <option value="2">Individual</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mt-3 hidden" id="icon-select-div2">
+                                            <label for="imageSelector2" class="form-label">Icon</label>
+                                            <select class="form-control" id="imageSelector2" name="icon">
+                                                <option value="assets2/images/avatar/ceo.png" data-image="<?= base_url('assets2/images/avatar/ceo.png') ?>">CEO</option>
+                                                <option value="assets2/images/avatar/ceo.png" data-image="<?= base_url('assets2/images/avatar/ceo.png') ?>">CEO 2</option>
+                                                <option value="assets2/images/avatar/employee.png" data-image="<?= base_url('assets2/images/avatar/employee.png') ?>">EMPLOYEE</option>
+                                                <option value="assets2/images/avatar/employee2.png" data-image="<?= base_url('assets2/images/avatar/employee2.png') ?>">EMPLOYEE 2</option>
+                                                <option value="assets2/images/avatar/hr.png" data-image="<?= base_url('assets2/images/avatar/hr.png') ?>">GIRL</option>
+                                                <option value="assets2/images/avatar/girl.png" data-image="<?= base_url('assets2/images/avatar/girl.png') ?>">GIRL 2</option>
+                                                <option value="assets2/images/avatar/worker.png" data-image="<?= base_url('assets2/images/avatar/worker.png') ?>">WORKER</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -840,6 +870,27 @@
                                             } ?>
                                         </select>
                                     </div>
+                                    <div id="roller">
+                                        <div class="form-group mt-3">
+                                            <label for="show_with" class="form-label">Show in Employee Management</label>
+                                            <select class="form-control select2" name="show_with" id="show_with">
+                                                <option value="1">With Employee</option>
+                                                <option value="2">Individual</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mt-3 hidden" id="icon-select-div">
+                                            <label for="imageSelector" class="form-label">Icon</label>
+                                            <select class="form-control" id="imageSelector" name="icon">
+                                                <option value="assets2/images/avatar/ceo.png" data-image="<?= base_url('assets2/images/avatar/ceo.png') ?>">CEO</option>
+                                                <option value="assets2/images/avatar/ceo.png" data-image="<?= base_url('assets2/images/avatar/ceo.png') ?>">CEO 2</option>
+                                                <option value="assets2/images/avatar/employee.png" data-image="<?= base_url('assets2/images/avatar/employee.png') ?>">EMPLOYEE</option>
+                                                <option value="assets2/images/avatar/employee2.png" data-image="<?= base_url('assets2/images/avatar/employee2.png') ?>">EMPLOYEE 2</option>
+                                                <option value="assets2/images/avatar/hr.png" data-image="<?= base_url('assets2/images/avatar/hr.png') ?>">GIRL</option>
+                                                <option value="assets2/images/avatar/girl.png" data-image="<?= base_url('assets2/images/avatar/girl.png') ?>">GIRL 2</option>
+                                                <option value="assets2/images/avatar/worker.png" data-image="<?= base_url('assets2/images/avatar/worker.png') ?>">WORKER</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -933,10 +984,20 @@
                 dataType: "json",
                 success: function(result) {
                     if (result['error'] == false) {
-                        console.log(result["data"]);
+                        console.log(result);
                         $("#update_id").val(result['data'].id);
                         $("#description").val(result['data'].description);
+                        console.log(result['data'].description);
                         $("#description").trigger("change");
+                        if (result['data'].name == 'employee' || result['data'].name == 'ceo' || result['data'].name == 'partners' || result['data'].name == 'client' || result['data'].name == 'hr_manager') {
+                            $("#roller").addClass('hidden');
+                            $("#imageSelector").val('').trigger('change');
+                            $('#description').prop('readonly', true)
+                            $('#descriptive_name').prop('readonly', true)
+                        } else {
+                            $("#imageSelector").val(result['data'].icon).trigger('change');
+                            $("#roller").removeClass('hidden');
+                        }
                         $("#descriptive_name").val(result['data'].descriptive_name);
                         $("#descriptive_name").trigger("change");
                         $("input[type='checkbox']").prop('checked', false);
@@ -945,16 +1006,24 @@
                                 $("input[name='" + permission + "']").prop('checked', true);
                             }
                         });
-
-                        var assignedUsers = JSON.parse(result.data.assigned_users);
+                        console.log(result['data'].show_with);
+                        if (result['data'].show_with == "2") {
+                            $("#show_with").val('2').trigger('change');
+                            $("#icon-select-div").removeClass('hidden');
+                        } else {
+                            $("#show_with").val('1').trigger('change');
+                            $("#icon-select-div").addClass('hidden');
+                        }
+                        var assignedUsers = JSON.parse(result['data'].assigned_users);
                         if (assignedUsers.length > 0) {
                             console.log(assignedUsers);
-                             $("#all_selected_edit").val('selected').trigger('change');
+                            $("#all_selected_edit").val('selected').trigger('change');
                             $("#selectedUsersSelect").val(assignedUsers).trigger('change');
-                        }else{
+                        } else {
                             $("#all_selected_edit").val('all').trigger('change');
                             $("#selected_div_edit").addClass('hidden');
                         }
+
                         $("#modal-edit-roles").trigger("click");
                     } else {
                         iziToast.error({
@@ -1040,6 +1109,24 @@
     </script>
     <script>
         $(document).ready(function() {
+            $('#show_with').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue === '2') {
+                    $('#icon-select-div').removeClass('hidden');
+                } else {
+
+                    $('#icon-select-div').addClass('hidden');
+                }
+            });
+            $('#show_with2').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue === '2') {
+                    $('#icon-select-div2').removeClass('hidden');
+                } else {
+
+                    $('#icon-select-div2').addClass('hidden');
+                }
+            });
             $('#all_selected').on('change', function() {
                 var selectedValue = $(this).val();
                 if (selectedValue === 'selected') {
@@ -1062,6 +1149,34 @@
                     $('#selected_div_edit').addClass('hidden');
                 }
             });
+        });
+    </script>
+
+    <script>
+        // Function to format dropdown options with image
+        function formatImage(option) {
+            if (!option.id) {
+                return option.text;
+            }
+
+            // Create image HTML
+            var imageUrl = $(option.element).data('image');
+            var optionTemplate = $(
+                '<span class="image-option"><img src="' + imageUrl + '" alt="' + option.text + '"/> ' + option.text + '</span>'
+            );
+
+            return optionTemplate;
+        }
+
+        $('#imageSelector').select2({
+            templateResult: formatImage, // Render images in dropdown options
+            templateSelection: formatImage, // Show selected image
+            minimumResultsForSearch: -1 // Hide search box (optional)
+        });
+        $('#imageSelector2').select2({
+            templateResult: formatImage, // Render images in dropdown options
+            templateSelection: formatImage, // Show selected image
+            minimumResultsForSearch: -1 // Hide search box (optional)
         });
     </script>
 </body>

@@ -41,7 +41,7 @@ class Permissions extends CI_Controller
 				if ($this->input->post('users')) {
 					$users = $this->input->post('users');
 					$users = json_encode($users);
-				}else{
+				} else {
 					$users = json_encode(array());
 				}
 				$all_users = 'false';
@@ -101,12 +101,17 @@ class Permissions extends CI_Controller
 					'client_delete' => $this->input->post('client_delete') ? '1' : '0',
 					'team_members_and_client_can_chat' => $this->input->post('team_members_and_client_can_chat') ? '1' : '0',
 				];
+				if ($this->input->post('show_with') == 1) {
+					# code...
+				}
 				$data = array(
 					'saas_id' => $this->session->userdata('saas_id'),
 					'name' => str_replace(' ', '_', strtolower($this->input->post('description'))),
 					'description' => $this->input->post('description'),
 					'descriptive_name' => $this->input->post('descriptive_name'),
 					'permissions' => json_encode($data_json),
+					'show_with' => $this->input->post('show_with'),
+					'icon' => ($this->input->post('show_with') == 2) ? $this->input->post('icon') : '',
 					'assigned_users' => $users,
 					'all_users' => $all_users,
 				);
@@ -140,7 +145,7 @@ class Permissions extends CI_Controller
 				if ($this->input->post('users')) {
 					$users = $this->input->post('users');
 					$users = json_encode($users);
-				}else{
+				} else {
 					$users = json_encode(array());
 				}
 				$all_users = 'false';
@@ -205,6 +210,8 @@ class Permissions extends CI_Controller
 					'name' => str_replace(' ', '_', strtolower($this->input->post('description'))),
 					'description' => $this->input->post('description'),
 					'descriptive_name' => $this->input->post('descriptive_name'),
+					'show_with' => $this->input->post('show_with'),
+					'icon' => ($this->input->post('show_with') == 2) ? $this->input->post('icon') : '',
 					'permissions' => json_encode($data_json),
 					'assigned_users' => $users,
 					'all_users' => $all_users,
