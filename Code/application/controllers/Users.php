@@ -150,7 +150,7 @@ class Users extends CI_Controller
 			$this->data['page_title'] = 'Create User - ' . company_name();
 			$this->data['main_page'] = 'Create User';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$this->load->view('create_user', $this->data);
+			$this->load->view('pages/users/create_user', $this->data);
 		} else {
 			redirect_to_index();
 		}
@@ -171,7 +171,7 @@ class Users extends CI_Controller
 			$query = $this->db->get('devices');
 			$this->data['devices'] = $query->result_array();
 			$saas_id = $this->session->userdata('saas_id');
-			
+
 			$this->db->where('saas_id', $saas_id);
 			$query4 = $this->db->get('leaves_type');
 			$this->data['leave_types'] = $query4->result_array();
@@ -193,12 +193,66 @@ class Users extends CI_Controller
 			}
 			$this->data['data'] = $this->ion_auth->user($id)->row();
 			// echo json_encode($this->data);
-			$this->load->view('edit_user', $this->data);
+			$this->load->view('pages/users/edit_user', $this->data);
 		} else {
 			redirect_to_index();
 		}
 	}
+
 	public function index()
+	{
+		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || is_assign_users() || $this->ion_auth->in_group(3))) {
+			$this->data['page_title'] = 'Users - ' . company_name();
+			$this->data['main_page'] = 'Users';
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$saas_id = $this->session->userdata('saas_id');
+			$ceo = $this->db->where('saas_id', $saas_id)
+				->where('name', 'ceo')
+				->get('groups')
+				->row();
+			$this->data['ceo'] = $ceo;
+			$partners = $this->db->where('saas_id', $saas_id)
+				->where('name', 'partners')
+				->get('groups')
+				->row();
+			$this->data['partners'] = $partners;
+			$client = $this->db->where('saas_id', $saas_id)
+				->where('name', 'client')
+				->get('groups')
+				->row();
+			$this->data['clients'] = $client;
+			$hr_manager = $this->db->where('saas_id', $saas_id)
+				->where('name', 'hr_manager')
+				->get('groups')
+				->row();
+			$this->data['hr_manager'] = $hr_manager;
+			$this->load->view('pages/users/users-control', $this->data);
+		} else {
+			redirect_to_index();
+		}
+	}
+
+	public function special_roles($id)
+	{
+		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || is_assign_users() || $this->ion_auth->in_group(3))) {
+			$group = $this->ion_auth->group($id)->row();
+			$add_user = false;
+			if ($group->name == 'hr_manager') {
+				$add_user = true;
+			}
+			$this->data['add_user'] = $add_user;
+			$this->data['group_id'] = $id;
+			$this->data['page_title'] = $group->description . ' ' . company_name();
+			$this->data['main_page'] = $group->description;
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+			$system_users = $this->ion_auth->users(array($id))->result();
+			$this->data['system_users'] = $system_users;
+			$this->load->view('pages/users/ceo', $this->data);
+		} else {
+			redirect_to_index();
+		}
+	}
+	public function employees()
 	{
 		$this->data['is_allowd_to_create_new'] = if_allowd_to_create_new("projects");
 		if ($this->ion_auth->logged_in() && is_module_allowed('team_members') && ($this->ion_auth->is_admin() || permissions('user_view') || is_assign_users() || $this->ion_auth->in_group(3))) {
@@ -215,7 +269,7 @@ class Users extends CI_Controller
 
 			$query = $this->db->where('saas_id', $saas_id)->get('devices');
 			$this->data['devices'] = $query->result_array();
-			
+
 			if (is_saas_admin()) {
 				$system_users = $this->ion_auth->users(array(3))->result();
 				foreach ($system_users as $system_user) {
@@ -532,6 +586,12 @@ class Users extends CI_Controller
 		}
 	}
 
+	public function get_user_by_id()
+	{
+		$id = $this->input->post('id');
+		$user = $this->ion_auth->user($id)->row();
+		echo json_encode($user);
+	}
 	public function ajax_get_user_by_id($id = '')
 	{
 		$id = !empty($id) ? $id : $this->input->post('id');
@@ -637,11 +697,12 @@ class Users extends CI_Controller
 			if ($this->session->userdata('saas_id') == $system_user->saas_id) {
 				$tempRow['employee_id'] = '<a  href="' . base_url('users/detail/' . $system_user->id) . '">' . $system_user->employee_id . '</a>';
 				$tempRow['id'] = $system_user->id;
+
 				$tempRow['email'] = $system_user->email;
 				if ($system_user->active == 1) {
-					$tempRow['status'] = '<span class="text-success">Active</span>';
+					$tempRow['status'] = '<span class="badge light badge-primary">Active</span>';
 				} else {
-					$tempRow['status'] = '<span class="text-danger">Inactive</span>';
+					$tempRow['status'] = '<span class="badge light badge-danger">Inactive</span>';
 				}
 				$user_id = $tempRow['id'];
 				$tempRow['first_name'] = $system_user->first_name;
@@ -693,7 +754,7 @@ class Users extends CI_Controller
 				$tempRow['group_id'] = $group[0]->id;
 				$tempRow['projects_count'] = '<span class="badge badge-secondary">' . get_count('id', 'project_users', 'user_id=' . $user_id) . '</span>';
 				$tempRow['tasks_count'] = '<span class="badge badge-secondary">' . get_count('id', 'task_users', 'user_id=' . $user_id) . '</span>';
-				if ($group[0]->name != 'client') {
+				if ($group[0]->name != 'client' && $group[0]->name != 'ceo' && $group[0]->name != 'partners' && $group[0]->name != 'hr_manager' && $group[0]->name != 'admin') {
 					$rows[] = $tempRow;
 					$serial_no++;
 				}

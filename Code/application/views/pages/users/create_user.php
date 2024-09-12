@@ -38,6 +38,8 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('users') ?>">Users</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('users/employees') ?>">Employees</a></li>
                         <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
                     </ol>
                 </nav>
@@ -234,7 +236,7 @@
                                                                 <select class="form-select select2" name="groups" id="exampleFormControlInput15" aria-label="Default select example">
                                                                     <option selected>Role</option>
                                                                     <?php foreach ($user_groups as $user_group) : ?>
-                                                                        <?php if ($user_group->id !== '3' && $user_group->id !== '4') : ?>
+                                                                        <?php if ($user_group->name !== 'admin' && $user_group->name !== 'client' && $user_group->name !== 'partners' && $user_group->name !== 'saas_admin'  && $user_group->name !== 'ceo') : ?>
                                                                             <option value="<?= $user_group->id ?>">
                                                                                 <?= $user_group->description ?>
                                                                             </option>
@@ -338,7 +340,7 @@
                 },
                 success: function(result) {
                     if (result['error'] == false) {
-                        location.href = base_url + 'users';
+                        location.href = base_url + 'users/employees';
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }

@@ -136,6 +136,14 @@
     <script type="text/javascript" src="<?= base_url('assets2/js/attendance/attendance.js') ?>"></script>
     <script>
         $('.select2').select2();
+        // let childWindow;
+
+        function openChildWindow(id) {
+            // var screenWidth = window.screen.width;
+            // var screenHeight = window.screen.height;
+            // sessionStorage.setItem("window", true);
+            // window.open('' + base_url + 'attendance/user_attendance/' + id + '', 'childWindow', 'width=' + screenWidth + ',height=' + screenHeight + '');
+        }
     </script>
 
 </body>

@@ -134,10 +134,10 @@ $(document).ready(function () {
         var tbody = table.find('tbody');
         data.data.forEach(user => {
             var userRow = '<tr>';
-            userRow += '<td style="font-size:10px;"><a href="#" onclick="openChildWindow(' + user.user_id + ')">' + count + '</a></td>';
+            userRow += '<td style="font-size:10px;"><a href="'+base_url + 'attendance/user_attendance/'+user.user_id+'">' + count + '</a></td>';
             userRow += '<td style="font-size:10px;">' + user.user + '</td>';
             userRow += '<td style="font-size:10px;">' + user.name + '</td>';
-            userRow += '<td style="font-size:10px;"><a href="#" onclick="openChildWindow(' + user.user_id + ')">' + user.summery + '</a></td>';
+            userRow += '<td style="font-size:10px;"><a href="'+base_url + 'attendance/user_attendance/'+user.user_id+'">' + user.summery + '</a></td>';
             uniqueDates.forEach(date => {
                 if (user.dates[date]) {
                     userRow += '<td style="font-size:10px;">' + user.dates[date].join('<br>') + '</td>';
@@ -149,6 +149,7 @@ $(document).ready(function () {
             tbody.append(userRow);
             count++;
         });
+        
         let att_length = sessionStorage.getItem('att_length');
 
         if (att_length == null) {
@@ -286,14 +287,7 @@ $(document).ready(function () {
         // Update the date range picker input to show the selected date range
         $('#config-demo').val(`${startDate.format('MM/DD/YYYY')} - ${endDate.format('MM/DD/YYYY')}`);
     }
-    let childWindow;
 
-    function openChildWindow(id) {
-        var screenWidth = window.screen.width;
-        var screenHeight = window.screen.height;
-        sessionStorage.setItem("window", true);
-        window.open('' + base_url + 'attendance/user_attendance/' + id + '', 'childWindow', 'width=' + screenWidth + ',height=' + screenHeight + '');
-    }
 
     function getUniqueDates(data) {
         var uniqueDates = [];

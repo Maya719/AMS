@@ -26,7 +26,8 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
-                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('users') ?>">Employees</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('users') ?>">Users</a></li>
+                        <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('users/employees') ?>">Employees</a></li>
                         <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
                     </ol>
                 </nav>
@@ -232,16 +233,11 @@
                                                             <label for="exampleFormControlInput12" class="form-label">Email <span class="text-danger">*</span></label>
                                                             <input type="email" name="email" class="form-control" value="<?= $data->email ?>" id="exampleFormControlInput12" readonly>
                                                         </div>
-
                                                         <div class="col-6 mb-3">
                                                             <label for="exampleFormControlInput15" class="form-label">Role <span class="text-danger">*</span></label>
                                                             <select name="groups" class="form-control select2">
-                                                                <?php foreach ($user_groups as $user_group) {
-                                                                    if ($user_group->id == 3 || $user_group->id == 4) {
-                                                                        continue;
-                                                                    }
-                                                                ?>
-                                                                    <?php if ($user_group->saas_id == $this->session->userdata('saas_id')) : ?>
+                                                                <?php foreach ($user_groups as $user_group) { ?>
+                                                                    <?php if ($user_group->saas_id == $this->session->userdata('saas_id') && $user_group->name !== 'admin' && $user_group->name !== 'client' && $user_group->name !== 'partners' && $user_group->name !== 'saas_admin'  && $user_group->name !== 'ceo') : ?>
                                                                         <option value="<?= htmlspecialchars($user_group->id) ?>" <?= ($role == $user_group->id) ? 'selected' : '' ?>>
                                                                             <?= ucfirst(htmlspecialchars($user_group->description)) ?>
                                                                         </option>
@@ -255,7 +251,7 @@
                                             <div class="tab-pane fade" id="changePassword">
                                                 <div class="pt-4">
                                                     <div class="row d-flex justify-content-center">
-                                                        <div class="col-8 mb-3" style="display: <?=($data->id == $this->session->userdata('user_id')?'':'none')?>;">
+                                                        <div class="col-8 mb-3" style="display: <?= ($data->id == $this->session->userdata('user_id') ? '' : 'none') ?>;">
                                                             <label for="exampleFormControlInput13" class="form-label">Current Password <span class="text-danger">*</span></label>
                                                             <input type="password" name="old_password" class="form-control" id="exampleFormControlInput13" require>
                                                         </div>
@@ -508,7 +504,7 @@
                 success: function(result) {
                     if (result['error'] == false) {
                         console.log(result);
-                        window.location.href = base_url + 'users';
+                        window.location.href = base_url + 'users/employees';
                     } else {
                         $(document).find('.card-body').append('<div class="alert alert-danger">' + result['message'] + '</div>').find('.alert').delay(4000).fadeOut();
                     }

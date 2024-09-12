@@ -1,7 +1,4 @@
 <?php $this->load->view('includes/header'); ?>
-<style>
-
-</style>
 <link href="<?= base_url('assets2/vendor/introjs/modern.css') ?>" rel="stylesheet" type="text/css" />
 </head>
 
@@ -39,6 +36,7 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('home') ?>">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url('users') ?>">Users</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><?= $main_page ?></li>
               </ol>
             </nav>
@@ -51,7 +49,9 @@
                 ADD</a>
             </div>
           <?php
-          }
+          } else { ?>
+            <div class="col-xl-2 col-sm-3"></div>
+          <?php }
           ?>
         </div>
 
@@ -172,7 +172,9 @@
         theadRow += '<th style="font-size: 15px;">Department</th>';
         theadRow += '<th style="font-size: 15px;">Join Date</th>';
         theadRow += '<th style="font-size: 15px;">Status</th>';
-        theadRow += '<th style="font-size: 15px;">Action</th>';
+        <?php if (permissions('user_edit')) { ?>
+          theadRow += '<th style="font-size: 15px;">Action</th>';
+        <?php } ?>
         theadRow += '</tr>';
         thead.html(theadRow);
         // Add table body
@@ -189,11 +191,13 @@
           userRow += '<td style="font-size:13px;">' + user.department + '</td>';
           userRow += '<td style="font-size:13px;">' + user.joining_date + '</td>';
           userRow += '<td style="font-size:13px;">' + user.status + '</td>';
+          <?php if (permissions('user_edit')) { ?>
           userRow += '<td>';
           userRow += '<div class="d-flex">';
           userRow += user.action;
           userRow += '</div>';
           userRow += '</td>';
+          <?php } ?>
           userRow += '</tr>';
           tbody.append(userRow);
         });

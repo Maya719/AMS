@@ -39,7 +39,7 @@
             </li>
           <?php
           } ?>
-          
+
           <li class="nav-item dropdown notification_dropdown">
             <a class="btn btn-outline-primary btn-sm" style="padding:0.325rem 0.5rem;" href="#">
               <?= get_current_user_group($this->session->userdata('user_id')) ?>
@@ -121,7 +121,7 @@
           <span class="nav-text">Dashboard</span>
         </a>
       </li>
-      <?php if (($this->ion_auth->is_admin()|| is_all_users() || is_assign_users() || permissions('attendance_view') || permissions('leaves_view') || permissions('biometric_request_view') || permissions('plan_holiday_view')) && !is_saas_admin() && (is_module_allowed('leaves') || is_module_allowed('attendance') || is_module_allowed('biometric_missing'))) { ?>
+      <?php if (($this->ion_auth->is_admin() || is_all_users() || is_assign_users() || permissions('attendance_view') || permissions('leaves_view') || permissions('biometric_request_view') || permissions('plan_holiday_view')) && !is_saas_admin() && (is_module_allowed('leaves') || is_module_allowed('attendance') || is_module_allowed('biometric_missing'))) { ?>
         <li>
           <a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
             <i class="fas fa-fingerprint"></i>
@@ -149,37 +149,6 @@
           </ul>
         </li>
       <?php } ?>
-
-      <!-- <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects') || is_module_allowed('tasks') || is_module_allowed('timesheet') || is_module_allowed('gantt') || is_module_allowed('calendar'))) { ?>
-        <li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
-            <i class="fas fa-list"></i>
-            <span class="nav-text"><?= $this->lang->line('pms') ? $this->lang->line('pms') : 'PMS' ?></span>
-          </a>
-          <ul aria-expanded="false">
-            <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('project_view'))) { ?>
-              <li><a href="<?= base_url('projects/list') ?>"><?= $this->lang->line('projects') ? $this->lang->line('projects') : 'Projects' ?></a></li>
-            <?php } ?>
-
-            <?php if (is_module_allowed('tasks') && ($this->ion_auth->is_admin() || permissions('task_view'))) { ?>
-              <li><a href="<?= base_url('projects/tasks') ?>"><?= $this->lang->line('tasks') ? $this->lang->line('tasks') : 'Tasks' ?></a></li>
-            <?php } ?>
-
-            <?php if (is_module_allowed('timesheet') && ($this->ion_auth->is_admin() || permissions('task_view')) && !is_client()) { ?>
-              <li><a href="<?= base_url('projects/timesheet') ?>"><?= $this->lang->line('timesheet') ? $this->lang->line('timesheet') : 'Timesheet' ?></a></li>
-            <?php } ?>
-
-            <?php if (($this->ion_auth->is_admin() || permissions('gantt_view')) && is_module_allowed('gantt')) { ?>
-              <li><a href="<?= base_url('projects/gantt') ?>"><?= $this->lang->line('gantt') ? $this->lang->line('gantt') : 'Gantt' ?></a></li>
-            <?php } ?>
-
-            <?php if ($this->ion_auth->is_admin() || permissions('calendar_view')) { ?>
-              <li><a href="<?= base_url('projects/calendar') ?>"><?= $this->lang->line('calendar') ? $this->lang->line('calendar') : 'Calendar' ?></a></li>
-            <?php } ?>
-          </ul>
-        </li>
-      <?php
-            }
-      ?> -->
 
       <?php if (($this->ion_auth->is_admin() || is_client() || permissions('project_view') || permissions('task_view') || permissions('gantt_view') || permissions('calendar_view')) && !is_saas_admin() && (is_module_allowed('projects'))) { ?>
         <li <?= (strpos(current_url(), 'projects/detail/') !== false ||
@@ -217,12 +186,9 @@
             <li><a href="<?= base_url('front/about') ?>"><?= $this->lang->line('about') ? $this->lang->line('about') : 'About Us' ?></a></li>
             <li><a href="<?= base_url('front/saas-privacy-policy') ?>"><?= $this->lang->line('privacy_policy') ? $this->lang->line('privacy_policy') : 'Privacy Policy' ?></a></li>
             <li><a href="<?= base_url('front/saas-terms-and-conditions') ?>"><?= $this->lang->line('terms_and_conditions') ? $this->lang->line('terms_and_conditions') : 'Terms and Conditions' ?></a></li>
-
             <li><a href="<?= base_url('front/saas-guide') ?>"><?= $this->lang->line('guide') ? $this->lang->line('guide') : 'Guide' ?></a></li>
-
           </ul>
         </li>
-
         <li><a href="<?= base_url('users') ?>" aria-expanded="false">
             <i class="fas fa-user-tie"></i>
             <span class="nav-text"><?= $this->lang->line('saas_admins') ? $this->lang->line('saas_admins') : 'SaaS Admins' ?></span>
@@ -232,19 +198,20 @@
       } ?>
 
       <?php if (($this->ion_auth->is_admin() || permissions('user_view')) && !is_saas_admin() && is_module_allowed('team_members')) { ?>
-        <li><a href="<?= base_url('users') ?>" aria-expanded="false">
+        <li <?= (strpos(current_url(), base_url('/users')) === 0) ? 'class="mm-active"' : ''; ?>>
+          <a href="<?= ($this->ion_auth->is_admin() || is_all_users())? base_url('users') : base_url('users/employees') ?>" aria-expanded="false" <?= (strpos(current_url(), base_url('/users')) === 0) ? 'class="mm-active"' : ''; ?>>
             <i class="fas fa-user"></i>
-            <span class="nav-text">Employees</span>
+            <span class="nav-text">Users</span>
           </a>
         </li>
 
-        <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('client_view'))) { ?>
+        <!-- <?php if (is_module_allowed('projects') && ($this->ion_auth->is_admin() || permissions('client_view'))) { ?>
           <li><a href="<?= base_url('users/client') ?>" aria-expanded="false">
               <i class="fas fa-handshake"></i>
               <span class="nav-text">Clients</span>
             </a>
           </li>
-        <?php } ?>
+        <?php } ?> -->
         <li><a href="<?= base_url('events') ?>" aria-expanded="false">
             <i class="fas fa-calendar"></i>
             <span class="nav-text"><?= $this->lang->line('events') ? $this->lang->line('events') : 'Events' ?></span>

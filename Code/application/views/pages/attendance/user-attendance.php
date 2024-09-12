@@ -546,50 +546,10 @@
       const day = today.getDate();
 
       let fromDate, toDate;
-
-      switch (filterOption) {
-        case "today":
-          fromDate = new Date(year, month, day);
-          toDate = new Date(year, month, day);
-          break;
-        case "ystdy":
-          fromDate = new Date(year, month, day - 1);
-          toDate = new Date(year, month, day - 1);
-          break;
-        case "tweek":
-          fromDate = new Date(year, month, day - today.getDay());
-          toDate = new Date(year, month, day);
-          break;
-        case "lweek":
-          fromDate = new Date(year, month, day - today.getDay() - 7);
-          toDate = new Date(year, month, day - today.getDay() - 1);
-          break;
-        case "tmonth":
-          fromDate = new Date(year, month, 1);
-          toDate = today;
-          break;
-        case "lmonth":
-          fromDate = new Date(year, month - 1, 1);
-          toDate = new Date(year, month, 0);
-          break;
-        case "custom":
-          $("#custom-date-range").show();
-          var fromInput = $('#from').val();
-          var toInput = $('#too').val();
-          fromDate = new Date(convertDateFormat(fromInput));
-          toDate = new Date(convertDateFormat(toInput));
-          break;
-        default:
-          console.error("Invalid filter option:", filterOption);
-          return null;
-      }
-
-
-      var formattedFromDate = formatDate(fromDate, "Y-m-d");
-      var formattedToDate = formatDate(toDate, "Y-m-d");
+      var formattedFromDate = $("#att_startDate").val();
+      var formattedToDate = $("#att_endDate").val();
       var rangetext = getRangeText(formattedFromDate, formattedToDate);
       $("#date-range").html(rangetext);
-
       return {
         employee_id: employee_id,
         from: formattedFromDate,
@@ -621,16 +581,7 @@
     }
 
     $('.select2').select2();
-    let windowSession = sessionStorage.getItem('window');
-    <?php if ($this->ion_auth->is_admin() || is_assign_users()) : ?>
-      window.addEventListener('click', function(event) {
-        if (windowSession && (event.target.tagName === 'A' || event.target.tagName === 'li')) {
-          sessionStorage.removeItem('window')
-          window.close();
-          event.preventDefault();
-        }
-      });
-    <?php endif ?>
+    sessionStorage.removeItem('window')
   </script>
   <!--**********************************
         Main wrapper end

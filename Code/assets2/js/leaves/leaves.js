@@ -28,7 +28,6 @@ function ajaxCall(userstatus, employee_id, leave_type, status, from, too) {
         },
         success: function (response) {
             var tableData = JSON.parse(response);
-            console.log(tableData);
             showTable(tableData);
         },
         complete: function () {
@@ -128,7 +127,6 @@ function showTable(data) {
         }
         var table = $('#leave_list').DataTable();
         table.page(cookieValue - 1).draw(false);
-        console.log("Set current page number to:", cookieValue);
     } else {
         console.error("DataTable initialization failed or table not found.");
     }

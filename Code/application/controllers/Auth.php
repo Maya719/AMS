@@ -1137,6 +1137,97 @@ class Auth extends CI_Controller
 		}
 	}
 
+	public function invite()
+	{
+		$tables = $this->config->item('tables', 'ion_auth');
+		$identity_column = $this->config->item('identity', 'ion_auth');
+		$this->data['identity_column'] = $identity_column;
+		if ($identity_column !== 'email') {
+			$this->form_validation->set_rules('identity', $this->lang->line('create_user_validation_identity_label'), 'trim|required|is_unique[' . $tables['users'] . '.' . $identity_column . ']');
+			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email');
+		} else {
+			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|strip_tags|xss_clean|valid_email|is_unique[' . $tables['users'] . '.email]');
+		}
+		if ($this->form_validation->run() === TRUE) {
+			$email = strtolower($this->input->post('email'));
+			$identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
+			$data["saas_id"] = $this->session->userdata('saas_id');
+			$data["email"] = $email;
+			$data["group_id"] = $this->input->post('group_id');
+			$this->db->insert('invitations', $data);
+			$inserted_id = $this->db->insert_id();
+			$template_data = array();
+			$invataion_id = $this->ion_auth->encryptId($inserted_id, 'GeekForGeek');
+			$template_data['INVATATION_LINK'] = base_url('auth/accept-invatation/' . $invataion_id);
+			$group = $this->ion_auth->group($this->input->post('group_id'))->row();
+			$template_data['GROUP'] = $group->description;
+			$email_template = render_email_template('invitation', $template_data);
+			send_mail($this->input->post('email'), $email_template[0]['subject'], $email_template[0]['message']);
+			$this->session->set_flashdata('message', 'Successfull Invite');
+			$this->session->set_flashdata('message_type', 'success');
+			$this->data['error'] = false;
+			$this->data['message'] = 'Successfull Invite';
+			echo json_encode($this->data);
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+			echo json_encode($this->data);
+			return false;
+		}
+	}
+
+	public function accept_invatation($encID)
+	{
+		$encID = $this->ion_auth->decryptId($encID, 'GeekForGeek');
+		$query = $this->db->where('id', $encID)->get('invitations');
+		$invation = $query->row();
+		$data["email"] = $invation->email;
+		$data["saas_id"] = $invation->saas_id;
+		$data["group_id"] = $invation->group_id;
+		$this->load->view('auth/pages/accept-invatation', $data);
+	}
+	public function create_special_role()
+	{
+		$this->data['title'] = $this->lang->line('create_user_heading');
+		$tables = $this->config->item('tables', 'ion_auth');
+		$identity_column = $this->config->item('identity', 'ion_auth');
+		$this->data['identity_column'] = $identity_column;
+		$this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('last_name', $this->lang->line('create_user_validation_lname_label'), 'trim|required|strip_tags|xss_clean');
+		$this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
+		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+		if ($this->form_validation->run() === TRUE) {
+			$email = strtolower($this->input->post('email'));
+			$identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
+			$password = $this->input->post('password');
+			$additional_data = [
+				'employee_id' => $this->input->post('employee_id'),
+				'saas_id' => $this->input->post('saas_id'),
+				'first_name' => $this->input->post('first_name'),
+				'last_name' => $this->input->post('last_name'),
+				'phone' => $this->input->post('phone'),
+			];
+			$group = array($this->input->post('group_id'));
+			if ($new_user_id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group)) {
+				$this->session->set_flashdata('message', 'Successfully created');
+				$this->session->set_flashdata('message_type', 'success');
+				$this->data['error'] = false;
+				$this->data['message'] = 'Successfully created';
+				echo json_encode($this->data);
+			} else {
+				$this->data['error'] = true;
+				$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+				echo json_encode($this->data);
+				return false;
+			}
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+			echo json_encode($this->data);
+			return false;
+		}
+	}
 	/**
 	 * Redirect a user checking if is admin
 	 */
@@ -1168,10 +1259,6 @@ class Auth extends CI_Controller
 		$this->set_form_validation_rules();
 
 		if ($this->form_validation->run() === TRUE) {
-			if ($this->input->post('password') && !$this->validate_old_password($user->password)) {
-				$this->send_error_message('Old password incorrect.');
-				return false;
-			}
 			$profile_pic = $this->handle_file_upload('profile', 'assets/uploads/f' . $this->session->userdata('saas_id') . '/profiles/');
 			$document_paths = $this->handle_multiple_file_upload('files', 'assets/uploads/f' . $this->session->userdata('saas_id') . '/documents/');
 			$this->delete_old_documents();
@@ -1244,9 +1331,6 @@ class Auth extends CI_Controller
 		$this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'trim|strip_tags|xss_clean');
 
 		if ($this->input->post('password')) {
-			if ($this->session->userdata('user_id') == $this->input->post('update_id')) {
-				$this->form_validation->set_rules('old_password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
-			}
 			$this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
 			$this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
 		}
@@ -1257,10 +1341,9 @@ class Auth extends CI_Controller
 		if ($this->session->userdata('user_id') == $this->input->post('update_id')) {
 			$old_password = $this->input->post('old_password');
 			return $this->ion_auth->verify_password($old_password, $hash_password_db);
-		}else{
+		} else {
 			return true;
 		}
-		
 	}
 
 	private function handle_file_upload($field_name, $upload_path)

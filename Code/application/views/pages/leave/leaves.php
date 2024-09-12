@@ -46,7 +46,9 @@
             </nav>
           </div>
           <div class="col-xl-2 col-sm-3">
-            <a href="<?= base_url('leaves/create_leave') ?>" class="btn btn-block btn-primary">+ ADD</a>
+            <?php if (permissions('leaves_create')) : ?>
+              <a href="<?= base_url('leaves/create_leave') ?>" class="btn btn-block btn-primary">+ ADD</a>
+            <?php endif ?>
           </div>
           <div class="col-lg-12 mt-3">
             <div class="card">
@@ -63,11 +65,6 @@
                       <div class="col-lg-2">
                         <select class="form-select select2" id="le_employee_id">
                           <option value=""><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Employee' ?></option>
-                          <?php foreach ($system_users as $system_user) {
-                            if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == '1' && $system_user->finger_config == '1') { ?>
-                              <option value="<?= $system_user->employee_id ?>"><?= htmlspecialchars($system_user->first_name) ?> <?= htmlspecialchars($system_user->last_name) ?></option>
-                          <?php }
-                          } ?>
                         </select>
                       </div>
                     <?php
@@ -134,45 +131,78 @@
   <script type="text/javascript" src="<?= base_url('assets2/vendor/range-picker/daterangepicker.js') ?>"></script>
   <script>
     $(document).ready(function() {
+      console.log(sessionStorage);
+      apply_filters_from_session();
+      setFilter();
+      $(document).on('change', '#le_leave_type, #le_status_name, #le_employee_id,#le_status', function() {
+        setFilter();
+      });
+    });
+
+    function apply_filters_from_session() {
+      let statusFilterValue = sessionStorage.getItem('le_leave_type') || '';
+      $('#le_leave_type').val(statusFilterValue).trigger('change');
+      let shiftFilterValue = sessionStorage.getItem('le_status_name') || '';
+      $('#le_status_name').val(shiftFilterValue).trigger('change');
+      let departmentFilterValue = sessionStorage.getItem('le_status') || '1';
+      $('#le_status').val(departmentFilterValue).trigger('change');
+
       const startDate = sessionStorage.getItem('le_startDate') || moment().startOf('month').format('YYYY-MM-DD');
       const endDate = sessionStorage.getItem('le_endDate') || moment().format('YYYY-MM-DD');
       $('#le_startDate').val(startDate);
       $('#le_endDate').val(endDate);
       sessionStorage.setItem('le_startDate', startDate);
       sessionStorage.setItem('le_endDate', endDate);
+      // updating Employees
+      update_employee_filter();
+    }
 
-      store_session("le_status");
-      store_session("le_leave_type");
-      store_session("le_status_name");
-      store_session("le_employee_id");
-
-      set_session("le_status");
-      set_session("le_leave_type");
-      set_session("le_status_name");
-      set_session("le_employee_id");
-      setTimeout(function() {
-          setFilter();
-      }, 500);
-      $(document).on('change', '#le_leave_type, #le_status_name, #le_employee_id,#le_status', function() {
-        setFilter();
-      });
+    $(document).on('change', '#le_employee_id', function() {
+      sessionStorage.setItem('le_employee_id', $(this).val());
+    });
+    $(document).on('change', '#le_status_name', function() {
+      sessionStorage.setItem('le_status_name', $(this).val());
+    });
+    $(document).on('change', '#le_leave_type', function() {
+      sessionStorage.setItem('le_leave_type', $(this).val());
     });
 
-    function set_session(id) {
-      const value = sessionStorage.getItem(id);
-      console.log(id + ':' + value);
-      if (value !== null) {
-        $(`#${id}`).val(value).trigger('change');
-      }
-    }
+    $(document).on('change', '#le_status', function() {
+      sessionStorage.setItem('le_status', $(this).val());
+      console.log("status changed");
+      update_employee_filter();
+    });
 
-    function store_session(id) {
-      $(`#${id}`).change(function() {
-        console.log(id + ' change ');
-        sessionStorage.setItem(id, $(this).val());
+    function update_employee_filter() {
+      var status = $('#le_status').val();
+      $.ajax({
+        url: '<?= base_url('attendance/get_users_by_status') ?>',
+        type: 'POST',
+        data: {
+          status: status,
+        },
+        success: function(response) {
+          var tableData = JSON.parse(response);
+          $('#le_employee_id').empty();
+          $('#le_employee_id').append(`<option value="">Employees</option>`);
+          if (tableData.length > 0) {
+            tableData.forEach(employee => {
+              $('#le_employee_id').append(`<option value="${employee.id}">${employee.first_name} ${employee.last_name}</option>`);
+            });
+          } else {
+            $('#le_employee_id').empty();
+            $('#le_employee_id').append(`<option value="">No employees found</option>`);
+          }
+          let employeeFilterValue = sessionStorage.getItem('le_employee_id') || '';
+          $('#le_employee_id').val(employeeFilterValue).trigger('change');
+        },
+        complete: function() {},
+        error: function(error) {
+          console.error(error);
+        }
+
       });
     }
-
     $('.select2').select2();
 
     let childWindow;
@@ -190,43 +220,6 @@
         this.location.reload();
       }
     });
-
-    $(document).on('change', '#le_employee_id', function() {
-      store_session("le_employee_id");
-    });
-    $(document).on('change', '#le_status', function() {
-      console.log("status changing");
-      appendStateEmp();
-    });
-
-    function appendStateEmp() {
-      var status = $('#le_status').val();
-      $.ajax({
-        url: '<?= base_url('attendance/get_users_by_status') ?>',
-        type: 'POST',
-        data: {
-          status: status,
-        },
-        success: function(response) {
-          var tableData = JSON.parse(response);
-          const value = sessionStorage.getItem("le_employee_id");
-          $('#le_employee_id').empty();
-          $('#le_employee_id').append('<option value="">Employee</option>');
-          tableData.forEach(function(department) {
-            if (value == department.id) {
-              $('#le_employee_id').append('<option value="' + department.id + '" selected>' + department.first_name + ' ' + department.last_name + '</option>');
-            } else {
-              $('#le_employee_id').append('<option value="' + department.id + '">' + department.first_name + ' ' + department.last_name + '</option>');
-            }
-          });
-        },
-        complete: function() {},
-        error: function(error) {
-          console.error(error);
-        }
-
-      });
-    }
   </script>
   <script type="text/javascript">
     $(document).ready(function() {
