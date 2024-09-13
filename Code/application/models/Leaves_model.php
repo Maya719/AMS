@@ -69,9 +69,9 @@ class Leaves_model extends CI_Model
                 } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin() || is_all_users())) {
                     $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-primary" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
                 } else {
-                    if (permissions('leaves_delete') || $this->ion_auth->is_admin() || is_all_users()) {
-                        $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave col btn-danger">Delete</button>';
-                    }
+                    // if (permissions('leaves_delete') || $this->ion_auth->is_admin() || is_all_users()) {
+                    //     $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave col btn-danger">Delete</button>';
+                    // }
                     $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave col btn-primary ">Save</button>';
                 }
             } else {

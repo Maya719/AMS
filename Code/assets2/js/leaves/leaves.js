@@ -40,6 +40,7 @@ function ajaxCall(userstatus, employee_id, leave_type, status, from, too) {
 }
 
 function showTable(data) {
+    console.log(data);
     var table = $('#leave_list');
     if ($.fn.DataTable.isDataTable(table)) {
         table.DataTable().destroy();

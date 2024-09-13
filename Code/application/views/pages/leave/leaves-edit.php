@@ -196,7 +196,7 @@
                                         <?php } ?>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
-                                        <div class="col-lg-8 d-flex col-sm-8">
+                                        <div class="col-lg-6 d-flex col-sm-6">
                                             <?= $leave[0]["btnHTML"] ?>
                                             <?php if (permissions('leaves_status_edit') && ($leave[0]["status"] == 2 || $leave[0]["status"] == 1)) : ?>
                                                 <button type="button" class="btn btn-edit-enable-leave col btn-primary mx-2">Enable Edit</button>

@@ -171,6 +171,12 @@
                                                 <label class="form-check-label" for="">edit approval</label>
                                             </div>
                                         </div>
+                                        <div class="col-3">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="leaves_cancel">
+                                                <label class="form-check-label" for="">Approve Cancelation</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- <div class="row mb-3">
                                         <div class="col-12">
@@ -616,6 +622,12 @@
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="checkbox" id="" name="leaves_status_edit">
                                                 <label class="form-check-label" for="">edit approval</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="leaves_cancel">
+                                                <label class="form-check-label" for="">Approve Cancelation</label>
                                             </div>
                                         </div>
                                     </div>
