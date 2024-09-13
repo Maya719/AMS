@@ -148,7 +148,7 @@
       $('#le_status').val(departmentFilterValue).trigger('change');
 
       const startDate = sessionStorage.getItem('le_startDate') || moment().startOf('month').format('YYYY-MM-DD');
-      const endDate = sessionStorage.getItem('le_endDate') || moment().format('YYYY-MM-DD');
+      const endDate = sessionStorage.getItem('le_endDate') || moment().endOf('month').format('YYYY-MM-DD');
       $('#le_startDate').val(startDate);
       $('#le_endDate').val(endDate);
       sessionStorage.setItem('le_startDate', startDate);
