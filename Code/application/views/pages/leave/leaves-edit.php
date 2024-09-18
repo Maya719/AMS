@@ -256,6 +256,17 @@
                                                         </a>
                                                     </li>
                                                 <?php endforeach ?>
+                                                <?php if ($cancel_request) : ?>
+                                                    <li>
+                                                        <div class="timeline-badge danger">
+                                                        </div>
+                                                        <a class="timeline-panel text-muted" href="javascript:void(0);">
+                                                            <span><?= getTimeAgo($cancel_request->created) ?></span>
+                                                            <h6 class="mb-0">Cancel Request <strong class="text-danger"><?= ($cancel_request->status == '1') ? 'Pending' : 'Accept' ?></strong></h6>
+                                                            <p class="mb-0"></p>
+                                                        </a>
+                                                    </li>
+                                                <?php endif ?>
                                             </ul>
                                         </div>
                                     </div>
@@ -491,7 +502,29 @@
             $('.btn-edit-leave').prop('disabled', false);
         });
     </script>
+<?php
+function getTimeAgo($timestamp)
+{
+    $timestampDateTime = new DateTime($timestamp);
+    $currentDateTime = new DateTime();
 
+    $interval = $currentDateTime->diff($timestampDateTime);
+
+    if ($interval->y > 0) {
+        return $interval->format("%y years ago");
+    } elseif ($interval->m > 0) {
+        return $interval->format("%m months ago");
+    } elseif ($interval->d > 0) {
+        return $interval->format("%d days ago");
+    } elseif ($interval->h > 0) {
+        return $interval->format("%h hours ago");
+    } elseif ($interval->i > 0) {
+        return $interval->format("%i minutes ago");
+    } else {
+        return "just now";
+    }
+}
+?>
 </body>
 
 </html>

@@ -137,7 +137,7 @@ class Leaves extends CI_Controller
 				$data["status"] = '3';
 				$this->db->where('id', $id);
 				$this->db->update('leaves', $data);
-				$this->session->set_flashdata('message', $this->lang->line('cancel successfully.') ? $this->lang->line('cancel successfully.') : "Canceled successfully.");
+				$this->session->set_flashdata('message', $this->lang->line('cancel_successfully.') ? $this->lang->line('cancel_successfully.') : "Canceled successfully.");
 				$this->session->set_flashdata('message_type', 'success');
 				$this->data['error'] = false;
 				$this->data['message'] = $this->lang->line('cancel_successfully.') ? $this->lang->line('cancel_successfully.') : "Canceled successfully.";
@@ -895,6 +895,11 @@ class Leaves extends CI_Controller
 					$leaves_log["class"] = 'danger';
 				}
 			}
+			$this->db->where('leave_id', $id);
+            $query = $this->db->get('leave_cancel');
+            $cancel_request = $query->row();
+			$leaves_log["cancel_request_created"] = $this->getTimeAgo($cancel_request->created);
+			$this->data['cancel_request'] = $cancel_request;
 			$this->data['leaves_logs'] = $leaves_logs;
 			// echo json_encode($this->data);
 			$this->load->view('pages/leave/leaves-edit', $this->data);
