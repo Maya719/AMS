@@ -91,10 +91,10 @@ function showTable(data) {
             // userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title="Edit" target="_blank"><i class="fas fa-eye text-primary"></i></a>';
         }
 
-        if (user.btn) {
-            userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary ms-2 btn-delete-leave" data-bs-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash text-danger"></i></a>';
+        if (user.banbtn && user.btn) {
+            userRow += '<a href="' + base_url + 'leaves/manage/' + user.id + '" data-id="' + user.id + '" class="text-primary ms-2 btn-delete-leave" data-bs-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa-solid fa-ban text-danger"></i></a>';
         } else {
-            userRow += '<a href="javascript:void(0);" class="text-primary ms-2" data-bs-toggle="tooltip" data-placement="top" title="Delete" disabled><i class="fa-solid fa-trash text-muted"></i></a>';
+            userRow += '<a href="javascript:void(0);" class="text-primary ms-2" data-bs-toggle="tooltip" data-placement="top" title="Cancel" disabled><i class="fa-solid fa-ban text-muted"></i></a>';
         }
         userRow += '</div>';
         userRow += '</td>';
@@ -176,8 +176,6 @@ $('#short_leave').change(function () {
     }
 });
 
-
-
 $(document).on('click', '.btn-delete-leave', function (e) {
     e.preventDefault();
     var id = $("#update_id").val();
@@ -197,6 +195,43 @@ $(document).on('click', '.btn-delete-leave', function (e) {
             $.ajax({
                 type: "POST",
                 url: base_url + 'leaves/delete/' + id,
+                data: "id=" + id,
+                dataType: "json",
+                success: function (result) {
+                    if (result['error'] == false) {
+                        window.location.href = base_url + 'leaves';
+                    } else {
+                        iziToast.error({
+                            title: result['message'],
+                            message: "",
+                            position: 'topRight'
+                        });
+                    }
+                }
+            });
+        }
+    });
+});
+
+$(document).on('click', '.btn-cancel-leave', function (e) {
+    e.preventDefault();
+    var id = $("#update_id").val();
+    if (!id) {
+        var id = $(this).data('id');
+    }
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: base_url + 'leaves/cancel_leave/' + id,
                 data: "id=" + id,
                 dataType: "json",
                 success: function (result) {

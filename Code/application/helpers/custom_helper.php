@@ -1170,6 +1170,18 @@ function get_notifications($user_id = '')
                     $notification_txt = $CI->lang->line('leave_request_rejected') ? htmlspecialchars($CI->lang->line('leave_request_rejected')) : 'Leave request rejected';
                     $notification_url = base_url('leaves');
                 }
+            } elseif ($notification['type'] == 'leave_request_canceled') {
+                $leave = $CI->leaves_model->get_leaves_by_id($notification['type_id']);
+                if ($leave) {
+                    $notification_txt = $CI->lang->line('leave_request_canceled') ? htmlspecialchars($CI->lang->line('leave_request_canceled')) : 'Leave request canceled';
+                    $notification_url = base_url('leaves');
+                }
+            }  elseif ($notification['type'] == 'leave_cancel_request') {
+                $leave = $CI->leaves_model->get_leaves_by_id($notification['type_id']);
+                if ($leave) {
+                    $notification_txt = $CI->lang->line('leave_cancel_request') ? htmlspecialchars($CI->lang->line('leave_cancel_request')) : 'Leave cancel request';
+                    $notification_url = base_url('leaves');
+                }
             } elseif ($notification['type'] == 'new_lead') {
                 $leads = $CI->leads_model->get_leads_by_id($notification['type_id']);
                 if ($leads) {
@@ -1390,6 +1402,22 @@ function permissions($permissions_type = '')
         return false;
     }
 }
+function cancel_request_users()
+{
+    $CI = &get_instance();
+    $permission_needed = 'leaves_cancel';
+    $groups = $CI->ion_auth->groups()->result();
+    $users = [];
+    foreach ($groups as $group) {
+        $permissions = json_decode($group->permissions, true);
+        if (isset($permissions[$permission_needed]) && $permissions[$permission_needed] == 1) {
+            $users_in_group = $CI->ion_auth->users($group->id)->result();
+            $users = array_merge($users, $users_in_group);
+        }
+    }
+    return $users;
+}
+
 function is_all_users()
 {
     $CI = &get_instance();
@@ -1407,12 +1435,6 @@ function is_assign_users()
     $CI = &get_instance();
     $group = $CI->ion_auth->get_users_groups($CI->session->userdata('user_id'))->result();
     return $assigned_users = json_decode($group[0]->assigned_users, true);
-    if (!empty($assigned_users)) {
-         true;
-    }else{
-
-        return false;
-    }
 }
 
 function get_notifications_group_id()

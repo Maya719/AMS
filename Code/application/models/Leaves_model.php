@@ -10,14 +10,12 @@ class Leaves_model extends CI_Model
 
     function delete($id)
     {
-        if ($this->ion_auth->is_admin() || is_assign_users() || is_all_users()) {
-            $this->db->where('id', $id);
-            $this->db->where('saas_id', $this->session->userdata('saas_id'));
-        } else {
-            $this->db->where('id', $id);
-            $this->db->where('saas_id', $this->session->userdata('saas_id'));
-        }
-        if ($this->db->delete('leaves'))
+        $group = $this->ion_auth->get_users_groups($this->session->userdata('user_id'))->result();
+        $current_group_id = $group[0]->id;
+        $data["leave_id"] = $id;
+        $data["group_id"] = $current_group_id;
+        $data["status"] = '1';
+        if ($this->db->insert('leave_cancel', $data))
             return true;
         else
             return false;
@@ -47,6 +45,12 @@ class Leaves_model extends CI_Model
         $query = $this->db->query("SELECT * FROM leaves " . $where);
         $results = $query->result_array();
         foreach ($results as &$value) {
+            
+            $this->db->where('leave_id', $value["id"]);
+            $query = $this->db->get('leave_cancel');
+            $cancel_request = $query->row();
+			$value["cancel_request"] = $cancel_request;
+
             $query = $this->db->query("SELECT * FROM users WHERE employee_id = " . $value["user_id"]);
             $user = $query->row();
             $value["user_id"] = $user->id;
@@ -61,23 +65,27 @@ class Leaves_model extends CI_Model
             $forword_result = $this->is_forworded($current_group_id, $step, $emppp);
             $value["current_group_id"] = $current_group_id;
             $value["step"] = $step;
-            if ($active == '1') {
-                if ($value["status"] == 1) {
-                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-success" disabled>Approved</button>';
-                } elseif ($value["status"] == 2) {
-                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-danger" disabled>Rejected</button>';
-                } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin() || is_all_users())) {
-                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-primary" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
+            if ($cancel_request && $cancel_request->status == 2) {
+                $value["btnHTML"] = '';
+            }else{
+                if ($active == '1') {
+                    if ($value["status"] == 1) {
+                        $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-success" disabled>Approved</button>';
+                    } elseif ($value["status"] == 2) {
+                        $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-danger" disabled>Rejected</button>';
+                    } elseif ($forword_result["is_forworded"] && (permissions('leaves_status') || permissions('leaves_edit') || $this->ion_auth->is_admin() || is_all_users())) {
+                        $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-primary" disabled>Forworded To ' . $forword_result["forworded_to"] . '</button>';
+                    } else {
+                        $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave col btn-primary ">Save</button>';
+                    }
                 } else {
-                    // if (permissions('leaves_delete') || $this->ion_auth->is_admin() || is_all_users()) {
-                    //     $value["btnHTML"] = '<button type="button" class="btn btn-delete-leave col btn-danger">Delete</button>';
-                    // }
-                    $value["btnHTML"] .= '<button type="button" class="btn btn-edit-leave col btn-primary ">Save</button>';
+                    $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-danger" disabled>User is deactive</button>';
                 }
-            } else {
-                $value["btnHTML"] = '<button type="button" class="btn btn-edit-leave col btn-danger" disabled>User is deactive</button>';
             }
+            
+
             $value["forword_result"] = $forword_result;
+
         }
         return $results;
     }
@@ -115,8 +123,7 @@ class Leaves_model extends CI_Model
         foreach ($rows as &$row) {
             $step_group = $row->group_id;
             $step_groupArray[] = $row->group_id;
-            $group = $this->ion_auth->group($step_group)->row();
-            $assigned_users = json_decode($group->assigned_users);
+
             if ($step_group == $group_id) {
                 $array = [
                     'is_forworded' => false,
@@ -124,6 +131,8 @@ class Leaves_model extends CI_Model
                 ];
                 break;
             } else {
+                $group = $this->ion_auth->group($step_group)->row();
+                $assigned_users = json_decode($group->assigned_users);
                 if ($assigned_users) {
                     if (in_array($user_id, $assigned_users)) {
                         $array = [
@@ -238,21 +247,34 @@ class Leaves_model extends CI_Model
 
             $leave['current_group_id'] = $current_group_id;
             $leave['forword_result'] = $forword_result;
+
+            $this->db->where('leave_id', $leave['id']);
+            $query = $this->db->get('leave_cancel');
+            $cancel_request = $query->row();
+            if($cancel_request){
+                $leave['banbtn'] = false;
+            }else{
+                $leave['banbtn'] = true;
+            }
+            
             if ($leave['status'] == 0) {
                 if (($forword_result["is_forworded"]) && (permissions('leaves_status') || $this->ion_auth->is_admin() || is_all_users())) {
                     $leave['btn'] = false;
                     if ($Logstatus == 1) {
                         $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) :  $forword_result["forworded_to"]) . '</span>';
-                        // $leave['status'] = '<span class="badge light badge-success">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Approved & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     } elseif ($Logstatus == 2) {
                         $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : $forword_result["forworded_to"]) . '</span>';
-                        // $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     } else {
                         $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : $forword_result["forworded_to"]) . '</span>';
-                        // $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     }
                 } else {
-                    $leave['btn'] = true;
+                    $user = $this->ion_auth->user()->row();
+				    $user_id = $user->employee_id;
+                    if ($leave['user_id'] == $user_id) {
+                        $leave['btn'] = true;
+                    }else{
+                        $leave['btn'] = false;
+                    }
                     $leave['status'] = '<span class="badge light badge-info">' . ($this->lang->line('pending') ? htmlspecialchars($this->lang->line('pending')) : 'Pending') . '</span>';
                 }
             } elseif ($leave['status'] == 1) {
@@ -261,12 +283,14 @@ class Leaves_model extends CI_Model
             } elseif ($leave['status'] == 2) {
                 if ($forword_result["is_forworded"]) {
                     $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : $forword_result["forworded_to"]) . '</span>';
-                    // $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('forworded') ? htmlspecialchars($this->lang->line('forworded')) : 'Rejected & Forworded to ' . $forword_result["forworded_to"]) . '</span>';
                     $leave['btn'] = false;
                 } else {
                     $leave['btn'] = false;
                     $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('rejected') ? htmlspecialchars($this->lang->line('rejected')) : 'Rejected') . '</span>';
                 }
+            }elseif ($leave['status'] == 3){
+                $leave['btn'] = false;
+                $leave['status'] = '<span class="badge light badge-danger">' . ($this->lang->line('cancel') ? htmlspecialchars($this->lang->line('cancel')) : 'Canceled') . '</span>';
             }
         }
         return $results;
@@ -463,5 +487,4 @@ class Leaves_model extends CI_Model
         $leaveTypes = $this->db->get();
         return $leaveTypes->result();
     }
-    
 }

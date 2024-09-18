@@ -196,7 +196,12 @@
                                         <?php } ?>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center">
-                                        <div class="col-lg-6 d-flex col-sm-6">
+                                        <div class="col-lg-12 d-flex col-sm-12">
+                                            <?php if (permissions('leaves_cancel') && ($leave[0]["cancel_request"]->status == 1)) : ?>
+                                                <button type="button" data-id="<?= $leave[0]["id"] ?>" class="btn btn-cancel-leave col btn-danger mx-2">Cancel Leave</button>
+                                            <?php elseif (permissions('leaves_cancel') && ($leave[0]["cancel_request"]->status == 2)) : ?>
+                                                <button type="button" class="btn col btn-primary mx-2" disabled>Canceled</button>
+                                            <?php endif ?>
                                             <?= $leave[0]["btnHTML"] ?>
                                             <?php if (permissions('leaves_status_edit') && ($leave[0]["status"] == 2 || $leave[0]["status"] == 1)) : ?>
                                                 <button type="button" class="btn btn-edit-enable-leave col btn-primary mx-2">Enable Edit</button>

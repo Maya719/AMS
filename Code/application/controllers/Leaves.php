@@ -123,23 +123,61 @@ class Leaves extends CI_Controller
 			redirect_to_index();
 		}
 	}
+	public function cancel_leave()
+	{
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
+			if (empty($id)) {
+				$id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
+			}
+			if (!empty($id) && is_numeric($id)) {
+				$data["status"] = '2';
+				$this->db->where('leave_id', $id);
+				$this->db->update('leave_cancel', $data);
+
+				$data["status"] = '3';
+				$this->db->where('id', $id);
+				$this->db->update('leaves', $data);
+				$this->session->set_flashdata('message', $this->lang->line('cancel successfully.') ? $this->lang->line('cancel successfully.') : "Canceled successfully.");
+				$this->session->set_flashdata('message_type', 'success');
+				$this->data['error'] = false;
+				$this->data['message'] = $this->lang->line('cancel_successfully.') ? $this->lang->line('cancel_successfully.') : "Canceled successfully.";
+				echo json_encode($this->data);
+			} else {
+				$this->data['error'] = true;
+				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
+				echo json_encode($this->data);
+			}
+		} else {
+			$this->data['error'] = true;
+			$this->data['message'] = $this->lang->line('access_denied') ? $this->lang->line('access_denied') : "Access Denied";
+			echo json_encode($this->data);
+		}
+	}
 
 	public function delete($id = '')
 	{
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->in_group(1) || permissions('leaves_view'))) {
-
 			if (empty($id)) {
 				$id = $this->uri->segment(3) ? $this->uri->segment(3) : '';
 			}
-
 			if (!empty($id) && is_numeric($id) && $this->leaves_model->delete($id)) {
-				$this->session->set_flashdata('message', $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.");
+				$notification_users = cancel_request_users();
+				foreach ($notification_users as $user) {
+					$notification_data = array(
+						'notification' => 'Leave cancel request',
+						'type' => 'leave_cancel_request',
+						'type_id' => $id,
+						'from_id' => $this->session->userdata('user_id'),
+						'to_id' => $user->id,
+					);
+					$notification_id = $this->notifications_model->create($notification_data);
+				}
+				$this->session->set_flashdata('message', $this->lang->line('cancel') ? $this->lang->line('cancel') : "Cancel request send");
 				$this->session->set_flashdata('message_type', 'success');
 				$this->data['error'] = false;
-				$this->data['message'] = $this->lang->line('deleted_successfully') ? $this->lang->line('deleted_successfully') : "Deleted successfully.";
+				$this->data['message'] = $this->lang->line('cancel') ? $this->lang->line('cancel') : "Cancel request send.";
 				echo json_encode($this->data);
 			} else {
-
 				$this->data['error'] = true;
 				$this->data['message'] = $this->lang->line('something_wrong_try_again') ? $this->lang->line('something_wrong_try_again') : "Something wrong! Try again.";
 				echo json_encode($this->data);
@@ -864,6 +902,8 @@ class Leaves extends CI_Controller
 			redirect_to_index();
 		}
 	}
+
+
 	public function create_leave()
 	{
 
