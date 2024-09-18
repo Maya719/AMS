@@ -236,7 +236,8 @@ $(document).on('click', '.btn-cancel-leave', function (e) {
                 dataType: "json",
                 success: function (result) {
                     if (result['error'] == false) {
-                        window.location.href = base_url + 'leaves';
+                        closeChildAndReloadMain();
+                        // window.location.href = base_url + 'leaves';
                     } else {
                         iziToast.error({
                             title: result['message'],
