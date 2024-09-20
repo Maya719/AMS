@@ -112,10 +112,14 @@ class Permissions extends CI_Controller
 					'descriptive_name' => $this->input->post('descriptive_name'),
 					'permissions' => json_encode($data_json),
 					'show_with' => $this->input->post('show_with'),
-					'icon' => ($this->input->post('show_with') == 2) ? $this->input->post('icon') : '',
 					'assigned_users' => $users,
 					'all_users' => $all_users,
 				);
+				
+				if ($this->input->post('show_with') == 2) {
+					$data["icon"] = $this->input->post('icon');
+				}
+
 				$id = $this->settings_model->roles_create($data);
 				if ($id) {
 					$this->session->set_flashdata('message', $this->lang->line('created_successfully') ? $this->lang->line('created_successfully') : "Created successfully.");

@@ -176,6 +176,7 @@
             $("#update_id").val(result['data'].id);
             $("#name").val(result['data'].name);
             $("#duration").val(result['data'].duration).trigger('change');
+            $("#apply_on").val(result['data'].apply_on).trigger('change');
             $("#count").val(result['data'].leave_counts);
 
           } else {

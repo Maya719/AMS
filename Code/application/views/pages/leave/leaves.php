@@ -46,7 +46,7 @@
             </nav>
           </div>
           <div class="col-xl-2 col-sm-3">
-            <?php if (permissions('leaves_create')) : ?>
+            <?php if ($this->ion_auth->is_admin() || permissions('leaves_create')) : ?>
               <a href="<?= base_url('leaves/create_leave') ?>" class="btn btn-block btn-primary">+ ADD</a>
             <?php endif ?>
           </div>

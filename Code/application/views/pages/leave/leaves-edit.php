@@ -309,6 +309,10 @@
                 },
                 success: function(response) {
                     console.log(response);
+                    $('#type').empty();
+                    response.leave_types.forEach((value, index) => {
+                        $('#type').append(`<option value="` + value.id + `">` + value.name + `</option>`);
+                    });
                     var html = '';
                     let emptyCell = '<td class=""></td>';
                     if (response) {

@@ -918,7 +918,6 @@ class Settings extends CI_Controller
 
 	public function hierarchy()
 	{
-		
 
 		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || is_module_allowed('user_permissions'))) {
 			$this->data['page_title'] = 'Settings - ' . company_name();
@@ -1937,6 +1936,7 @@ class Settings extends CI_Controller
 					'name' => $this->input->post('name'),
 					'duration' => $this->input->post('duration'),
 					'duration' => $this->input->post('duration'),
+					'apply_on' => $this->input->post('apply_on'),
 					'leave_counts' => $this->input->post('count'),
 				);
 				$id = $this->settings_model->leaves_type_create($data);

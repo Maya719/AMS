@@ -26,9 +26,9 @@ class Leaves extends CI_Controller
 		$too = date('Y-m-d');
 		$late_min = 0;
 		$absents = 0;
-		$leave_types = $this->att_model->get_db_leave_types();
-		$user_id = $this->input->post('user_id');
+		$user_id = ($this->input->post('user_id')) ? $this->input->post('user_id') : $this->session->userdata('user_id');
 		$user = $this->ion_auth->user($user_id)->row();
+		$leave_types = $this->att_model->get_db_leave_types('', $user);
 		$leave_summary = [];
 		foreach ($leave_types as $leave_type) {
 			$paid_leaves = 0;
@@ -73,6 +73,7 @@ class Leaves extends CI_Controller
 			'leave_summary' => $leave_summary,
 			'absents' => $absents,
 			'late_min' => $late_min,
+			'leave_types' => $leave_types,
 		];
 		echo json_encode($response);
 	}
@@ -895,10 +896,10 @@ class Leaves extends CI_Controller
 					$leaves_log["class"] = 'danger';
 				}
 			}
+
 			$this->db->where('leave_id', $id);
-            $query = $this->db->get('leave_cancel');
-            $cancel_request = $query->row();
-			$leaves_log["cancel_request_created"] = $this->getTimeAgo($cancel_request->created);
+			$query = $this->db->get('leave_cancel');
+			$cancel_request = $query->row();
 			$this->data['cancel_request'] = $cancel_request;
 			$this->data['leaves_logs'] = $leaves_logs;
 			// echo json_encode($this->data);

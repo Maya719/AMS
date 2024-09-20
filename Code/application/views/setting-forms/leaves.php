@@ -12,6 +12,7 @@
                                 <th>Leave Type</th>
                                 <th>Duration</th>
                                 <th>Leave Count</th>
+                                <th>Apply On</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -33,8 +34,26 @@
                                         $count = '6 Months';
                                     }
                                     ?>
+                                    <?php 
+                                    if ($type["apply_on"] == 'all') {
+                                        $apply_on = 'All';
+                                    }
+                                    if ($type["apply_on"] == 'male') {
+                                        $apply_on = 'Only Male Unmarried';
+                                    }
+                                    if ($type["apply_on"] == 'malemarried') {
+                                        $apply_on = 'Only Male Married';
+                                    }
+                                    if ($type["apply_on"] == 'female') {
+                                        $apply_on = 'Only Female Unmarried';
+                                    }
+                                    if ($type["apply_on"] == 'femalemarried') {
+                                        $apply_on = 'Only Female Married';
+                                    }
+                                    ?>
                                     <td><?= $count ?></td>
                                     <td><?= $type["leave_counts"] ?></td>
+                                    <td><?= $apply_on ?></td>
                                     <td>
                                         <div class="d-flex">
                                             <span class="badge light badge-primary"><a href="#" class="text-primary edit-leave-type" data-id="<?=$type["id"]?>" data-bs-toggle="modal" data-bs-target="#edit-leave-type-modal" data-placement="top" title="Edit"><i class="fa fa-pencil color-muted"></i></a></span>
@@ -73,6 +92,16 @@
                             <option value="6_months">For 6 Months</option>
                         </select>
                     </div>
+                    <div class="form-group mb-3">
+                        <label class="col-form-label"><?= $this->lang->line('apply_on') ? $this->lang->line('apply_on') : 'Apply On' ?><span class="text-danger">*</span></label>
+                        <select name="apply_on" class="form-control select2">
+                            <option value="all">All</option>
+                            <option value="male">Gender Male Martial Unmarried</option>
+                            <option value="malemarried">Gender Male Martial Married</option>
+                            <option value="female">Gender Female Martial Unmarried</option>
+                            <option value="femalemarried">Gender Female Martial Married</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label class="col-form-label"><?= $this->lang->line('count') ? $this->lang->line('count') : 'Leaves Count' ?><span class="text-danger">*</span></label>
                         <input type="number" name="count" class="form-control" required="">
@@ -109,6 +138,16 @@
                             <option value="3_months">For 3 Months</option>
                             <option value="4_months">For 4 Months</option>
                             <option value="6_months">For 6 Months</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="col-form-label"><?= $this->lang->line('apply_on') ? $this->lang->line('apply_on') : 'Apply On' ?><span class="text-danger">*</span></label>
+                        <select name="apply_on" id="apply_on" class="form-control select2">
+                            <option value="all">All</option>
+                            <option value="male">Gender Male Martial Unmarried</option>
+                            <option value="malemarried">Gender Male Martial Married</option>
+                            <option value="female">Gender Female Martial Unmarried</option>
+                            <option value="femalemarried">Gender Female Martial Married</option>
                         </select>
                     </div>
                     <div class="form-group">

@@ -476,13 +476,14 @@ class Leaves_model extends CI_Model
      * 
      * @return array Returns an array of leave type objects from the database.
      */
-    public function get_db_leave_types($id = '')
+    public function get_db_leave_types($id = '', $user)
     {
         $saas_id = $this->session->userdata('saas_id');
         $this->db->from('leaves_type');
         if (!empty($id)) {
             $this->db->where('id', $id);
         }
+       
         $this->db->where('saas_id', $saas_id);
         $leaveTypes = $this->db->get();
         return $leaveTypes->result();
