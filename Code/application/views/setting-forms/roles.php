@@ -394,35 +394,24 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="row mb-3">
+
+                                    <div class="row mb-3">
                                         <div class="col-12">
-                                            <label class="form-check-label" for="">Shifts</label>
+                                            <label class="form-check-label" for="">Report</label>
                                         </div>
                                         <div class="col-2">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_view">
+                                                <input class="form-check-input" type="checkbox" id="" name="reports_view">
                                                 <label class="form-check-label" for="">view</label>
                                             </div>
                                         </div>
                                         <div class="col-2">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_create">
+                                                <input class="form-check-input" type="checkbox" id="" name="report_create">
                                                 <label class="form-check-label" for="">create</label>
                                             </div>
                                         </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_edit">
-                                                <label class="form-check-label" for="">edit</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="" name="shift_delete">
-                                                <label class="form-check-label" for="">delete</label>
-                                            </div>
-                                        </div>
-                                    </div> -->
+                                    </div>
 
                                     <div class="row mb-3">
                                         <div class="col-12">
@@ -789,7 +778,23 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <label class="form-check-label" for="">Report</label>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="reports_view">
+                                                <label class="form-check-label" for="">view</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="" name="reports_create">
+                                                <label class="form-check-label" for="">create</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <label class="form-check-label" for="">Notes</label>

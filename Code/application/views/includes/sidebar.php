@@ -247,11 +247,8 @@
             <span class="nav-text">Reports</span>
           </a>
           <ul aria-expanded="false">
-            <?php if ($this->ion_auth->is_admin() || is_assign_users()) { ?>
-              <li><a href="<?= base_url('reports/attendance') ?>">Attendance</a></li>
-            <?php } ?>
-            <?php if ($this->ion_auth->is_admin() || permissions('leaves_view_all') || permissions('leaves_view_selected')) { ?>
-              <li><a href="<?= base_url('reports/leaves') ?>">Leaves</a></li>
+            <?php if ($this->ion_auth->is_admin() || permissions('reports_view') ) { ?>
+              <li><a href="<?= base_url('reports/attendance') ?>">AMS Report</a></li>
             <?php } ?>
           </ul>
         </li>

@@ -23,20 +23,10 @@ class Reports extends CI_Controller
 			$this->data['departments'] = $query3->result_array();
 			$this->data['main_page'] = 'Attendance Report';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			$query2 = $this->db->query("SELECT * FROM users WHERE active = '1'");
-			$results2 = $query2->result_array();
-			foreach ($results2 as $current_user) {
-				if ($current_user["id"] == $this->session->userdata('user_id')) {
-					$employee_id = $current_user["employee_id"];
-					$where = " WHERE attendance.user_id = " . $employee_id;
-					$where2 = " WHERE leaves.employee_id = " . $employee_id;
-					$user_id = $employee_id;
-				}
-			}
-			$this->data['user_id'] = $user_id;
-			if ($this->ion_auth->is_admin() || permissions('attendance_view_all')) {
+			
+			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
-			} elseif (permissions('attendance_view_selected')) {
+			} elseif (is_assign_users()) {
 				$selected = selected_users();
 				foreach ($selected as $user_id) {
 					$users[] = $this->ion_auth->user($user_id)->row();
