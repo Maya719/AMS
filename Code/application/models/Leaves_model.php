@@ -193,7 +193,7 @@ class Leaves_model extends CI_Model
         }
         if ($this->ion_auth->is_admin() || is_all_users()) {
             if (isset($get['user_id']) && !empty($get['user_id'])) {
-                $where .= " AND l.user_id = " . $get['user_id'];
+                $where .= " AND l.user_id = " . get_employee_id_from_user_id($get['user_id']);
             }
         } else {
             if (is_assign_users()) {
@@ -207,7 +207,7 @@ class Leaves_model extends CI_Model
                     $where .= " AND l.user_id IN ($userIdsString)";
                 }
                 if (isset($get['user_id']) && !empty($get['user_id'])) {
-                    $where .= " AND l.user_id = " . $get['user_id'];
+                    $where .= " AND l.user_id = " . get_employee_id_from_user_id($get['user_id']);
                 }
             } else {
                 $id = get_employee_id_from_user_id($this->session->userdata('user_id'));
@@ -295,9 +295,6 @@ class Leaves_model extends CI_Model
         }
         return $results;
     }
-
-
-
 
     function create($data)
     {

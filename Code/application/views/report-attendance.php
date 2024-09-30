@@ -54,19 +54,7 @@
                                         <div class="row">
                                             <div class="col-lg-12 form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('employee') ? $this->lang->line('employee') : 'Share with' ?></label>
-                                                <select name="user_id" class="form-control select2">
-                                                    <option value="">
-                                                        <?= $this->lang->line('select_employee') ? $this->lang->line('select_employee') : 'Select Employee' ?>
-                                                    </option>
-                                                    <?php foreach ($system_users as $system_user) {
-                                                        if ($system_user->saas_id == $this->session->userdata('saas_id') && $system_user->active == 1 && $system_user->finger_config == 1) { ?>
-                                                            <option value="<?= $system_user->id ?>">
-                                                                <?= htmlspecialchars($system_user->first_name) ?>
-                                                                <?= htmlspecialchars($system_user->last_name) ?>
-                                                            </option>
-                                                    <?php }
-                                                    } ?>
-                                                </select>
+                                                <input type="email" name="user_id" id="user_id" class="form-control" require>
                                             </div>
                                             <!-- <div class="col-lg-12 form-group mb-3">
                                                 <label class="col-form-label"><?= $this->lang->line('duration') ? $this->lang->line('duration') : 'Duration' ?></label>

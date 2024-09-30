@@ -101,9 +101,9 @@ function showTable(data) {
         userRow += '</tr>';
         tbody.append(userRow);
     });
-    let cookieValue = getCookie('leave_list_length');
-    if (cookieValue) { } else {
-        cookieValue = 10;
+    let le_length = sessionStorage.getItem('le_length');
+    if (le_length) { } else {
+        le_length = 10;
     }
     table.DataTable({
         "paging": true,
@@ -117,17 +117,30 @@ function showTable(data) {
         "info": false,
         "lengthChange": true,
         "lengthMenu": [10, 20, 50, 500],
-        "pageLength": cookieValue,
+        "pageLength": le_length,
         "dom": '<"top"f>rt<"bottom"lp><"clear">',
         "order": [[7, "desc"]]
     });
+
+    $('#leave_list').on('length.dt', function (e, settings, len) {
+        var currentPageLength = len;
+        console.log(currentPageLength);
+        sessionStorage.setItem('le_length', currentPageLength);
+    });
+
+    // Event listener for page change
+    $('#leave_list').on('page.dt', function () {
+        var table = $('#leave_list').DataTable();
+        var pageNumber = table.page.info().page + 1;
+        sessionStorage.setItem('le_page_no', pageNumber);
+    });
     if ($.fn.DataTable.isDataTable('#leave_list')) {
-        let cookieValue = getCookie('page_no');
-        if (cookieValue) { } else {
-            cookieValue = 1;
+        let le_page_no = sessionStorage.getItem('le_page_no');
+        if (le_page_no == null) {
+            le_page_no = 1;
         }
         var table = $('#leave_list').DataTable();
-        table.page(cookieValue - 1).draw(false);
+        table.page(le_page_no - 1).draw(false);
     } else {
         console.error("DataTable initialization failed or table not found.");
     }
@@ -256,6 +269,7 @@ $(document).on('change', '#starting_date_create', function (e) {
 });
 $(document).ready(function () {
     closeEnddate();
+    closeEnddate2();
 });
 
 function closeEnddate() {

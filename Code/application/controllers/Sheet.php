@@ -13,7 +13,7 @@ class Sheet extends CI_Controller
     {
         require_once APPPATH . '../vendor/autoload.php';
         parent::__construct();
-        $this->serviceAccountPath = FCPATH . 'assets2/spreadsheet-436507-90559108a808.json';
+        $this->serviceAccountPath = FCPATH . 'assets2/spreadsheet-436507-c0fb86ab5259.json';
         $this->client = new Client();
         $this->client->setAuthConfig($this->serviceAccountPath);
         $this->client->addScope(Sheets::SPREADSHEETS);
@@ -31,7 +31,7 @@ class Sheet extends CI_Controller
             $data = $query->result_array();
             $data = json_decode($data[0]['value']);
             $company_name = $data->company_name;
-            $email = $this->get_share_email($this->input->post('user_id'));
+            $email = $this->input->post('user_id');
             if ($data->sheet) {
                 $sheet = $data->sheet;
                 $this->shareSpreadsheet($sheet, $email);
