@@ -23,7 +23,7 @@ class Reports extends CI_Controller
 			$this->data['departments'] = $query3->result_array();
 			$this->data['main_page'] = 'Attendance Report';
 			$this->data['current_user'] = $this->ion_auth->user()->row();
-			
+
 			if ($this->ion_auth->is_admin() || is_all_users()) {
 				$this->data['system_users'] = $this->ion_auth->members()->result();
 			} elseif (is_assign_users()) {
@@ -34,11 +34,155 @@ class Reports extends CI_Controller
 				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
 				$this->data['system_users'] = $users;
 			}
-			$this->load->view('report-attendance', $this->data);
+			$this->load->view('pages/attendance/report/report-attendance', $this->data);
 		} else {
 			redirect_to_index();
 		}
 	}
+	protected function user_duration($join_date)
+	{
+		$current_date = new DateTime();
+		$join_date = new DateTime($join_date);
+		$interval = $current_date->diff($join_date);
+		$years = $interval->y;
+		$months = $interval->m;
+		return "{$years} years, {$months} months";
+	}
+	public function get_attendance_report()
+	{
+		$saas_id = $this->session->userdata('saas_id');
+		$finger_config = '1';
+		$active = '1';
+		$start_from = date('Y-m-01');
+		$end_date = date('Y-m-d');
+		$get = $this->input->get();
+		if (!empty($get['user_id'])) {
+			$employees = $this->ion_auth->user($get['user_id'])->result();
+		} else {
+			$users = $this->ion_auth->members()->result();
+			// Get desired department and shift from input
+			$desired_department = isset($get['department']) ? $get['department'] : '';
+			$desired_shift = isset($get['shifts']) ? $get['shifts'] : '';
+
+			// Loop through each employee
+			foreach ($users as $employee) {
+				$match = true;
+				if (!empty($desired_shift) && $employee->shift_id != $desired_shift) {
+					$match = false;
+				}
+				if (!empty($desired_department) && $employee->department != $desired_department) {
+					$match = false; 
+				}
+				if ($match) {
+					$employees[] = $employee;
+				}
+			}
+		}
+		$detail = [];
+		$header1 = ['ID', 'Name', 'Joining Date', 'Job Period'];
+		$header2 = ['', '', '', ''];
+		$leave_types = $this->att_model->get_db_leave_types2();
+		foreach ($leave_types as $leave_type) {
+			$header1[] = $leave_type->name;
+			$header1[] = '';
+			$header2[] = 'Allowed';
+			$header2[] = 'Actual';
+		}
+		$header1 = array_merge($header1, ['Total Paid Leaves', 'Balance', 'Unpaid', 'Absents', 'Late Min']);
+		$header2 = array_merge($header2, ['', '', '', '', '']);
+		$detail[] = $header1;
+		$detail[] = $header2;
+		foreach ($employees as $employee) {
+			if ($employee->active == $active && $employee->finger_config == $finger_config) {
+				$employee_id = $employee->employee_id;
+				$employee_leaves = [];
+				$total_paid_consumed = 0;
+				$total_remaining = 0;
+				$unpaid_leaves = 0;
+				foreach ($leave_types as $leave_type) {
+					$paid_leaves = 0;
+					$leave_total = $this->att_model->get_total_of_leave_type_for_user($leave_type, $employee, $end_date);
+					$leaves = $this->att_model->get_db_leaves($employee_id, $start_from, $end_date, $leave_type->id);
+					foreach ($leaves as $leave) {
+						$leaveDuration = (new DateTime($leave->ending_date))->diff(new DateTime($leave->starting_date))->days + 1;
+						if (strpos($leave->leave_duration, 'Full') !== false) {
+							if ($leave->paid == 0) {
+								$paid_leaves += $leaveDuration;
+							} else {
+								$unpaid_leaves += $leaveDuration;
+							}
+						} elseif (strpos($leave->leave_duration, 'Half') !== false) {
+							if ($leave->paid == 0) {
+								$paid_leaves += 0.5;
+							} else {
+								$unpaid_leaves += 0.5;
+							}
+						}
+					}
+
+					if ($leave_type->apply_on == 'all') {
+						$employee_leaves[] = $leave_total;
+					} elseif (($employee->gender == 'male' && $employee->martial_status == 'married') && $leave_type->apply_on == 'malemarried') {
+						$employee_leaves[] = $leave_total;
+					} elseif (($employee->gender == 'male' && $employee->martial_status == 'single') && $leave_type->apply_on == 'male') {
+						$employee_leaves[] = $leave_total;
+					} elseif (($employee->gender == 'female' && $employee->martial_status == 'married') && $leave_type->apply_on == 'femalemarried') {
+						$employee_leaves[] = $leave_total;
+					} elseif (($employee->gender == 'female' && $employee->martial_status == 'single') && $leave_type->apply_on == 'female') {
+						$employee_leaves[] = $leave_total;
+					} else {
+						$leave_total = 0;
+						$employee_leaves[] = 0;
+					}
+					$employee_leaves[] = $paid_leaves;
+					$total_paid_consumed += $paid_leaves;
+					$total_remaining += $leave_total - $paid_leaves;
+				}
+
+				$attendance = $this->att_model->get_attendance($employee_id, $start_from, $end_date);
+				$late_min = $this->att_model->get_late_min($employee_id, $start_from, $end_date);
+				$absents = $this->att_model->get_absents($employee_id, $start_from, $end_date, $attendance);
+				$detail[] = array_merge([
+					'<a href="#">' . $employee_id . '</a>',
+					'<a href="#">' . $employee->first_name . ' ' . $employee->last_name . '</a>',
+					date('d-m-Y', strtotime($employee->join_date)),
+					$this->user_duration($employee->join_date),
+				], $employee_leaves, [$total_paid_consumed], [$total_remaining], [$unpaid_leaves], [$absents], [$late_min]);
+			}
+		}
+		echo json_encode($detail);
+	}
+	public function custom_report_attendance()
+	{
+		if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('reports_view')) && is_module_allowed('reports')) {
+
+			$this->data['page_title'] = 'Attendance Report - ' . company_name();
+			$saas_id = $this->session->userdata('saas_id');
+			$this->db->where('saas_id', $saas_id);
+			$query4 = $this->db->get('shift');
+			$this->data['shifts'] = $query4->result_array();
+			$this->db->where('saas_id', $saas_id);
+			$query3 = $this->db->get('departments');
+			$this->data['departments'] = $query3->result_array();
+			$this->data['main_page'] = 'Attendance Report';
+			$this->data['current_user'] = $this->ion_auth->user()->row();
+
+			if ($this->ion_auth->is_admin() || is_all_users()) {
+				$this->data['system_users'] = $this->ion_auth->members()->result();
+			} elseif (is_assign_users()) {
+				$selected = selected_users();
+				foreach ($selected as $user_id) {
+					$users[] = $this->ion_auth->user($user_id)->row();
+				}
+				$users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+				$this->data['system_users'] = $users;
+			}
+			$this->load->view('pages/attendance/report/custom-report', $this->data);
+		} else {
+			redirect_to_index();
+		}
+	}
+
 
 	public function leaves()
 	{

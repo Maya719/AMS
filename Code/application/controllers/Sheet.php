@@ -19,10 +19,42 @@ class Sheet extends CI_Controller
         $this->client->addScope(Sheets::SPREADSHEETS);
         $this->client->addScope(Drive::DRIVE);
     }
+    
+    public function index()
+    {
+        if ($this->ion_auth->logged_in() && ($this->ion_auth->is_admin() || permissions('reports_view')) && is_module_allowed('reports')) {
+
+            $this->data['page_title'] = 'Attendance Report - ' . company_name();
+            $saas_id = $this->session->userdata('saas_id');
+            $this->db->where('saas_id', $saas_id);
+            $query4 = $this->db->get('shift');
+            $this->data['shifts'] = $query4->result_array();
+            $this->db->where('saas_id', $saas_id);
+            $query3 = $this->db->get('departments');
+            $this->data['departments'] = $query3->result_array();
+            $this->data['main_page'] = 'Attendance Report';
+            $this->data['current_user'] = $this->ion_auth->user()->row();
+
+            if ($this->ion_auth->is_admin() || is_all_users()) {
+                $this->data['system_users'] = $this->ion_auth->members()->result();
+            } elseif (is_assign_users()) {
+                $selected = selected_users();
+                foreach ($selected as $user_id) {
+                    $users[] = $this->ion_auth->user($user_id)->row();
+                }
+                $users[] = $this->ion_auth->user($this->session->userdata('user_id'))->row();
+                $this->data['system_users'] = $users;
+            }
+            $this->load->view('report-attendance', $this->data);
+        } else {
+            redirect_to_index();
+        }
+    }
+
     public function create()
     {
         $this->form_validation->set_rules('user_id', 'Sharing User', 'required');
-        if($this->form_validation->run() == TRUE){
+        if ($this->form_validation->run() == TRUE) {
             $type = 'company_' . $this->session->userdata('saas_id');
             $this->db->select('value');
             $this->db->from('settings');
@@ -222,9 +254,9 @@ class Sheet extends CI_Controller
                                 'bold' => true,
                             ],
                             'backgroundColor' => [
-                                'red' => 66/255,
-                                'green' => 133/255,
-                                'blue' => 244/255,
+                                'red' => 66 / 255,
+                                'green' => 133 / 255,
+                                'blue' => 244 / 255,
                             ],
                         ],
                     ],
@@ -246,9 +278,9 @@ class Sheet extends CI_Controller
                                 'bold' => true,
                             ],
                             'backgroundColor' => [
-                                'red' => 66/255,
-                                'green' => 133/255,
-                                'blue' => 244/255,
+                                'red' => 66 / 255,
+                                'green' => 133 / 255,
+                                'blue' => 244 / 255,
                             ],
                         ],
                     ],

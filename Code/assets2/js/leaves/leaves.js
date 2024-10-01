@@ -1,6 +1,3 @@
-
-
-
 function setFilter() {
     var employee_id = $('#le_employee_id').val();
     var leave_type = $('#le_leave_type').val();
