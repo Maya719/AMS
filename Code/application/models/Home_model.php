@@ -116,8 +116,8 @@ class Home_model extends CI_Model
                 if (!isset($formattedData[$user->employee_id])) {
                     $formattedData[$user->employee_id] = [
                         'user_id' => $user->employee_id,
-                        'user' => '<a href="javascript:void(0);" onclick=openChildWindow('.$user->employee_id.')>' . $user->employee_id . '</a>',
-                        'name' => '<a href="javascript:void(0);" onclick=openChildWindow('.$user->employee_id.')>' . $user->first_name . ' ' . $user->last_name . '</a>',
+                        'user' => '<a href="javascript:void(0);" onclick=openChildWindow(' . $user->employee_id . ')>' . $user->employee_id . '</a>',
+                        'name' => '<a href="javascript:void(0);" onclick=openChildWindow(' . $user->employee_id . ')>' . $user->first_name . ' ' . $user->last_name . '</a>',
                         'dates' => [],
                     ];
                 }
@@ -127,8 +127,8 @@ class Home_model extends CI_Model
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-success">L</span>';
                         $leaveArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
-                            'user' => '<a href="javascript:void(0);" onclick="openChildWindow('.$user->employee_id.')">' . $user->employee_id . '</a>',
-                            'name' => '<a href="javascript:void(0);" onclick="openChildWindow('.$user->employee_id.')">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'user' => '<a href="javascript:void(0);" onclick="openChildWindow(' . $user->employee_id . ')">' . $user->employee_id . '</a>',
+                            'name' => '<a href="javascript:void(0);" onclick="openChildWindow(' . $user->employee_id . ')">' . $user->first_name . ' ' . $user->last_name . '</a>',
                             'dates' => [],
                         ];
                         $leaveArray[$user->employee_id]['dates'][$from][] = '<span class="text-success">L</span>';
@@ -136,8 +136,8 @@ class Home_model extends CI_Model
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-info">H</span>';
                         $absentArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
-                            'user' => '<a href="javascript:void(0);" onclick="openChildWindow('.$user->employee_id.')">' . $user->employee_id . '</a>',
-                            'name' => '<a href="javascript:void(0);" onclick="openChildWindow('.$user->employee_id.')">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'user' => '<a href="javascript:void(0);" onclick="openChildWindow(' . $user->employee_id . ')">' . $user->employee_id . '</a>',
+                            'name' => '<a href="javascript:void(0);" onclick="openChildWindow(' . $user->employee_id . ')">' . $user->first_name . ' ' . $user->last_name . '</a>',
                             'dates' => [],
                         ];
                         $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-info">H</span>';
@@ -145,8 +145,8 @@ class Home_model extends CI_Model
                         $formattedData[$user->employee_id]['dates'][$from][] = '<span class="text-danger">A</span>';
                         $absentArray[$user->employee_id] = [
                             'user_id' => $user->employee_id,
-                            'user' => '<a href="javascript:void(0);" onclick="openChildWindow('.$user->employee_id.')">' . $user->employee_id . '</a>',
-                            'name' => '<a href="javascript:void(0);" onclick="openChildWindow('.$user->employee_id.')">' . $user->first_name . ' ' . $user->last_name . '</a>',
+                            'user' => '<a href="javascript:void(0);" onclick="openChildWindow(' . $user->employee_id . ')">' . $user->employee_id . '</a>',
+                            'name' => '<a href="javascript:void(0);" onclick="openChildWindow(' . $user->employee_id . ')">' . $user->first_name . ' ' . $user->last_name . '</a>',
                             'dates' => [],
                         ];
                         $absentArray[$user->employee_id]['dates'][$from][] = '<span class="text-danger">A</span>';
@@ -488,98 +488,93 @@ class Home_model extends CI_Model
     public function Get_events()
     {
         $currentDate = date('Y-m-d');
-        $nextTwoMonths = date('Y-m-d', strtotime('+3 months', strtotime($currentDate)));
-        $array = [];
+        $nextTwoMonths = date('Y-m-d', strtotime('+2 months', strtotime($currentDate)));
+        $eventsArray = [];
+
         $system_users = $this->ion_auth->members_all()->result();
+
         foreach ($system_users as $user) {
             if ($user->finger_config == '1' && $user->active == '1') {
                 $join_date = $user->join_date;
                 $probation_date = $user->probation;
                 $date_of_birth = $user->DOB;
 
-                // Check if any event falls within the next two months
+                // Check for Birthday event
                 if (
-                    (date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
-                        date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))) ||
-                    (date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
-                        date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))) ||
-                    (date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
-                        date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths)))
+                    date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
+                    date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))
                 ) {
-                    $events = [];
+                    $eventsArray[] = [
+                        'user' => $user->first_name . ' ' . $user->last_name,
+                        'profile' => $user->profile,
+                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                        'event' => 'Birthday',
+                        'date' => date('j F', strtotime($date_of_birth))
+                    ];
+                }
 
-                    // Check for Birthday event
-                    if (
-                        date('m-d', strtotime($date_of_birth)) >= date('m-d', strtotime($currentDate)) &&
-                        date('m-d', strtotime($date_of_birth)) <= date('m-d', strtotime($nextTwoMonths))
-                    ) {
-                        $events[] = [
-                            'user' => $user->first_name . ' ' . $user->last_name,
-                            'profile' => $user->profile,
-                            'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
-                            'event' => 'Birthday',
-                            'date' => date('j F', strtotime($date_of_birth))
-                        ];
-                    }
+                // Check for Anniversary event
+                if (
+                    date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
+                    date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths)) &&
+                    date('Y-m-d', strtotime($join_date)) != date('Y-m-d', strtotime($currentDate))
+                ) {
+                    $eventsArray[] = [
+                        'user' => $user->first_name . ' ' . $user->last_name,
+                        'profile' => $user->profile,
+                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                        'event' => 'Anniversary',
+                        'date' => date('j F', strtotime($join_date))
+                    ];
+                }
 
-                    // Check for Anniversary event
-                    if (
-                        date('m-d', strtotime($join_date)) >= date('m-d', strtotime($currentDate)) &&
-                        date('m-d', strtotime($join_date)) <= date('m-d', strtotime($nextTwoMonths))
-                    ) {
-                        $events[] = [
-                            'user' => $user->first_name . ' ' . $user->last_name,
-                            'profile' => $user->profile,
-                            'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
-                            'event' => 'Anniversary',
-                            'date' => date('j F', strtotime($join_date))
-                        ];
-                    }
-
-                    // Check for Probation Ending event
-                    if (
-                        date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
-                        date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))
-                    ) {
-                        $events[] = [
-                            'user' => $user->first_name . ' ' . $user->last_name,
-                            'profile' => $user->profile,
-                            'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
-                            'event' => 'Probation Ending',
-                            'date' => date('j F', strtotime($probation_date))
-                        ];
-                    }
-
-                    $array = array_merge($array, $events);
+                // Check for Probation Ending event
+                if (
+                    !empty($probation_date) && date('Y-m-d', strtotime($probation_date)) >= date('Y-m-d', strtotime($currentDate)) &&
+                    date('Y-m-d', strtotime($probation_date)) <= date('Y-m-d', strtotime($nextTwoMonths))
+                ) {
+                    $eventsArray[] = [
+                        'user' => $user->first_name . ' ' . $user->last_name,
+                        'profile' => $user->profile,
+                        'short' => strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)),
+                        'event' => 'Probation Ending',
+                        'date' => date('j F', strtotime($probation_date))
+                    ];
                 }
             }
         }
-        // events 
+
+        // Fetch additional events from the database
         $saas_id = $this->session->userdata('saas_id');
         $this->db->select('*');
         $this->db->from('events');
         $this->db->where('saas_id', $saas_id);
         $query = $this->db->get();
-        $events = $query->result_array();
-        foreach ($events as $value) {
+        $db_events = $query->result_array();
+
+        foreach ($db_events as $value) {
             $id = $value["id"];
             $title = $value["title"];
             $start = $value["start"];
             $end = $value["end"];
-            if (
-                (date('Y-m-d', strtotime($start)) >= date('Y-m-d', strtotime($currentDate)) && date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths))) ||
-                (date('Y-m-d', strtotime($start)) <= date('Y-m-d', strtotime($currentDate)) && date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths)) && date('Y-m-d', strtotime($end)) >= date('Y-m-d', strtotime($currentDate)))
+
+            // Check if the event is within the next two months
+            if ((date('Y-m-d', strtotime($start)) >= date('Y-m-d', strtotime($currentDate)) &&
+                    date('Y-m-d', strtotime($end)) <= date('Y-m-d', strtotime($nextTwoMonths))) ||
+                (date('Y-m-d', strtotime($start)) <= date('Y-m-d', strtotime($currentDate)) &&
+                    date('Y-m-d', strtotime($end)) >= date('Y-m-d', strtotime($currentDate)))
             ) {
+
                 if (date('j F', strtotime($start)) != date('j F', strtotime($end))) {
-                    $array[] = [
+                    $eventsArray[] = [
                         'user' => $title,
                         'profile' => '',
                         'short' => strtoupper(substr($title, 0, 2)),
                         'event' => 'Event',
-                        'date' => date('j F', strtotime($start)) . '-' . date('j F', strtotime($end))
+                        'date' => date('j F', strtotime($start)) . ' - ' . date('j F', strtotime($end))
                     ];
                 } else {
-                    $array[] = [
+                    $eventsArray[] = [
                         'user' => $title,
                         'profile' => '',
                         'short' => strtoupper(substr($title, 0, 2)),
@@ -590,9 +585,11 @@ class Home_model extends CI_Model
             }
         }
 
-        usort($array, function ($a, $b) {
+        // Sort events by date
+        usort($eventsArray, function ($a, $b) {
             return strtotime($a['date']) - strtotime($b['date']);
         });
-        return $array;
+
+        return $eventsArray;
     }
 }
